@@ -1,0 +1,142 @@
+/**
+ * Copyright 2014 Mozilla Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import { EventDispatcher } from './events/EventDispatcher';
+import { DisplayObject } from './display/DisplayObject';
+import { DisplayObjectContainer } from './display/DisplayObjectContainer';
+import { Stage } from './display/Stage';
+import { Loader } from './display/Loader';
+import { LoaderInfo } from './display/LoaderInfo';
+import { MovieClip } from './display/MovieClip';
+import { Graphics } from './display/Graphics';
+import { Bitmap } from './display/Bitmap';
+import { BitmapData } from './display/BitmapData';
+import { SimpleButton } from './display/SimpleButton';
+import { TextField } from './text/TextField';
+import { Point } from './geom/Point';
+import { Event } from './events/Event';
+import { KeyboardEvent } from './events/KeyboardEvent';
+import { MouseEvent } from './events/MouseEvent';
+import { ProgressEvent } from './events/ProgressEvent';
+import { Rectangle } from './geom/Rectangle';
+import { Matrix } from './geom/Matrix';
+import { ColorTransform } from './geom/ColorTransform';
+import { Transform } from './geom/Transform';
+import { URLRequest } from './net/URLRequest';
+import { URLLoader } from './net/URLLoader';
+import { URLVariables } from './net/URLVariables';
+import { SharedObject } from './net/SharedObject';
+import { LoaderContext } from './system/LoaderContext';
+import { Sound } from './media/Sound';
+import { TextFormat } from './text/TextFormat';
+import { AXSecurityDomain, ByteArray, XMLNode } from '@awayfl/avm2';
+import { Sprite } from './display/Sprite';
+import { ApplicationDomain } from './system/ApplicationDomain';
+import { TextSnapshot } from './text/TextSnapshot';
+import { ExternalInterface } from './external/ExternalInterface';
+import { Capabilities } from './system/Capabilities';
+import { Security } from './system/Security';
+import { fscommand } from './system/FSCommand';
+import { SoundChannel } from './media/SoundChannel';
+import { SoundTransform } from './media/SoundTransform';
+import { SoundMixer } from './media/SoundMixer';
+import { IOErrorEvent } from './events/IOErrorEvent';
+import { Vector3D } from './geom/Vector3D';
+import { Matrix3D } from './geom/Matrix3D';
+import { Shape } from './display/Shape';
+
+export class ContextMenu{}
+export class ContextMenuItem{}
+export class Mouse{}
+
+export class SecurityDomain extends AXSecurityDomain
+{
+	public flash = {
+		display: {
+			EventDispatcher: EventDispatcher,
+			DisplayObject: DisplayObject,
+			DisplayObjectContainer: DisplayObjectContainer,
+			Stage: Stage,
+			Loader: Loader,
+			LoaderInfo: LoaderInfo,
+			MovieClip: MovieClip,
+			Graphics: Graphics,
+			Bitmap: Bitmap,
+			BitmapData: BitmapData,
+			SimpleButton: SimpleButton,
+			Sprite: Sprite,
+			Shape: Shape
+		},
+		events: {
+			EventDispatcher: EventDispatcher,
+			Event: Event,
+			KeyboardEvent: KeyboardEvent,
+			MouseEvent: MouseEvent,
+			ProgressEvent: ProgressEvent,
+			IOErrorEvent: IOErrorEvent
+		},
+		external: {
+			ExternalInterface: ExternalInterface
+		},
+		filters: {},
+		text: {
+			TextField: TextField,
+			TextFormat: TextFormat,
+			TextSnapshot: TextSnapshot
+		},
+		geom: {
+			Point: Point,
+			Rectangle: Rectangle,
+			Matrix: Matrix,
+			ColorTransform: ColorTransform,
+			Transform: Transform,
+			Vector3D: Vector3D,
+			Matrix3D: Matrix3D
+		},
+		net: {
+			URLRequest: URLRequest,
+			URLLoader: URLLoader,
+			URLVariables: URLVariables,
+			SharedObject: SharedObject
+		},
+		system: {
+			ApplicationDomain: ApplicationDomain,
+			Capabilities: Capabilities,
+			LoaderContext: LoaderContext,
+			Security: Security,
+			fscommand: fscommand
+		},
+		ui: {
+			ContextMenu: ContextMenu,
+			ContextMenuItem: ContextMenuItem,
+			Mouse: Mouse
+		},
+		utils: {
+			ByteArray: ByteArray
+		},
+		media: {
+			Sound: Sound,
+			SoundChannel: SoundChannel,
+			SoundTransform: SoundTransform,
+			SoundMixer: SoundMixer
+		},
+		xml: {
+			XMLDocument: XMLDocument,
+			XMLNode: XMLNode
+		}
+	};
+	//public player: any;//80pro Shumway.Player.Player;
+	//public application: AXApplicationDomain;
+}
