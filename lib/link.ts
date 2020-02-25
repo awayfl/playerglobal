@@ -319,3 +319,35 @@ registerNativeFunction('flash.system.fscommand', fscommand);
 export function initLink(){
   release || console.log("init link");
 }
+
+// needed by externalInterface when doing "eval"
+
+window["__flash__toXML"] = function __flash__toXML(obj) {
+  switch (typeof obj) {
+    case 'boolean':
+      return obj ? '<true/>' : '<false/>';
+    case 'number':
+      return '<number>' + obj + '</number>';
+    case 'object':
+      if (obj === null) {
+        return '<null/>';
+      }
+      if ('hasOwnProperty' in obj && obj.hasOwnProperty('length')) {
+        // array
+        var xml = '<array>';
+        for (var i = 0; i < obj.length; i++) {
+          xml += '<property id="' + i + '">' + __flash__toXML(obj[i]) + '</property>';
+        }
+        return xml + '</array>';
+      }
+      var xml = '<object>';
+      for (var key in obj) {
+        xml += '<property id="' + key + '">' + __flash__toXML(obj[key]) + '</property>';
+      }
+      return xml + '</object>';
+    case 'string':
+      return '<string>' + obj.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</string>';
+    case 'undefined':
+      return '<undefined/>';
+  }
+};

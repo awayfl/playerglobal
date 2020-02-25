@@ -77,28 +77,36 @@ export class ExternalInterface extends ASObject {
 
     var self = this;
 
-    this._addCallback(functionName, function (request: string, args: any[]) {
+    this._addCallback(functionName, (request: string, args: any[]) => {
       var returnAsJS: Boolean = true;
-      if (args) {
-        var wrappedArgs = [];
-        for (var i = 0; i < args.length; i++) {
-          var arg = args[i];
-          // Objects have to be converted into proper AS objects in the current security domain.
-          if (typeof arg === 'object' && arg) {
-            wrappedArgs.push(self.sec.createObjectFromJS(arg, true));
-          } else {
-            wrappedArgs.push(arg);
+      if (typeof args !== "undefined") {
+        if (Array.isArray(args)) {
+          var wrappedArgs = [];
+          for (var i = 0; i < args.length; i++) {
+            var arg = args[i];
+            // Objects have to be converted into proper AS objects in the current security domain.
+            if (typeof arg === 'object' && arg) {
+              wrappedArgs.push(self.sec.createObjectFromJS(arg, true));
+            } else {
+              wrappedArgs.push(arg);
+            }
           }
+          args = wrappedArgs;
         }
-        args = wrappedArgs;
+        else {
+          args=[args];
+        }
       } else {
         var xml = this.convertToXML(request);
         var returnTypeAttr = xml.attribute('returntype');
-        returnAsJS = returnTypeAttr && returnTypeAttr._value == 'javascript';
+        returnAsJS = returnTypeAttr && (<any>returnTypeAttr)._value == 'javascript';
         args = [];
-        for (var i = 0; i < xml._children.length; i++) {
-          var x = xml._children[i];
-          args.push(this.convertFromXML(x));
+        if(xml._children){
+          for (var i = 0; i < xml._children.length; i++) {
+            var x = xml._children[i];
+            args.push(this.convertFromXML(x));
+          }
+
         }
       }
 

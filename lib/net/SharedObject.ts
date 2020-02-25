@@ -129,7 +129,7 @@ export class SharedObject extends ASObject {
 		var serializedData = new ByteArray();
 		(<any>serializedData).sec=this.sec;
 		//serializedData.objectEncoding = this._objectEncoding;
-		serializedData.writeObject(this._data);
+		//serializedData.writeObject(this._data);
 		
         AMF3.write(<any>serializedData, this._data);
 		//data = AMF3.write(<any>serializedData); //serializedData.readObject();
