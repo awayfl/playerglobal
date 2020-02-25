@@ -1,6 +1,6 @@
 import {MouseEvent as MouseEventAway} from "@awayjs/scene"
 import { Event } from "./Event";
-import { notImplemented } from "@awayjs/swf-viewer";
+import { notImplemented } from "@awayfl/swf-loader";
 import { InteractiveObject } from "../display/InteractiveObject";
 import { Point } from "../geom/Point";
 import { DisplayObject } from "../display/DisplayObject";

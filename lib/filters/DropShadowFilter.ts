@@ -1,6 +1,6 @@
 import { BitmapFilter } from "./BitmapFilter";
 import { Rectangle } from "../geom/Rectangle";
-import { NumberUtilities, assert, release } from "@awayjs/swf-viewer";
+import { NumberUtilities, assert, release } from "@awayfl/swf-loader";
 
 /**
  * Copyright 2014 Mozilla Foundation

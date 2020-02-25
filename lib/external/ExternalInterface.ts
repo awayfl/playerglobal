@@ -1,4 +1,4 @@
-import { MapObject, ExternalInterfaceService } from "@awayjs/swf-viewer";
+import { MapObject, ExternalInterfaceService } from "@awayfl/swf-loader";
 import { ASObject, ASXML, Errors, AXFunction, axCoerceString, AXXMLClass, AXObject, NamespaceType, Multiname } from "@awayfl/avm2";
 
 /**

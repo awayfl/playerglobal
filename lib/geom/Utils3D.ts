@@ -1,4 +1,4 @@
-import { release, notImplemented } from "@awayjs/swf-viewer";
+import { release, notImplemented } from "@awayfl/swf-loader";
 import { Float64Vector } from "@awayfl/avm2";
 import { Vector3D } from "./Vector3D";
 import { Matrix3D } from "./Matrix3D";

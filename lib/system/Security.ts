@@ -1,6 +1,6 @@
 
 import { ASArray, ASObject, axCoerceString } from "@awayfl/avm2";
-import { notImplemented, release, somewhatImplemented, FileLoadingService } from "@awayjs/swf-viewer";
+import { notImplemented, release, somewhatImplemented, FileLoadingService } from "@awayfl/swf-loader";
 
 /**
  * Copyright 2014 Mozilla Foundation

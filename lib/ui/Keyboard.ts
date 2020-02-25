@@ -1,4 +1,4 @@
-import { release, notImplemented } from "@awayjs/swf-viewer";
+import { release, notImplemented } from "@awayfl/swf-loader";
 import { ASObject } from "@awayfl/avm2";
 import { EventDispatcher } from "../events/EventDispatcher";
 import { KeyboardEvent } from "../events/KeyboardEvent";

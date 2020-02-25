@@ -1,5 +1,5 @@
 import { BitmapFilter } from "./BitmapFilter";
-import { NumberUtilities } from "@awayjs/swf-viewer";
+import { NumberUtilities } from "@awayfl/swf-loader";
 import { Rectangle } from "../geom/Rectangle";
 
 /**

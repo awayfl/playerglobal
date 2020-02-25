@@ -70,7 +70,7 @@ import { ProgressEvent } from "./events/ProgressEvent";
 import { SoundMixer } from "./media/SoundMixer";
 import { TextSnapshot } from "./text/TextSnapshot";
 import { URLVariables } from "./net/URLVariables";
-import { release } from '@awayjs/swf-viewer';
+import { release } from '@awayfl/swf-loader';
 /*
 import { NativeMenu } from "./display/NativeMenu";
 import { NativeMenuItem } from "./display/NativeMenuItem";

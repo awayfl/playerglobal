@@ -1,5 +1,5 @@
 import { BitmapFilter } from "./BitmapFilter";
-import { NumberUtilities, isNullOrUndefined, toNumber } from "@awayjs/swf-viewer";
+import { NumberUtilities, isNullOrUndefined, toNumber } from "@awayfl/swf-loader";
 import { ASArray, Errors } from "@awayfl/avm2";
 
 /**

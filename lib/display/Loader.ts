@@ -20,7 +20,7 @@ import {Image2DParser, BitmapImage2D} from "@awayjs/stage";
 import {Sound} from "../media/Sound";
 import {FlashSceneGraphFactory} from "../factories/FlashSceneGraphFactory";
 import {URLLoaderEvent} from "@awayjs/core";
-import { release, somewhatImplemented } from '@awayjs/swf-viewer';
+import { release, somewhatImplemented } from '@awayfl/swf-loader';
 import { UncaughtErrorEvents } from '../events/UncaughtErrorEvents';
 import { Errors, ByteArray } from '@awayfl/avm2';
 import { Graphics } from '@awayjs/graphics';

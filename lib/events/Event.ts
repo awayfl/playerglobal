@@ -1,5 +1,5 @@
 import { ASObject } from "@awayfl/avm2";
-import { MapObject, ObjectUtilities, release } from "@awayjs/swf-viewer";
+import { MapObject, ObjectUtilities, release } from "@awayfl/swf-loader";
 import { assert, axCoerceString } from "@awayjs/graphics";
 
 /**

@@ -13,7 +13,7 @@ import { IBitmapDrawable } from "./IBitmapDrawable"
 import { SceneImage2D } from "@awayjs/scene"
 
 import { IBitmapDataOwner } from "./IBitmapDataOwner";
-import { notImplemented } from '@awayjs/swf-viewer';
+import { notImplemented } from '@awayfl/swf-loader';
 import { ASObject, ByteArray, Uint32Vector, GenericVector } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 

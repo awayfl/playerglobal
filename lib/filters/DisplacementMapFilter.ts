@@ -1,5 +1,5 @@
 import { BitmapFilter } from "./BitmapFilter";
-import { somewhatImplemented, release } from "@awayjs/swf-viewer";
+import { somewhatImplemented, release } from "@awayfl/swf-loader";
 import { axCoerceString } from "@awayfl/avm2";
 import { Point } from "../geom/Point";
 import { BitmapData } from "../display/BitmapData";

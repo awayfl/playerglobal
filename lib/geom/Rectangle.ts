@@ -1,5 +1,5 @@
 import { ASObject } from "@awayfl/avm2";
-import { Bounds } from "@awayjs/swf-viewer";
+import { Bounds } from "@awayfl/swf-loader";
 import { Point } from "./Point";
 import { IExternalizable } from "../utils/IExternalizable";
 

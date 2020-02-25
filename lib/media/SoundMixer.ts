@@ -1,4 +1,4 @@
-import { somewhatImplemented, release, notImplemented, isNullOrUndefined } from "@awayjs/swf-viewer";
+import { somewhatImplemented, release, notImplemented, isNullOrUndefined } from "@awayfl/swf-loader";
 import { ByteArray, axCoerceString, ASObject } from "@awayfl/avm2";
 import { SoundTransform } from "./SoundTransform";
 

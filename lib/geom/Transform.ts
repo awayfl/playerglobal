@@ -3,7 +3,7 @@ import { Matrix } from "./Matrix";
 import { ColorTransform } from "./ColorTransform";
 import { Rectangle } from "./Rectangle";
 import { Matrix3D } from "./Matrix3D";
-import { release, notImplemented } from "@awayjs/swf-viewer";
+import { release, notImplemented } from "@awayfl/swf-loader";
 import { PerspectiveProjection } from "./PerspectiveProjection";
 import { DisplayObject } from '../display/DisplayObject';
 

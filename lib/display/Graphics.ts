@@ -1,6 +1,6 @@
 
 import { Graphics as AwayGraphics } from "@awayjs/graphics";
-import { notImplemented } from '@awayjs/swf-viewer';
+import { notImplemented } from '@awayfl/swf-loader';
 import { ASObject } from '@awayfl/avm2';
 import { IAssetAdapter, Matrix } from '@awayjs/core';
 

@@ -1,5 +1,5 @@
 import { BitmapFilter } from "./BitmapFilter";
-import { assert, release, NumberUtilities } from "@awayjs/swf-viewer";
+import { assert, release, NumberUtilities } from "@awayfl/swf-loader";
 import { BitmapFilterType } from "./BitmapFilterType";
 import { Rectangle } from "../geom/Rectangle";
 import { axCoerceString, Errors } from "@awayfl/avm2";

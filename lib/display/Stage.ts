@@ -1,5 +1,5 @@
 
-import {StageAlign, StageScaleMode} from "@awayjs/swf-viewer"
+import {StageAlign, StageScaleMode} from "@awayfl/swf-loader"
 import {Sprite} from "./Sprite"
 import {Event} from "../events/Event"
 import {IEventMapper} from "../events/IEventMapper"

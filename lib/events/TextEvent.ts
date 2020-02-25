@@ -1,4 +1,4 @@
-import { release, notImplemented } from "@awayjs/swf-viewer";
+import { release, notImplemented } from "@awayfl/swf-loader";
 
 import { Event } from "./Event";
 

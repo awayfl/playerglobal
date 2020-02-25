@@ -1,6 +1,6 @@
 import { Vector3D } from "./Vector3D";
 import { ASObject } from "@awayfl/avm2";
-import { notImplemented, release, somewhatImplemented } from "@awayjs/swf-viewer";
+import { notImplemented, release, somewhatImplemented } from "@awayfl/swf-loader";
 import { axCoerceString } from "@awayjs/graphics";
 import { Matrix3D as AwayMatrix3D } from '@awayjs/core';
 import { Float64Vector, GenericVector } from '@awayfl/avm2';

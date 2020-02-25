@@ -1,6 +1,6 @@
 import { BitmapFilter, GradientArrays } from "./BitmapFilter";
 import { BitmapFilterType } from "./BitmapFilterType";
-import { NumberUtilities, isNullOrUndefined } from "@awayjs/swf-viewer";
+import { NumberUtilities, isNullOrUndefined } from "@awayfl/swf-loader";
 import { Errors, ASArray, axCoerceString } from "@awayfl/avm2";
 import { Rectangle } from "../geom/Rectangle";
 

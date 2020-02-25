@@ -1,5 +1,5 @@
 import { ASObject } from '@awayfl/avm2';
-import { notImplemented, warning, StringUtilities } from '@awayjs/swf-viewer';
+import { notImplemented, warning, StringUtilities } from '@awayfl/swf-loader';
 import { axCoerceString, ObjectEncoding, AMF3 } from '@awayfl/avm2';
 import { ByteArray } from '../utils/ByteArray';
 import { SecurityDomain } from '../SecurityDomain';

@@ -1,5 +1,5 @@
 import { ASObject } from "@awayfl/avm2";
-import { clampS8U8, toS16 } from "@awayjs/swf-viewer";
+import { clampS8U8, toS16 } from "@awayfl/swf-loader";
 import { AbstractMethodError, ColorTransform as AwayColorTransform } from '@awayjs/core';
 import { SecurityDomain } from '../SecurityDomain';
 

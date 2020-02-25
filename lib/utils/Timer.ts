@@ -1,4 +1,4 @@
-import { warning } from "@awayjs/swf-viewer";
+import { warning } from "@awayfl/swf-loader";
 import { EventDispatcher } from "../events/EventDispatcher";
 import { Errors } from "@awayfl/avm2";
 import { TimerEvent } from "../events/TimerEvent";

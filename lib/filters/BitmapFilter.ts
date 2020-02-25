@@ -1,4 +1,4 @@
-import { NumberUtilities, isNullOrUndefined } from "@awayjs/swf-viewer";
+import { NumberUtilities, isNullOrUndefined } from "@awayfl/swf-loader";
 import { Rectangle } from "../geom/Rectangle";
 import { ASObject } from "@awayfl/avm2";
 

@@ -1,5 +1,5 @@
 import { ASObject } from "@awayfl/avm2";
-import { release, notImplemented, somewhatImplemented, toKeyValueArray } from "@awayjs/swf-viewer";
+import { release, notImplemented, somewhatImplemented, toKeyValueArray } from "@awayfl/swf-loader";
 import { TouchscreenType } from "./TouchscreenType";
 
 /**
