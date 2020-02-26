@@ -245,6 +245,7 @@ export class Stage extends DisplayObjectContainer{
 
 		// resize event listens on window
 		this._resizeCallbackDelegate = (event:any) => this.resizeCallback(event);
+		window.addEventListener("resize", this._resizeCallbackDelegate);
 		this.eventMapping[Event.RESIZE]=(<IEventMapper>{
 			adaptedType:"",
 			addListener:this.initResizeListener,
@@ -532,7 +533,6 @@ export class Stage extends DisplayObjectContainer{
 	private initListeners()
 	{
 		console.log("init listeners");
-		window.addEventListener("resize", this._resizeCallbackDelegate);
 
 		this._timer = new RequestAnimationFrame(this.onEnterFrame, this);
 		this._timer.start();
