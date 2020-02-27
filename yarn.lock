@@ -27,6 +27,11 @@
   version "0.5.6"
   resolved "https://registry.yarnpkg.com/@awayjs/materials/-/materials-0.5.6.tgz#4e8737e226ec807cb65f67b032a36c4089c830aa"
 
+"@awayjs/renderer@^0.10.0":
+  version "0.10.11"
+  resolved "https://registry.yarnpkg.com/@awayjs/renderer/-/renderer-0.10.11.tgz#85a661ee00610592274fd1c6d71eb91e6d2c71b3"
+  integrity sha512-/sXbGPKUuivedlfC8myKKGtdt51t9x0HnRqrO1+m7qKUaAwVdhFD37u9FBRw1y/aznpjcPLiEMt2r0KQx+FyWw==
+
 "@awayjs/scene@^0.12.0":
   version "0.12.61"
   resolved "https://registry.yarnpkg.com/@awayjs/scene/-/scene-0.12.61.tgz#0e24b099680cbbab674cfa3265faeb4c8e0a897b"
