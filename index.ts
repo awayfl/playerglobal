@@ -1,6 +1,6 @@
 
 
-console.debug("AwayFL - PlayerGlobal - 0.1.8");
+console.debug("AwayFL - PlayerGlobal - 0.1.9");
 
 export { Sprite } from "./lib/display/Sprite";
 export { FlashSceneGraphFactory } from "./lib/factories/FlashSceneGraphFactory";
