@@ -83,14 +83,14 @@ export class Timer extends EventDispatcher {
   }
   stop(): void {
     this._running = false;
-    clearInterval(this._interval);
+    window.clearInterval(this._interval);
   }
   start(): void {
     if (this._running) {
       return;
     }
     this._running = true;
-    this._interval = setInterval(this._tick.bind(this), this._delay);
+    this._interval = window.setInterval(this._tick.bind(this), this._delay);
   }
   private _tick(): void {
     this._iteration++;
