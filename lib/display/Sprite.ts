@@ -46,14 +46,7 @@ export class  Sprite extends DisplayObjectContainer
 	 */
 	constructor()
 	{
-		/*if(!adaptee && AwayMovieClip.mcForConstructor){
-			adaptee=AwayMovieClip.mcForConstructor;
-		}*/
 		super();
-
-		/*if(!this.adaptee.parent && !(<any>this).noReset){
-
-		}*/
 		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics((<AwaySprite> this._adaptee).graphics);
 	}
 
@@ -62,9 +55,7 @@ export class  Sprite extends DisplayObjectContainer
 		var newAdaptee=AwaySprite.getNewSprite();
 		
 		//console.log("createAdaptee AwaySprite");
-		(<any>newAdaptee).timelineMC=true;
 		newAdaptee.reset();
-		(<any>this).noReset=true;
         //FrameScriptManager.execute_queue();
 		return newAdaptee;
 	}

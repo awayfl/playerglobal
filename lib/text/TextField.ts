@@ -90,7 +90,6 @@ export class TextField extends InteractiveObject
 	}
 	protected createAdaptee():AwayDisplayObject{
 		var newAdaptee= AwayTextField.getNewTextField();
-		(<any>this).noReset=true;
 		newAdaptee.reset();
 		return newAdaptee;
 	}

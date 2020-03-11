@@ -271,10 +271,8 @@ export class DisplayObjectContainer extends InteractiveObject{
 	public addChild (child:DisplayObject) : DisplayObject {
 		
 		//child.dispatchEventRecursive(new Event(Event.ADDED_TO_STAGE));
-		(<any>child).noReset=true;
-		(<AwayDisplayObjectContainer> this._adaptee).addChild((<DisplayObject>child).adaptee);
-		
-		(<any>child).noReset=false;
+        (<AwayDisplayObjectContainer> this._adaptee).addChild((<DisplayObject>child).adaptee);
+        
 		child.dispatchStaticEvent(Event.ADDED);
 		child.dispatchStaticEvent(Event.ADDED_TO_STAGE);
 		//child.dispatchStaticEvent(Event.FRAME_CONSTRUCTED);
@@ -309,7 +307,6 @@ export class DisplayObjectContainer extends InteractiveObject{
 		//child.dispatchEventRecursive(new Event(Event.ADDED_TO_STAGE));
 		// todo: this should be done much more efficient (in awayjs)
 		var allChildren=[];
-		(<any>child).noReset=true;
 		for(var i:number /*uint*/ = 0; i < (<AwayDisplayObjectContainer> this._adaptee).numChildren; i++){
 			if(child.adaptee.id != (<AwayDisplayObjectContainer> this._adaptee)._children[i].id){
 				allChildren[allChildren.length]=(<AwayDisplayObjectContainer> this._adaptee)._children[i];
@@ -325,11 +322,9 @@ export class DisplayObjectContainer extends InteractiveObject{
 				(<AwayDisplayObjectContainer> this._adaptee).addChild(child.adaptee);
 			}
 			else{
-				allChildren[newChildCnt].adapter.noReset=true;
 				(<AwayDisplayObjectContainer> this._adaptee).addChild(allChildren[newChildCnt++]);
 			}
 		}
-		(<any>child).noReset=false;
 		child.dispatchStaticEvent(Event.ADDED);
 		child.dispatchStaticEvent(Event.ADDED_TO_STAGE);
 		//child.dispatchStaticEvent(Event.FRAME_CONSTRUCTED);
@@ -595,7 +590,6 @@ export class DisplayObjectContainer extends InteractiveObject{
 
 			(<AwayDisplayObjectContainer> this._adaptee).removeChild(allChildren[i]);
 		}
-		(<any>child).noReset=true;
 		var newChildCnt=0;
 		var oldChild;
 		for(i = 0; i < allChildren.length; i++){
@@ -604,20 +598,15 @@ export class DisplayObjectContainer extends InteractiveObject{
 			}
 			else{
 				oldChild=allChildren[newChildCnt++];
-				(<any>oldChild.adapter).noReset=true;
 				if(oldChild.id!=child.adaptee.id){
 					(<AwayDisplayObjectContainer> this._adaptee).addChild(oldChild);
 				}
 				else{
 					oldChild = allChildren[newChildCnt++];
-					(<any>oldChild.adapter).noReset=true;
 					(<AwayDisplayObjectContainer> this._adaptee).addChild(oldChild);
 				}
-				(<any>oldChild.adapter).noReset=false;
-
 			}
 		}
-		(<any>child).noReset=false;
 	}
 
 	public stopAllMovieClips ()  {

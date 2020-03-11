@@ -84,10 +84,8 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 
 	protected createAdaptee():AwayDisplayObject{
 		var adaptee=AwayMovieClip.getNewMovieClip();
-		(<any>adaptee).timelineMC=true;
 		adaptee.reset();
 		//console.log("createAdaptee AwayMovieClip");
-		(<any>this).noReset=true;
         //FrameScriptManager.execute_queue();
 		return adaptee;
 	}

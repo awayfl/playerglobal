@@ -94,7 +94,6 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 
 		//(<AwayMovieClip>asObj.adaptee).timeline.resetScripts();
 		//(<any>asObj).axInitializer();
-		asObj.adaptee.timelineMC=true;
 		asObj.adaptee["fileurl"]=this.url;
 		return asObj.adaptee;
 	}
