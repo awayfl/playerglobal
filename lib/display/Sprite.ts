@@ -1,4 +1,4 @@
-import {Sprite as AwaySprite, DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip, FrameScriptManager} from "@awayjs/scene";
+import {Sprite as AwaySprite, DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip, FrameScriptManager, MovieClip} from "@awayjs/scene";
 import {DisplayObjectContainer} from "./DisplayObjectContainer";
 import {DisplayObject} from "./DisplayObject";
 import {Rectangle, Matrix3D} from "@awayjs/core";
@@ -145,13 +145,10 @@ export class  Sprite extends DisplayObjectContainer
 	 * to label.
 	 */
 	public get buttonMode () : boolean{
-		//todo
-		//console.log("buttonMode not implemented yet in flash/Sprite");
-		return false;
+		return (<MovieClip>this.adaptee).buttonMode;
 	}
 	public set buttonMode (value:boolean) {
-		//todo
-		//console.log("buttonMode not implemented yet in flash/Sprite");
+        (<MovieClip>this.adaptee).buttonMode=value;
 	}
 
 	/**
