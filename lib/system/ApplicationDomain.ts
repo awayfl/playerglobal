@@ -50,7 +50,7 @@ export class ApplicationDomain extends ASObject
 	constructor (parentDomain:ApplicationDomain=null){
 		super();
 		if(parentDomain==null && ApplicationDomain._currentDomain!=null){
-			ApplicationDomain.currentDomain;
+			//ApplicationDomain.currentDomain;
 			parentDomain=ApplicationDomain.getSystemDomain();
 		}
 
@@ -65,10 +65,10 @@ export class ApplicationDomain extends ASObject
 	 * @internal	Question: Do you call System.currentDomain? or Loader.currentDomain or request.currentDomain?
 	 */
 	public static get currentDomain () : ApplicationDomain{
-		if(ApplicationDomain._systemDomain==null)
+		/*if(ApplicationDomain._systemDomain==null)
 			ApplicationDomain._systemDomain=new ApplicationDomain();
 		if(ApplicationDomain._currentDomain==null)
-			ApplicationDomain._currentDomain=new ApplicationDomain(ApplicationDomain._systemDomain);
+			ApplicationDomain._currentDomain=new ApplicationDomain(ApplicationDomain._systemDomain);*/
 		return ApplicationDomain._currentDomain;
 	}
 

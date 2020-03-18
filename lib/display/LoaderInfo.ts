@@ -123,7 +123,9 @@ import {ByteArray} from "../utils/ByteArray";
 export class LoaderInfo extends EventDispatcher
 {
 	public adaptee:LoaderInfoAway;
-	public _loader:Loader;
+    public _loader:Loader;
+    
+    private _swfVersion:number;
 	private _applicationDomain:ApplicationDomain;
 	/**
 	 * The ActionScript version of the loaded SWF file.
@@ -162,7 +164,7 @@ export class LoaderInfo extends EventDispatcher
 		//this.eventMappingDummys[HTTPStatusEvent.IO_ERROR]="HTTPStatusEvent.IO_ERROR";
 		this.eventMappingDummys[Event.OPEN]="LoaderInfo:Event.OPEN";
 		this.eventMappingDummys[Event.INIT]="LoaderInfo:Event.INIT";
-		this.adaptee=new LoaderInfoAway();
+		//this.adaptee=new LoaderInfoAway();
 
 	}
 
@@ -204,7 +206,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get bytes () : ByteArray{
 		console.log("bytes not implemented yet in flash/LoaderInfo");
-		return null;
+		return this.adaptee.bytes;
 		
 	}
 
@@ -305,7 +307,7 @@ export class LoaderInfo extends EventDispatcher
 	 * @throws	Error If the file is not a SWF file.
 	 */
 	public get frameRate () : number{
-		return 0;//this.adaptee.frameRate;		
+		return this.adaptee.frameRate;		
 	}
 
 	/**
@@ -316,7 +318,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get height () : number{
 		console.log("height not implemented yet in flash/LoaderInfo");
-		return 0;//this.adaptee.height;
+		return this.adaptee.height;
 		
 	}
 
@@ -460,8 +462,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get swfVersion () : number{
 		console.log("swfVersion not implemented yet in flash/LoaderInfo");
-		return 0;
-		
+		return this._swfVersion;		
 	}
 
 	/**
@@ -515,8 +516,9 @@ export class LoaderInfo extends EventDispatcher
 	 * @throws	Error If the file is not downloaded sufficiently to retrieve the requested information.
 	 */
 	public get width () : number{
-		console.log("width not implemented yet in flash/LoaderInfo");
-		return 0;
+		//console.log("width not implemented yet in flash/LoaderInfo");
+		return this.adaptee.width;
+		
 		
 	}
 	
