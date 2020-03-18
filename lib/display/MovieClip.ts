@@ -345,8 +345,9 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 
 
 		if (typeof frame === "string") {
-			// todo: only do toLowerCase if FP version <=9
-			frame=frame.toLowerCase();
+            if((<any>this.sec).swfVersion<=9){
+                frame=frame.toLowerCase();
+            }
 			if ((<AwayMovieClip>this.adaptee).timeline._labels[frame] == null) {
 				frame = parseInt(frame);
 				if (!isNaN(frame)) {
@@ -386,8 +387,9 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		}
 
 		if (typeof frame === "string") {
-			// todo: only do toLowerCase if FP version <=9
-			frame=frame.toLowerCase();
+            if((<any>this.sec).swfVersion<=9){
+                frame=frame.toLowerCase();
+            }
 			if ((<AwayMovieClip>this.adaptee).timeline._labels[frame] == null) {
 				frame = parseInt(frame);
 				if (!isNaN(frame)) {
