@@ -1,4 +1,5 @@
 import { Event } from "./Event";
+import { SecurityDomain } from '../SecurityDomain';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -32,8 +33,7 @@ export class TimerEvent extends Event {
   static TIMER_COMPLETE: string = "timerComplete";
 
   clone(): Event {
-    return new TimerEvent(this.type, this.bubbles,
-                                                            this.cancelable);
+    return new (<SecurityDomain> this.sec).flash.events.TimerEvent(this.type, this.bubbles, this.cancelable);
   }
 
   toString(): string {

@@ -2,6 +2,7 @@ import { warning } from "@awayfl/swf-loader";
 import { EventDispatcher } from "../events/EventDispatcher";
 import { Errors } from "@awayfl/avm2";
 import { TimerEvent } from "../events/TimerEvent";
+import { SecurityDomain } from '../SecurityDomain';
 //import { leaveTimeline, enterTimeline } from "../../avm2/module";
 
 /**
@@ -100,7 +101,7 @@ export class Timer extends EventDispatcher {
     if (Timer.dispatchingEnabled) {
       //enterTimeline("Timer.Timer");
       try {
-        this.dispatchEvent(new TimerEvent("timer", true, false));
+        this.dispatchEvent(new (<SecurityDomain>this.sec).flash.events.TimerEvent("timer", true, false));
       } catch (e) {
         warning('caught error under Timer TIMER event: ', e);
       }
@@ -110,8 +111,7 @@ export class Timer extends EventDispatcher {
       this.stop();
       //enterTimeline("Timer.TimerComplete");
       try {
-        this.dispatchEvent(new TimerEvent(TimerEvent.TIMER_COMPLETE,
-                                                                            false, false));
+        this.dispatchEvent(new (<SecurityDomain>this.sec).flash.events.TimerEvent(TimerEvent.TIMER_COMPLETE, false, false));
       } catch (e) {
         warning('caught error under Timer COMPLETE event: ', e);
       }

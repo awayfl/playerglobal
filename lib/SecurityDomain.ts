@@ -56,6 +56,7 @@ import { IOErrorEvent } from './events/IOErrorEvent';
 import { Vector3D } from './geom/Vector3D';
 import { Matrix3D } from './geom/Matrix3D';
 import { Shape } from './display/Shape';
+import { TimerEvent } from './events/TimerEvent';
 
 export class ContextMenu{}
 export class ContextMenuItem{}
@@ -85,7 +86,8 @@ export class SecurityDomain extends AXSecurityDomain
 			KeyboardEvent: KeyboardEvent,
 			MouseEvent: MouseEvent,
 			ProgressEvent: ProgressEvent,
-			IOErrorEvent: IOErrorEvent
+            IOErrorEvent: IOErrorEvent,
+            TimerEvent:TimerEvent,
 		},
 		external: {
 			ExternalInterface: ExternalInterface

@@ -47,7 +47,7 @@ export class EventDispatcher extends EventDispatcherBase
 		return super.getQueuedEvents();
 	}
 	public dispatchEvent(event:EventBase):void{
-		
+		(<any>event).currentTarget=this;
 		super.dispatchEvent(event);
 	}
 	protected eventMapping:Object;
@@ -128,14 +128,6 @@ export class EventDispatcher extends EventDispatcherBase
 		if (!useCapture && Event.isBroadcastEventType(type)) {
 			BroadcastEventDispatchQueue.getInstance().add(type, this);
 		}
-		if(this.eventMappingExtern.hasOwnProperty(type)){
-
-			// this is a external eventMapping
-			// this means that we do not need to create any mapping, and will manually dispatch the event
-			// we still need to register it on superclass, so it will work if we dispatch it manually
-			super.addEventListener(type, listener);
-			return;
-		}
 		if(this.eventMappingDummys.hasOwnProperty(type)){
 
 			// this is a dummy eventMapping
@@ -145,7 +137,7 @@ export class EventDispatcher extends EventDispatcherBase
 			//console.log("Warning - EventDispatcher:  trying to listen for unsupported event: : "+this.eventMappingDummys[type]);
 			return;
 		}
-		if(this.eventMapping.hasOwnProperty(type)){
+		else if(this.eventMapping.hasOwnProperty(type)){
 			
 			// a mapping exists for this event
 			
@@ -157,6 +149,14 @@ export class EventDispatcher extends EventDispatcherBase
 			return;
 		}
 		
+		//if(this.eventMappingExtern.hasOwnProperty(type)){
+        else{
+			// this is a external eventMapping
+			// this means that we do not need to create any mapping, and will manually dispatch the event
+			// we still need to register it on superclass, so it will work if we dispatch it manually
+			super.addEventListener(type, listener);
+			return;
+		}
 		// if we make it here, the event is not handled by this dispatcher
 		// lets output a Warning for now.
 		//console.log("EventDispatcher: trying to listen for unknown event: '"+type+"'")
@@ -207,7 +207,7 @@ export class BroadcastEventDispatchQueue {
 	}
   
 	add(type: string, target: EventDispatcher) {
-	  release || assert(Event.isBroadcastEventType(type), "Can only register broadcast events.");
+	 // release || assert(Event.isBroadcastEventType(type), "Can only register broadcast events.");
 	  var queue = this._queues[type] || (this._queues[type] = []);
 	  if (queue.indexOf(target) >= 0) {
 		return;
@@ -216,7 +216,7 @@ export class BroadcastEventDispatchQueue {
 	}
   
 	remove(type: string, target: EventDispatcher) {
-	  release || assert (Event.isBroadcastEventType(type), "Can only unregister broadcast events.");
+	  //release || assert (Event.isBroadcastEventType(type), "Can only unregister broadcast events.");
 	  var queue = this._queues[type];
 	  release || assert (queue, "There should already be a queue for this.");
 	  var index = queue.indexOf(target);
@@ -226,7 +226,7 @@ export class BroadcastEventDispatchQueue {
 	}
   
 	dispatchEvent(event: Event) {
-	  release || assert (event.isBroadcastEvent(), "Cannot dispatch non-broadcast events.");
+	  //release || assert (event.isBroadcastEvent(), "Cannot dispatch non-broadcast events.");
 	  var queue = this._queues[event._type];
 	  if (!queue) {
 		return;
