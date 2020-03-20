@@ -149,7 +149,8 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		this._adaptee.copyChannel(sourceBitmap.adaptee, sourceRect.adaptee, destPoint.adaptee, sourceChannel, destChannel);
 
 	}
-	public copyPixels(sourceBitmap: any, sourceRect: Rectangle, destPoint: Point, alphaBitmapData: BitmapData = null, alphaPoint: Point = null, mergeAlpha: boolean = false) {
+	public copyPixels(sourceBitmap: any, sourceRect: Rectangle, destPoint: Point, alphaBitmapData: BitmapData = null, alphaPoint: Point = null, mergeAlpha: boolean = false)
+	{
 		this._adaptee.copyPixels(sourceBitmap.adaptee, sourceRect.adaptee, destPoint.adaptee, alphaBitmapData? alphaBitmapData.adaptee : null, alphaPoint? alphaPoint.adaptee : null, mergeAlpha);
 	}
 	public dispose() {
@@ -244,17 +245,11 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		console.log("scroll not implemented yet in flash/BitmapData");
 
 	}
-	public threshold(sourceBitmap: BitmapData,
-		sourceRect: Rectangle,
-		destPoint: Point,
-		operation: string,
-		threshold: number,
-		color: number,
-		mask: number,
-		copySource: boolean): number {
-		//console.log("threshold not implemented yet in flash/BitmapData");
-		return 0;
+	public threshold(sourceBitmap: BitmapData, sourceRect: Rectangle, destPoint: Point, operation: string, threshold: number, color: number, mask: number, copySource: boolean): number
+	{
+		this._adaptee.threshold(sourceBitmap.adaptee, sourceRect.adaptee, destPoint.adaptee, operation, threshold, color, mask, copySource);
 
+		return 0;//number of pixels is not implemented
 	}
 
 	public unlock(): void {
