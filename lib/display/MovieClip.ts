@@ -260,8 +260,8 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 
 	public get isPlaying(): boolean {
 		//todo
-		console.log("isPlaying not implemented yet in flash/MovieClip");
-		return false;
+		//console.log("isPlaying not implemented yet in flash/MovieClip");
+		return (<AwayMovieClip>this.adaptee).isPlaying;
 	}
 
 	/**
@@ -320,9 +320,9 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			// 	if the mc was already added to scene before the construcor was run,
 			//	no framescript was defined, and therefore we might need to add scripts for the current frame manually
 			//	todo: make sure that this is correctly behaving in case constructor navigates the mc to another frame
-			/*if(this.adaptee.parent && frameNum==0){//(<AwayMovieClip>this.adaptee).currentFrameIndex==frameNum){
+			if(this.adaptee.parent && frameNum==0){//(<AwayMovieClip>this.adaptee).currentFrameIndex==frameNum){
 				FrameScriptManager.add_script_to_queue_pass2(<AwayMovieClip>this.adaptee, [fn]);
-			}*/
+			}
 
 			
 		}
@@ -395,12 +395,15 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 				if (!isNaN(frame)) {
 					(<AwayMovieClip>this.adaptee).currentFrameIndex = (<number>frame) - 1;
 					(<AwayMovieClip>this.adaptee).stop();
-				}
+				}	
+				this.stop();
 				return;
 			}
 		}
-		if (typeof frame === "number" && frame <= 0)
+		if (typeof frame === "number" && frame <= 0){				
+			this.stop();
 			return;
+		}
 		this.stop();
 		this._gotoFrame(frame);
 		FrameScriptManager.execute_as3_constructors();
