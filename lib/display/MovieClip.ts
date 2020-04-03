@@ -317,12 +317,14 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			var fn = arguments[i + 1];
 			(<AwayMovieClip>this.adaptee).timeline.add_framescript(fn, frameNum);
 
+			// newly registered scripts get queued in FrameScriptManager.execute-as3constructor
+			//console.log("add framescript", frameNum, this.adaptee, this.adaptee.parent);
 			// 	if the mc was already added to scene before the construcor was run,
 			//	no framescript was defined, and therefore we might need to add scripts for the current frame manually
 			//	todo: make sure that this is correctly behaving in case constructor navigates the mc to another frame
-			if(this.adaptee.parent && frameNum==0){//(<AwayMovieClip>this.adaptee).currentFrameIndex==frameNum){
-				FrameScriptManager.add_script_to_queue_pass2(<AwayMovieClip>this.adaptee, [fn]);
-			}
+			//if((<AwayMovieClip>this.adaptee).currentFrameIndex==frameNum){
+			//	FrameScriptManager.add_script_to_queue_pass2(<AwayMovieClip>this.adaptee, [fn]);
+			//}
 
 			
 		}
