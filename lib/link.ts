@@ -152,10 +152,15 @@ import { Responder } from "./net/Responder";
 import { URLRequestHeader } from "./net/URLRequestHeader";
 import { URLStream } from "./net/URLStream";
 import { FileReferenceList } from "./net/FileReferenceList";
+*/
+
 import { LocalConnection } from "./net/LocalConnection";
+
+/*
 import { Socket } from "./net/Socket";
 import { Security } from "./system/Security";
 */
+
 /**
  * Copyright 2014 Mozilla Foundation
  *
@@ -293,7 +298,7 @@ M("flash.text.TextField", TextField);
  M("flash.net.URLLoader", URLLoader);
  M("flash.net.SharedObject", SharedObject);
 // M("flash.net.ObjectEncoding", ObjectEncoding);
-// M("flash.net.LocalConnection", LocalConnection);
+M("flash.net.LocalConnection", LocalConnection);
 // M("flash.net.Socket", Socket);
 M("flash.net.URLVariables", URLVariables);
 
