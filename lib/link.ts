@@ -140,8 +140,10 @@ import { SoundTransform } from "./media/SoundTransform";
 import { StageVideo } from "./media/StageVideo";
 import { Video } from "./media/Video";
 import { TouchEvent } from "./events/TouchEvent";
+*/
 import { MultitouchInputMode } from "./ui/MultitouchInputMode";
 import { Multitouch } from "./ui/Multitouch";
+/*
 import { GameInputEvent } from "./events/GameInputEvent";
 import { AsyncErrorEvent } from "./events/AsyncErrorEvent";
 import { NetStatusEvent } from "./events/NetStatusEvent";
@@ -271,8 +273,8 @@ M("flash.display.FrameLabel", FrameLabel);
 // M("flash.ui.GameInputDevice", GameInputDevice);
 // M("flash.ui.GameInputFinger", GameInputFinger);
 // M("flash.ui.GameInputHand", GameInputHand);
-// M("flash.ui.Multitouch", Multitouch);
-// M("flash.ui.MultitouchInputMode", MultitouchInputMode);
+M("flash.ui.Multitouch", <any>Multitouch);
+M("flash.ui.MultitouchInputMode", <any>MultitouchInputMode);
 // M("flash.events.TouchEvent", TouchEvent);
 
 // M("flash.text.Font", Font);
