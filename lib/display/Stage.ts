@@ -276,6 +276,7 @@ export class Stage extends DisplayObjectContainer{
 		this._scene.root.addChild(this.adaptee);
 
 		// helps with mouse-events:
+		this._scene.mousePicker.shapeFlag=true;
 		//this._view.mousePicker.onlyMouseEnabled=false;
 		//this._view.renderer.stage.container.style.display="none";
 		// create the entrance-class
