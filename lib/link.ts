@@ -71,13 +71,20 @@ import { SoundMixer } from "./media/SoundMixer";
 import { TextSnapshot } from "./text/TextSnapshot";
 import { URLVariables } from "./net/URLVariables";
 import { release } from '@awayfl/swf-loader';
+
 /*
 import { NativeMenu } from "./display/NativeMenu";
 import { NativeMenuItem } from "./display/NativeMenuItem";
+*/
+
 import { ContextMenu } from "./ui/ContextMenu";
 import { ContextMenuItem } from "./ui/ContextMenuItem";
 import { ContextMenuBuiltInItems } from "./ui/ContextMenuBuiltInItems";
-import { ContextMenuClipboardItems } from "./ui/ContextMenuClipboardItems";*/
+import { ContextMenuClipboardItems } from "./ui/ContextMenuClipboardItems";
+
+
+import { FrameLabel } from "./display/FrameLabel";
+
 /*
 import { URLRequest } from "./net/URLRequest";
 import { ApplicationDomain } from "./system/ApplicationDomain";
@@ -202,7 +209,7 @@ M("flash.text.TextField", TextField);
 // M("flash.display.MorphShape", MorphShape);
  //M("flash.display.NativeMenu", NativeMenu);
  //M("flash.display.NativeMenuItem", NativeMenuItem);
-// M("flash.display.FrameLabel", FrameLabel);
+M("flash.display.FrameLabel", FrameLabel);
 // M("flash.display.AVM1Movie", AVM1Movie);
 
 // M("flash.display.GradientType", GradientType);
@@ -248,11 +255,12 @@ M("flash.text.TextField", TextField);
 
  M("flash.external.ExternalInterface", ExternalInterface);
 
- /*
+ 
  M("flash.ui.ContextMenu", ContextMenu);
  M("flash.ui.ContextMenuItem", ContextMenuItem);
  M("flash.ui.ContextMenuBuiltInItems", ContextMenuBuiltInItems);
- M("flash.ui.ContextMenuClipboardItems", ContextMenuClipboardItems);*/
+ M("flash.ui.ContextMenuClipboardItems", ContextMenuClipboardItems);
+ 
 // M("flash.ui.Mouse", Mouse);
 // M("flash.ui.MouseCursorData", MouseCursorData);
 

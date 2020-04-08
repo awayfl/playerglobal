@@ -255,7 +255,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	public get framesLoaded(): number {
 		//todo
 		console.log("framesLoaded not implemented yet in flash/MovieClip");
-		return 0;
+		return this.totalFrames;
 	}
 
 	public get isPlaying(): boolean {
