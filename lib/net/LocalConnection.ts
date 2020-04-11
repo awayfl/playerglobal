@@ -1,12 +1,6 @@
 import { EventDispatcher } from "../events/EventDispatcher";
 //import { LocalConnectionService, LocalConnectionConnectResult } from "../../base/utilities/LocalConnectionService";
-import { getCurrentABC } from "@awayfl/avm2/dist/lib/run/getCurrentABC";
-import { axCoerceString } from "@awayfl/avm2/dist/lib/run/axCoerceString";
-import { axIsCallable } from "@awayfl/avm2/dist/lib/run/axIsCallable";
-import { axIsTypeString } from "@awayfl/avm2/dist/lib/run/axIsTypeString";
-import { ASObject } from "@awayfl/avm2";
-import { ASError } from "@awayfl/avm2/dist/lib/nat/ASError";
-import { ASArray, Errors, ByteArray, } from "@awayfl/avm2";
+import { getCurrentABC, axCoerceString, axIsCallable, axIsTypeString, ASObject, ASError, ASArray, Errors, ByteArray, } from "@awayfl/avm2";
 import { assert, release, warning } from "@awayfl/swf-loader";
 import { ErrorEvent } from "../events/ErrorEvent";
 
