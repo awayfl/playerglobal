@@ -167,9 +167,9 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	public static _activeStage: Stage = null;
 
 	public get activeStage(): any {
-		if ((<SecurityDomain> this.sec).flash.display.DisplayObject.axClass._activeStage == null) {
+		/*if ((<SecurityDomain> this.sec).flash.display.DisplayObject.axClass._activeStage == null) {
 			console.log("ERROR: a Stage must have been created before any Sprite can be created!")
-		}
+		}*/
 		return (<SecurityDomain> this.sec).flash.display.DisplayObject.axClass._activeStage;
 	}
 
