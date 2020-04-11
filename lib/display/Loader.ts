@@ -25,6 +25,7 @@ import { UncaughtErrorEvents } from '../events/UncaughtErrorEvents';
 import { Errors, ByteArray } from '@awayfl/avm2';
 import { Graphics } from '@awayjs/graphics';
 import { SecurityDomain } from '../SecurityDomain';
+import { ApplicationDomain } from '../system/ApplicationDomain';
 
 // todo: define all methods (start new with converting as3-Loader to ts ?)
 
@@ -168,7 +169,7 @@ export class Loader extends DisplayObjectContainer
 		this._isImage = (ext == "jpg" || ext == "png");
 		//url.url=url.url.replace(".swf", ".awd");
 		this._loaderContext=context;
-		this._loaderInfo.applicationDomain=context.applicationDomain;
+		this._loaderInfo.applicationDomain = context ?  context.applicationDomain : new ApplicationDomain();
 
 		this._loader = new AwayLoader();
 		this._loader.addEventListener(URLLoaderEvent.LOAD_PROGRESS, this._onLoaderProgressDelegate);

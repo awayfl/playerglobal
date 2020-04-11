@@ -122,6 +122,8 @@ import {ByteArray} from "../utils/ByteArray";
  */
 export class LoaderInfo extends EventDispatcher
 {
+	public static DefaultLocation = "//";
+
 	public adaptee:LoaderInfoAway;
     public _loader:Loader;
     
@@ -372,7 +374,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get loaderURL () : string{
 		console.log("loaderURL not implemented yet in flash/LoaderInfo");
-		return "";
+		return LoaderInfo.DefaultLocation;
 		
 	}
 
@@ -498,15 +500,15 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get url () : string{
 		if(!this.adaptee || !this.adaptee.url)
-			return "";
+			return LoaderInfo.DefaultLocation;
 		return this.adaptee.url;
 		
 	}
 	public set url (value:string){
 		
+		console.warn('try set:',value);
 		console.log("url not implemented yet in flash/LoaderInfo");
-		//this.adaptee.url=value;
-		
+		//this.adaptee && (this.adaptee.url = value);
 	}
 
 	/**

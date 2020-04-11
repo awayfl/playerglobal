@@ -71,13 +71,20 @@ import { SoundMixer } from "./media/SoundMixer";
 import { TextSnapshot } from "./text/TextSnapshot";
 import { URLVariables } from "./net/URLVariables";
 import { release } from '@awayfl/swf-loader';
+
 /*
 import { NativeMenu } from "./display/NativeMenu";
 import { NativeMenuItem } from "./display/NativeMenuItem";
+*/
+
 import { ContextMenu } from "./ui/ContextMenu";
 import { ContextMenuItem } from "./ui/ContextMenuItem";
 import { ContextMenuBuiltInItems } from "./ui/ContextMenuBuiltInItems";
-import { ContextMenuClipboardItems } from "./ui/ContextMenuClipboardItems";*/
+import { ContextMenuClipboardItems } from "./ui/ContextMenuClipboardItems";
+
+
+import { FrameLabel } from "./display/FrameLabel";
+
 /*
 import { URLRequest } from "./net/URLRequest";
 import { ApplicationDomain } from "./system/ApplicationDomain";
@@ -92,7 +99,6 @@ import { JPEGLoaderContext } from "./system/JPEGLoaderContext";
 import { System } from "../avm2/natives/system";
 import { AVM1Movie } from "./display/AVM1Movie";
 import { MorphShape } from "./display/MorphShape";
-import { FrameLabel } from "./display/FrameLabel";
 import { GradientType } from "./display/GradientType";
 import { SpreadMethod } from "./display/SpreadMethod";
 import { InterpolationMethod } from "./display/InterpolationMethod";
@@ -133,8 +139,10 @@ import { SoundTransform } from "./media/SoundTransform";
 import { StageVideo } from "./media/StageVideo";
 import { Video } from "./media/Video";
 import { TouchEvent } from "./events/TouchEvent";
+*/
 import { MultitouchInputMode } from "./ui/MultitouchInputMode";
 import { Multitouch } from "./ui/Multitouch";
+/*
 import { GameInputEvent } from "./events/GameInputEvent";
 import { AsyncErrorEvent } from "./events/AsyncErrorEvent";
 import { NetStatusEvent } from "./events/NetStatusEvent";
@@ -152,10 +160,15 @@ import { Responder } from "./net/Responder";
 import { URLRequestHeader } from "./net/URLRequestHeader";
 import { URLStream } from "./net/URLStream";
 import { FileReferenceList } from "./net/FileReferenceList";
+*/
+
 import { LocalConnection } from "./net/LocalConnection";
+
+/*
 import { Socket } from "./net/Socket";
 import { Security } from "./system/Security";
 */
+
 /**
  * Copyright 2014 Mozilla Foundation
  *
@@ -202,7 +215,7 @@ export function initLink() {
 	// M("flash.display.MorphShape", MorphShape);
 	// M("flash.display.NativeMenu", NativeMenu);
 	// M("flash.display.NativeMenuItem", NativeMenuItem);
-	// M("flash.display.FrameLabel", FrameLabel);
+	M("flash.display.FrameLabel", FrameLabel);
 	// M("flash.display.AVM1Movie", AVM1Movie);
 
 	// M("flash.display.GradientType", GradientType);
@@ -249,10 +262,10 @@ export function initLink() {
 	M("flash.external.ExternalInterface", ExternalInterface);
 
 	
-	// M("flash.ui.ContextMenu", ContextMenu);
-	// M("flash.ui.ContextMenuItem", ContextMenuItem);
-	// M("flash.ui.ContextMenuBuiltInItems", ContextMenuBuiltInItems);
-	// M("flash.ui.ContextMenuClipboardItems", ContextMenuClipboardItems);
+	M("flash.ui.ContextMenu", ContextMenu);
+	M("flash.ui.ContextMenuItem", ContextMenuItem);
+	M("flash.ui.ContextMenuBuiltInItems", ContextMenuBuiltInItems);
+	M("flash.ui.ContextMenuClipboardItems", ContextMenuClipboardItems);
 	// M("flash.ui.Mouse", Mouse);
 	// M("flash.ui.MouseCursorData", MouseCursorData);
 
@@ -263,8 +276,8 @@ export function initLink() {
 	// M("flash.ui.GameInputDevice", GameInputDevice);
 	// M("flash.ui.GameInputFinger", GameInputFinger);
 	// M("flash.ui.GameInputHand", GameInputHand);
-	// M("flash.ui.Multitouch", Multitouch);
-	// M("flash.ui.MultitouchInputMode", MultitouchInputMode);
+	M("flash.ui.Multitouch",  <any>Multitouch);
+	M("flash.ui.MultitouchInputMode",  <any>MultitouchInputMode);
 	// M("flash.events.TouchEvent", TouchEvent);
 
 	// M("flash.text.Font", Font);
@@ -298,7 +311,7 @@ export function initLink() {
 	M("flash.net.URLLoader", URLLoader);
 	M("flash.net.SharedObject", SharedObject);
 	// M("flash.net.ObjectEncoding", ObjectEncoding);
-	// M("flash.net.LocalConnection", LocalConnection);
+	M("flash.net.LocalConnection", LocalConnection);
 	// M("flash.net.Socket", Socket);
 	M("flash.net.URLVariables", URLVariables);
 

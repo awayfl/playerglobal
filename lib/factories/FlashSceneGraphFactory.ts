@@ -14,7 +14,6 @@ import { SecurityDomain } from '../SecurityDomain';
 export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements ISceneGraphFactory
 {
 	public imageStore:Object = {};
-	public url:string = "";
 	private _sec:SecurityDomain;
 
 	constructor(sec:SecurityDomain)
@@ -58,7 +57,6 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 		// manually call the axInitializer for now:
 		//asObj.axInitializer(AwaySprite.getNewSprite(new this._sec.flash.display.Graphics(graphics).adaptee));
 
-		asObj.adaptee["fileurl"]=this.url;
 		return asObj.adaptee;
 	}
 
@@ -94,7 +92,6 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 
 		//(<AwayMovieClip>asObj.adaptee).timeline.resetScripts();
 		//(<any>asObj).axInitializer();
-		asObj.adaptee["fileurl"]=this.url;
 		return asObj.adaptee;
 	}
 
@@ -111,7 +108,6 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 		// 	manually call the axInitializer - this will run the constructor
 		//	creating new Away-MovieClip and timeline, and registers framescripts on the timeline:
 		asObj.axInitializer();
-		asObj.adaptee["fileurl"]=this.url;
 		return asObj.adaptee;
 	}
 
