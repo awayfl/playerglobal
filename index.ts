@@ -12,3 +12,4 @@ export { URLRequest } from './lib/net/URLRequest';
 export { initLink } from './lib/link';
 
 export { SecurityDomain } from './lib/SecurityDomain';
+export { PlayerGlobal } from './lib/PlayerGlobal';
