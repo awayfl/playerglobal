@@ -173,181 +173,184 @@ import { Security } from "./system/Security";
  */
 
 function M(name: string, asClass: ASClass) {
-  registerNativeClass(name, asClass);
-}
-M("flash.display.Stage", Stage);
-M("flash.display.DisplayObject", DisplayObject);
-M("flash.display.InteractiveObject", InteractiveObject);
-M("flash.display.DisplayObjectContainer", DisplayObjectContainer);
-M("flash.display.Sprite", Sprite);
-M("flash.display.MovieClip", MovieClip);
-M("flash.display.Shape", Shape);
-M("flash.display.Bitmap", Bitmap);
-M("flash.display.BitmapData", BitmapData);
-M("flash.display.Loader", Loader);
-M("flash.display.LoaderInfo", LoaderInfo);
-M("flash.display.Graphics", Graphics);
-M("flash.display.SimpleButton", SimpleButton);
-M("flash.display.Scene", Scene);
-
-M("flash.events.Event", Event);
-M("flash.ui.Keyboard", Keyboard);
-M("flash.events.KeyboardEvent", KeyboardEvent);
-M("flash.text.TextField", TextField);
-// M("flash.display.MorphShape", MorphShape);
- //M("flash.display.NativeMenu", NativeMenu);
- //M("flash.display.NativeMenuItem", NativeMenuItem);
-// M("flash.display.FrameLabel", FrameLabel);
-// M("flash.display.AVM1Movie", AVM1Movie);
-
-// M("flash.display.GradientType", GradientType);
-// M("flash.display.SpreadMethod", SpreadMethod);
-// M("flash.display.InterpolationMethod", InterpolationMethod);
-// M("flash.display.LineScaleMode", LineScaleMode);
-// M("flash.display.CapsStyle", CapsStyle);
-// M("flash.display.JointStyle", JointStyle);
-
- M("flash.filters.BevelFilter", BevelFilter);
- M("flash.filters.BitmapFilter", BitmapFilter);
- M("flash.filters.BlurFilter", BlurFilter);
- M("flash.filters.ColorMatrixFilter", ColorMatrixFilter);
- M("flash.filters.ConvolutionFilter", ConvolutionFilter);
- M("flash.filters.DisplacementMapFilter", DisplacementMapFilter);
- M("flash.filters.DropShadowFilter", DropShadowFilter);
- M("flash.filters.GlowFilter", GlowFilter);
- M("flash.filters.GradientBevelFilter", GradientBevelFilter);
- M("flash.filters.GradientGlowFilter", GradientGlowFilter);
-
- M("flash.geom.Point", Point);
- M("flash.geom.Rectangle", Rectangle);
- M("flash.geom.Matrix", Matrix);
- M("flash.geom.Matrix3D", Matrix3D);
- M("flash.geom.Vector3D", Vector3D);
- M("flash.geom.Transform", Transform);
- M("flash.geom.ColorTransform", ColorTransform);
-// M("flash.geom.PerspectiveProjection", PerspectiveProjection);
-
- M("flash.events.EventDispatcher", EventDispatcher);
- M("flash.events.MouseEvent", MouseEvent);
- M("flash.events.ErrorEvent", ErrorEvent);
- M("flash.events.IOErrorEvent", IOErrorEvent);
-// M("flash.events.GestureEvent", GestureEvent);
- M("flash.events.TextEvent", TextEvent);
- M("flash.events.TimerEvent", TimerEvent);
- M("flash.events.ProgressEvent", ProgressEvent);
-// M("flash.events.StatusEvent", StatusEvent);
-// M("flash.events.NetStatusEvent", NetStatusEvent);
-// M("flash.events.HTTPStatusEvent", HTTPStatusEvent);
-// M("flash.events.AsyncErrorEvent", AsyncErrorEvent);
-// M("flash.events.UncaughtErrorEvents", UncaughtErrorEvents);
-
- M("flash.external.ExternalInterface", ExternalInterface);
-
- /*
- M("flash.ui.ContextMenu", ContextMenu);
- M("flash.ui.ContextMenuItem", ContextMenuItem);
- M("flash.ui.ContextMenuBuiltInItems", ContextMenuBuiltInItems);
- M("flash.ui.ContextMenuClipboardItems", ContextMenuClipboardItems);*/
-// M("flash.ui.Mouse", Mouse);
-// M("flash.ui.MouseCursorData", MouseCursorData);
-
-// M("flash.ui.GameInput", GameInput);
-// M("flash.events.GameInputEvent", GameInputEvent);
-// M("flash.ui.GameInputControl", GameInputControl);
-// M("flash.ui.GameInputControlType", GameInputControlType);
-// M("flash.ui.GameInputDevice", GameInputDevice);
-// M("flash.ui.GameInputFinger", GameInputFinger);
-// M("flash.ui.GameInputHand", GameInputHand);
-// M("flash.ui.Multitouch", Multitouch);
-// M("flash.ui.MultitouchInputMode", MultitouchInputMode);
-// M("flash.events.TouchEvent", TouchEvent);
-
-// M("flash.text.Font", Font);
-// M("flash.text.StaticText", StaticText);
-// M("flash.text.StyleSheet", StyleSheet);
- M("flash.text.TextFormat", TextFormat);
-// M("flash.text.TextRun", TextRun);
- M("flash.text.TextSnapshot", TextSnapshot);
-// M("flash.text.TextLineMetrics", TextLineMetrics);
-
- M("flash.media.Sound", Sound);
- M("flash.media.SoundChannel", SoundChannel);
- M("flash.media.SoundMixer", SoundMixer);
- M("flash.media.SoundTransform", SoundTransform);
-// M("flash.media.Video", Video);
-// M("flash.media.StageVideo", StageVideo);
-// M("flash.media.ID3Info", ID3Info);
-// M("flash.media.Microphone", Microphone);
-// M("flash.media.Camera", Camera);
-
-// M("flash.net.FileFilter", FileFilter);
-// M("flash.net.FileReference", FileReference);
-// M("flash.net.FileReferenceList", FileReferenceList);
-// M("flash.net.NetConnection", NetConnection);
-// M("flash.net.NetStream", NetStream);
-// M("flash.net.NetStreamInfo", NetStreamInfo);
-// M("flash.net.Responder", Responder);
- M("flash.net.URLRequest", URLRequest);
-// M("flash.net.URLRequestHeader", URLRequestHeader);
-// M("flash.net.URLStream", URLStream);
- M("flash.net.URLLoader", URLLoader);
- M("flash.net.SharedObject", SharedObject);
-// M("flash.net.ObjectEncoding", ObjectEncoding);
-// M("flash.net.LocalConnection", LocalConnection);
-// M("flash.net.Socket", Socket);
-M("flash.net.URLVariables", URLVariables);
-
- M("flash.system.Capabilities", Capabilities);
- M("flash.system.Security", Security);
- M("flash.system.System", System);
- M("flash.system.SecurityDomain", SecurityDomain);
-M("flash.system.ApplicationDomain", ApplicationDomain);
-// M("flash.system.JPEGLoaderContext", JPEGLoaderContext);
-M("flash.system.LoaderContext", LoaderContext);
-
-// M("flash.accessibility.Accessibility", Accessibility);
-// M("flash.accessibility.AccessibilityProperties", AccessibilityProperties);
-
- M("flash.utils.Timer", Timer);
-// M("flash.utils.ByteArray", ByteArray);
-
- M("flash.xml.XMLNode", XMLNode);
- M("flash.xml.XMLDocument", XMLDocument);
-
-registerNativeFunction('flash.system.fscommand', fscommand);
-
-export function initLink(){
-  release || console.log("init link");
+	registerNativeClass(name, asClass);
 }
 
-// needed by externalInterface when doing "eval"
 
-window["__flash__toXML"] = function __flash__toXML(obj) {
-  switch (typeof obj) {
-    case 'boolean':
-      return obj ? '<true/>' : '<false/>';
-    case 'number':
-      return '<number>' + obj + '</number>';
-    case 'object':
-      if (obj === null) {
-        return '<null/>';
-      }
-      if ('hasOwnProperty' in obj && obj.hasOwnProperty('length')) {
-        // array
-        var xml = '<array>';
-        for (var i = 0; i < obj.length; i++) {
-          xml += '<property id="' + i + '">' + __flash__toXML(obj[i]) + '</property>';
-        }
-        return xml + '</array>';
-      }
-      var xml = '<object>';
-      for (var key in obj) {
-        xml += '<property id="' + key + '">' + __flash__toXML(obj[key]) + '</property>';
-      }
-      return xml + '</object>';
-    case 'string':
-      return '<string>' + obj.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</string>';
-    case 'undefined':
-      return '<undefined/>';
-  }
-};
+export function initLink() {
+	release || console.log("init link");
+
+	M("flash.display.Stage", Stage);
+	M("flash.display.DisplayObject", DisplayObject);
+	M("flash.display.InteractiveObject", InteractiveObject);
+	M("flash.display.DisplayObjectContainer", DisplayObjectContainer);
+	M("flash.display.Sprite", Sprite);
+	M("flash.display.MovieClip", MovieClip);
+	M("flash.display.Shape", Shape);
+	M("flash.display.Bitmap", Bitmap);
+	M("flash.display.BitmapData", BitmapData);
+	M("flash.display.Loader", Loader);
+	M("flash.display.LoaderInfo", LoaderInfo);
+	M("flash.display.Graphics", Graphics);
+	M("flash.display.SimpleButton", SimpleButton);
+	M("flash.display.Scene", Scene);
+
+	M("flash.events.Event", Event);
+	M("flash.ui.Keyboard", Keyboard);
+	M("flash.events.KeyboardEvent", KeyboardEvent);
+	M("flash.text.TextField", TextField);
+	// M("flash.display.MorphShape", MorphShape);
+	// M("flash.display.NativeMenu", NativeMenu);
+	// M("flash.display.NativeMenuItem", NativeMenuItem);
+	// M("flash.display.FrameLabel", FrameLabel);
+	// M("flash.display.AVM1Movie", AVM1Movie);
+
+	// M("flash.display.GradientType", GradientType);
+	// M("flash.display.SpreadMethod", SpreadMethod);
+	// M("flash.display.InterpolationMethod", InterpolationMethod);
+	// M("flash.display.LineScaleMode", LineScaleMode);
+	// M("flash.display.CapsStyle", CapsStyle);
+	// M("flash.display.JointStyle", JointStyle);
+
+	M("flash.filters.BevelFilter", BevelFilter);
+	M("flash.filters.BitmapFilter", BitmapFilter);
+	M("flash.filters.BlurFilter", BlurFilter);
+	M("flash.filters.ColorMatrixFilter", ColorMatrixFilter);
+	M("flash.filters.ConvolutionFilter", ConvolutionFilter);
+	M("flash.filters.DisplacementMapFilter", DisplacementMapFilter);
+	M("flash.filters.DropShadowFilter", DropShadowFilter);
+	M("flash.filters.GlowFilter", GlowFilter);
+	M("flash.filters.GradientBevelFilter", GradientBevelFilter);
+	M("flash.filters.GradientGlowFilter", GradientGlowFilter);
+
+	M("flash.geom.Point", Point);
+	M("flash.geom.Rectangle", Rectangle);
+	M("flash.geom.Matrix", Matrix);
+	M("flash.geom.Matrix3D", Matrix3D);
+	M("flash.geom.Vector3D", Vector3D);
+	M("flash.geom.Transform", Transform);
+	M("flash.geom.ColorTransform", ColorTransform);
+	// M("flash.geom.PerspectiveProjection", PerspectiveProjection);
+
+	M("flash.events.EventDispatcher", EventDispatcher);
+	M("flash.events.MouseEvent", MouseEvent);
+	M("flash.events.ErrorEvent", ErrorEvent);
+	M("flash.events.IOErrorEvent", IOErrorEvent);
+	// M("flash.events.GestureEvent", GestureEvent);
+	M("flash.events.TextEvent", TextEvent);
+	M("flash.events.TimerEvent", TimerEvent);
+	M("flash.events.ProgressEvent", ProgressEvent);
+	// M("flash.events.StatusEvent", StatusEvent);
+	// M("flash.events.NetStatusEvent", NetStatusEvent);
+	// M("flash.events.HTTPStatusEvent", HTTPStatusEvent);
+	// M("flash.events.AsyncErrorEvent", AsyncErrorEvent);
+	// M("flash.events.UncaughtErrorEvents", UncaughtErrorEvents);
+
+	M("flash.external.ExternalInterface", ExternalInterface);
+
+	
+	// M("flash.ui.ContextMenu", ContextMenu);
+	// M("flash.ui.ContextMenuItem", ContextMenuItem);
+	// M("flash.ui.ContextMenuBuiltInItems", ContextMenuBuiltInItems);
+	// M("flash.ui.ContextMenuClipboardItems", ContextMenuClipboardItems);
+	// M("flash.ui.Mouse", Mouse);
+	// M("flash.ui.MouseCursorData", MouseCursorData);
+
+	// M("flash.ui.GameInput", GameInput);
+	// M("flash.events.GameInputEvent", GameInputEvent);
+	// M("flash.ui.GameInputControl", GameInputControl);
+	// M("flash.ui.GameInputControlType", GameInputControlType);
+	// M("flash.ui.GameInputDevice", GameInputDevice);
+	// M("flash.ui.GameInputFinger", GameInputFinger);
+	// M("flash.ui.GameInputHand", GameInputHand);
+	// M("flash.ui.Multitouch", Multitouch);
+	// M("flash.ui.MultitouchInputMode", MultitouchInputMode);
+	// M("flash.events.TouchEvent", TouchEvent);
+
+	// M("flash.text.Font", Font);
+	// M("flash.text.StaticText", StaticText);
+	// M("flash.text.StyleSheet", StyleSheet);
+	M("flash.text.TextFormat", TextFormat);
+	// M("flash.text.TextRun", TextRun);
+	M("flash.text.TextSnapshot", TextSnapshot);
+	// M("flash.text.TextLineMetrics", TextLineMetrics);
+
+	M("flash.media.Sound", Sound);
+	M("flash.media.SoundChannel", SoundChannel);
+	M("flash.media.SoundMixer", SoundMixer);
+	M("flash.media.SoundTransform", SoundTransform);
+	// M("flash.media.Video", Video);
+	// M("flash.media.StageVideo", StageVideo);
+	// M("flash.media.ID3Info", ID3Info);
+	// M("flash.media.Microphone", Microphone);
+	// M("flash.media.Camera", Camera);
+
+	// M("flash.net.FileFilter", FileFilter);
+	// M("flash.net.FileReference", FileReference);
+	// M("flash.net.FileReferenceList", FileReferenceList);
+	// M("flash.net.NetConnection", NetConnection);
+	// M("flash.net.NetStream", NetStream);
+	// M("flash.net.NetStreamInfo", NetStreamInfo);
+	// M("flash.net.Responder", Responder);
+	M("flash.net.URLRequest", URLRequest);
+	// M("flash.net.URLRequestHeader", URLRequestHeader);
+	// M("flash.net.URLStream", URLStream);
+	M("flash.net.URLLoader", URLLoader);
+	M("flash.net.SharedObject", SharedObject);
+	// M("flash.net.ObjectEncoding", ObjectEncoding);
+	// M("flash.net.LocalConnection", LocalConnection);
+	// M("flash.net.Socket", Socket);
+	M("flash.net.URLVariables", URLVariables);
+
+	M("flash.system.Capabilities", Capabilities);
+	M("flash.system.Security", Security);
+	M("flash.system.System", System);
+	M("flash.system.SecurityDomain", SecurityDomain);
+	M("flash.system.ApplicationDomain", ApplicationDomain);
+	// M("flash.system.JPEGLoaderContext", JPEGLoaderContext);
+	M("flash.system.LoaderContext", LoaderContext);
+
+	// M("flash.accessibility.Accessibility", Accessibility);
+	// M("flash.accessibility.AccessibilityProperties", AccessibilityProperties);
+
+	M("flash.utils.Timer", Timer);
+	// M("flash.utils.ByteArray", ByteArray);
+
+	M("flash.xml.XMLNode", XMLNode);
+	M("flash.xml.XMLDocument", XMLDocument);
+
+	registerNativeFunction('flash.system.fscommand', fscommand);
+
+	// needed by externalInterface when doing "eval"
+
+	window["__flash__toXML"] = function __flash__toXML(obj) {
+		switch (typeof obj) {
+			case 'boolean':
+				return obj ? '<true/>' : '<false/>';
+			case 'number':
+				return '<number>' + obj + '</number>';
+			case 'object':
+				if (obj === null) {
+					return '<null/>';
+				}
+				if ('hasOwnProperty' in obj && obj.hasOwnProperty('length')) {
+					// array
+					var xml = '<array>';
+					for (var i = 0; i < obj.length; i++) {
+						xml += '<property id="' + i + '">' + __flash__toXML(obj[i]) + '</property>';
+					}
+					return xml + '</array>';
+				}
+				var xml = '<object>';
+				for (var key in obj) {
+					xml += '<property id="' + key + '">' + __flash__toXML(obj[key]) + '</property>';
+				}
+				return xml + '</object>';
+			case 'string':
+				return '<string>' + obj.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</string>';
+			case 'undefined':
+				return '<undefined/>';
+		}
+	};
+}
+
