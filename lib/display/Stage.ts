@@ -1,5 +1,5 @@
 
-import {StageAlign, StageScaleMode} from "@awayfl/swf-loader"
+import {StageAlign, StageScaleMode, AVMStage} from "@awayfl/swf-loader"
 import {Sprite} from "./Sprite"
 import {Event} from "../events/Event"
 import {IEventMapper} from "../events/IEventMapper"
@@ -8,7 +8,7 @@ import {DisplayObject} from "./DisplayObject"
 
 import {AssetEvent, LoaderEvent, ParserEvent, AudioManager, URLRequest, RequestAnimationFrame, CoordinateSystem, PerspectiveProjection} from "@awayjs/core";
 import {Graphics, GradientFillStyle, TextureAtlas} from "@awayjs/graphics";
-import {HoverController, TextField, Billboard, MouseManager, SceneGraphPartition, Camera, LoaderContainer, MovieClip} from "@awayjs/scene";
+import {HoverController, TextField, Billboard, MouseManager, SceneGraphPartition, Camera, LoaderContainer, MovieClip, FrameScriptManager} from "@awayjs/scene";
 
 import {MethodMaterial, MaterialBase}	from "@awayjs/materials";
 import {View, BasicPartition} from "@awayjs/view";
@@ -19,6 +19,7 @@ import {MouseEvent} from "../events/MouseEvent";
 import { Transform } from '../geom/Transform';
 import { Rectangle } from '../geom/Rectangle';
 import { SecurityDomain } from '../SecurityDomain'
+import { OrphanManager } from '@awayfl/avm2'
 
 
 /**
@@ -121,127 +122,29 @@ import { SecurityDomain } from '../SecurityDomain'
 
 export class Stage extends DisplayObjectContainer{
 
-	private static _colorMaterials:any={};
-	private static _textureMaterials:any={};
-	private static _useTextureAtlasForColors:boolean=true;
-	private _scaleMode:StageScaleMode;
-	private _align:StageAlign;
-	private _mainSprite:Sprite;
 	private _stage3Ds:AwayStage[];
 
-	private _frameRate:number = 30;
-	private _currentFps:number = 0;
-	private _rendererStage:AwayStage;
-	private _timer: RequestAnimationFrame;
-	private _time: number = 0;
-	private _projection: PerspectiveProjection;
-	private _hoverControl: HoverController;
-	private _stageWidth: number;
-	private _stageHeight: number;
-	private _fpsTextField:HTMLDivElement;
-
 	private _events:any[];
-	private _mouseX:number;
-	private _mouseY:number;
 	// no need to create new events on each frame. we can reuse them
 	private _eventOnEnter: Event;
 	private _eventFrameConstructed: Event;
 	private _eventExitFrame: Event;
 	private _eventRender: Event;
-	private _scene: Scene;
 
-	private _debugtimer:number=0;
-	private SHOW_FRAME_RATE:boolean = false;
 
-	constructor(startClass:any, width:number = 550, height:number = 400, backgroundColor:number = null, frameRate:number = 30, showFPS:boolean=false) {
+	constructor() {
 		super();
 
-		this.SHOW_FRAME_RATE=showFPS;
-		
-		this._stageWidth = width;
-		this._stageHeight = height;
-
-		this._eventOnEnter=new Event(Event.ENTER_FRAME);
-		this._eventFrameConstructed=new Event(Event.FRAME_CONSTRUCTED);
-		this._eventExitFrame=new Event(Event.EXIT_FRAME);
-		this._eventRender=new Event(Event.RENDER);
+			// todo: fix typing for this.sec
+			this._eventOnEnter = new (<any>this.sec).flash.events.Event(Event.ENTER_FRAME);
+			this._eventFrameConstructed = new (<any>this.sec).flash.events.Event(Event.FRAME_CONSTRUCTED);
+			this._eventExitFrame = new (<any>this.sec).flash.events.Event(Event.EXIT_FRAME);
+			this._eventRender = new (<any>this.sec).flash.events.Event(Event.RENDER);
+			this._events = [this._eventOnEnter, this._eventExitFrame];
 
 		this._events=[this._eventOnEnter, this._eventExitFrame];
 
-		this._scaleMode=StageScaleMode.SHOW_ALL;
-		this._align=StageAlign.TOP_LEFT;
 		this._stage3Ds=[];
-		//this._stage3Ds[this._stage3Ds.length]=new AwayStage(null, );
-		AudioManager.setVolume(1);
-		//todo: better implement this in graphics (this function provides the drawing api with materials for a color / alpha)
-		Graphics.get_material_for_color=function(color:number, alpha:number=1):any{
-			if(color==0){
-				color=0x000001;
-			}
-			if(color==0xFF8100){
-				alpha=1;
-			}
-			//color=0xFF8100;
-			//alpha=0.5;
-			var texObj:any={};
-
-			if(Stage._useTextureAtlasForColors){
-				texObj=TextureAtlas.getTextureForColor(color, alpha);
-				if(Stage._colorMaterials[texObj.bitmap.id]){
-					texObj.material=Stage._colorMaterials[texObj.bitmap.id];
-					return texObj;
-				}
-				var newmat:MethodMaterial=new MethodMaterial(texObj.bitmap);
-				newmat.alphaBlending=true;
-				newmat.useColorTransform = true;
-				newmat.bothSides = true;
-				Stage._colorMaterials[texObj.bitmap.id]=newmat;
-				texObj.material=newmat;
-				return texObj;
-			}
-
-			var colorstr:string=color+"_"+Math.round(alpha*100).toString();
-			if(Stage._colorMaterials[colorstr]){
-				texObj.material=Stage._colorMaterials[colorstr];
-				return texObj;
-			}
-			var newmat:MethodMaterial=new MethodMaterial(color, alpha);
-			newmat.alphaBlending=true;
-			newmat.useColorTransform = true;
-			newmat.bothSides = true;
-			texObj.material=newmat;
-			Stage._colorMaterials[colorstr]=newmat;
-			return texObj;
-		};
-		Graphics.get_material_for_gradient=function(gradient:GradientFillStyle):any{
-			var texObj=TextureAtlas.getTextureForGradient(gradient);
-			/*if(alpha==0){
-			 alpha=1;
-			 }*/
-			/*if(color==0xffffff){
-			 color=0xcccccc;
-			 }*/
-			// alpha=0.5;
-			var lookupstr:string=texObj.bitmap.id+gradient.type;
-			if(Stage._textureMaterials[lookupstr]){
-				texObj.material=Stage._textureMaterials[lookupstr];
-				return texObj;
-			}
-			var newmat:MethodMaterial=new MethodMaterial(texObj.bitmap);
-			newmat.useColorTransform = true;
-			newmat.alphaBlending=true;
-			newmat.bothSides = true;
-			Stage._textureMaterials[lookupstr]=newmat;
-			texObj.material=newmat;
-			return texObj;
-		};
-		/*
-		//todo
-		this.eventMappingDummys[StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY]="StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY";
-		this.eventMappingDummys[StageOrientationEvent.ORIENTATION_CHANGE]="StageOrientationEvent.ORIENTATION_CHANGE";
-		this.eventMappingDummys[StageOrientationEvent.ORIENTATION_CHANGING]="StageOrientationEvent.ORIENTATION_CHANGING";
-		this.eventMappingDummys[FullScreenEvent.FULL_SCREEN]="FullScreenEvent.FULL_SCREEN";
-		*/
 
 		// resize event listens on window
 		this._resizeCallbackDelegate = (event:any) => this.resizeCallback(event);
@@ -266,199 +169,31 @@ export class Stage extends DisplayObjectContainer{
 		(<SecurityDomain> this.sec).flash.display.DisplayObject.axClass._activeStage=this;
 		this._stage=this;
 
-		// init awayengine
-		this.initEninge();
 		this._resizeCallbackDelegate(null);
 
-		this.adaptee.partition = new SceneGraphPartition(this.adaptee, true);
-		// create new Partition for the adaptee and make it child of the awayjs-scene
-		//this._view.setPartition(this.adaptee, new SceneGraphPartition(this.adaptee));
-		this._scene.root.addChild(this.adaptee);
 
-		// helps with mouse-events:
-		//this._view.mousePicker.onlyMouseEnabled=false;
-		//this._view.renderer.stage.container.style.display="none";
-		// create the entrance-class
-		// this is the moment the converted as3-code is executed
-		this._scene.renderer.view.backgroundColor = (isNaN(backgroundColor))? 0xFFFFFF : backgroundColor;
-		this._frameRate = frameRate;
-
-		// make sure we have a background, so any mousedowns on stage are registered even if no object is hit
-		// it might make more sense to put this bg on the stage, but if i try to draw into the stage,
-		// the shape is the only thing that shows up, the _mainSprite is than no longer rendered
-		/*this._mainSprite.graphics.clear();
-		this._mainSprite.graphics.beginFill(0xffff00, 0.5);
-		this._mainSprite.graphics.drawRect(0,0,window.innerWidth, window.innerHeight);
-		this._mainSprite.graphics.endFill();*/
-
-		// prevent backspace and other default shortcutz for our document:
-		/*document.onkeydown = function (event) {
-
-			if (!event) { // This will happen in IE
-				event = <any>window.event;
-			}
-
-			var keyCode = event.keyCode;
-
-			if (keyCode == 8 &&
-				((<any>(event.target || event.srcElement)).tagName != "TEXTAREA") &&
-				((<any>(event.target || event.srcElement)).tagName != "INPUT")) {
-
-				if (navigator.userAgent.toLowerCase().indexOf("msie") == -1) {
-					event.stopPropagation();
-				} else {
-					alert("prevented");
-					event.returnValue = false;
-				}
-
-				return false;
-			}
-			/*
-			window.location.href += "#";
-
-			var _hash = "";
-			window.setTimeout(function () {
-				window.location.href += "";
-			}, 50);
-
-			window.onhashchange = function () {
-				if (window.location.hash !== _hash) {
-					window.location.hash = _hash;
-				}
-			};
-		}
-			*/
-		
-
-		if( this.SHOW_FRAME_RATE ) {
-			this._fpsTextField = <HTMLDivElement> document.createElement( 'div' ); // disable in RC
-			this._fpsTextField.style.cssFloat   = 'none';
-			this._fpsTextField.style.backgroundColor   = '#000';
-			this._fpsTextField.style.position   = 'fixed';
-			this._fpsTextField.style.top        = '5px';
-			this._fpsTextField.style.width      = '100px';
-			this._fpsTextField.style.height     = '20px';
-			this._fpsTextField.style.right       = '5px';
-			this._fpsTextField.style.textAlign  = 'center';
-			this._fpsTextField.style.color      = '#ffffff';
-			this._fpsTextField.style.fontSize   = '16';
-			this._fpsTextField.innerHTML        = "";
-			document.body.appendChild( this._fpsTextField );
-			setInterval(() => this.updateFPS(), 1000);
-		}
-
-		if(startClass){
-			
-			this._mainSprite = new startClass();
-			this.addChild(this._mainSprite);
-			this.initListeners();
-			console.log("constructed Stage and create the entranceclass");
-		}
-		this._rendererStage.container.style.visibility="visible";
-		// inits the resize listener
 
 	}
-	public init(startClass){
-		
-		this._mainSprite = new startClass();
-		this.addChild(this._mainSprite);
-		this.initListeners();
-		this._resizeCallbackDelegate(null);
-		this._rendererStage.container.style.visibility="visible";
-	}
+	
 
 	public get view(): View {
-		return this._scene.renderer.view;
-	}
-	public updateFPS(): void {
-		this._fpsTextField.innerText = this._currentFps.toFixed(2) + '/' + this._frameRate + " fps";
-		this._currentFps = 0;
-	}
-
-	public set onlyMouseEnabled(value:boolean) {
-		// todo2019: what is this supposed to do ?
-		//this._scene.mousePicker.onlyMouseEnabled = value;
+		return (<AVMStage>this.adaptee).scene.renderer.view;
 	}
 
 	// ---------- event mapping functions Event.RESIZE
 
 	private initResizeListener(type:string, callback:(event:any) => void):void
 	{
-		window.addEventListener("resize", callback);
+		//window.addEventListener("resize", callback);
 	}
 	private removeResizeListener(type:string, callback:(event:any) => void):void
 	{
-		window.removeEventListener("resize", callback);
+		//window.removeEventListener("resize", callback);
 	}
 
 	private _resizeCallbackDelegate:(event:any) => void;
-	private resizeCallback(event:any=null):void
+	public resizeCallback(event:any=null):void
 	{
-		// todo: correctly implement all StageScaleModes;
-
-		var newWidth=window.innerWidth;
-		var newHeight=window.innerHeight;
-		var newX=0;
-		var newY=0;
-
-		switch(this.scaleMode){
-			case StageScaleMode.NO_SCALE:
-				this._projection.fieldOfView = Math.atan(window.innerHeight/1000/2)*360/Math.PI;
-				break;
-			case StageScaleMode.SHOW_ALL:
-				newHeight = window.innerHeight;
-				newWidth = (this._stageWidth / this._stageHeight) * newHeight;
-				if (newWidth > window.innerWidth) {
-					newWidth = window.innerWidth;
-					newHeight = newWidth * (this._stageHeight / this._stageWidth);
-				}
-				newX=(window.innerWidth - newWidth) / 2;
-				newY=(window.innerHeight - newHeight) / 2;
-				this._projection.fieldOfView = Math.atan(this._stageHeight/1000/2)*360/Math.PI;
-				break;
-
-			case StageScaleMode.EXACT_FIT:
-			case StageScaleMode.NO_BORDER:
-				this._projection.fieldOfView = Math.atan(window.innerHeight/1000/2)*360/Math.PI;
-				break;
-			default:
-				console.log("Stage: only implemented StageScaleMode are NO_SCALE, SHOW_ALL");
-				break;
-		}
-		// todo: correctly implement all alignModes;
-		switch(this.align){
-			case StageAlign.TOP_LEFT:
-				this._scene.renderer.view.y         = 0;
-				this._scene.renderer.view.x         = 0;
-				break;
-			default:
-				this._scene.renderer.view.y         = 0;
-				this._scene.renderer.view.x         = 0;
-				console.log("Stage: only implemented StageAlign is TOP_LEFT");
-				break;
-		}
-		//console.log("test28");
-		
-		if(this._mainSprite){
-			this._mainSprite.graphics.clear();
-			this._mainSprite.graphics.beginFill(0xffffff,0);
-			this._mainSprite.graphics.drawRect(0,0,newWidth, newHeight);
-			this._mainSprite.graphics.endFill();
-		}
-
-		this.updateSize(newX, newY, newWidth, newHeight);
-		//this._scene.view.preserveFocalLength = true;
-		
-		/*
-		if(aspectRatio>=1){
-			this._projection.fieldOfView = Math.atan(window.innerHeight/1000/2)*360/Math.PI;
-		}
-		else{
-			this._projection.fieldOfView = Math.atan(window.innerWidth/1000/2)*360/Math.PI;
-		}
-		*/
-		//this._projection.originX = (0.5 - 0.5*(window.innerHeight/newHeight)*(this._stageWidth/window.innerWidth));
-
 		this.dispatchEvent(new (<SecurityDomain> this.sec).flash.events.Event(Event.RESIZE));
 	}
 
@@ -483,109 +218,34 @@ export class Stage extends DisplayObjectContainer{
 	}
 
 
-	//---------------------------stuff added to make it work:
-
-
-
-	private initEninge(){
-
-		//create the view
-		this._scene = new Scene(new BasicPartition(new AwayDisplayObjectContainer()));
-		this._rendererStage = this._scene.view.stage;
-		this._rendererStage.container.style.visibility="hidden";
-		this._rendererStage.antiAlias=0;
-		this._scene.renderer.renderableSorter = null;//new RenderableSort2D();
-
-		this._projection = new PerspectiveProjection();
-		this._projection.coordinateSystem = CoordinateSystem.RIGHT_HANDED;
-		this._projection.originX = -1;
-		this._projection.originY = 1;
-		var camera:Camera = new Camera();
-		camera.projection = this._projection;
-
-		this._scene.camera = camera;
-		this._projection.fieldOfView = Math.atan(window.innerHeight/1000/2)*360/Math.PI;
-		//this._projection.fieldOfView = Math.atan(this._stageHeight/1000/2)*360/Math.PI;
-
-
-
-	}
-	public updateSize(x:number, y:number, w:number, h:number){
-		//this._stageWidth=w;
-		//this._stageHeight=h;
-		this._scene.view.x         = x;
-		this._scene.view.y         = y;
-		this._scene.view.width     = w;
-		this._scene.view.height    = h;
-
-		this._rendererStage.x     	= x;
-		this._rendererStage.y    	= y;
-		this._rendererStage.width   = w;
-		this._rendererStage.height  = h;
-
-		if(this._fpsTextField)
-			this._fpsTextField.style.left  =  window.innerWidth * 0.5 - 100 + 'px';
-	};
-
-	/**
-	 * Initialise the listeners
-	 */
-	private initListeners()
+	public enterFrame()
 	{
-		console.log("init listeners");
+		
+			//FrameScriptManager.execute_queue();
+			// 	broadcast ENTER_FRAME event
+			//	i think this should really be done after the stage has advanced, but it causes a error in BIC
+			this._stage.dispatchStaticBroadCastEvent(Event.ENTER_FRAME);
 
-		this._timer = new RequestAnimationFrame(this.onEnterFrame, this);
-		this._timer.start();
-
-		this._resizeCallbackDelegate(null);
-	}
-	/**
-	 * Render loop
-	 */
-	private onEnterFrame(dt: number)
-	{
-		var frameMarker:number = Math.floor(1000/this._frameRate);
-		this._time += Math.min(dt, frameMarker);
-
-		if (this._time >= frameMarker) {
-			this._time -= frameMarker;
-
-			this._rendererStage.clear();
-
-			//this.dispatchEventRecursive(this._eventOnEnter);
-			this.advanceFrame(this._events);
-			//this.dispatchEventRecursive(this._eventFrameConstructed);
-			// todo: move Framescriptexecution and rest from frame-update logic from Movieclip.update to here
-			//this.dispatchEventRecursive(this._eventExitFrame);
-			//this.dispatchEventRecursive(this._eventRender);
-
-
-			this._scene.render();
-			this._currentFps++;
-
-			this._debugtimer++;
-
-			if(this._debugtimer%150==0){
-
-				var displayGraph={};
-				this.debugDisplayGraph(displayGraph);
-				console.log("SceneGraph frame :", this._debugtimer, displayGraph);
-
-			}
+			// 	advance the stage - this updates the timeline
+			//	objects get removed, created and updated - framescripts get queued
+			//	as3 constructors for the adpaters are not yet run
+			//	ADD events are queued on the objects, because they need to run after the constructors
+			this._stage.advanceFrame(this._events);
+			OrphanManager.updateOrphans(this._events);
 			
 			
-		}
-	}
-	public render()
-	{		
-		this._currentFps++;
-		//this._rendererStage.clear();
-		this._scene.render();
-	}
+			// run all as3 constructors
+			FrameScriptManager.execute_as3_constructors();
+			
+			// 	ADD events events have been queued on the objects before their constructor was run
+			//	dispatch them now (this is recursivly)
+			this._stage.dispatchQueuedEvents();
 
-	public get rendererStage():AwayStage
-	{
-		return this._rendererStage;
+			// broadcast FRAME_CONSTRUCTED event to all objects
+			this._stage.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
+
+			// run all queued framescripts
+			FrameScriptManager.execute_queue();
 	}
 
 
@@ -593,7 +253,7 @@ export class Stage extends DisplayObjectContainer{
 
 	public get mouseX () : number{
 		//console.log("mouseX not implemented yet in flash/DisplayObject");
-		return this._scene.getLocalMouseX(this.adaptee);
+		return (<AVMStage>this.adaptee).scene.getLocalMouseX(this.adaptee);
 	}
 
 	/**
@@ -604,7 +264,7 @@ export class Stage extends DisplayObjectContainer{
 	 */
 	public get mouseY () : number{
 		//console.log("mouseY not implemented yet in flash/DisplayObject");
-		return this._scene.getLocalMouseY(this.adaptee);
+		return (<AVMStage>this.adaptee).scene.getLocalMouseY(this.adaptee);
 	}
 
 	public set accessibilityImplementation (value:any){
@@ -625,11 +285,11 @@ export class Stage extends DisplayObjectContainer{
 	 */
 	public get align():StageAlign
 	{
-		return this._align;
+		return (<AVMStage>this.adaptee).align;
 	}
 	public set align(value:StageAlign)
 	{
-		value=this._align;
+		(<AVMStage>this.adaptee).align=value;
 	}
 
 	/**
@@ -648,9 +308,8 @@ export class Stage extends DisplayObjectContainer{
 	}
 
 	public get allowsFullScreenInteractive () : boolean{
-		//todo
-		console.log("allowsFullScreenInteractive not implemented yet in flash/Stage");
-		return false;
+		console.log("allowsFullScreen not implemented yet in flash/Stage");
+		return null;
 	}
 
 
@@ -662,10 +321,10 @@ export class Stage extends DisplayObjectContainer{
 
 
 	public get color():number{
-		return this._scene.renderer.view.backgroundColor;
+		return (<AVMStage>this.adaptee).color;
 	}
 	public set color(color:number){
-		this._scene.renderer.view.backgroundColor = color;
+		(<AVMStage>this.adaptee).color = color;
 	}
 
 
@@ -828,11 +487,11 @@ export class Stage extends DisplayObjectContainer{
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
 	public get frameRate () : number{
-		return this._frameRate;
+		return (<AVMStage>this.adaptee).frameRate;
 	}
 
 	public set frameRate (value:number) {
-		this._frameRate=value;
+		(<AVMStage>this.adaptee).frameRate=value;
 	}
 
 	/**
@@ -990,12 +649,11 @@ export class Stage extends DisplayObjectContainer{
 	 */
 	public get scaleMode():StageScaleMode
 	{
-		return this._scaleMode;
+		return (<AVMStage>this.adaptee).scaleMode;
 	}
 	public set scaleMode(value:StageScaleMode)
 	{
-		this._scaleMode=value;
-		this._resizeCallbackDelegate(null);
+		(<AVMStage>this.adaptee).scaleMode=value;
 	}
 
 	/**
@@ -1094,11 +752,10 @@ export class Stage extends DisplayObjectContainer{
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
 	public get stageHeight () : number{
-		return this._stageHeight;
+		return (<AVMStage>this.adaptee).stageHeight;
 	}
 	public set stageHeight (value:number){
-		this._stageHeight=value;
-		this.resizeCallback();
+		(<AVMStage>this.adaptee).stageHeight=value;
 	}
 
 	/**
@@ -1147,11 +804,10 @@ export class Stage extends DisplayObjectContainer{
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
 	public get stageWidth () : number{
-		return this._stageWidth;
+		return (<AVMStage>this.adaptee).stageWidth;
 	}
 	public set stageWidth (value:number){
-		this._stageWidth=value;
-		this.resizeCallback();
+		(<AVMStage>this.adaptee).stageWidth=value;
 	}
 
 	/**
