@@ -392,7 +392,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get parameters () : any{
 		console.log("parameters not implemented yet in flash/LoaderInfo");
-		return null;
+		return this.sec.createArrayUnsafe([]);
 		
 	}
 
@@ -428,7 +428,7 @@ export class LoaderInfo extends EventDispatcher
 		return null;
 	}
 	public set parentSandboxBridge (door:any){
-		console.log("parentSandboxBridge not implemented yet in flash/LoaderInfo");
+		console.log("parentSandboxBridge not implemented yet in flash/LoaderInfßo");
 	}
 
 	/**
