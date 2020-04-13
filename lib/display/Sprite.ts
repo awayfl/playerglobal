@@ -5,6 +5,7 @@ import {Rectangle, Matrix3D} from "@awayjs/core";
 import {Graphics} from "./Graphics";
 import { constructClassFromSymbol } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
+import { release } from '@awayfl/swf-loader';
 export class  Sprite extends DisplayObjectContainer
 {
 
@@ -62,6 +63,10 @@ export class  Sprite extends DisplayObjectContainer
 	//---------------------------stuff added to make it work:
 
 	public registerScriptObject(child: AwayDisplayObject): void {
+		if(child.adapter == child){
+			release || console.log("warning: child registered for script that has no avms-adapter");
+			return;
+		}
 		if (child.name){
 			this[child.name] = child._adapter ? child.adapter : child;
 			
