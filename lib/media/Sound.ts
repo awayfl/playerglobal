@@ -211,8 +211,7 @@ export class Sound extends EventDispatcher
 	 * @playerversion	Lite 4
 	 */
 	public get length () : number{
-		console.log("length not implemented yet in flash/Sound");
-		return 0;
+		return this._adaptee.duration;
 	}
 
 	/**
@@ -377,13 +376,10 @@ export class Sound extends EventDispatcher
 	 * @playerversion	Lite 4
 	 * @refpath
 	 */
-	public play (startTime:number=0, loops:number=0, sndTransform:SoundTransform=null) : any{
+	public play (startTime:number=0, loops:number=0, sndTransform:SoundTransform=null) : SoundChannel{
 		if(!this.adaptee){
 			console.log("Sound.play : no adaptee exists!");
 			return;
-		}
-		if(loops>1){
-			//console.log("TODO: as3web/flash: loop property")
 		}
 		if(sndTransform){
 			this.adaptee.volume=sndTransform.volume;
@@ -400,9 +396,6 @@ export class Sound extends EventDispatcher
 			sndTransform=new (<SecurityDomain> this.sec).flash.media.SoundTransform();
 		}
 		newSoundChannel.soundTransform=sndTransform;
-		//console.log("play not implemented yet in flash/Sound");
-
-		// todo: should return a flash soundchannel
 		return newSoundChannel;
 	}
 	public stop () : void{

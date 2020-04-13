@@ -11,21 +11,27 @@ export class SoundTransform extends ASObject
 	static axClass: typeof SoundTransform & AXClass;
 	// for AVM1:
 	public axCallPublicProperty(value1:any, value2:any):any{
+		console.log("axCallPublicProperty not implemented yet in flash/SoundTransform");
 		return null;
 	}
 	public axGetPublicProperty(value:any):any{
+		console.log("axGetPublicProperty not implemented yet in flash/SoundTransform");
 		return null;
 	}
 	public axSetPublicProperty(value:any, value2:any):any{
+		console.log("axSetPublicProperty not implemented yet in flash/SoundTransform");
 		return null;
 	}
 	public axHasPublicProperty(value:any):any{
+		console.log("axHasPublicProperty not implemented yet in flash/SoundTransform");
 		return null;
 	}
 	public axDeletePublicProperty(value:any):any{
+		console.log("axDeletePublicProperty not implemented yet in flash/SoundTransform");
 		return null;
 	}
 	public axGetEnumerableKeys():string[]{
+		console.log("axGetEnumerableKeys not implemented yet in flash/SoundTransform");
 		return [];
 	}
 
