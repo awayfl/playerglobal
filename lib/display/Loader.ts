@@ -20,7 +20,7 @@ import {Image2DParser, BitmapImage2D} from "@awayjs/stage";
 import {Sound} from "../media/Sound";
 import {FlashSceneGraphFactory} from "../factories/FlashSceneGraphFactory";
 import {URLLoaderEvent} from "@awayjs/core";
-import { release, somewhatImplemented } from '@awayfl/swf-loader';
+import { release, somewhatImplemented, SWFParser } from '@awayfl/swf-loader';
 import { UncaughtErrorEvents } from '../events/UncaughtErrorEvents';
 import { Errors, ByteArray } from '@awayfl/avm2';
 import { Graphics } from '@awayjs/graphics';
@@ -236,7 +236,11 @@ export class Loader extends DisplayObjectContainer
 			console.log("[LOADER] start loading the url:", cleanUrl);
 		}
 
-		const ext = cleanUrl.substr(-3);
+		const ext = cleanUrl.substr(-3).toLocaleLowerCase();
+		
+		if(ext === 'swf') {
+			AwayLoader.enableParser(SWFParser);
+		}
 
 		this._isImage = (ext == "jpg" || ext == "png");
 		//url.url=url.url.replace(".swf", ".awd");
