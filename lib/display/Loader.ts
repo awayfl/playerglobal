@@ -195,7 +195,7 @@ export class Loader extends DisplayObjectContainer
 
 				if(passed) {					
 					if(rule) {
-						console.warn('[LOADER] Duplicate redirect rules, lastes wiil be used!');
+						console.warn('[LOADER] Duplicate redirect rules, latest rule would be used!');
 					}
 
 					rule = {
@@ -211,7 +211,7 @@ export class Loader extends DisplayObjectContainer
 					}
 
 					if(typeof rule.url === 'undefined'){
-						console.warn("[LOADER] Redirect url is null, should be used  original url!");
+						console.warn("[LOADER] Redirect url is null, would be used  original url!");
 						rule.url = url;
 					}
 				};
