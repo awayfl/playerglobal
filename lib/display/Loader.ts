@@ -29,8 +29,19 @@ import { ApplicationDomain } from '../system/ApplicationDomain';
 
 // todo: define all methods (start new with converting as3-Loader to ts ?)
 
+type TLoaderRuleFunc = (url: string) => boolean;
+type TLoaderRuleFuncResult = (url: string) => string;
+
+export interface ILoaderRedirectRule {
+	test: string | RegExp | TLoaderRuleFunc | undefined,
+	resolve?: string | RegExp| TLoaderRuleFuncResult | undefined,
+	supressErrors?: boolean
+}
+
 export class Loader extends DisplayObjectContainer
 {
+	public static redirectRules: ILoaderRedirectRule[] = [];
+
 	private _factory:FlashSceneGraphFactory;
 	private _loader:AwayLoader;
 	private _isImage:boolean;
@@ -161,11 +172,72 @@ export class Loader extends DisplayObjectContainer
 	setChildIndex(child: DisplayObject, index: number): void {
 		this.sec.throwError('IllegalOperationError', Errors.InvalidLoaderMethodError);
 	}
-	
+
+	private _matchRedirect(url: string): {url: string, supressErrors: boolean} | undefined {
+
+		let rule : {
+			url: string, supressErrors: boolean
+		} = undefined;
+
+		if(Loader.redirectRules) {
+			Loader.redirectRules.forEach(({test, resolve, supressErrors = false})=>{
+				let passed = false;
+
+				if(typeof test  === 'function') {
+					passed = test(url);
+				} 
+				else if (test instanceof RegExp) {
+					passed = test.test(url);
+				}
+				else if (typeof test === 'string') {
+					passed = test === url;
+				}
+
+				if(passed) {					
+					if(rule) {
+						console.warn('[LOADER] Duplicate redirect rules, lastes wiil be used!');
+					}
+
+					rule = {
+						url, supressErrors : supressErrors
+					}
+
+					if(typeof resolve === 'function') {
+						rule.url = resolve(url);
+					} else if(resolve instanceof RegExp) {
+						rule.url = url.match(resolve)[0];
+					} else if (typeof resolve === 'string') {
+						rule.url = url;
+					}
+
+					if(typeof rule.url === 'undefined'){
+						console.warn("[LOADER] Redirect url is null, should be used  original url!");
+						rule.url = url;
+					}
+				};
+			});
+		}
+
+		return rule;
+	}
+
 	public load(url:URLRequest, context:LoaderContext=null)
 	{
-		console.log("start loading the url:"+url.url);
-		var ext:string = url.url.substr(-3);
+		// remove all after ?
+		const directUrl = url.url || '';
+		const cleanUrl = directUrl.replace(/\?.*$/, "");
+
+		let redirect = this._matchRedirect(directUrl);
+
+		if(redirect) {
+			console.log("[LOADER] Override loading url:", redirect.url);
+			url.adaptee.url = redirect.url;
+		} else {
+			console.log("[LOADER] start loading the url:", cleanUrl);
+		}
+
+		const ext = cleanUrl.substr(-3);
+
 		this._isImage = (ext == "jpg" || ext == "png");
 		//url.url=url.url.replace(".swf", ".awd");
 		this._loaderContext=context;
@@ -175,6 +247,13 @@ export class Loader extends DisplayObjectContainer
 		this._loader.addEventListener(URLLoaderEvent.LOAD_PROGRESS, this._onLoaderProgressDelegate);
 		this._loader.addEventListener(LoaderEvent.LOAD_COMPLETE, this._onLoaderCompleteDelegate);
 		this._loader.addEventListener(AssetEvent.ASSET_COMPLETE, this._onAssetCompleteDelegate);
+
+		if(redirect && redirect.supressErrors) {
+			this._loader.addEventListener(URLLoaderEvent.LOAD_ERROR, (event: URLLoaderEvent)=>{
+				console.log("[LOADER] Error supressed by redirect rule as empty complete events!", event);
+				this._onLoaderCompleteDelegate(new LoaderEvent(LoaderEvent.LOAD_COMPLETE, event.urlLoader.url,));
+			})
+		}
 		
 		this._loader.load(url.adaptee, null, null, (this._isImage)? new Image2DParser(this._factory) : this._parser);
 	}
