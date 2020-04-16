@@ -1,10 +1,10 @@
-import { TextFormat as AwaytextFormat } from "@awayjs/scene";
+import { TextFormat as AwaytextFormat, Font } from "@awayjs/scene";
 import { ASObject, AXClass, ASArray } from '@awayfl/avm2';
-
 
 export class TextFormat extends ASObject {
 
-    static axClass: typeof TextFormat & AXClass;
+	static axClass: typeof TextFormat & AXClass;
+	
     public adaptee: AwaytextFormat;
 
     public get target(): string {
@@ -47,6 +47,25 @@ export class TextFormat extends ASObject {
     public set url(value: string) {
         console.log("not implemented: TextFormat url");
     }
+	/**
+	 * Indicates the target window where the hyperlink is displayed. If the
+	 * target window is an empty string, the text is displayed in the default
+	 * target window <code>_self</code>. You can choose a custom name or one of
+	 * the following four names: <code>_self</code> specifies the current frame
+	 * in the current window, <code>_blank</code> specifies a new window,
+	 * <code>_parent</code> specifies the parent of the current frame, and
+	 * <code>_top</code> specifies the top-level frame in the current window. If
+	 * the <code>TextFormat.url</code> property is an empty string or
+	 * <code>null</code>, you can get or set this property, but the property will
+	 * have no effect.
+	 */
+    public get link_target(): string {
+        console.log("not implemented: TextFormat link_target");
+        return null;
+    }
+    public set link_target(value: string) {
+        console.log("not implemented: TextFormat link_target");
+    }
 
     public get align(): string {
         return this.adaptee.align;
@@ -60,21 +79,14 @@ export class TextFormat extends ASObject {
     }
     public set blockIndent(value: number) {
         this.adaptee.blockIndent = value;
-    }
-
-	/**
-	 * The left margin of the paragraph, in pixels. The default value is
-	 * <code>null</code>, which indicates that the left margin is 0 pixels.
-	 */
-    //todo: not used with in tesselated-font-table yet (flash-pro offers this as paragraph-properties)
-    private _leftMargin: number;
+	}
+	
     public get leftMargin(): number {
         return this.adaptee.leftMargin;
     }
     public set leftMargin(value: number) {
         this.adaptee.leftMargin = value;
     }
-
 
     public get rightMargin(): number {
         return this.adaptee.rightMargin;
@@ -118,7 +130,6 @@ export class TextFormat extends ASObject {
         this.adaptee.letterSpacing = value;
     }
 
-
     public get size(): number {
         return this.adaptee.size;
     }
@@ -147,50 +158,25 @@ export class TextFormat extends ASObject {
         this.adaptee.underline = value;
     }
 
-
     public get font_name(): string {
-        console.log("not implemented: TextFormat font_name");
-        return null;
+        return this.adaptee.font_name;
     }
     public set font_name(value: string) {
-        console.log("not implemented: TextFormat font_name");
+        this.adaptee.font_name = value;
     }
 
     public get style_name(): any {
-        console.log("not implemented: TextFormat style_name");
-        return null;
+        return this.adaptee.style_name;
     }
     public set style_name(value: any) {
-        console.log("not implemented: TextFormat style_name");
+        this.adaptee.style_name = value;
     }
-    public get font(): any {
-        console.log("not implemented: TextFormat Font getter");
-        return null;//this.adaptee.font;;
+    public get font(): Font {
+        return this.adaptee.font;
     }
-    public set font(value: any) {
-        console.log("not implemented: TextFormat Font setter");
-
-
+    public set font(value: Font) {
+        this.adaptee.font = value;
     }
-
-
-
-	/**
-	 * Indicates the target window where the hyperlink is displayed. If the
-	 * target window is an empty string, the text is displayed in the default
-	 * target window <code>_self</code>. You can choose a custom name or one of
-	 * the following four names: <code>_self</code> specifies the current frame
-	 * in the current window, <code>_blank</code> specifies a new window,
-	 * <code>_parent</code> specifies the parent of the current frame, and
-	 * <code>_top</code> specifies the top-level frame in the current window. If
-	 * the <code>TextFormat.url</code> property is an empty string or
-	 * <code>null</code>, you can get or set this property, but the property will
-	 * have no effect.
-	 */
-    //todo: not used with in tesselated-font-table yet
-    public link_target: string;
-
-
 
     constructor(
         font: string = null, size: number = null, color: number = null, bold: boolean = null,
@@ -203,12 +189,10 @@ export class TextFormat extends ASObject {
     }
 
     public clone(): TextFormat {
-        console.log("not implemented: textFOrmat.clone");
-        return null;
-        /*var clonedFormat:TextFormat=new TextFormat();
-        this.applyToFormat(clonedFormat);
-		return clonedFormat;*/
-
+		//console.log("not implemented: textFOrmat.clone");
+		var clonedFormat:TextFormat=new (<any>this.sec).flash.text.TextFormat();
+		clonedFormat.adaptee=this.adaptee.clone();
+        return clonedFormat;
     }
 
 

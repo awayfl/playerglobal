@@ -7,7 +7,7 @@ import { StyleSheet } from "./StyleSheet";
 import {Rectangle} from "../geom/Rectangle";
 import { TextLineMetrics } from "./TextLineMetrics";
 import {DisplayObject} from "../display/DisplayObject";
-import {DisplayObject as AwayDisplayObject, TextField as AwayTextField, TextFieldAutoSize, TextFormatAlign, FrameScriptManager} from "@awayjs/scene";
+import {DisplayObject as AwayDisplayObject, TextField as AwayTextField, TextFieldAutoSize, TextFormatAlign, FrameScriptManager, TextFieldType} from "@awayjs/scene";
 import { constructClassFromSymbol } from '@awayfl/avm2';
 /**
  * Flash Player dispatches the textInteractionModeChange event when a user
@@ -315,8 +315,8 @@ export class TextField extends InteractiveObject
 		return <TextFormat><any>((<AwayTextField> this._adaptee).textFormat.adapter);
 	}
 	public set defaultTextFormat (format:TextFormat){
-		console.log("todo TextFormat");
-		//<TextFormat><any>(<AwayTextField> this._adaptee).textFormat.adapter=format;
+		//console.log("todo TextFormat");
+		(<AwayTextField> this._adaptee).textFormat = format.adaptee;
 	}
 
 	/**
@@ -573,31 +573,24 @@ export class TextField extends InteractiveObject
 	 * a user can enter an unlimited amount of text.
 	 */
 	public get maxChars () : number{
-		//todo
-		console.log("maxChars not implemented yet in flash/TextField");
-		return 0;
+		return (<AwayTextField>this.adaptee).maxChars;
 	}
 	public set maxChars (value:number){
-		//todo
-		console.log("maxChars not implemented yet in flash/TextField");
+		(<AwayTextField>this.adaptee).maxChars = value;
 	}
 
 	/**
 	 * The maximum value of scrollH.
 	 */
 	public get maxScrollH () : number{
-		//todo
-		//console.log("maxScrollH not implemented yet in flash/TextField");
-		return 0;
+		return (<AwayTextField>this.adaptee).maxScrollH;
 	}
 
 	/**
 	 * The maximum value of scrollV.
 	 */
 	public get maxScrollV () : number{
-		//todo
-		//console.log("maxScrollV not implemented yet in flash/TextField");
-		return 0;
+		return (<AwayTextField>this.adaptee).maxScrollV;
 	}
 
 	/**
@@ -607,13 +600,10 @@ export class TextField extends InteractiveObject
 	 * mouse wheel scrolling of text fields, or implement your own text field scrolling.
 	 */
 	public get mouseWheelEnabled () : boolean{
-		//todo
-		//console.log("mouseWheelEnabled not implemented yet in flash/TextField");
-		return false;
+		return (<AwayTextField>this.adaptee).mouseWheelEnabled;
 	}
 	public set mouseWheelEnabled (value:boolean){
-		//todo
-		//console.log("mouseWheelEnabled not implemented yet in flash/TextField");
+		(<AwayTextField>this.adaptee).mouseWheelEnabled = value;
 	}
 
 	/**
@@ -626,13 +616,9 @@ export class TextField extends InteractiveObject
 	 * newlines are stripped out of the text.
 	 */
 	public get multiline () : boolean{
-		//todo
-		//console.log("multiline not implemented yet in flash/TextField");
 		return (<AwayTextField> this._adaptee).multiline;
 	}
 	public set multiline (value:boolean){
-		//todo
-		//console.log("multiline not implemented yet in flash/TextField");
 		(<AwayTextField> this._adaptee).multiline=value;
 	}
 
@@ -642,8 +628,6 @@ export class TextField extends InteractiveObject
 	 * the number of lines increases when text wraps.
 	 */
 	public get numLines () : number{
-		//todo
-		console.log("numLines not implemented yet in flash/TextField");
 		return (<AwayTextField> this._adaptee).numLines;
 	}
 
@@ -695,13 +679,10 @@ export class TextField extends InteractiveObject
 	 * the scrollV vertical scrolling property.
 	 */
 	public get scrollH () : number{
-		//todo
-		console.log("scrollH not implemented yet in flash/TextField");
-		return 0;
+		return (<AwayTextField>this.adaptee).scrollH;
 	}
 	public set scrollH (value:number){
-		//todo
-		console.log("scrollH not implemented yet in flash/TextField");
+		(<AwayTextField>this.adaptee).scrollH=value;
 	}
 
 	/**
@@ -717,13 +698,10 @@ export class TextField extends InteractiveObject
 	 * use.
 	 */
 	public get scrollV () : number{
-		//todo
-		console.log("scrollV not implemented yet in flash/TextField");
-		return 0;
+		return (<AwayTextField>this.adaptee).scrollV;
 	}
 	public set scrollV (value:number){
-		//todo
-		console.log("scrollV not implemented yet in flash/TextField");
+		(<AwayTextField>this.adaptee).scrollV=value;
 	}
 
 	/**
@@ -740,14 +718,10 @@ export class TextField extends InteractiveObject
 	 * You can select text this way even if the text field is a dynamic text field instead of an input text field.
 	 */
 	public get selectable () : boolean{
-		//todo
-		//console.log("selectable not implemented yet in flash/TextField");
-		return false;
+		return (<AwayTextField>this.adaptee).selectable;
 	}
 	public set selectable (value:boolean){
-		//todo
 		(<AwayTextField> this._adaptee).selectable=value;
-		//console.log("selectable not implemented yet in flash/TextField");
 	}
 
 	public get selectedText () : string{
@@ -762,9 +736,7 @@ export class TextField extends InteractiveObject
 	 * text is selected, this property is the value of caretIndex.
 	 */
 	public get selectionBeginIndex () : number{
-		//todo
-		console.log("selectionBeginIndex not implemented yet in flash/TextField");
-		return 0;
+		return (<AwayTextField>this.adaptee).selectionBeginIndex;
 	}
 
 	/**
@@ -773,9 +745,7 @@ export class TextField extends InteractiveObject
 	 * text is selected, this property is the value of caretIndex.
 	 */
 	public get selectionEndIndex () : number{
-		//todo
-		console.log("selectionEndIndex not implemented yet in flash/TextField");
-		return 0;
+		return (<AwayTextField>this.adaptee).selectionEndIndex;
 	}
 
 	/**
@@ -897,15 +867,11 @@ export class TextField extends InteractiveObject
 	 * which specifies an input text field, which a user can edit.
 	 * @throws	ArgumentError The type specified is not a member of flash.text.TextFieldType.
 	 */
-	public get type () : string{
-		//todo
-		console.log("type not implemented yet in flash/TextField");
-		return "";
+	public get type () : TextFieldType{
+		return (<AwayTextField> this._adaptee).type;
 	}
-	public set type (value:string){
-		//this.adaptee.
-		//todo
-		console.log("type not implemented yet in flash/TextField");
+	public set type (value:TextFieldType){
+		(<AwayTextField> this._adaptee).type = value;
 	}
 
 	/**
@@ -976,9 +942,7 @@ export class TextField extends InteractiveObject
 	 *   the second position is 1, and so on).  Returns -1 if the point is not over any character.
 	 */
 	public getCharIndexAtPoint (x:number, y:number) : number{
-		//todo
-		console.log("getCharIndexAtPoint not implemented yet in flash/TextField");
-		return 0;
+		return (<AwayTextField> this._adaptee).getCharIndexAtPoint(x, y);
 	}
 
 	/**
@@ -989,9 +953,7 @@ export class TextField extends InteractiveObject
 	 * @throws	RangeError The character index specified is out of range.
 	 */
 	public getFirstCharInParagraph (charIndex:number) : number{
-		//todo
-		console.log("getFirstCharInParagraph not implemented yet in flash/TextField");
-		return 0;
+		return (<AwayTextField> this._adaptee).getFirstCharInParagraph(charIndex);
 	}
 
 	/**
@@ -1023,9 +985,7 @@ export class TextField extends InteractiveObject
 	 *   second line is 1, and so on).  Returns -1 if the point is not over any line.
 	 */
 	public getLineIndexAtPoint (x:number, y:number) : number{
-		//todo
-		console.log("getLineIndexAtPoint not implemented yet in flash/TextField");
-		return 0;
+		return (<AwayTextField> this._adaptee).getLineIndexAtPoint(x, y);
 	}
 
 	/**
@@ -1036,9 +996,7 @@ export class TextField extends InteractiveObject
 	 * @return	The zero-based index value of the line.
 	 */
 	public getLineIndexOfChar (charIndex:number) : number{
-		//todo
-		console.log("getLineIndexOfChar not implemented yet in flash/TextField");
-		return 0;
+		return (<AwayTextField> this._adaptee).getLineIndexOfChar(charIndex);
 	}
 
 	/**
@@ -1048,9 +1006,7 @@ export class TextField extends InteractiveObject
 	 * @throws	RangeError The line number specified is out of range.
 	 */
 	public getLineLength (lineIndex:number) : number{
-		//todo
-		console.log("getLineLength not implemented yet in flash/TextField");
-		return 0;
+		return (<AwayTextField> this._adaptee).getLineLength(lineIndex);
 	}
 
 	/**
@@ -1074,9 +1030,7 @@ export class TextField extends InteractiveObject
 	 * @throws	RangeError The line number specified is out of range.
 	 */
 	public getLineOffset (lineIndex:number) : number{
-		//todo
-		console.log("getLineOffset not implemented yet in flash/TextField");
-		return 0;
+		return (<AwayTextField> this._adaptee).getLineOffset(lineIndex);
 	}
 
 	/**
@@ -1087,9 +1041,7 @@ export class TextField extends InteractiveObject
 	 * @throws	RangeError The line number specified is out of range.
 	 */
 	public getLineText (lineIndex:number) : string{
-		//todo
-		console.log("getLineText not implemented yet in flash/TextField");
-		return "";
+		return (<AwayTextField> this._adaptee).getLineText(lineIndex);
 	}
 
 	/**
@@ -1102,9 +1054,7 @@ export class TextField extends InteractiveObject
 	 * @throws	RangeError The character index specified is out of range.
 	 */
 	public getParagraphLength (charIndex:number) : number{
-		//todo
-		console.log("getParagraphLength not implemented yet in flash/TextField");
-		return 0;
+		return (<AwayTextField> this._adaptee).getParagraphLength(charIndex);
 	}
 
 	public getRawText () : string{
@@ -1139,7 +1089,7 @@ export class TextField extends InteractiveObject
 	public getTextFormat (beginIndex:number=-1, endIndex:number=-1) : TextFormat{
 		// todo: support multiple formats
 		console.log("todo: textformats");
-		return null;//(<AwayTextField> this._adaptee).textFormat;
+		return (<TextFormat><any>(<AwayTextField> this._adaptee).getTextFormat(beginIndex, endIndex).adapter);
 	}
 
 	public getTextRuns (beginIndex:number=0, endIndex:number=2147483647) : any[]{
@@ -1199,8 +1149,7 @@ export class TextField extends InteractiveObject
 	 * @throws	Error This method cannot be used on a text field with a style sheet.
 	 */
 	public replaceSelectedText (value:string) {
-		//todo
-		console.log("replaceSelectedText not implemented yet in flash/TextField");
+		return (<AwayTextField> this._adaptee).replaceSelectedText(value);
 	}
 
 	/**
@@ -1216,8 +1165,7 @@ export class TextField extends InteractiveObject
 	 * @throws	Error This method cannot be used on a text field with a style sheet.
 	 */
 	public replaceText (beginIndex:number, endIndex:number, newText:string) {
-		//todo
-		console.log("replaceText not implemented yet in flash/TextField");
+		return (<AwayTextField> this._adaptee).replaceText(beginIndex, endIndex, newText);
 	}
 
 	/**
@@ -1232,8 +1180,7 @@ export class TextField extends InteractiveObject
 	 * @internal	Need to add an example.
 	 */
 	public setSelection (beginIndex:number, endIndex:number) {
-		//todo
-		console.log("setSelection not implemented yet in flash/TextField");
+		return (<AwayTextField> this._adaptee).setSelection(beginIndex, endIndex);
 	}
 
 	/**
