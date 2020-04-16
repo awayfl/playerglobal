@@ -74,6 +74,9 @@ export class Loader extends DisplayObjectContainer
 
 		this._parser = parser;
 
+		this._loaderContext= new (<SecurityDomain> this.sec).flash.system.LoaderContext();
+		this._loaderContext.applicationDomain = ApplicationDomain.currentDomain;
+		
 		this._loaderInfo=new (<SecurityDomain> this.sec).flash.display.LoaderInfo();
 		this._loaderInfo._loader = this;
 		this._factory = new FlashSceneGraphFactory(null);
