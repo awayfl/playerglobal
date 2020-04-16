@@ -53,7 +53,7 @@ export class ApplicationDomain extends ASObject
 			//ApplicationDomain.currentDomain;
 			parentDomain=ApplicationDomain.getSystemDomain();
 		}
-
+		ApplicationDomain._currentDomain = this;
 		this._parentDomain=parentDomain;
 		this._definitions={};
 		this._font_definitions={};

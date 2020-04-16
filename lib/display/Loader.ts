@@ -76,7 +76,7 @@ export class Loader extends DisplayObjectContainer
 
 		this._loaderContext= new (<SecurityDomain> this.sec).flash.system.LoaderContext();
 		this._loaderContext.applicationDomain = ApplicationDomain.currentDomain;
-		
+
 		this._loaderInfo=new (<SecurityDomain> this.sec).flash.display.LoaderInfo();
 		this._loaderInfo._loader = this;
 		this._factory = new FlashSceneGraphFactory(null);
@@ -247,7 +247,8 @@ export class Loader extends DisplayObjectContainer
 
 		this._isImage = (ext == "jpg" || ext == "png");
 		//url.url=url.url.replace(".swf", ".awd");
-		this._loaderContext=context;
+		if(context)
+			this._loaderContext=context;
 		this._loaderInfo.applicationDomain = context ?  context.applicationDomain : new ApplicationDomain();
 
 		this._loader = new AwayLoader();
