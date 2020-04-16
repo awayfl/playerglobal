@@ -207,7 +207,7 @@ export class Loader extends DisplayObjectContainer
 					} else if(resolve instanceof RegExp) {
 						rule.url = url.match(resolve)[0];
 					} else if (typeof resolve === 'string') {
-						rule.url = url;
+						rule.url = resolve;
 					}
 
 					if(typeof rule.url === 'undefined'){
