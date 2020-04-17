@@ -4,6 +4,7 @@ import { DisplayObject } from "./DisplayObject";
 import {SoundTransform} from "../media/SoundTransform";
 import { MovieClip } from './MovieClip';
 import { FrameScriptManager } from '@awayjs/scene';
+import { MovieClip as AwayMovieClip } from '@awayjs/scene';
 
 /**
  * The SimpleButton class lets you control all instances of button symbols in a SWF
@@ -51,6 +52,7 @@ export class SimpleButton extends MovieClip
 	 */
 	constructor (upState:DisplayObject=null, overState:DisplayObject=null, downState:DisplayObject=null, hitTestState:DisplayObject=null){
 		super();
+		(<AwayMovieClip>this._adaptee).addButtonListeners();
 	}
 
 	// for AVM1:
