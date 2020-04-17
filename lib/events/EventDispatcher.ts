@@ -7,6 +7,7 @@ import { release } from '@awayfl/swf-loader';
 import { assert } from '@awayjs/graphics';
 import { SecurityDomain } from '../SecurityDomain';
 
+import {MouseEvent} from "../events/MouseEvent";
 /**
 	 * [broadcast event] Dispatched when the Flash Player or AIR application operating
 	 * loses system focus and is becoming inactive.
@@ -22,6 +23,17 @@ import { SecurityDomain } from '../SecurityDomain';
 
 export class EventDispatcher extends EventDispatcherBase
 {
+
+	public static eventsThatBubbleInAwayJS:string[]=[
+		MouseEvent.MOUSE_WHEEL,
+		MouseEvent.MOUSE_UP,
+		MouseEvent.MOUSE_OVER,
+		MouseEvent.MOUSE_OUT,
+		MouseEvent.MOUSE_MOVE,
+		MouseEvent.MOUSE_DOWN,
+		MouseEvent.DOUBLE_CLICK,
+		MouseEvent.CLICK		
+	]
 
     public toString():string{
         return "";
@@ -49,6 +61,15 @@ export class EventDispatcher extends EventDispatcherBase
 	public dispatchEvent(event:EventBase):void{
 		(<any>event).currentTarget=this;
 		super.dispatchEvent(event);
+		
+		// workaround for now.
+		// mousevents already bubble up the scenegraph in MouseMangager
+		// for all other events, we want to bubble them up here:
+		if(EventDispatcher.eventsThatBubbleInAwayJS.indexOf(event.type)==-1){
+			if((<any>this).adaptee && (<any>this).adaptee.parent){
+				(<any>this).adaptee.parent.adapter.dispatchEvent(event);
+			}
+		}
 	}
 	protected eventMapping:Object;
 	protected eventMappingDummys:Object;
