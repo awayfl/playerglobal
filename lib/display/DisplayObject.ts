@@ -614,17 +614,13 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   A large SWF file can monitor its download by calling
 	 * this.root.loaderInfo.addEventListener(Event.COMPLETE, func).
 	 */
-	public get loaderInfo(): LoaderInfo {
-		//console.log("loaderInfo not implemented yet in flash/DisplayObject");
-		//this._adaptee.loaderInfo
-		if (!this._loaderInfo) {
-			this._loaderInfo = new (<SecurityDomain> this.sec).flash.display.LoaderInfo()
-		}
+	public get loaderInfo():LoaderInfo
+	{
 		return this._loaderInfo;
 	}
-	public set loaderInfo(value: LoaderInfo) {
-		//console.log("loaderInfo not implemented yet in flash/DisplayObject");
-		//this._adaptee.loaderInfo
+
+	public set loaderInfo(value:LoaderInfo)
+	{
 		this._loaderInfo = value;
 	}
 

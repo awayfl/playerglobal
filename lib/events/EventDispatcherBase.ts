@@ -16,7 +16,8 @@ export class EventDispatcherBase extends ASObject
 	protected _queuedEvents:EventBase[]=[];
 
 
-    public toString():string{
+	public toString():string
+	{
         return "";
     }
 	constructor(target:any = null)
@@ -124,7 +125,7 @@ export class ListenerObject
 	public addEventListener(listener:(event:EventBase) => void):void
 	{
 		//check if listener already added
-		if (this.getEventListenerIndex(listener) !== -1)
+		if (this._listeners.indexOf(listener) !== -1)
 			return;
 
 		this._listeners.push(listener);
@@ -135,7 +136,7 @@ export class ListenerObject
 	public removeEventListener(listener:(event:EventBase) => void):void
 	{
 		//check if listener exists
-		var index:number = this.getEventListenerIndex(listener);
+		var index:number = this._listeners.indexOf(listener);
 
 		if (index === -1)
 			return;
@@ -164,11 +165,7 @@ export class ListenerObject
 	 */
 	public getEventListenerIndex(listener:(event:EventBase) => void):number
 	{
-		for (var index:number = 0; index < this.numListeners; index++)
-			if (listener == this._listeners[index])
-				return index;
-
-		return -1;
+		return this._listeners.indexOf(listener);
 	}
 }
 export default EventDispatcherBase;

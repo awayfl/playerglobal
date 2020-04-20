@@ -11,13 +11,28 @@ import { BitmapImage2D } from '@awayjs/stage';
 import { Graphics } from '@awayjs/graphics';
 import { Stage } from './display/Stage';
 import { DisplayObject } from './display/DisplayObject';
+import { LoaderInfo } from './display/LoaderInfo';
+import { ILoader } from './ILoader';
 
 
-export class PlayerGlobal implements IPlayerGlobal {
+export class PlayerGlobal implements IPlayerGlobal, ILoader {
 
+	private _contentLoaderInfo:LoaderInfo;
+	private _content:DisplayObject;
 	private _avmStage: AVMStage;
 	private _stage: Stage;
 	private _applicationDomain: ApplicationDomain;
+
+	public get stage():Stage
+	{
+		return this._stage;
+	}
+
+	public get content():DisplayObject
+	{
+		return this._content;
+	}
+
 	public createSecurityDomain(
 		avmStage: AVMStage,
 		swfFile: SWFFile,
@@ -87,6 +102,7 @@ export class PlayerGlobal implements IPlayerGlobal {
 							}, result.reject)
 							.then(
 								() => {
+									this._contentLoaderInfo = new sec.flash.display.LoaderInfo(this, this._avmStage);
 									this._applicationDomain = new sec.flash.system.ApplicationDomain()
 									var loaderContext: LoaderContext = new sec.flash.system.LoaderContext(false, this._applicationDomain);
 									ActiveLoaderContext.loaderContext = loaderContext;
@@ -140,10 +156,10 @@ export class PlayerGlobal implements IPlayerGlobal {
 			// if this is the "Scene 1", we make it a child of the loader
 			if (addScene && (<any>asset).isAVMScene) {// "Scene 1" when AWDParser, isAVMScene when using SWFParser
 
-				var newClone = <DisplayObject>(<IDisplayObjectAdapter>asset.adapter).clone();
-				//newClone.loaderInfo=this._avmStage.loaderInfo;
-				newClone.adaptee.reset();
-				this._stage.addChild(newClone);
+				this._content = <DisplayObject>(<IDisplayObjectAdapter>asset.adapter).clone();
+				this._content.loaderInfo = this._contentLoaderInfo;
+				this._content.adaptee.reset();
+				this._stage.addChild(this._content);
 				//this.addChild(this._loaderInfo.content = (<MovieClip>(<AwayMovieClip>asset).adapter));
 			}
 		}
@@ -166,7 +182,10 @@ class BrowserSystemResourcesLoadingService {
 			return BrowserSystemResourcesLoadingService._instance;
 		return (BrowserSystemResourcesLoadingService._instance = new BrowserSystemResourcesLoadingService());
 	}
-	public constructor() { }
+	public constructor()
+	{
+		
+	}
 
 	public load(url, type): Promise<any> {
 		return this._promiseFile(url, type);
