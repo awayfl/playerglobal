@@ -130,6 +130,7 @@ export class Stage extends DisplayObjectContainer{
 	private _eventFrameConstructed: Event;
 	private _eventExitFrame: Event;
 	private _eventRender: Event;
+	private _sendEventRender:boolean;
 
 
 	constructor() {
@@ -246,6 +247,13 @@ export class Stage extends DisplayObjectContainer{
 
 			// run all queued framescripts
 			FrameScriptManager.execute_queue();
+
+			if(this._sendEventRender){
+				this._stage.dispatchStaticBroadCastEvent(Event.RENDER);
+				FrameScriptManager.execute_queue();
+				this._sendEventRender=false;
+
+			}
 	}
 
 
@@ -949,8 +957,7 @@ export class Stage extends DisplayObjectContainer{
 	 * Security.allowDomain() method.
 	 */
 	public invalidate (){
-		//todo
-		console.log("invalidate not implemented yet in flash/Stage");
+		this._sendEventRender=true;
 	}
 
 	/**
