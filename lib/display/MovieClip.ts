@@ -147,9 +147,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		}
 		if((<AwayMovieClip>newMC.adaptee).timeline){
 			
-			//	check if this mc is based on MovieClip or Sprite
-			//	if it is based on sprite, we remove all timeline frames but the first
-
+			/*
 			let foundSpriteOrMCClass:string="";
 			let symbolClass:any=(<any>this)._symbol.symbolClass; 
 			while(symbolClass && foundSpriteOrMCClass==""){
@@ -162,8 +160,12 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 				else{
 					symbolClass==null;
 				}
-			}
-			if(foundSpriteOrMCClass=="Sprite"){
+			}*/
+			// 	hack to BadIceCreamFont compiledClip:
+			//	the compiledClip "BadIcecreamFont" seem to behave different to other classes
+			//	it seem to always stick to frame 0, 
+			//if(foundSpriteOrMCClass=="Sprite"){
+			if((<any>this)._symbol.className && (<any>this)._symbol.className=="BadIcecreamFont"){
 				(<any>newMC.adaptee).adaptee.timeline.frame_command_indices=[(<any>newMC.adaptee).timeline.frame_command_indices[0]];
 				(<any>newMC.adaptee).adaptee.timeline.frame_recipe=[(<any>newMC.adaptee).timeline.frame_recipe[0]];
 				(<any>newMC.adaptee).adaptee.timeline.keyframe_constructframes=[(<any>newMC.adaptee).timeline.keyframe_constructframes[0]];
