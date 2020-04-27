@@ -8,6 +8,7 @@ import { assert } from '@awayjs/graphics';
 import { SecurityDomain } from '../SecurityDomain';
 
 import {MouseEvent} from "../events/MouseEvent";
+import {KeyboardEvent} from "../events/KeyboardEvent";
 /**
 	 * [broadcast event] Dispatched when the Flash Player or AIR application operating
 	 * loses system focus and is becoming inactive.
@@ -32,7 +33,17 @@ export class EventDispatcher extends EventDispatcherBase
 		MouseEvent.MOUSE_MOVE,
 		MouseEvent.MOUSE_DOWN,
 		MouseEvent.DOUBLE_CLICK,
-		MouseEvent.CLICK		
+		MouseEvent.CLICK,
+		Event.ENTER_FRAME,	
+		Event.EXIT_FRAME,
+		Event.FRAME_CONSTRUCTED,
+		Event.ADDED,
+		Event.ADDED_TO_STAGE,
+		Event.RESIZE,
+		Event.REMOVED,
+		Event.REMOVED_FROM_STAGE,
+		KeyboardEvent.KEY_DOWN,
+		KeyboardEvent.KEY_UP,
 	]
 
     public toString():string{
