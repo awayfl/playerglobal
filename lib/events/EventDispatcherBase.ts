@@ -14,6 +14,7 @@ export class EventDispatcherBase extends ASObject
 	private _listenerObjects:Array<ListenerObject> = new Array<ListenerObject>();
 	private _t:any;
 	protected _queuedEvents:EventBase[]=[];
+	protected _queuedAttachEventListeners:StringMap<((event: EventBase) => void)[]> = {};
 
 
 	public toString():string
@@ -64,7 +65,11 @@ export class EventDispatcherBase extends ASObject
 				delete this._listenerObjects[type];
 		}
 	}
-
+	
+	public getQueuedAttachEventListeners()
+	{
+		return this._queuedAttachEventListeners;
+	}
 	public getQueuedEvents()
 	{
 		if(!this._queuedEvents)

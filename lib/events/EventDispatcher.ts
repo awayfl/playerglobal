@@ -69,51 +69,64 @@ export class EventDispatcher extends EventDispatcherBase
 		
 		return super.getQueuedEvents();
 	}
-	public dispatchEvent(event:EventBase):void{
-		(<any>event).currentTarget=this;
+	public getQueuedAttachEventListeners() {
+
+		return super.getQueuedAttachEventListeners();
+	}
+	
+	public dispatchEvent(event: EventBase): void {
+		(<any>event).currentTarget = this;
 		super.dispatchEvent(event);
-		
+
 		// workaround for now.
 		// mousevents already bubble up the scenegraph in MouseMangager
 		// for all other events, we want to bubble them up here:
-		if(EventDispatcher.eventsThatBubbleInAwayJS.indexOf(event.type)==-1){
-			if((<any>this).adaptee && (<any>this).adaptee.parent){
+		if (EventDispatcher.eventsThatBubbleInAwayJS.indexOf(event.type) == -1) {
+			if ((<any>this).adaptee && (<any>this).adaptee.parent) {
 				(<any>this).adaptee.parent.adapter.dispatchEvent(event);
 			}
 		}
 	}
-	protected eventMapping:Object;
-	protected eventMappingDummys:Object;
-	protected eventMappingExtern:Object;
+	protected eventMapping: Object;
+	protected eventMappingDummys: Object;
+	protected eventMappingExtern: Object;
 
-	protected eventMappingInvert:Object;
+	protected eventMappingInvert: Object;
 
 	// for AVM1:
-	public _avm1Context:any;
+	public _avm1Context: any;
 
-	constructor(target:any = null)
-	{
+	constructor(target: any = null) {
 		super(target);
 
-		this.eventMapping={};
-		this.eventMappingDummys={};
-		this.eventMappingExtern={};
+		this.eventMapping = {};
+		this.eventMappingDummys = {};
+		this.eventMappingExtern = {};
 
-		this.eventMappingInvert={};//only needed in some cases, when we translate back from awayjs-type to flash-type
+		this.eventMappingInvert = {};//only needed in some cases, when we translate back from awayjs-type to flash-type
 
-		this._activateCallbackDelegate = (event:any) => this.activateCallback(event);
-		this.eventMapping[Event.ACTIVATE]=(<IEventMapper>{
-			adaptedType:"",
-			addListener:this.initActivateListener,
-			removeListener:this.removeActivateListener,
-			callback:this._activateCallbackDelegate});
+		this._activateCallbackDelegate = (event: any) => this.activateCallback(event);
+		this.eventMapping[Event.ACTIVATE] = (<IEventMapper>{
+			adaptedType: "",
+			addListener: this.initActivateListener,
+			removeListener: this.removeActivateListener,
+			callback: this._activateCallbackDelegate
+		});
 
-		this._deactivateCallbackDelegate = (event:any) => this.deactivateCallback(event);
-		this.eventMapping[Event.DEACTIVATE]=(<IEventMapper>{
-			adaptedType:"",
-			addListener:this.initDeactivateListener,
-			removeListener:this.removeDeactivateListener,
-			callback:this._deactivateCallbackDelegate});
+		this._deactivateCallbackDelegate = (event: any) => this.deactivateCallback(event);
+		this.eventMapping[Event.DEACTIVATE] = (<IEventMapper>{
+			adaptedType: "",
+			addListener: this.initDeactivateListener,
+			removeListener: this.removeDeactivateListener,
+			callback: this._deactivateCallbackDelegate
+		});
+		if(this._queuedAttachEventListeners){
+			for(var key in this._queuedAttachEventListeners){
+				for(let i=0; i<this._queuedAttachEventListeners[key].length; i++){
+					this.addEventListener(key, this._queuedAttachEventListeners[key][i]);
+				}
+			}
+		}
 	}
 
 	// ---------- event mapping functions Event.ACTIVATE
@@ -160,7 +173,17 @@ export class EventDispatcher extends EventDispatcherBase
 		if (!useCapture && Event.isBroadcastEventType(type)) {
 			BroadcastEventDispatchQueue.getInstance().add(type, this);
 		}
-		if(this.eventMappingDummys.hasOwnProperty(type)){
+
+		if (!this.eventMappingDummys) {
+			if (!this._queuedAttachEventListeners)
+				this._queuedAttachEventListeners = {};
+			if (!this._queuedAttachEventListeners[type]) {
+				this._queuedAttachEventListeners[type]=[];
+			}
+			this._queuedAttachEventListeners[type].push(listener);
+			return;
+		}
+		if (this.eventMappingDummys.hasOwnProperty(type)) {
 
 			// this is a dummy eventMapping
 			// this means that this is a event-type, that is not yet supported
@@ -200,8 +223,11 @@ export class EventDispatcher extends EventDispatcherBase
 	 * @param {String} type of event to remove a listener for
 	 * @param {Function} listener function
 	 */
-	public removeEventListener(type:string, listener:(event:EventBase) => void):void
-	{
+	public removeEventListener(type: string, listener: (event: EventBase) => void): void {
+		if (!this.eventMappingDummys) {
+			console.log("todo: remove queued addEventListener");
+			return;
+		}
 		super.removeEventListener(type, listener);
 		if(this.eventMapping.hasOwnProperty(type)){
 			// a mapping exists
