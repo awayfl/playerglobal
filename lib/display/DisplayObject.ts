@@ -33,6 +33,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	protected _visibilityByScript: boolean;
 
 	private _transform: Transform;
+	private _filters:any[] = [];
 	public toString():string {
 		return this.adaptee.name;
 
@@ -557,11 +558,13 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   property for more information.
 	 */
 	public get filters(): any[] {
-		//console.log("filters not implemented yet in flash/DisplayObject");
-		return [];
+		return this._filters;
 	}
 	public set filters(value: any[]) {
-		//console.log("filters not implemented yet in flash/DisplayObject");
+		if (this._filters == value)
+			return;
+		
+		this._filters = value;
 	}
 
 	/**
