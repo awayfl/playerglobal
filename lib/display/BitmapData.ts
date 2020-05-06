@@ -267,7 +267,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		if (index != -1)
 			this._owners.splice(index, 1);
 
-		if (!this._owners.length)
+		if (!this._owners.length && this._adaptee)
 			this._adaptee.clear();
 	}
 }
