@@ -87,7 +87,7 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 							new Uint8Array(results[0]),
 							results[1]
 						);
-						console.log("add playerglobals as ABCCatalog");
+						release || console.log("add playerglobals as ABCCatalog");
 						sec.addCatalog(catalog);
 
 						BrowserSystemResourcesLoadingService.getInstance()
