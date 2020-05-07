@@ -58,6 +58,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	public updateFilters(newFilters:IFilter[]){
 		if(!newFilters || newFilters.length==0){
 			this.filters=this.sec.createArrayUnsafe([]);
+			return;
 		}
 		let filter:IFilter;
 		let newASFilters:BitmapFilter[]=[];
