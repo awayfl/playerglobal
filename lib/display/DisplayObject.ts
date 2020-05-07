@@ -1,7 +1,7 @@
 import { Transform as AwayTransform, Point as AwayPoint, Box, Vector3D as AwayVector3D, AbstractMethodError } from "@awayjs/core";
 import { EventDispatcher, BroadcastEventDispatchQueue } from "../events/EventDispatcher";
 import { Event } from "../events/Event";
-import { DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip,  IDisplayObjectAdapter, MovieClip } from "@awayjs/scene";
+import { DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip,  IDisplayObjectAdapter, MovieClip, IFilter } from "@awayjs/scene";
 import { LoaderInfo } from "./LoaderInfo";
 import { DisplayObjectContainer } from "./DisplayObjectContainer";
 import { Stage } from "./Stage";
@@ -13,6 +13,9 @@ import { Rectangle } from '../geom/Rectangle';
 import { Point } from '../geom/Point';
 import { Vector3D } from '../geom/Vector3D';
 import { SecurityDomain } from '../SecurityDomain';
+import { release, FilterType } from '@awayfl/swf-loader';
+import { BitmapFilter } from '../filters/BitmapFilter';
+import { GlowFilter } from '@awayfl/swf-loader';
 
 class StaticEvents{
 	
@@ -33,7 +36,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	protected _visibilityByScript: boolean;
 
 	private _transform: Transform;
-	private _filters:any[] = [];
+	private _filters:BitmapFilter[] = [];
 	public toString():string {
 		return this.adaptee.name;
 
@@ -51,6 +54,71 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		if(!StaticEvents.events[eventName])
 			StaticEvents.events[eventName]=new (<SecurityDomain> this.sec).flash.events.Event(eventName);
 		BroadcastEventDispatchQueue.getInstance().dispatchEvent(StaticEvents.events[eventName])
+	}
+	public updateFilters(newFilters:IFilter[]){
+		if(!newFilters || newFilters.length==0){
+			this.filters=this.sec.createArrayUnsafe([]);
+		}
+		let filter:IFilter;
+		let newASFilters:BitmapFilter[]=[];
+		newASFilters.length=newFilters.length;
+		for(let f=0; f<newFilters.length; f++){
+			filter=newFilters[f];
+			switch(filter.type){
+				case FilterType.DROPSHADOW:
+					newASFilters[f]=new (<SecurityDomain>this.sec).flash.filters.DropShadowFilter(
+						filter.distance, filter.angle, filter.color, 1, filter.blurX, filter.blurY, 
+						filter.strength, filter.quality, filter.inner, filter.knockout, filter.compositeSource );
+					break;
+				case FilterType.GLOW:
+					newASFilters[f]=new (<SecurityDomain>this.sec).flash.filters.GlowFilter(
+						filter.color, 1, filter.blurX, filter.blurY, filter.strength, 
+						filter.quality, filter.inner, filter.knockout);
+					break;
+				case FilterType.BEVEL:
+					// todo: set argument "type" (currently stubbed with "")
+					newASFilters[f]=new (<SecurityDomain>this.sec).flash.filters.BevelFiler(
+						filter.distance, filter.angle, filter.colors[0], 1,
+						filter.colors[1], 1, filter.blurX, filter.blurY, filter.strength, 
+						filter.quality, "", filter.knockout);
+					break;
+				case FilterType.GRADIENTGLOW:
+					// todo: set argument "type" (currently stubbed with "")
+					var alphas=[];
+					filter.colors.forEach(value=>alphas.push(1));
+					newASFilters[f]=new (<SecurityDomain>this.sec).flash.filters.GradientGlowFilter(
+						filter.distance, filter.angle, this.sec.createArrayUnsafe(filter.colors), 
+						this.sec.createArrayUnsafe(alphas), this.sec.createArrayUnsafe(filter.ratios),
+						filter.blurX, filter.blurY, filter.strength, filter.quality, "", filter.knockout
+					);
+					break;
+				case FilterType.GRADIENTBEVEL:
+					// todo: set argument "type" (currently stubbed with "")
+					newASFilters[f]=new (<SecurityDomain>this.sec).flash.filters.GradientBevelFilter(
+						filter.distance, filter.angle, this.sec.createArrayUnsafe(filter.colors), 
+						this.sec.createArrayUnsafe(alphas), this.sec.createArrayUnsafe(filter.ratios),
+						filter.blurX, filter.blurY, filter.strength, filter.quality, "", filter.knockout
+						);
+					break;
+				case FilterType.BLUR:
+					newASFilters[f]=new (<SecurityDomain>this.sec).flash.filters.BlurFilter(
+						filter.blurX, filter.blurY, filter.quality);
+					break;
+				case FilterType.CONVOLUTION:
+					newASFilters[f]=new (<SecurityDomain>this.sec).flash.filters.ConvolutionFilter(
+						filter.matrixX, filter.matrixY, this.sec.createArrayUnsafe(filter.matrix), 
+						filter.divisor, filter.bias, filter.preserveAlpha,
+						filter.clamp, filter.color, 1
+					);
+					break;
+				case FilterType.COLORMATRIX:
+					newASFilters[f]=new (<SecurityDomain>this.sec).flash.filters.ColorMatrixFilter(
+						this.sec.createArrayUnsafe(filter.matrix)
+					);
+					break;
+			}
+		}
+		this.filters=newASFilters;
 	}
 	protected _adaptee: AwayDisplayObject;
 	/**
@@ -557,10 +625,10 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   data in the input data. See the ShaderInput.input
 	 *   property for more information.
 	 */
-	public get filters(): any[] {
+	public get filters(): BitmapFilter[] {
 		return this._filters;
 	}
-	public set filters(value: any[]) {
+	public set filters(value: BitmapFilter[]) {
 		if (this._filters == value)
 			return;
 		

@@ -57,6 +57,16 @@ import { Vector3D } from './geom/Vector3D';
 import { Matrix3D } from './geom/Matrix3D';
 import { Shape } from './display/Shape';
 import { TimerEvent } from './events/TimerEvent';
+import { GlowFilter } from './filters/GlowFilter';
+import { BevelFilter } from './filters/BevelFilter';
+import { BitmapFilter } from './filters/BitmapFilter';
+import { BlurFilter } from './filters/BlurFilter';
+import { ColorMatrixFilter } from './filters/ColorMatrixFilter';
+import { ConvolutionFilter } from './filters/ConvolutionFilter';
+import { DisplacementMapFilter } from './filters/DisplacementMapFilter';
+import { DropShadowFilter } from './filters/DropShadowFilter';
+import { GradientBevelFilter } from './filters/GradientBevelFilter';
+import { GradientGlowFilter } from './filters/GradientGlowFilter';
 
 export class ContextMenu{}
 export class ContextMenuItem{}
@@ -92,7 +102,18 @@ export class SecurityDomain extends AXSecurityDomain
 		external: {
 			ExternalInterface: ExternalInterface
 		},
-		filters: {},
+		filters: {
+			BevelFiler: BevelFilter,
+			BitmapFilter: BitmapFilter,
+			BlurFilter: BlurFilter,
+			ColorMatrixFilter: ColorMatrixFilter,
+			ConvolutionFilter: ConvolutionFilter,
+			DisplacementMapFilter: DisplacementMapFilter,
+			DropShadowFilter: DropShadowFilter,
+			GlowFilter: GlowFilter,
+			GradientBevelFilter: GradientBevelFilter,
+			GradientGlowFilter: GradientGlowFilter,
+		},
 		text: {
 			TextField: TextField,
 			TextFormat: TextFormat,
