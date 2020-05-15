@@ -4,6 +4,7 @@ import { ASArray } from "@awayfl/avm2";
 import { URLRequest } from "../net/URLRequest";
 import { ContextMenuBuiltInItems } from "./ContextMenuBuiltInItems";
 import { NativeMenu } from "../display/NativeMenu";
+import { SecurityDomain } from '../SecurityDomain';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -30,7 +31,7 @@ export class ContextMenu extends NativeMenu {
 
 	constructor () {
 		super();
-		this._builtInItems = new ContextMenuBuiltInItems();
+		this._builtInItems = new (<SecurityDomain> this.sec).flash.ui.ContextMenuBuiltInItems();
 		this._customItems = [];
 	}
 
@@ -111,7 +112,7 @@ export class ContextMenu extends NativeMenu {
 	}
 
 	clone(): ContextMenu {
-		var result: ContextMenu = new ContextMenu();
+		var result: ContextMenu = new (<SecurityDomain> this.sec).flash.ui.ContextMenu();
 		result._builtInItems = this._builtInItems.clone();
 
 		this.cloneLinkAndClipboardProperties(result);

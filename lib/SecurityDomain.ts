@@ -67,9 +67,10 @@ import { DisplacementMapFilter } from './filters/DisplacementMapFilter';
 import { DropShadowFilter } from './filters/DropShadowFilter';
 import { GradientBevelFilter } from './filters/GradientBevelFilter';
 import { GradientGlowFilter } from './filters/GradientGlowFilter';
+import { ContextMenuBuiltInItems } from './ui/ContextMenuBuiltInItems';
+import { ContextMenu } from './ui/ContextMenu';
+import { ContextMenuItem } from './ui/ContextMenuItem';
 
-export class ContextMenu{}
-export class ContextMenuItem{}
 export class Mouse{}
 
 export class SecurityDomain extends AXSecurityDomain
@@ -144,6 +145,7 @@ export class SecurityDomain extends AXSecurityDomain
 		ui: {
 			ContextMenu: ContextMenu,
 			ContextMenuItem: ContextMenuItem,
+			ContextMenuBuiltInItems: ContextMenuBuiltInItems,
 			Mouse: Mouse
 		},
 		utils: {
