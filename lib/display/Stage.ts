@@ -20,6 +20,7 @@ import { Transform } from '../geom/Transform';
 import { Rectangle } from '../geom/Rectangle';
 import { SecurityDomain } from '../SecurityDomain'
 import { OrphanManager } from '@awayfl/avm2'
+import { LoaderInfo } from './LoaderInfo'
 
 
 /**
@@ -886,7 +887,6 @@ export class Stage extends DisplayObjectContainer{
 	public set contextMenu (value:any){};// todo: any is ContextMenu
 	public set filters (value:Array<any>) {};
 	public set focusRect (value:any) {};
-	public set loaderInfo (value:any) {};
 	public set mask (value:DisplayObject){};
 	public set mouseChildren (value:boolean){};
 	public get mouseChildren():boolean{return false;};
@@ -939,7 +939,11 @@ export class Stage extends DisplayObjectContainer{
 	public dispatchEvent(event: Event): void {
 		return super.dispatchEvent(event);}
 	//____________________________________
-		
+
+	public get loaderInfo():LoaderInfo
+	{
+		return this.getChildAt(0).loaderInfo;
+	}
 
 	/**
 	 * Calling the invalidate() method signals Flash runtimes to alert display objects
