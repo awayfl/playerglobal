@@ -74,9 +74,9 @@ import { release } from '@awayfl/swf-loader';
 
 /*
 import { NativeMenu } from "./display/NativeMenu";
-import { NativeMenuItem } from "./display/NativeMenuItem";
-*/
 
+*/
+import { NativeMenuItem } from "./display/NativeMenuItem";
 import { ContextMenu } from "./ui/ContextMenu";
 import { ContextMenuItem } from "./ui/ContextMenuItem";
 import { ContextMenuBuiltInItems } from "./ui/ContextMenuBuiltInItems";
@@ -138,8 +138,8 @@ import { SoundChannel } from "./media/SoundChannel";
 import { SoundTransform } from "./media/SoundTransform";
 import { StageVideo } from "./media/StageVideo";
 import { Video } from "./media/Video";
-import { TouchEvent } from "./events/TouchEvent";
 */
+import { TouchEvent } from "./events/TouchEvent";
 import { MultitouchInputMode } from "./ui/MultitouchInputMode";
 import { Multitouch } from "./ui/Multitouch";
 /*
@@ -214,7 +214,7 @@ export function initLink() {
 	M("flash.text.TextField", TextField);
 	// M("flash.display.MorphShape", MorphShape);
 	// M("flash.display.NativeMenu", NativeMenu);
-	// M("flash.display.NativeMenuItem", NativeMenuItem);
+	M("flash.display.NativeMenuItem", NativeMenuItem);
 	M("flash.display.FrameLabel", FrameLabel);
 	// M("flash.display.AVM1Movie", AVM1Movie);
 
@@ -278,7 +278,7 @@ export function initLink() {
 	// M("flash.ui.GameInputHand", GameInputHand);
 	M("flash.ui.Multitouch",  <any>Multitouch);
 	M("flash.ui.MultitouchInputMode",  <any>MultitouchInputMode);
-	// M("flash.events.TouchEvent", TouchEvent);
+	M("flash.events.TouchEvent", TouchEvent);
 
 	// M("flash.text.Font", Font);
 	// M("flash.text.StaticText", StaticText);
