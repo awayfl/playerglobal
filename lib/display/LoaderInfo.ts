@@ -660,7 +660,7 @@ export class LoaderInfo extends EventDispatcher
 	
 	public _setApplicationDomain(value:ApplicationDomain)
 	{
-		this._applicationDomain = value || new ApplicationDomain(ApplicationDomain.currentDomain);
+		this._applicationDomain = value || new (<SecurityDomain>this.sec).flash.system.ApplicationDomain(ApplicationDomain.currentDomain);
 	}
 }
 

@@ -1,5 +1,5 @@
 
-import {StageAlign, StageScaleMode, AVMStage} from "@awayfl/swf-loader"
+import {StageAlign, StageScaleMode, AVMStage, release} from "@awayfl/swf-loader"
 import {Sprite} from "./Sprite"
 import {Event} from "../events/Event"
 import {IEventMapper} from "../events/IEventMapper"
@@ -680,14 +680,14 @@ export class Stage extends DisplayObjectContainer{
 	 */
 	public get showDefaultContextMenu () : boolean{
 		//todo
-		console.log("showDefaultContextMenu not implemented yet in flash/Stage");
+		release || console.log("showDefaultContextMenu not implemented yet in flash/Stage");
 		return false;
 
 
 	}
 	public set showDefaultContextMenu (value:boolean){
 		//todo
-		console.log("showDefaultContextMenu not implemented yet in flash/Stage");
+		release || console.log("showDefaultContextMenu not implemented yet in flash/Stage");
 
 	}
 
