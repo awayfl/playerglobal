@@ -5,7 +5,8 @@ import {MovieClip as AwayMovieClip} from "@awayjs/scene";
 import {WaveAudio} from "@awayjs/core";
 import {MovieClip} from "../display/MovieClip";
 import {Sound} from "../media/Sound";
-import { ASObject } from '@awayfl/avm2';
+import { ASObject, Multiname } from '@awayfl/avm2';
+import { SecurityDomain } from '../SecurityDomain';
 
 /**
  * The ApplicationDomain class is a container for discrete groups of class definitions.
@@ -53,7 +54,7 @@ export class ApplicationDomain extends ASObject
 			//ApplicationDomain.currentDomain;
 			parentDomain=ApplicationDomain.getSystemDomain();
 		}
-		(<any>this.sec).flash.system.ApplicationDomain._currentDomain = this;
+		ApplicationDomain._currentDomain = this;
 		this._parentDomain=parentDomain;
 		this._definitions={};
 		this._font_definitions={};
@@ -143,7 +144,7 @@ export class ApplicationDomain extends ASObject
 			return sound;
 		}
 
-		return null;
+		return (<SecurityDomain>this.sec).application.getClass(Multiname.FromSimpleName(name));	
 	}
 	public getFontDefinition (name:string) : Font{
 		return this._font_definitions[name];

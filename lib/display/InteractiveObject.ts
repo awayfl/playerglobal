@@ -8,6 +8,7 @@ import {KeyboardEvent} from "../events/KeyboardEvent";
 
 import {IEventMapper} from "../events/IEventMapper"
 import { SecurityDomain } from '../SecurityDomain';
+import { AVMStage } from '@awayfl/swf-loader';
 export class InteractiveObject extends DisplayObject{
 
 	/** these should be able to get setup:
@@ -482,6 +483,8 @@ export class InteractiveObject extends DisplayObject{
 	private _keyUpCallbackDelegate:(event:any) => void;
 	private keyUpCallback(event:any=null):boolean
 	{
+		if(AVMStage.instance().isPaused)
+			return;
 		if (window.event) {
 			window.event.returnValue = false;
 		}
@@ -520,6 +523,8 @@ export class InteractiveObject extends DisplayObject{
 	private _keyDownCallbackDelegate:(event:any) => void;
 	private keyDownCallback(event:any=null):boolean
 	{
+		if(AVMStage.instance().isPaused)
+			return;
 		if (window.event) {
 			window.event.returnValue = false;
 		}
