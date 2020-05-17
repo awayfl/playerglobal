@@ -278,7 +278,7 @@ export class Loader extends DisplayObjectContainer implements ILoader
 				this._content = <DisplayObject>(<IDisplayObjectAdapter> asset.adapter).clone();
 				this._content.loaderInfo = this._contentLoaderInfo;
 				this._content.adaptee.reset();
-				this.addChild(this._content);
+				super.addChild(this._content);
 				//this.addChild(this._loaderInfo.content = (<MovieClip>(<AwayMovieClip>asset).adapter));
 			}
 		}
@@ -549,7 +549,10 @@ export class Loader extends DisplayObjectContainer implements ILoader
 		this._isImage = (ext == "jpg" || ext == "png");
 		//url.url=url.url.replace(".swf", ".awd");
 
-		this._loaderContext = context || new LoaderContext();
+		this._loaderContext = context || new LoaderContext(
+			false,
+			ApplicationDomain.currentDomain
+		);
 
 		this._contentLoaderInfo._setApplicationDomain(this._loaderContext.applicationDomain);
 
