@@ -137,12 +137,12 @@ export class Stage extends DisplayObjectContainer{
 	constructor() {
 		super();
 
-			// todo: fix typing for this.sec
-			this._eventOnEnter = new (<any>this.sec).flash.events.Event(Event.ENTER_FRAME);
-			this._eventFrameConstructed = new (<any>this.sec).flash.events.Event(Event.FRAME_CONSTRUCTED);
-			this._eventExitFrame = new (<any>this.sec).flash.events.Event(Event.EXIT_FRAME);
-			this._eventRender = new (<any>this.sec).flash.events.Event(Event.RENDER);
-			this._events = [this._eventOnEnter, this._eventExitFrame];
+		this._eventOnEnter = new (<SecurityDomain>this.sec).flash.events.Event(Event.ENTER_FRAME);
+		this._eventFrameConstructed = new (<SecurityDomain>this.sec).flash.events.Event(Event.FRAME_CONSTRUCTED);
+		this._eventExitFrame = new (<SecurityDomain>this.sec).flash.events.Event(Event.EXIT_FRAME);
+		this._eventRender = new (<SecurityDomain>this.sec).flash.events.Event(Event.RENDER);
+		this._events = [this._eventOnEnter, this._eventExitFrame];
+
 
 		this._events=[this._eventOnEnter, this._eventExitFrame];
 
