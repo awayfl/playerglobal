@@ -262,7 +262,7 @@ export class Stage extends DisplayObjectContainer{
 
 	public get mouseX () : number{
 		//console.log("mouseX not implemented yet in flash/DisplayObject");
-		return (<AVMStage>this.adaptee).scene.getLocalMouseX(this.adaptee);
+		return (<AVMStage>this.adaptee).scene.getLocalMouseX(this.adaptee) | 0;
 	}
 
 	/**
@@ -273,7 +273,7 @@ export class Stage extends DisplayObjectContainer{
 	 */
 	public get mouseY () : number{
 		//console.log("mouseY not implemented yet in flash/DisplayObject");
-		return (<AVMStage>this.adaptee).scene.getLocalMouseY(this.adaptee);
+		return (<AVMStage>this.adaptee).scene.getLocalMouseY(this.adaptee) | 0;
 	}
 
 	public set accessibilityImplementation (value:any){
