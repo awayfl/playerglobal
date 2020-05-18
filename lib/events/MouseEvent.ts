@@ -241,7 +241,7 @@ export class MouseEvent extends Event {
   }
 
   updateAfterEvent(): void {
-    this.sec.player.requestRendering();
+    this.sec.player.requestRender();
   }
 
   private _getGlobalPoint(): Point {

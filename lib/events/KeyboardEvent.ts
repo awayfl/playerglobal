@@ -98,6 +98,6 @@ export class KeyboardEvent extends Event {
   }
 
   updateAfterEvent(): void {
-    this.sec.player.requestRendering();
+    this.sec.player.requestRender();
   }
 }
