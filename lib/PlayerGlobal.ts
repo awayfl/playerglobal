@@ -56,6 +56,7 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 				sec.system.loadABC(builtinABC);
 				sec.initialize();
 				sec.system.executeABC(builtinABC);
+				sec.player=avmStage;
 				//SWF.leaveTimeline();
 
 				//// If library is shell.abc, then just go ahead and run it now since
