@@ -167,14 +167,16 @@ export class MouseEvent extends Event {
     if (isNaN(this.localX + this.localY)) {
       return Number.NaN;
     }
-    return (this._getGlobalPoint().x / 20) | 0;
+    
+    return (<DisplayObject> this.target).stage.mouseX;
   }
 
   public get stageY(): Number {
     if (isNaN(this.localX + this.localY)) {
       return Number.NaN;
     }
-    return (this._getGlobalPoint().y / 20) | 0;
+
+    return (<DisplayObject> this.target).stage.mouseY;
   }
 
   get movementX(): number {
@@ -242,21 +244,6 @@ export class MouseEvent extends Event {
 
   updateAfterEvent(): void {
     this.sec.player.requestRender();
-  }
-
-  private _getGlobalPoint(): Point {
-    var point = this._position;
-    if (!point) {
-      point = this._position = new Point();
-    }
-    if (this.target) {
-      point.setTo(this._localX, this._localY);
-      var m = (<DisplayObject>this._target).transform.concatenatedMatrix;
-      point = m.transformPoint(point);
-    } else {
-      point.setTo(0, 0);
-    }
-    return point;
   }
 
   clone(): Event {
