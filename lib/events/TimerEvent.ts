@@ -1,5 +1,6 @@
 import { Event } from "./Event";
 import { SecurityDomain } from '../SecurityDomain';
+import { release } from '@awayfl/swf-loader';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -41,6 +42,7 @@ export class TimerEvent extends Event {
   }
 
   updateAfterEvent(): void {
-    this.sec.player.requestRendering();
+	//release || console.log("TimerEvent.updateAfterEvent not implemented");
+    this.sec.player.requestRender();
   }
 }
