@@ -11,7 +11,7 @@ import {ByteArray} from "../utils/ByteArray";
 import {DisplayObject as AwayDisplayObject } from '@awayjs/scene';
 import { SecurityDomain } from '../SecurityDomain';
 import { PickGroup } from '@awayjs/view';
-import { AVMStage } from '@awayfl/swf-loader';
+import { AVMStage, release } from '@awayfl/swf-loader';
 
 /**
  * The LoaderInfo export class provides information about a loaded SWF file or a
@@ -143,7 +143,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get actionScriptVersion():number
 	{
-		console.log("actionScriptVersion not implemented yet in flash/LoaderInfo");
+		release || console.log("actionScriptVersion not implemented yet in flash/LoaderInfo");
 		return 0;
 	}
 
@@ -250,7 +250,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get bytes():ByteArray
 	{
-		console.log("bytes not implemented yet in flash/LoaderInfo");
+		release || console.log("bytes not implemented yet in flash/LoaderInfo");
 		return null;
 		
 	}
@@ -294,7 +294,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get childAllowsParent():boolean
 	{
-		console.log("childAllowsParent not implemented yet in flash/LoaderInfo");
+		release || console.log("childAllowsParent not implemented yet in flash/LoaderInfo");
 		return false;
 	}
 
@@ -312,13 +312,13 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get childSandboxBridge():any
 	{
-		console.log("childSandboxBridge not implemented yet in flash/LoaderInfo");
+		release || console.log("childSandboxBridge not implemented yet in flash/LoaderInfo");
 		return null;
 	}
 
 	public set childSandboxBridge(door:any)
 	{
-		console.log("childSandboxBridge not implemented yet in flash/LoaderInfo");
+		release || console.log("childSandboxBridge not implemented yet in flash/LoaderInfo");
 		
 	}
 
@@ -354,7 +354,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get contentType():string
 	{
-		console.log("childSandboxBridge not implemented yet in flash/LoaderInfo");
+		release || console.log("childSandboxBridge not implemented yet in flash/LoaderInfo");
 		return null;
 	}
 
@@ -425,7 +425,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get isURLInaccessible():boolean
 	{
-		console.log("isURLInaccessible not implemented yet in flash/LoaderInfo");
+		release || console.log("isURLInaccessible not implemented yet in flash/LoaderInfo");
 		return false;
 		
 	}
@@ -460,7 +460,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get loaderURL():string
 	{
-		console.log("loaderURL not implemented yet in flash/LoaderInfo");
+		release || console.log("loaderURL not implemented yet in flash/LoaderInfo");
 		return LoaderInfo.DefaultLocation;
 		
 	}
@@ -487,7 +487,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get parameters():any
 	{
-		console.log("parameters not implemented yet in flash/LoaderInfo");
+		release || console.log("parameters not implemented yet in flash/LoaderInfo");
 		return this.sec.createArrayUnsafe([]);
 	}
 
@@ -508,7 +508,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get parentAllowsChild():boolean
 	{
-		console.log("parentAllowsChild not implemented yet in flash/LoaderInfo");
+		release || console.log("parentAllowsChild not implemented yet in flash/LoaderInfo");
 		return false;
 		
 	}
@@ -527,13 +527,13 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get parentSandboxBridge():any
 	{
-		console.log("parentSandboxBridge not implemented yet in flash/LoaderInfo");
+		release || console.log("parentSandboxBridge not implemented yet in flash/LoaderInfo");
 		return null;
 	}
 
 	public set parentSandboxBridge(door:any)
 	{
-		console.log("parentSandboxBridge not implemented yet in flash/LoaderInfßo");
+		release || console.log("parentSandboxBridge not implemented yet in flash/LoaderInfßo");
 	}
 
 	/**
@@ -546,7 +546,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get sameDomain():boolean
 	{
-		console.log("sameDomain not implemented yet in flash/LoaderInfo");
+		release || console.log("sameDomain not implemented yet in flash/LoaderInfo");
 		return false;
 		
 	}
@@ -560,7 +560,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get sharedEvents():EventDispatcher
 	{
-		console.log("sharedEvents not implemented yet in flash/LoaderInfo");
+		release || console.log("sharedEvents not implemented yet in flash/LoaderInfo");
 		return null;
 	}
 
@@ -575,7 +575,6 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get swfVersion():number
 	{
-		console.log("swfVersion not implemented yet in flash/LoaderInfo");
 		return this._swfVersion;		
 	}
 
@@ -597,7 +596,7 @@ export class LoaderInfo extends EventDispatcher
 	public get uncaughtErrorEvents():any
 	{
 		//todo: any is UncaughtErrorEvents
-		console.log("uncaughtErrorEvents not implemented yet in flash/LoaderInfo");
+		release || console.log("uncaughtErrorEvents not implemented yet in flash/LoaderInfo");
 		return null;
 	
 }
@@ -653,7 +652,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public static getLoaderInfoByDefinition(object:any):LoaderInfo
 	{
-		console.log("getLoaderInfoByDefinition not implemented yet in flash/LoaderInfo");
+		release || console.log("getLoaderInfoByDefinition not implemented yet in flash/LoaderInfo");
 		return null;
 	}
 

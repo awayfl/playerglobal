@@ -1,5 +1,6 @@
 import { EventDispatcher } from "../events/EventDispatcher";
 import { SoundTransform } from "./SoundTransform";
+import { release } from '@awayfl/swf-loader';
 
 /**
  * Dispatched when a sound has finished playing.
@@ -43,7 +44,7 @@ export class SoundChannel extends EventDispatcher {
 	 * The current amplitude (volume) of the left channel, from 0 (silent) to 1 (full amplitude).
 	 */
 	public get leftPeak(): number {
-		console.log("leftPeak not implemented yet in flash/SoundChannel");
+		release || console.log("leftPeak not implemented yet in flash/SoundChannel");
 		return 0;
 	}
 
@@ -57,7 +58,7 @@ export class SoundChannel extends EventDispatcher {
 	 * If the sound is looped, position is reset to 0 at the beginning of each loop.
 	 */
 	public get position(): number {
-		console.log("position not implemented yet in flash/SoundChannel");
+		release || console.log("position not implemented yet in flash/SoundChannel");
 		return 0;
 	}
 
@@ -65,7 +66,7 @@ export class SoundChannel extends EventDispatcher {
 	 * The current amplitude (volume) of the right channel, from 0 (silent) to 1 (full amplitude).
 	 */
 	public get rightPeak(): number {
-		console.log("rightPeak not implemented yet in flash/SoundChannel");
+		release || console.log("rightPeak not implemented yet in flash/SoundChannel");
 		return 0;
 	}
 
@@ -100,7 +101,7 @@ export class SoundChannel extends EventDispatcher {
 	 */
 	public stop() {
 		if (!this._sound) {
-			console.log("SoundChannel.stop: No sound exists");
+			release || console.log("SoundChannel.stop: No sound exists");
 			return;
 		}
 		this._sound.stop();
