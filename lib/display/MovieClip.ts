@@ -1,6 +1,6 @@
 import { IDisplayObjectAdapter, MovieClip as AwayMovieClip, Sprite as AwaySprite, DisplayObject as AwayDisplayObject, IMovieClipAdapter, SceneGraphPartition, Timeline, FrameScriptManager } from "@awayjs/scene";
 import { Sprite } from "./Sprite";
-import { Matrix3D } from '@awayjs/core';
+import { Matrix3D, AssetBase } from '@awayjs/core';
 import { constructClassFromSymbol } from '@awayfl/avm2';
 import { Event } from "../events/Event";
 
@@ -115,24 +115,36 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 
 	}
 	public clone(): MovieClip {
-		if(!(<any>this)._symbol){
+		const anyThis: AssetBase = <any>this;
+
+		if(!anyThis._symbol){
 			throw("_symbol not defined when cloning movieclip")
 		}
+
 		//var clone: MovieClip = MovieClip.getNewMovieClip(AwayMovieClip.getNewMovieClip((<AwayMovieClip>this.adaptee).timeline));
-		var newMC:MovieClip=constructClassFromSymbol((<any>this)._symbol, (<any>this)._symbol.symbolClass);
+		const newMC:MovieClip = constructClassFromSymbol(anyThis._symbol, anyThis._symbol.symbolClass);
+		
+		// console.log("Base", anyThis._symbol, anyThis._symbol.symbolClass);
+
 		//console.log("clone", (<any>this)._symbol, (<any>this)._symbol.symbolClass);
-		var adaptee=new AwayMovieClip((<AwayMovieClip>this.adaptee).timeline);
+		const adaptee = new AwayMovieClip((<AwayMovieClip>this.adaptee).timeline);
+
 		//console.log("clone mc", newMC, adaptee, adaptee.id, (<any>this)._symbol, (<any>this)._symbol.symbolClass)
 		this.adaptee.copyTo(adaptee);
-		newMC.adaptee=adaptee;
+
+		newMC.adaptee = adaptee;
 		newMC._stage = this.activeStage;
-		(<IMovieClipAdapter>newMC).executeConstructor=()=>{
-			(<AwayMovieClip>newMC.adaptee).timeline.resetScripts();
+
+		(<IMovieClipAdapter>newMC).executeConstructor = () => {
+			adaptee.timeline.resetScripts();
+		
 			//console.log("executeConstructor mc", newMC, newMC.adaptee.id);
-			var events=(<any>newMC).getQueuedEvents();
+			const events=(<any>newMC).getQueuedEvents();
+		
 			(<any>newMC).axInitializer();
+
 			if(events){
-				for(var i=0; i<events.length; i++){
+				for(let i = 0; i < events.length; i++) {
 					(<any>newMC).dispatchEvent(events[i]);
 				}
 			}
@@ -142,11 +154,14 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		// make sure that the clone will not be reused on the timeline.
 		// it must reclone for every new instance thats added to scene, so that the as3 constructor (axInitializer) will run again...
 		// (if cloneForEveryInstance is true, the awayjs-mc will not cache the instance on the potentialinstance-list)
-		if((<any>this)._symbol.className){
-			(<any>newMC.adaptee).cloneForEveryInstance=true;
+		if(anyThis._symbol.className){
+			(<any>newMC.adaptee).cloneForEveryInstance = true;
 		}
-		if((<AwayMovieClip>newMC.adaptee).timeline){
+
+		if (adaptee.timeline) {
 			
+			//console.log(adaptee.timeline);
+
 			/*
 			let foundSpriteOrMCClass:string="";
 			let symbolClass:any=(<any>this)._symbol.symbolClass; 
@@ -163,18 +178,31 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			}*/
 			// 	hack to BadIceCreamFont compiledClip:
 			//	the compiledClip "BadIcecreamFont" seem to behave different to other classes
-			//	it seem to always stick to frame 0, 
-			//if(foundSpriteOrMCClass=="Sprite"){
-			if((<any>this)._symbol.className && (<any>this)._symbol.className=="BadIcecreamFont"){
-				(<any>newMC.adaptee).adaptee.timeline.frame_command_indices=[(<any>newMC.adaptee).timeline.frame_command_indices[0]];
-				(<any>newMC.adaptee).adaptee.timeline.frame_recipe=[(<any>newMC.adaptee).timeline.frame_recipe[0]];
-				(<any>newMC.adaptee).adaptee.timeline.keyframe_constructframes=[(<any>newMC.adaptee).timeline.keyframe_constructframes[0]];
-				(<any>newMC.adaptee).adaptee.timeline.keyframe_durations=[(<any>newMC.adaptee).timeline.keyframe_durations[0]];
-				(<any>newMC.adaptee).adaptee.timeline.keyframe_firstframes=[(<any>newMC.adaptee).timeline.keyframe_firstframes[0]];
-				(<any>newMC.adaptee).adaptee.timeline.keyframe_indices=[(<any>newMC.adaptee).timeline.keyframe_indices[0]];	
-			
+			//	it seem to always stick to frame 0,
+			//
+			//	DANGER!!!
+			//	MAY PRODUCE SIDE EFFECTS 
+
+			const cn = anyThis._symbol.className;
+			const freezeOnFirstFrame = cn && (
+				//anyThis._symbol.className == "BadIcecreamFont" ||
+				cn.includes('Font')
+			);
+
+			if(freezeOnFirstFrame) {
+
+				const targetTimeline = (<AwayMovieClip>this.adaptee).timeline
+				const timeline = (<AwayMovieClip>adaptee).timeline;
+
+				targetTimeline.frame_command_indices = <any>[timeline.frame_command_indices[0]];
+				targetTimeline.frame_recipe = <any>[timeline.frame_recipe[0]];
+				targetTimeline.keyframe_constructframes = [timeline.keyframe_constructframes[0]];
+				targetTimeline.keyframe_durations = <any>[timeline.keyframe_durations[0]];
+				targetTimeline.keyframe_firstframes = [timeline.keyframe_firstframes[0]];
+				targetTimeline.keyframe_indices = [timeline.keyframe_indices[0]];	
 			}
 		}
+
 		return newMC;
 	}
 
