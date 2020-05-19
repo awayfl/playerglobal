@@ -190,9 +190,8 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			);
 
 			if(freezeOnFirstFrame) {
-
-				const targetTimeline = (<AwayMovieClip>this.adaptee).timeline
 				const timeline = (<AwayMovieClip>adaptee).timeline;
+				const targetTimeline = timeline;
 
 				targetTimeline.frame_command_indices = <any>[timeline.frame_command_indices[0]];
 				targetTimeline.frame_recipe = <any>[timeline.frame_recipe[0]];
