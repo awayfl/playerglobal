@@ -31,7 +31,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		return this._adaptee;
 	}
 	public set adaptee(value: SceneImage2D) {
-		this._adaptee=value;
+		this._adaptee = value;
 	}
 
 	static loadBitmap(id: string): BitmapData {
@@ -154,6 +154,11 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		this._adaptee.copyPixels(sourceBitmap.adaptee, sourceRect.adaptee, destPoint.adaptee, alphaBitmapData? alphaBitmapData.adaptee : null, alphaPoint? alphaPoint.adaptee : null, mergeAlpha);
 	}
 	public dispose() {
+		// already disposed or not setted
+		if(!this._adaptee) {
+			return;
+		}
+
 		this._adaptee.dispose();
 		this._adaptee = null;
 	}
