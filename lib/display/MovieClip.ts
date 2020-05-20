@@ -92,6 +92,8 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	// --------------------- stuff needed because of implementing the existing IMovieClipAdapter
 
 	public clearPropsDic(){
+		//	this is used by CompiledClips
+		//	todo: check if "$Bg__setPropDict" can be used to identify compiledClips
 		this["$Bg__setPropDict"].map= new WeakMap();
 	}
 
