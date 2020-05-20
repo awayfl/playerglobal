@@ -1,4 +1,4 @@
-import {Sprite as AwaySprite, DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip, FrameScriptManager, MovieClip} from "@awayjs/scene";
+import {Sprite as AwaySprite, DisplayObjectContainer as AwayDisplayObjectContainer, DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip, FrameScriptManager, MovieClip} from "@awayjs/scene";
 import {DisplayObjectContainer} from "./DisplayObjectContainer";
 import {DisplayObject} from "./DisplayObject";
 import {Rectangle, Matrix3D} from "@awayjs/core";
@@ -190,13 +190,10 @@ export class  Sprite extends DisplayObjectContainer
 	 * of your sprite button.
 	 */
 	public get hitArea () : Sprite{
-		//todo
-		console.log("hitArea not implemented yet in flash/Sprite");
-		return null;
+		return <Sprite>this.adaptee.pickObject.adapter;
 	}
 	public set hitArea (value:Sprite){
-		//todo
-		console.log("hitArea not implemented yet in flash/Sprite");
+		this.adaptee.pickObject = <AwayDisplayObjectContainer>value.adaptee;
 	}
 
 	/**
