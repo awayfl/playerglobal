@@ -1240,10 +1240,19 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 */
 	public getBounds(targetCoordinateSpace: DisplayObject): Rectangle {
 		//console.log("DisplayObject:getBounds not yet implemented");
+		// for debugging!
 
-		var box: Box = PickGroup.getInstance(this._stage.view).getBoundsPicker(this.adaptee.partition).getBoxBounds(this.adaptee);
-		return new (<SecurityDomain> this.sec).flash.geom.Rectangle(box.x - this.x, box.y - this.y, box.width, box.height);
+		const picker = PickGroup.getInstance(this._stage.view);
+		const bPicker = picker.getBoundsPicker(this.adaptee.partition);
+		const box = bPicker.getBoxBounds(this.adaptee);
+	
+		if(!box) {
+			return null;
+		}
 
+		const aligned = new (<SecurityDomain> this.sec).flash.geom.Rectangle(box.x - this.x, box.y - this.y, box.width, box.height);
+
+		return aligned;
 	}
 
 	/**
