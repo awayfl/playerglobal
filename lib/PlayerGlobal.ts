@@ -121,17 +121,16 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 		return result.promise;
 	}
 
-	public enterFrame() {
-		this._stage.enterFrame();
+	public enterFrame() {	
+		this._stage && this._stage.enterFrame();
 	}
 
 	public resizeStage() {
-		this._stage.resizeCallback();
+		// it can happen that resizeStage is called before createSecurityDomain has finished and stage exists
+		this._stage && this._stage.resizeCallback();
 	}
+	
 	public addAsset(asset: IAsset, addScene:boolean) {
-
-
-
 
 		if (asset.isAsset(TextField)) {
 			this._applicationDomain.addDefinition(asset.name, <TextField>asset);
