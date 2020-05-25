@@ -30,6 +30,8 @@ export class EventDispatcher extends EventDispatcherBase
 		MouseEvent.MOUSE_UP,
 		MouseEvent.MOUSE_OVER,
 		MouseEvent.MOUSE_OUT,
+		MouseEvent.ROLL_OVER,
+		MouseEvent.ROLL_OUT,
 		MouseEvent.MOUSE_MOVE,
 		MouseEvent.MOUSE_DOWN,
 		MouseEvent.DOUBLE_CLICK,

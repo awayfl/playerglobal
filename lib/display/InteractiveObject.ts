@@ -449,26 +449,26 @@ export class InteractiveObject extends DisplayObject{
 			 removeListener:this.removeMouseListener,
 			 callback:this._mouseCallbackDelegate});
 
-		 this.eventMappingInvert[MouseEventAway.CLICK]=MouseEvent.CLICK;
+		this.eventMappingInvert[MouseEventAway.CLICK]=MouseEvent.CLICK;
 		this.eventMapping[MouseEvent.CLICK]=(<IEventMapper>{
 			adaptedType:MouseEventAway.CLICK,
 			addListener:this.initMouseListener,
 			removeListener:this.removeMouseListener,
 			callback:this._mouseCallbackDelegate});
 			
-			/*this.eventMappingInvert[MouseEventAway.MOUSE_OUT]=MouseEvent.ROLL_OUT;
-			this.eventMapping[MouseEvent.ROLL_OUT]=(<IEventMapper>{
-				adaptedType:MouseEventAway.MOUSE_OUT,
-				addListener:this.initMouseListener,
-				removeListener:this.removeMouseListener,
-				callback:this._mouseCallbackDelegate});
-				
-			this.eventMappingInvert[MouseEventAway.MOUSE_OVER]=MouseEvent.ROLL_OVER;
-			this.eventMapping[MouseEvent.ROLL_OVER]=(<IEventMapper>{
-				adaptedType:MouseEventAway.MOUSE_OVER,
-				addListener:this.initMouseListener,
-				removeListener:this.removeMouseListener,
-				callback:this._mouseCallbackDelegate});*/
+		this.eventMappingInvert[MouseEventAway.ROLL_OUT]=MouseEvent.ROLL_OUT;
+		this.eventMapping[MouseEvent.ROLL_OUT]=(<IEventMapper>{
+			adaptedType:MouseEventAway.ROLL_OUT,
+			addListener:this.initMouseListener,
+			removeListener:this.removeMouseListener,
+			callback:this._mouseCallbackDelegate});
+			
+		this.eventMappingInvert[MouseEventAway.ROLL_OVER]=MouseEvent.ROLL_OVER;
+		this.eventMapping[MouseEvent.ROLL_OVER]=(<IEventMapper>{
+			adaptedType:MouseEventAway.ROLL_OVER,
+			addListener:this.initMouseListener,
+			removeListener:this.removeMouseListener,
+			callback:this._mouseCallbackDelegate});
 	}
 
 	// ---------- event mapping functions for KeyboardEvent.KEY_UP:
