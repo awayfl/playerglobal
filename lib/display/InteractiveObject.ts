@@ -11,6 +11,8 @@ import { SecurityDomain } from '../SecurityDomain';
 import { AVMStage } from '@awayfl/swf-loader';
 export class InteractiveObject extends DisplayObject{
 
+	private _keyDownListenersCnt:number=0;
+	private _keyUpListenersCnt:number=0;
 	/** these should be able to get setup:
 	 
 
@@ -329,7 +331,8 @@ export class InteractiveObject extends DisplayObject{
 		 this.eventMappingDummys[MouseEvent.MIDDLE_MOUSE_DOWN]="InteractiveObject:MouseEvent.MIDDLE_MOUSE_DOWN";
 		 this.eventMappingDummys[MouseEvent.MIDDLE_CLICK]="InteractiveObject:MouseEvent.MIDDLE_CLICK";
 
-
+		this._keyDownListenersCnt=0;
+		this._keyUpListenersCnt=0;
 		 /*
 		 //todo
 		 this.eventMappingDummys[SoftKeyboardEvent.SOFT_KEYBOARD_DEACTIVATE]="SoftKeyboardEvent.SOFT_KEYBOARD_DEACTIVATE";
@@ -473,12 +476,20 @@ export class InteractiveObject extends DisplayObject{
 
 	private initKeyUpListener(type:string, callback:(event:any) => void):void
 	{
-		document.addEventListener("keyup", callback);
-		document.addEventListener("keypress", callback);
+		if(this._keyUpListenersCnt==0){
+			//console.log("initKeyUpListener", this)
+			document.addEventListener("keyup", callback);
+			document.addEventListener("keypress", callback);
+		}
+		this._keyUpListenersCnt++;
 	}
 	private removeKeyUpListener(type:string, callback:(event:any) => void):void
 	{
-		document.removeEventListener("keyup", callback);
+		this._keyUpListenersCnt--;
+		if(this._keyUpListenersCnt==0){
+			//console.log("removeKeyUpListener", this)
+			document.removeEventListener("keyup", callback);
+		}
 	}
 	private _keyUpCallbackDelegate:(event:any) => void;
 	private keyUpCallback(event:any=null):boolean
@@ -512,13 +523,21 @@ export class InteractiveObject extends DisplayObject{
 
 	private initKeyDownListener(type:string, callback:(event:any) => void):void
 	{
-		document.addEventListener("keydown", callback);
-		document.addEventListener("keypress", callback);
+		if(this._keyDownListenersCnt==0){
+			//console.log("initKeyDownListener", this)
+			document.addEventListener("keydown", callback);
+			document.addEventListener("keypress", callback);
+		}
+		this._keyDownListenersCnt++;
 	}
 	private removeKeyDownListener(type:string, callback:(event:any) => void):void
 	{
-		document.removeEventListener("keydown", callback);
-		document.removeEventListener("keypress", callback);
+		this._keyDownListenersCnt--;
+		if(this._keyDownListenersCnt==0){
+			//console.log("removeKeyDownListener", this)
+			document.removeEventListener("keydown", callback);
+			document.removeEventListener("keypress", callback);
+		}
 	}
 	private _keyDownCallbackDelegate:(event:any) => void;
 	private keyDownCallback(event:any=null):boolean
