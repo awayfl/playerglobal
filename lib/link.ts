@@ -85,6 +85,7 @@ import { ContextMenuClipboardItems } from "./ui/ContextMenuClipboardItems";
 
 import { FrameLabel } from "./display/FrameLabel";
 
+import { Mouse } from "./ui/Mouse";
 /*
 import { URLRequest } from "./net/URLRequest";
 import { ApplicationDomain } from "./system/ApplicationDomain";
@@ -118,7 +119,6 @@ import { MouseEvent } from "./events/MouseEvent";
 import { HTTPStatusEvent } from "./events/HTTPStatusEvent";
 import { UncaughtErrorEvents } from "./events/UncaughtErrorEvents";
 import { Keyboard } from "./ui/Keyboard";
-import { Mouse } from "./ui/Mouse";
 import { MouseCursorData } from "./ui/MouseCursorData";
 import { GameInput } from "./ui/GameInput";
 import { GameInputControl } from "./ui/GameInputControl";
@@ -266,7 +266,7 @@ export function initLink() {
 	M("flash.ui.ContextMenuItem", ContextMenuItem);
 	M("flash.ui.ContextMenuBuiltInItems", ContextMenuBuiltInItems);
 	M("flash.ui.ContextMenuClipboardItems", ContextMenuClipboardItems);
-	// M("flash.ui.Mouse", Mouse);
+	M("flash.ui.Mouse", Mouse);
 	// M("flash.ui.MouseCursorData", MouseCursorData);
 
 	// M("flash.ui.GameInput", GameInput);

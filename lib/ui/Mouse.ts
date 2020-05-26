@@ -1,4 +1,8 @@
-export class Mouse{
+import { ASObject } from '@awayfl/avm2';
+
+export class Mouse extends ASObject{
+	
+	static axClass: typeof Mouse;
 	private static _cursor:string;
 	/*
 	 The name of the native cursor.
