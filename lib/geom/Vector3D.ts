@@ -31,10 +31,11 @@ export class Vector3D extends ASObject
 
   static Create(x: number, y: number, z: number, w: number) {
     var v: Vector3D = Object.create(this.tPrototype);
-    v.x = x;
+    v._adaptee = new AwayVector3D(x, y, z, w);
+    /*v.x = x;
     v.y = y;
     v.z = z;
-    v.w = w;
+    v.w = w;*/
     return v;
   }
 
