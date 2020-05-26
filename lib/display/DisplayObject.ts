@@ -446,12 +446,12 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * the blendMode property is set to BlendMode.NORMAL. Not supported under GPU rendering.
 	 */
 	public get blendMode(): string {
-		console.log("blendMode not implemented yet in flash/DisplayObject");
+		release || console.log("blendMode not implemented yet in flash/DisplayObject");
 		// todo: translate awayblendmode to as3blendmode
 		return "";
 	}
 	public set blendMode(value: string) {
-		console.log("blendMode not implemented yet in flash/DisplayObject");
+		release || console.log("blendMode not implemented yet in flash/DisplayObject");
 		//this._adaptee.blendMode=value;
 	}
 
@@ -495,7 +495,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   property for more information.
 	 */
 	public set blendShader(value: any) {
-		console.log("blendShader not implemented yet in flash/DisplayObject");
+		release || console.log("blendShader not implemented yet in flash/DisplayObject");
 		//todo (if ever)
 	}
 
@@ -532,11 +532,11 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * movie clip is translated (when its x and y position is changed).
 	 */
 	public get cacheAsBitmap(): boolean {
-		console.log("cacheAsBitmap not implemented yet in flash/DisplayObject");
+		release || console.log("cacheAsBitmap not implemented yet in flash/DisplayObject");
 		return false;
 	}
 	public set cacheAsBitmap(value: boolean) {
-		console.log("cacheAsBitmap not implemented yet in flash/DisplayObject");
+		release || console.log("cacheAsBitmap not implemented yet in flash/DisplayObject");
 	}
 
 	/**
