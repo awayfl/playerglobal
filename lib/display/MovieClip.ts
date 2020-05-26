@@ -44,7 +44,6 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		return new MovieClip();
 	}
 
-
 	//forAVM1:
 	public _getAbsFrameNumber(param1: any, param2: any): number {
 		return 0;
@@ -277,13 +276,10 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * included in automatic tab ordering.
 	 */
 	public get enabled(): boolean {
-		//todo
-		//console.log("enabled not implemented yet in flash/MovieClip");
-		return false;
+		return (<AwayMovieClip>this.adaptee).buttonEnabled;
 	}
 	public set enabled(value: boolean) {
-		//todo
-		//console.log("enabled not implemented yet in flash/MovieClip");
+		(<AwayMovieClip>this.adaptee).buttonEnabled=value;
 	}
 
 	/**
@@ -442,11 +438,15 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 					(<AwayMovieClip>this.adaptee).currentFrameIndex = (<number>frame) - 1;
 					(<AwayMovieClip>this.adaptee).stop();
 				}	
+				//	for FP>10 we should throw a error and stop the timeline
+				if((<any>this.sec).swfVersion > 10){
+					(<AwayMovieClip>this.adaptee).currentFrameIndex = 0;
+				}
 				this.stop();
 				return;
 			}
 		}
-		if (typeof frame === "number" && frame <= 0){				
+		if (typeof frame === "number" && frame <= 0){
 			this.stop();
 			return;
 		}
