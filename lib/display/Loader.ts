@@ -23,15 +23,8 @@ import {DisplayObjectContainer} from "./DisplayObjectContainer";
 import {DisplayObject} from "./DisplayObject";
 import {URLRequest} from "../net/URLRequest";
 import { ILoader } from '../ILoader';
+import { IRedirectRule, matchRedirect } from "./../utils/redirectResolver";
 
-type TLoaderRuleFunc = (url: string) => boolean;
-type TLoaderRuleFuncResult = (url: string) => string;
-
-export interface ILoaderRedirectRule {
-	test: string | RegExp | TLoaderRuleFunc | undefined,
-	resolve?: string | RegExp| TLoaderRuleFuncResult | undefined,
-	supressErrors?: boolean
-}
 
 /**
  * The Loader class is used to load SWF files or image(JPG, PNG, or GIF)
@@ -94,7 +87,7 @@ export interface ILoaderRedirectRule {
  */
 export class Loader extends DisplayObjectContainer implements ILoader
 {
-	public static redirectRules: ILoaderRedirectRule[] = [];
+	public static redirectRules: IRedirectRule[] = [];
 
 	private _factory:FlashSceneGraphFactory;
 	private _isImage:boolean;
@@ -327,53 +320,6 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	{
 		(<LoaderContainer> this.adaptee).close();
 	}
-	private _matchRedirect(url: string): {url: string, supressErrors: boolean} | undefined {
-
-		let rule : {
-			url: string, supressErrors: boolean
-		} = undefined;
-
-		if(Loader.redirectRules) {
-			Loader.redirectRules.forEach(({test, resolve, supressErrors = false})=>{
-				let passed = false;
-
-				if(typeof test  === 'function') {
-					passed = test(url);
-				} 
-				else if (test instanceof RegExp) {
-					passed = test.test(url);
-				}
-				else if (typeof test === 'string') {
-					passed = test === url;
-				}
-
-				if(passed) {					
-					if(rule) {
-						console.warn('[LOADER] Duplicate redirect rules, latest rule would be used!');
-					}
-
-					rule = {
-						url, supressErrors : supressErrors
-					}
-
-					if(typeof resolve === 'function') {
-						rule.url = resolve(url);
-					} else if(resolve instanceof RegExp) {
-						rule.url = url.match(resolve)[0];
-					} else if (typeof resolve === 'string') {
-						rule.url = resolve;
-					}
-
-					if(typeof rule.url === 'undefined'){
-						console.warn("[LOADER] Redirect url is null, would be used  original url!");
-						rule.url = url;
-					}
-				};
-			});
-		}
-
-		return rule;
-	}
 
 	/**
 	 * Loads a SWF, JPEG, progressive JPEG, unanimated GIF, or PNG file into an
@@ -535,8 +481,7 @@ export class Loader extends DisplayObjectContainer implements ILoader
 		// remove all after ?
 		const directUrl = request.url || '';
 		const cleanUrl = directUrl.replace(/\?.*$/, "");
-
-		let redirect = this._matchRedirect(directUrl);
+		const redirect = matchRedirect(directUrl, Loader.redirectRules);
 
 		if(redirect) {
 			console.log("[LOADER] Override loading url:", redirect.url);

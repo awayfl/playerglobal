@@ -8,9 +8,13 @@ import {IOErrorEvent} from "../events/IOErrorEvent"
 import { AXClass } from '@awayfl/avm2';
 import { URLRequest } from './URLRequest';
 import { SecurityDomain } from '../SecurityDomain';
+import { IRedirectRule, matchRedirect } from "./../utils/redirectResolver";
+
 
 export class URLLoader extends EventDispatcher
 {
+	static redirectRules: IRedirectRule[] = [];
+
 	static axClass: typeof URLLoader & AXClass;
 	private _adaptee:URLLoaderAway;
 	//for AVM1:
@@ -76,6 +80,7 @@ export class URLLoader extends EventDispatcher
 		this.dispatchEvent(newEvent);
 	}
 	private _completeCallbackDelegate:(event:URLLoaderEvent) => void;
+
 	private completeCallback(event:URLLoaderEvent=null):void
 	{
 		var newEvent:Event=new (<SecurityDomain> this.sec).flash.events.Event(Event.COMPLETE);
@@ -83,7 +88,18 @@ export class URLLoader extends EventDispatcher
 		newEvent.target=this;
 		this.dispatchEvent(newEvent);
 	}
+
 	public load(request:URLRequest):void{
+		const directUrl = request.url || '';
+		const redirect = matchRedirect(directUrl, URLLoader.redirectRules);
+
+		if(redirect) {
+			console.log("[URL LOADER] Override loading url:", redirect.url);
+			request.adaptee.url = redirect.url;
+		} else {
+			console.log("[URL LOADER] start loading the url:", directUrl);
+		}
+
 		this._adaptee.load(request.adaptee);
 	};
 }
