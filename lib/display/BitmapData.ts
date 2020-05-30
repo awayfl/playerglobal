@@ -223,10 +223,42 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		console.log("generateFilterRect not implemented yet in flash/BitmapData");
 		return null;
 	}
+
 	public getColorBoundsRect(mask: number, color: number, findColor: boolean): Rectangle {
-		console.log("getColorBoundsRect not implemented yet in flash/BitmapData");
-		return null;
+		const buffer = this._adaptee.data;
+		const size = this._adaptee.rect;
+
+		let minX = 0,
+			minY = 0, 
+			maxX = 0, 
+			maxY = 0;
+		
+		let c = 0;
+
+		for(let j = 0; j < size.height; j++) {
+			for(let i = 0; i < size.width; i++) {
+				const b = buffer[(j * size.width + i) * 4];
+				c = ColorUtils.ARGBtoFloat32(b[3], b[0], b[1], b[2]);
+				c &= mask;
+
+				if(c === color) {
+					minX = Math.min(minX, i);
+					maxX = Math.min(maxX, i);
+					minY = Math.min(minY, j);
+					maxY = Math.min(maxY, j);
+				}
+			}	
+		}
+
+		//console.log("getColorBoundsRect not implemented yet in flash/BitmapData");
+		const d = new (<SecurityDomain>this.sec).flash.geom.Rectangle(minX, minY, maxX - minX, maxY - minY);
+
+		console.warn("Unsage implementation `getColorBoundsRect`!");
+		console.debug("ColoreRect (mask, color, rect) ", mask.toString(16), color.toString(16), d.toString(), this);
+
+		return d;
 	}
+
 	public hitTest(
 		firstPoint: Point,
 		firstAlphaThreshold: number,
