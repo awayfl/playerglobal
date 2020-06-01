@@ -472,9 +472,9 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * Sends the playhead to the next frame and stops it.  This happens after all
 	 * remaining actions in the frame have finished executing.
 	 */
-	public nextFrame() {
-		//todo
-		console.log("nextFrame not implemented yet in flash/MovieClip");
+	public nextFrame() {		
+		(<AwayMovieClip>this._adaptee).stop();
+		++(<AwayMovieClip>this._adaptee).currentFrameIndex;
 	}
 
 	/**
