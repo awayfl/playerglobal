@@ -149,6 +149,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 					(<any>newMC).dispatchEvent(events[i]);
 				}
 			}
+			
 		}
 
 		// if this is a custom class (not a plain MC or Sprite)
@@ -163,20 +164,20 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			
 			//console.log(adaptee.timeline);
 
-			/*
-			let foundSpriteOrMCClass:string="";
+			
+			let foundUIComponent:boolean=false;
 			let symbolClass:any=(<any>this)._symbol.symbolClass; 
-			while(symbolClass && foundSpriteOrMCClass==""){
-				if(symbolClass.name?.name=="Sprite" || symbolClass.name?.name=="MovieClip"){
-					foundSpriteOrMCClass=symbolClass.name?.name;
+			while(symbolClass && !foundUIComponent){
+				if(symbolClass.name?.name=="UIComponent"){
+					foundUIComponent=true;
 				}
 				else if(symbolClass.superClass){
 					symbolClass=symbolClass.superClass;
 				}
 				else{
-					symbolClass==null;
+					symbolClass=null;
 				}
-			}*/
+			}
 			// 	hack to BadIceCreamFont compiledClip:
 			//	the compiledClip "BadIcecreamFont" seem to behave different to other classes
 			//	it seem to always stick to frame 0,
@@ -185,9 +186,9 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			//	MAY PRODUCE SIDE EFFECTS 
 
 			const cn = anyThis._symbol.className;
-			const freezeOnFirstFrame = cn && (
+			const freezeOnFirstFrame = foundUIComponent || (cn && (
 				//anyThis._symbol.className == "BadIcecreamFont" ||
-				cn.includes('Font')
+				cn.includes('Font'))
 			);
 
 			if(freezeOnFirstFrame) {
