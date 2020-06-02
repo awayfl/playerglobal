@@ -36,7 +36,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	protected _visibilityByScript: boolean;
 
 	private _transform: Transform;
-	private _filters:BitmapFilter[] = [];
+	private _filters:BitmapFilter[];
 	public toString():string {
 		return this.adaptee.name;
 
@@ -194,6 +194,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 	constructor() {
 		super();
+
+		this._filters = this._filters || [];
 
 		this._blockedByScript = false;
 		this._ctBlockedByScript = false;
