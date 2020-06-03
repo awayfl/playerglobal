@@ -96,7 +96,7 @@ export class Sprite extends DisplayObjectContainer {
 		clone._stage = this.activeStage;
 		(<any>clone).executeConstructor = () => {
 			var events = (<any>clone).getQueuedEvents();
-			(<any>clone).axInitializer.apply(clone);
+			(<any>clone).axInitializer();
 			if (events) {
 				for (var i = 0; i < events.length; i++) {
 					(<any>clone).dispatchEvent(events[i]);
