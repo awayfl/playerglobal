@@ -142,7 +142,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			//console.log("executeConstructor mc", newMC, newMC.adaptee.id);
 			const events=(<any>newMC).getQueuedEvents();
 		
-			(<any>newMC).axInitializer();
+			(<any>newMC).axInitializer.apply(newMC);
 
 			if(events){
 				for(let i = 0; i < events.length; i++) {
