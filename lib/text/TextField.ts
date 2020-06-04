@@ -115,10 +115,13 @@ export class TextField extends InteractiveObject
 		clone.adaptee=newText;
 		clone._stage = this.activeStage;
 		(<any>clone).executeConstructor=()=>{
-			var events = (<any>clone).getQueuedEvents();
+			const events=(<any>clone).getQueuedEvents();
 			(<any>clone).axInitializer();
+			
 			if(events && events.length>0){
-				FrameScriptManager.queue_as3_events({mc:clone, events: events});
+				for(let i = 0; i < events.length; i++) {
+					(<any>clone).dispatchEvent(events[i]);
+				}
 			}
 		}
 
