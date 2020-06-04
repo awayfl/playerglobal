@@ -97,14 +97,12 @@ export class Sprite extends DisplayObjectContainer {
 		(<any>clone).executeConstructor = () => {
 			var events = (<any>clone).getQueuedEvents();
 			(<any>clone).axInitializer();
-			if (events) {
-				for (var i = 0; i < events.length; i++) {
-					(<any>clone).dispatchEvent(events[i]);
-				}
+			if(events && events.length>0){
+				FrameScriptManager.queue_as3_events({mc:clone, events: events});
 			}
-			if(clone["$Bg__setPropDict"]){
+			/*if(clone["$Bg__setPropDict"]){
 				console.log("Bg__setPropDict found");
-			}
+			}*/
 		}
 		clone.adaptee.graphics = this.graphics;
 		return clone;

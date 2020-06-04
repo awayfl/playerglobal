@@ -144,10 +144,8 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		
 			(<any>newMC).axInitializer();
 
-			if(events){
-				for(let i = 0; i < events.length; i++) {
-					(<any>newMC).dispatchEvent(events[i]);
-				}
+			if(events && events.length>0){
+				FrameScriptManager.queue_as3_events({mc:newMC, events: events});
 			}
 			
 		}
