@@ -235,14 +235,6 @@ export class Stage extends DisplayObjectContainer{
 			this._stage.advanceFrame(this._events);
 			OrphanManager.updateOrphans(this._events);
 			
-			
-			// run all as3 constructors
-			FrameScriptManager.execute_as3_constructors();
-			
-			// 	ADD events events have been queued on the objects before their constructor was run
-			//	dispatch them now (this is recursivly)
-			this._stage.dispatchQueuedEvents();
-
 			// broadcast FRAME_CONSTRUCTED event to all objects
 			this._stage.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
 

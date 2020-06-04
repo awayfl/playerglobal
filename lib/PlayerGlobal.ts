@@ -2,7 +2,7 @@ import { ABCFile, ABCCatalog, ActiveLoaderContext, AVM2LoadLibrariesFlags, IPlay
 import { release, assert, PromiseWrapper, AVMStage, SWFFile } from "@awayfl/swf-loader";
 import { SecurityDomain } from "./SecurityDomain";
 import { initLink } from './link';
-import { ISceneGraphFactory, TextField, SceneImage2D, Font, Sprite, MovieClip, MorphSprite, IDisplayObjectAdapter } from '@awayjs/scene';
+import { ISceneGraphFactory, TextField, SceneImage2D, Font, Sprite, MovieClip, MorphSprite, IDisplayObjectAdapter, FrameScriptManager } from '@awayjs/scene';
 import { LoaderContext } from './system/LoaderContext';
 import { FlashSceneGraphFactory } from './factories/FlashSceneGraphFactory';
 import { IAsset, WaveAudio } from '@awayjs/core';
@@ -160,6 +160,20 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 				this._content.loaderInfo = this._contentLoaderInfo;
 				this._content.adaptee.reset();
 				this._stage.addChild(this._content);
+				
+				let constructorFunc = (<IDisplayObjectAdapter>this._content).executeConstructor;
+				(<IDisplayObjectAdapter>this._content).executeConstructor = null;
+				constructorFunc();
+				// in avm2, framescripts get added to timeline in the constructor of the mc
+				// so when the mc was added to parent, no framescripts exists and therefore none are queued now
+				// we need to execute the script manually. 
+				if (this._content.adaptee.isAsset(MovieClip)) {
+					let mc=<MovieClip>this._content.adaptee;
+					var script = mc.timeline.get_script_for_frame(mc, mc.currentFrameIndex);
+					if (script) {
+						FrameScriptManager.add_script_to_queue(mc, script);
+					}
+				}
 				//this.addChild(this._loaderInfo.content = (<MovieClip>(<AwayMovieClip>asset).adapter));
 			}
 		}

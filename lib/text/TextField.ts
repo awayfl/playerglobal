@@ -93,13 +93,7 @@ export class TextField extends InteractiveObject
 		newAdaptee.reset();
 		return newAdaptee;
 	}
-	public initAdapter(): void {
-		
-		if ((<any>this).executeConstructor) {
-			FrameScriptManager.queue_as3_constructor(<any>this.adaptee);
-		}
-
-	}
+	public initAdapter(): void {}
 	public dispatchKeyEvent(charCode, isShift, isCTRL, isAlt){
 
 	}

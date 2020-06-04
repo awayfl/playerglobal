@@ -58,13 +58,7 @@ export class SimpleButton extends MovieClip
 	// for AVM1:
 	public buttonMode:any;
 
-	public initAdapter(): void {
-		
-		if ((<any>this).executeConstructor) {
-			FrameScriptManager.queue_as3_constructor(<any>this.adaptee);
-		}
-
-	}
+	public initAdapter(): void {}
 	public registerScriptObject(child: any): void {
 	}
 

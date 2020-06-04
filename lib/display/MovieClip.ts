@@ -65,13 +65,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		}
 	}
 
-	public initAdapter(): void {
-		
-		if ((<IMovieClipAdapter>this).executeConstructor) {
-			FrameScriptManager.queue_as3_constructor(<AwayMovieClip>this.adaptee);
-		}
-
-	}
+	public initAdapter(): void {}
 	/**
 	 * Creates a new MovieClip instance. After creating the MovieClip, call the
 	 * addChild() or addChildAt() method of a
@@ -145,8 +139,10 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			(<any>newMC).axInitializer();
 
 			if(events && events.length>0){
-				for(let i = 0; i < events.length; i++) {
-					(<any>newMC).dispatchEvent(events[i]);
+				(<any>newMC).executeQueuedEvents=()=>{
+					for(let i = 0; i < events.length; i++) {
+						(<any>newMC).dispatchEvent(events[i]);
+					}
 				}
 			}
 			
@@ -404,7 +400,6 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			return;
 		this.play();
 		this._gotoFrame(frame);
-		FrameScriptManager.execute_as3_constructors();
 		this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
 		FrameScriptManager.execute_queue();
 	}
@@ -453,7 +448,6 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		}
 		this.stop();
 		this._gotoFrame(frame);
-		FrameScriptManager.execute_as3_constructors();
 		this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
 		FrameScriptManager.execute_queue();
 	}

@@ -20,13 +20,7 @@ export class Sprite extends DisplayObjectContainer {
 		return new Sprite();
 	}
 
-	public initAdapter(): void {
-
-		if ((<any>this).executeConstructor) {
-			FrameScriptManager.queue_as3_constructor(<AwayMovieClip>this.adaptee);
-		}
-
-	}
+	public initAdapter(): void {}
 	private _graphics: Graphics;
 
 	/**
@@ -97,9 +91,12 @@ export class Sprite extends DisplayObjectContainer {
 		(<any>clone).executeConstructor = () => {
 			var events = (<any>clone).getQueuedEvents();
 			(<any>clone).axInitializer();
-			if (events) {
-				for (var i = 0; i < events.length; i++) {
-					(<any>clone).dispatchEvent(events[i]);
+			if (events && events.length>0) {
+				
+				(<any>clone).executeQueuedEvents=()=>{
+					for(let i = 0; i < events.length; i++) {
+						(<any>clone).dispatchEvent(events[i]);
+					}
 				}
 			}
 			/*if(clone["$Bg__setPropDict"]){
