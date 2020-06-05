@@ -400,8 +400,6 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			return;
 		this.play();
 		this._gotoFrame(frame);
-		this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
-		FrameScriptManager.execute_queue();
 	}
 
 	/**
@@ -448,20 +446,21 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		}
 		this.stop();
 		this._gotoFrame(frame);
-		this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
-		FrameScriptManager.execute_queue();
 	}
 
 
 	private _gotoFrame(frame: any): void {
 		if (typeof frame === "string") {
 			(<AwayMovieClip>this._adaptee).jumpToLabel(<string>frame);
-			return;
-
 		}
-		if (typeof frame === "number" && frame <= 0)
-			return;
-		(<AwayMovieClip>this._adaptee).currentFrameIndex = (<number>frame) - 1;
+		else if (typeof frame === "number" && frame <= 0){}
+		else{
+			(<AwayMovieClip>this._adaptee).currentFrameIndex = (<number>frame) - 1;
+		}
+		this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
+		// only in FP10 and above we want to execute scripts immediatly here
+		if((<any>this.sec).swfVersion > 9)
+			FrameScriptManager.execute_queue();
 	}
 	/**
 	 * Sends the playhead to the next frame and stops it.  This happens after all
