@@ -68,8 +68,7 @@ export class Graphics extends ASObject implements IAssetAdapter {
     public beginGradientFill(type: string, colors: ASArray, alphas: ASArray, ratios: ASArray,
         matrix: Matrix = null, spreadMethod: string = "pad",
         interpolationMethod: string = "rgb", focalPointRatio: number = 0): void {
-        notImplemented("Graphics.beginGradientFill");
-        //this.adaptee.beginGradientFill(type, colors, alphas, ratios,  matrix , spreadMethod , interpolationMethod, focalPointRatio);
+		this.adaptee.beginGradientFill(<any>type, colors.value, alphas.value, ratios.value, matrix, spreadMethod, interpolationMethod, focalPointRatio);
     }
 
     public beginBitmapFill(bitmap: BitmapData, matrix: Matrix = null,
@@ -89,21 +88,18 @@ export class Graphics extends ASObject implements IAssetAdapter {
     public lineStyle(thickness: number, color: number /*uint*/ = 0, alpha: number = 1,
         pixelHinting: boolean = false, scaleMode: string = "normal", caps: string = null,
         joints: string = null, miterLimit: number = 3): void {
-        notImplemented("Graphics.lineStyle");
-        //this.adaptee.lineStyle(thickness, color, alpha, pixelHinting, scaleMode, caps, joints, miterLimit);
+        this.adaptee.lineStyle(thickness, color, alpha, pixelHinting, <any>scaleMode, <any>caps, <any>joints, miterLimit);
     }
 
     public lineGradientStyle(type: string, colors: ASArray, alphas: ASArray, ratios: ASArray,
         matrix: Matrix = null, spreadMethod: string = "pad",
         interpolationMethod: string = "rgb", focalPointRatio: number = 0): void {
-        notImplemented("Graphics.lineGradientStyle");
-        //this.adaptee.lineGradientStyle(type, colors, alphas, ratios, matrix, spreadMethod, interpolationMethod, focalPointRatio);
+        this.adaptee.lineGradientStyle(<any>type, colors.value, alphas.value, ratios.value, matrix, spreadMethod, interpolationMethod, focalPointRatio);
     }
 
     public lineBitmapStyle(bitmap: BitmapData, matrix: Matrix = null,
         repeat: boolean = true, smooth: boolean = false): void {
-        notImplemented("Graphics.lineBitmapStyle");
-        //this.adaptee.lineBitmapStyle(bitmap, matrix, repeat, smooth);
+    	this.adaptee.lineBitmapStyle(bitmap.adaptee, matrix, repeat, smooth);
     }
 
     public drawRect(x: number, y: number, width: number, height: number): void {
