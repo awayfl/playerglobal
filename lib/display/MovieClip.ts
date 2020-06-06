@@ -59,10 +59,10 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	public executeScript(scripts: any) {
 		if (scripts){
 			for (let k = 0; k < scripts.length; k++) {
-				if(this.parent){
+				//if(this.parent){
 					scripts[k].setReceiver(this);
 					scripts[k].axCall(this);
-				}
+				//}
 			}
 		}
 	}
