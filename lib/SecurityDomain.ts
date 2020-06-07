@@ -70,6 +70,7 @@ import { GradientGlowFilter } from './filters/GradientGlowFilter';
 import { ContextMenuBuiltInItems } from './ui/ContextMenuBuiltInItems';
 import { ContextMenu } from './ui/ContextMenu';
 import { ContextMenuItem } from './ui/ContextMenuItem';
+import { FrameLabel } from './display/FrameLabel';
 
 export class Mouse{}
 
@@ -89,7 +90,8 @@ export class SecurityDomain extends AXSecurityDomain
 			BitmapData: BitmapData,
 			SimpleButton: SimpleButton,
 			Sprite: Sprite,
-			Shape: Shape
+			Shape: Shape,
+			FrameLabel: FrameLabel
 		},
 		events: {
 			EventDispatcher: EventDispatcher,
