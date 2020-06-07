@@ -94,7 +94,8 @@ export class EventDispatcherBase extends ASObject
 		var l:ListenerObject = this._listenerObjects[event.type];
 
 		if (l) {
-			event.target = this._t;
+			if(!event.target)
+				event.target = this._t;
 			l.dispatchEvent(event);
 		}
 	}
