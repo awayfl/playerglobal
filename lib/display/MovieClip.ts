@@ -3,6 +3,8 @@ import { Sprite } from "./Sprite";
 import { Matrix3D, AssetBase } from '@awayjs/core';
 import { constructClassFromSymbol } from '@awayfl/avm2';
 import { Event } from "../events/Event";
+import { FrameLabel } from './FrameLabel';
+import { SecurityDomain } from '../SecurityDomain';
 
 var includeString: string = '';//TODO
 
@@ -247,11 +249,22 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * Returns an array of FrameLabel objects from the current scene. If the MovieClip instance does
 	 * not use scenes, the array includes all frame labels from the entire MovieClip instance.
 	 */
-	public get currentLabels(): any[] {
-		//todo
-		console.log("currentFrameLabel not implemented yet in flash/MovieClip");
-		return [];
+	public get currentLabels(): FrameLabel[] {
+		//	this is called quite frequently in some games
+		//	we do not 100% support scenes, yet
+		//	as long as we do not have ull scene-support, we can cache the result
+		if(this._currentLabels)
+			return this._currentLabels;
+		const labels=(<AwayMovieClip>this.adaptee).timeline._labels;
+		const keyframe_firstframes=(<AwayMovieClip>this.adaptee).timeline.keyframe_firstframes;
+		this._currentLabels=[];
+		for(var key in labels){
+			this._currentLabels.push(new (<SecurityDomain>this.sec).flash.display.FrameLabel(labels[key].name, keyframe_firstframes[labels[key].keyFrameIndex]+1));
+		}
+		return this._currentLabels;
 	}
+	private _currentLabels:FrameLabel[];
+
 
 	/**
 	 * The current scene in which the playhead is located in the timeline of the MovieClip instance.
