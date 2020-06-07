@@ -45,9 +45,10 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	public applySymbol() {
 
 	}
-	public dispatchStaticEvent(eventName:string){
+	public dispatchStaticEvent(eventName:string, target=null){
 		if(!StaticEvents.events[eventName])
 			StaticEvents.events[eventName]=new (<SecurityDomain> this.sec).flash.events.Event(eventName);
+		StaticEvents.events[eventName].target=target;
 		this.dispatchEvent(StaticEvents.events[eventName])
 	}
 	public dispatchStaticBroadCastEvent(eventName:string){
