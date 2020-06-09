@@ -222,31 +222,38 @@ export class Stage extends DisplayObjectContainer{
 
 	public enterFrame()
 	{
-		
-			//FrameScriptManager.execute_queue();
-			// 	broadcast ENTER_FRAME event
-			//	i think this should really be done after the stage has advanced, but it causes a error in BIC
+		if((<AwayDisplayObjectContainer>this._stage.adaptee).numChildren==0){
+			return;
+		}
+	
+		// 	advance the stage - this updates the timeline
+		//	objects get removed, created and updated - framescripts get queued
+		this._stage.advanceFrame(this._events);
+		OrphanManager.updateOrphans(this._events);
+
+		if((<any>(<AwayDisplayObjectContainer>this._stage.adaptee)._children[0]).firstFrameOnSWFStart){
+			(<any>(<AwayDisplayObjectContainer>this._stage.adaptee)._children[0]).firstFrameOnSWFStart=false;
+		}
+		else{
 			this._stage.dispatchStaticBroadCastEvent(Event.ENTER_FRAME);
-
-			// 	advance the stage - this updates the timeline
-			//	objects get removed, created and updated - framescripts get queued
-			//	as3 constructors for the adpaters are not yet run
-			//	ADD events are queued on the objects, because they need to run after the constructors
-			this._stage.advanceFrame(this._events);
-			OrphanManager.updateOrphans(this._events);
+		}
 			
-			// broadcast FRAME_CONSTRUCTED event to all objects
-			this._stage.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
+		FrameScriptManager.execute_as3_constructors();
 
-			// run all queued framescripts
+		// broadcast FRAME_CONSTRUCTED event to all objects
+		this._stage.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
+			
+		// run all queued framescriptsP
+		FrameScriptManager.execute_queue();
+		// broadcast FRAME_CONSTRUCTED event to all objects
+		this._stage.dispatchStaticBroadCastEvent(Event.EXIT_FRAME);
+		FrameScriptManager.execute_queue();
+
+		if(this._sendEventRender){
+			this._stage.dispatchStaticBroadCastEvent(Event.RENDER);
 			FrameScriptManager.execute_queue();
-
-			if(this._sendEventRender){
-				this._stage.dispatchStaticBroadCastEvent(Event.RENDER);
-				FrameScriptManager.execute_queue();
-				this._sendEventRender=false;
-
-			}
+			this._sendEventRender=false;
+		}
 	}
 
 
@@ -915,9 +922,23 @@ export class Stage extends DisplayObjectContainer{
 	// 80pro: todo: this was added because otherwise avm2 cant find these on Stage
 	//	but it should find them anyway, because its inheriting from Sprite...
 	//____________________________________
-	public addChild (child:DisplayObject) : DisplayObject {return super.addChild(child);}
-	public addChildAt (child:DisplayObject, index:number) : DisplayObject {return super.addChildAt(child, index);}
-	public removeChildAt (index:number) : DisplayObject {return super.removeChildAt(index);}
+	public addChild (child:DisplayObject) : DisplayObject {
+		child.dispatch_ADDED_TO_STAGE();
+		let returnChild=super.addChild(child);
+		child.adaptee.hasDispatchedAddedToStage=true;
+		child.dispatchStaticEvent(Event.ADDED_TO_STAGE, child);
+		return returnChild;
+	}
+	public addChildAt (child:DisplayObject, index:number) : DisplayObject {
+		child.dispatch_ADDED_TO_STAGE();
+		let returnChild=super.addChildAt(child, index);
+		child.adaptee.hasDispatchedAddedToStage=true;
+		child.dispatchStaticEvent(Event.ADDED_TO_STAGE, child);
+		return returnChild;
+	}
+	public removeChildAt (index:number) : DisplayObject {
+		return super.removeChildAt(index);
+	}
 	public swapChildrenAt (index:number,index2:number) : void {return super.swapChildrenAt(index, index2);}
 	
 	public setChildIndex (child:DisplayObject, index:number) : DisplayObject {return null;}
