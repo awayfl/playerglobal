@@ -109,14 +109,7 @@ export class TextField extends InteractiveObject
 		clone.adaptee=newText;
 		clone._stage = this.activeStage;
 		(<any>clone).executeConstructor=()=>{
-			const events=(<any>clone).getQueuedEvents();
 			(<any>clone).axInitializer();
-			
-			if(events && events.length>0){
-				for(let i = 0; i < events.length; i++) {
-					(<any>clone).dispatchEvent(events[i]);
-				}
-			}
 		}
 
 		return clone;
