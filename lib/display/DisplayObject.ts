@@ -1,6 +1,7 @@
 import { Transform as AwayTransform, Point as AwayPoint, Box, Vector3D as AwayVector3D, AbstractMethodError } from "@awayjs/core";
 import { EventDispatcher, BroadcastEventDispatchQueue } from "../events/EventDispatcher";
 import { Event } from "../events/Event";
+import { StaticEvents } from "../events/StaticEvents";
 import { DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip,  IDisplayObjectAdapter, MovieClip, IFilter } from "@awayjs/scene";
 import { LoaderInfo } from "./LoaderInfo";
 import { DisplayObjectContainer } from "./DisplayObjectContainer";
@@ -17,10 +18,6 @@ import { release, FilterType } from '@awayfl/swf-loader';
 import { BitmapFilter } from '../filters/BitmapFilter';
 import { GlowFilter } from '@awayfl/swf-loader';
 
-class StaticEvents{
-	
-	public static events:any={};
-}
 export class DisplayObject extends EventDispatcher implements IDisplayObjectAdapter {
 	static axClass: typeof DisplayObject & AXClass;
 
@@ -263,10 +260,6 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	//		use to dispatch events on a object and all its childs
 	//		overwritten in DisplayObjectContainer to work recursivly on children
 	// 		used for:
-	// 		- ENTER_FRAME
-	// 		- FRAME_CONSTRUCTED
-	// 		- EXIT_FRAME
-	//		- RENDER
 	//		- REMOVED_FROM_STAGE
 	//		- ADDED_TO_STAGE
 
