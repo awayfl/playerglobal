@@ -120,12 +120,14 @@ import { HTTPStatusEvent } from "./events/HTTPStatusEvent";
 import { UncaughtErrorEvents } from "./events/UncaughtErrorEvents";
 import { Keyboard } from "./ui/Keyboard";
 import { MouseCursorData } from "./ui/MouseCursorData";
+*/
 import { GameInput } from "./ui/GameInput";
 import { GameInputControl } from "./ui/GameInputControl";
 import { GameInputControlType } from "./ui/GameInputControlType";
 import { GameInputDevice } from "./ui/GameInputDevice";
 import { GameInputFinger } from "./ui/GameInputFinger";
 import { GameInputHand } from "./ui/GameInputHand";
+/*
 import { Font } from "./text/Font";
 import { TextField } from "./text/TextField";
 import { StaticText } from "./text/StaticText";
@@ -142,8 +144,8 @@ import { Video } from "./media/Video";
 import { TouchEvent } from "./events/TouchEvent";
 import { MultitouchInputMode } from "./ui/MultitouchInputMode";
 import { Multitouch } from "./ui/Multitouch";
-/*
 import { GameInputEvent } from "./events/GameInputEvent";
+/*
 import { AsyncErrorEvent } from "./events/AsyncErrorEvent";
 import { NetStatusEvent } from "./events/NetStatusEvent";
 import { StatusEvent } from "./events/StatusEvent";
@@ -269,13 +271,13 @@ export function initLink() {
 	M("flash.ui.Mouse", Mouse);
 	// M("flash.ui.MouseCursorData", MouseCursorData);
 
-	// M("flash.ui.GameInput", GameInput);
-	// M("flash.events.GameInputEvent", GameInputEvent);
-	// M("flash.ui.GameInputControl", GameInputControl);
-	// M("flash.ui.GameInputControlType", GameInputControlType);
-	// M("flash.ui.GameInputDevice", GameInputDevice);
-	// M("flash.ui.GameInputFinger", GameInputFinger);
-	// M("flash.ui.GameInputHand", GameInputHand);
+	M("flash.ui.GameInput", GameInput);
+	M("flash.events.GameInputEvent", GameInputEvent);
+	M("flash.ui.GameInputControl", GameInputControl);
+	M("flash.ui.GameInputControlType", GameInputControlType);
+	M("flash.ui.GameInputDevice", GameInputDevice);
+	M("flash.ui.GameInputFinger", GameInputFinger);
+	M("flash.ui.GameInputHand", GameInputHand);
 	M("flash.ui.Multitouch",  <any>Multitouch);
 	M("flash.ui.MultitouchInputMode",  <any>MultitouchInputMode);
 	M("flash.events.TouchEvent", TouchEvent);
