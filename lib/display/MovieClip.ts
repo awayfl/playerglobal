@@ -31,6 +31,7 @@ declare var __framescript__;
  * define FEATURE_BITMAPCACHE in your project.</p>*/
 export class MovieClip extends Sprite implements IMovieClipAdapter {
 	private static _movieClips: Array<MovieClip> = new Array<MovieClip>();
+	private static current_script_scope: MovieClip=null;
 
 	// 	executed directly after a MC has been constructed via Object.create,
 	//	befre the actual constructors have been run
@@ -57,16 +58,28 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	public addScript(param1: any) {
 		return param1;
 	}
+	// call this after you call scripts 
+	public queuedNavigationAction:Function=null;
 
 	public executeScript(scripts: any) {
+		if(typeof scripts==="number"){
+			scripts=(<AwayMovieClip>this.adaptee).timeline.get_script_for_frame(<AwayMovieClip>this.adaptee, scripts);
+		}
 		if (scripts){
+			MovieClip.current_script_scope=this;
 			for (let k = 0; k < scripts.length; k++) {
 				//if(this.parent){
 					scripts[k].setReceiver(this);
 					scripts[k].axCall(this);
 				//}
 			}
+			MovieClip.current_script_scope=null;
 		}
+		if(this.queuedNavigationAction){
+			this.queuedNavigationAction();
+			this.queuedNavigationAction=null;
+		}
+		FrameScriptManager.execute_as3_constructors();
 	}
 
 	public initAdapter(): void {}
@@ -135,20 +148,8 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		newMC._stage = this.activeStage;
 
 		(<IMovieClipAdapter>newMC).executeConstructor = () => {
-			adaptee.timeline.resetScripts();
-		
-			//console.log("executeConstructor mc", newMC, newMC.adaptee.id);
-			const events=(<any>newMC).getQueuedEvents();
-		
+			adaptee.timeline.resetScripts();				
 			(<any>newMC).axInitializer();
-
-			if(events && events.length>0){
-				(<any>newMC).executeQueuedEvents=()=>{
-					for(let i = 0; i < events.length; i++) {
-						(<any>newMC).dispatchEvent(events[i]);
-					}
-				}
-			}
 			
 		}
 
@@ -392,8 +393,12 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 *   jumps to the frame number in the specified scene.
 	 * @param	scene	The name of the scene to play. This parameter is optional.
 	 */
-	public gotoAndPlay(frame: any, scene: string = null) {
+	public gotoAndPlay(frame: any, scene: string = null, force:boolean=false) {
 
+		if(!force && MovieClip.current_script_scope==this){
+			this.queuedNavigationAction=()=>this.gotoAndPlay(frame, scene, true);
+			return;
+		}
 		if (frame == null)
 			return;
 
@@ -429,8 +434,12 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * @throws	ArgumentError If the scene or frame specified are
 	 *   not found in this movie clip.
 	 */
-	public gotoAndStop(frame: any, scene: string = null) {
+	public gotoAndStop(frame: any, scene: string = null, force:boolean=false) {
 
+		if(!force && MovieClip.current_script_scope==this){
+			this.queuedNavigationAction=()=>this.gotoAndStop(frame, scene, true);
+			return;
+		}
 		// in FP for frame==null, we need to stop the mc
 		if (frame == null){			
 			this.stop();
@@ -472,16 +481,23 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		else{
 			(<AwayMovieClip>this._adaptee).currentFrameIndex = (<number>frame) - 1;
 		}
-		this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
+		FrameScriptManager.execute_as3_constructors();
+		//this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
 		// only in FP10 and above we want to execute scripts immediatly here
-		if((<any>this.sec).swfVersion > 9)
+		if((<any>this.sec).swfVersion > 9){
 			FrameScriptManager.execute_queue();
+
+		}
 	}
 	/**
 	 * Sends the playhead to the next frame and stops it.  This happens after all
 	 * remaining actions in the frame have finished executing.
 	 */
-	public nextFrame() {		
+	public nextFrame(force:boolean=false) {	
+		if(!force && MovieClip.current_script_scope==this){
+			this.queuedNavigationAction=()=>this.nextFrame(true);
+			return;
+		}	
 		(<AwayMovieClip>this._adaptee).stop();
 		++(<AwayMovieClip>this._adaptee).currentFrameIndex;
 	}
@@ -490,7 +506,11 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * Moves the playhead to the next scene of the MovieClip instance.  This happens after all
 	 * remaining actions in the frame have finished executing.
 	 */
-	public nextScene() {
+	public nextScene(force:boolean=false) {
+		if(!force && MovieClip.current_script_scope==this){
+			this.queuedNavigationAction=()=>this.nextScene(true);
+			return;
+		}	
 		//todo
 		console.log("nextScene not implemented yet in flash/MovieClip");
 	}
@@ -506,7 +526,11 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * Sends the playhead to the previous frame and stops it.  This happens after all
 	 * remaining actions in the frame have finished executing.
 	 */
-	public prevFrame() {
+	public prevFrame(force:boolean=false) {
+		if(!force && MovieClip.current_script_scope==this){
+			this.queuedNavigationAction=()=>this.prevFrame(true);
+			return;
+		}	
 		if ((<AwayMovieClip>this._adaptee).currentFrameIndex > 0) {
 			(<AwayMovieClip>this._adaptee).currentFrameIndex = (<AwayMovieClip>this._adaptee).currentFrameIndex - 1;
 		}
@@ -516,7 +540,11 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * Moves the playhead to the previous scene of the MovieClip instance.  This happens after all
 	 * remaining actions in the frame have finished executing.
 	 */
-	public prevScene() {
+	public prevScene(force:boolean=false) {
+		if(!force && MovieClip.current_script_scope==this){
+			this.queuedNavigationAction=()=>this.prevScene(true);
+			return;
+		}	
 		//todo
 		console.log("prevScene not implemented yet in flash/MovieClip");
 	}
