@@ -38,9 +38,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	private _transform: Transform;
 	private _filters:BitmapFilter[];
 	public toString():string {
-		return this.adaptee.name;
-
-
+		return `[object ${(<any>this).classInfo.instanceInfo.name.name}]`;
 	}
 	public applySymbol() {
 
