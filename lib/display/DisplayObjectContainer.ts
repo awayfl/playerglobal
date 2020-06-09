@@ -7,6 +7,7 @@ import {PickGroup} from "@awayjs/view";
 import { constructClassFromSymbol, OrphanManager } from '@awayfl/avm2';
 import { Point } from '../geom/Point';
 import { SecurityDomain } from '../SecurityDomain';
+import { StaticEvents } from "../events/StaticEvents";
 
 export class DisplayObjectContainer extends InteractiveObject{
 
@@ -98,15 +99,6 @@ export class DisplayObjectContainer extends InteractiveObject{
 			}
 		}
 	}
-	public dispatchQueuedEvents() {
-		super.dispatchQueuedEvents();
-		for(var i=0;i < (<AwayDisplayObjectContainer>this._adaptee).numChildren;i++){
-			var oneChild:AwayDisplayObject=(<AwayDisplayObjectContainer> this._adaptee).getChildAt(i);
-			if(oneChild && oneChild.adapter && (<any>oneChild.adapter).dispatchQueuedEvents)
-				(<any>oneChild.adapter).dispatchQueuedEvents();
-
-		}
-	}
 	public debugDisplayGraph(obj:any) {
 		obj.object=this;
 		obj.rectangle="x:"+this.x+", y:"+this.y+", width:"+this.width+", height:"+this.height;
@@ -162,23 +154,50 @@ export class DisplayObjectContainer extends InteractiveObject{
 
 	}
 
-	/*
+	
 	//	overwrite 
-	public dispatchEventRecursive(event:Event) {
-		this.dispatchEvent(event);
-
+	public dispatch_ADDED_TO_STAGE(dispatchForThisChild:boolean=false) {
+		
+		if(dispatchForThisChild){
+			if(!StaticEvents.events[Event.ADDED_TO_STAGE])
+				StaticEvents.events[Event.ADDED_TO_STAGE]=new (<SecurityDomain> this.sec).flash.events.Event(Event.ADDED_TO_STAGE);
+			StaticEvents.events[Event.ADDED_TO_STAGE].target=this;
+			this.dispatchEvent(StaticEvents.events[Event.ADDED_TO_STAGE]);
+		}
 		if((<AwayDisplayObjectContainer> this._adaptee)){
-			var i:number=(<AwayDisplayObjectContainer> this._adaptee).numChildren;
-			while(i>0){
-				i--;
-				var oneChild:AwayDisplayObject=(<AwayDisplayObjectContainer> this._adaptee).getChildAt(i);
-				if(oneChild.adapter){
-					(<DisplayObject>oneChild.adapter).dispatchEventRecursive(event);
+			let children=(<AwayDisplayObjectContainer> this._adaptee)._children;
+			let len=children.length;
+			for(let i=0;i<len; i++){
+				let oneChild:AwayDisplayObject=children[i];
+				if(oneChild.adapter && (<any>oneChild.adapter).dispatchEventRecursive && !oneChild.hasDispatchedAddedToStage){
+					oneChild.hasDispatchedAddedToStage=true;
+					(<DisplayObject>oneChild.adapter).dispatch_ADDED_TO_STAGE(true);
 				}
 			}
 		}
 	};
-	*/
+	public dispatch_REMOVED_FROM_STAGE(dispatchForThisChild:boolean=false) {
+		
+		if(dispatchForThisChild){
+			if(!StaticEvents.events[Event.REMOVED_FROM_STAGE])
+				StaticEvents.events[Event.REMOVED_FROM_STAGE]=new (<SecurityDomain> this.sec).flash.events.Event(Event.REMOVED_FROM_STAGE);
+			StaticEvents.events[Event.REMOVED_FROM_STAGE].target=this;
+			//FrameScriptManager.queue_removed_mc(this.adaptee, StaticEvents.events[Event.REMOVED_FROM_STAGE], this.adaptee);
+			this.dispatchEvent(StaticEvents.events[Event.REMOVED_FROM_STAGE]);
+		}
+		if((<AwayDisplayObjectContainer> this._adaptee)){
+			let children=(<AwayDisplayObjectContainer> this._adaptee)._children;
+			let len=children.length;
+			for(let i=0;i<len; i++){
+				let oneChild:AwayDisplayObject=children[i];
+				if(oneChild.adapter && (<any>oneChild.adapter).dispatchEventRecursive && oneChild.hasDispatchedAddedToStage){
+					oneChild.hasDispatchedAddedToStage=false;
+					(<DisplayObject>oneChild.adapter).dispatch_REMOVED_FROM_STAGE(true);
+				}
+			}
+		}
+	};
+	
 
 	
 
@@ -270,12 +289,12 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 */
 	public addChild (child:DisplayObject) : DisplayObject {
 		
-		//child.dispatchEventRecursive(new Event(Event.ADDED_TO_STAGE));
         (<AwayDisplayObjectContainer> this._adaptee).addChild((<DisplayObject>child).adaptee);
         
-		child.dispatchStaticEvent(Event.ADDED);
-		child.dispatchStaticEvent(Event.ADDED_TO_STAGE);
-		//child.dispatchStaticEvent(Event.FRAME_CONSTRUCTED);
+		child.dispatchStaticEvent(Event.ADDED, child);
+		if(this.adaptee.isOnDisplayList()){
+			child.dispatch_ADDED_TO_STAGE(true);
+		}
 		OrphanManager.removeOrphan(child);
 		return child;
 	}
@@ -304,7 +323,6 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 *   the caller is a child (or grandchild etc.) of the child being added.
 	 */
 	public addChildAt (child:DisplayObject, index:number) : DisplayObject {
-		//child.dispatchEventRecursive(new Event(Event.ADDED_TO_STAGE));
 		// todo: this should be done much more efficient (in awayjs)
 		var allChildren=[];
 		for(var i:number /*uint*/ = 0; i < (<AwayDisplayObjectContainer> this._adaptee).numChildren; i++){
@@ -326,9 +344,9 @@ export class DisplayObjectContainer extends InteractiveObject{
 			}
 		}
 		child.dispatchStaticEvent(Event.ADDED);
-		child.dispatchStaticEvent(Event.ADDED_TO_STAGE);
-		//child.dispatchStaticEvent(Event.FRAME_CONSTRUCTED);
-		//(<AwayDisplayObjectContainer>(<AwayDisplayObjectContainer> this._adaptee)).addChildAt(child.adaptee, index);
+		if(this.adaptee.isOnDisplayList()){
+			child.dispatch_ADDED_TO_STAGE(true);
+		}
 		return child;
 	}
 
@@ -497,8 +515,6 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 * @throws	ArgumentError Throws if the child parameter is not a child of this object.
 	 */
 	public removeChild (child:DisplayObject) : DisplayObject {
-		//child.dispatchEventRecursive(new Event(Event.REMOVED_FROM_STAGE));
-		child.dispatchStaticEvent(Event.REMOVED);
 		(<AwayDisplayObjectContainer> this._adaptee).removeChild(child.adaptee);
 		//console.log("removeChild not implemented yet in flash/DisplayObjectContainer");
 		return child;
@@ -526,10 +542,6 @@ export class DisplayObjectContainer extends InteractiveObject{
 	public removeChildAt (index:number) : DisplayObject {
 		var awayChild:AwayDisplayObject=(<AwayDisplayObjectContainer> this._adaptee).removeChildAt(index);
 		var childadapter:DisplayObject=(<DisplayObject>awayChild.adapter);
-
-		//childadapter.dispatchEventRecursive(new Event(Event.REMOVED_FROM_STAGE));
-		childadapter.dispatchEvent(new Event(Event.REMOVED));
-		//console.log("removeChildAt not implemented yet in flash/DisplayObjectContainer");
 		return childadapter;
 	}
 
@@ -538,19 +550,8 @@ export class DisplayObjectContainer extends InteractiveObject{
 		if(endIndex>=(<AwayDisplayObjectContainer> this._adaptee).numChildren) {
 			endIndex=(<AwayDisplayObjectContainer> this._adaptee).numChildren-1;
 		}
-
-		for(var i:number /*uint*/ = beginIndex; i <= endIndex; i++){
-			var oneChild:AwayDisplayObject=(<AwayDisplayObjectContainer> this._adaptee)._children[i];
-			if(oneChild.adapter){
-				//(<DisplayObject>oneChild.adapter).dispatchEventRecursive(new Event(Event.REMOVED_FROM_STAGE));
-				(<DisplayObject>oneChild.adapter).dispatchStaticEvent(Event.REMOVED);
-			}
-		}
-
-
 		(<AwayDisplayObjectContainer> this._adaptee).removeChildren(beginIndex, endIndex+1);
 
-		//console.log("removeChildren not implemented yet in flash/DisplayObjectContainer");
 	}
 
 	/**
