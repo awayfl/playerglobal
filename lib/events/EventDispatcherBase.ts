@@ -13,8 +13,6 @@ export class EventDispatcherBase extends ASObject
 
 	private _listenerObjects:Array<ListenerObject> = new Array<ListenerObject>();
 	private _t:any;
-	protected _queuedEvents:EventBase[]=[];
-	protected _queuedAttachEventListeners:StringMap<((event: EventBase) => void)[]> = {};
 
 
 	public toString():string
@@ -66,18 +64,6 @@ export class EventDispatcherBase extends ASObject
 		}
 	}
 	
-	public getQueuedAttachEventListeners()
-	{
-		return this._queuedAttachEventListeners;
-	}
-	public getQueuedEvents()
-	{
-		if(!this._queuedEvents)
-			return null;
-		var returnEvents=this._queuedEvents.concat();
-		this._queuedEvents.length=0;
-		return returnEvents;
-	}
 	/**
 	 * Dispatch an event
 	 * @method dispatchEvent
@@ -86,9 +72,7 @@ export class EventDispatcherBase extends ASObject
 	public dispatchEvent(event:EventBase):void
 	{
 		if(!this._listenerObjects){
-			if(!this._queuedEvents)
-				this._queuedEvents=[];
-			this._queuedEvents.push(event);
+			//throw("dispatching event on object that wasnt init yet");
 			return;
 		}
 		var l:ListenerObject = this._listenerObjects[event.type];
@@ -108,8 +92,6 @@ export class EventDispatcherBase extends ASObject
 	 */
 	public hasEventListener(type:string, listener?:(event:EventBase) => void):boolean
 	{
-		if(!this._listenerObjects)
-			return;
 		if (this._listenerObjects[type] === undefined)
 			return false;
 

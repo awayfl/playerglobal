@@ -59,22 +59,6 @@ export class EventDispatcher extends EventDispatcherBase
 	public willTrigger(){
 
 	}
-	public dispatchQueuedEvents():void{
-		
-		for(var i=0; i<this._queuedEvents.length; i++){
-			this.dispatchEvent(this._queuedEvents[i])
-		}
-		this._queuedEvents.length=0;
-		
-	}
-	public getQueuedEvents(){
-		
-		return super.getQueuedEvents();
-	}
-	public getQueuedAttachEventListeners() {
-
-		return super.getQueuedAttachEventListeners();
-	}
 	
 	public dispatchEvent(event: EventBase): void {
 		(<any>event).currentTarget = this;
@@ -122,13 +106,6 @@ export class EventDispatcher extends EventDispatcherBase
 			removeListener: this.removeDeactivateListener,
 			callback: this._deactivateCallbackDelegate
 		});
-		if(this._queuedAttachEventListeners){
-			for(var key in this._queuedAttachEventListeners){
-				for(let i=0; i<this._queuedAttachEventListeners[key].length; i++){
-					this.addEventListener(key, this._queuedAttachEventListeners[key][i]);
-				}
-			}
-		}
 	}
 
 	// ---------- event mapping functions Event.ACTIVATE
@@ -177,12 +154,7 @@ export class EventDispatcher extends EventDispatcherBase
 		}
 
 		if (!this.eventMappingDummys) {
-			if (!this._queuedAttachEventListeners)
-				this._queuedAttachEventListeners = {};
-			if (!this._queuedAttachEventListeners[type]) {
-				this._queuedAttachEventListeners[type]=[];
-			}
-			this._queuedAttachEventListeners[type].push(listener);
+			//throw("called addEventListener for object that wasnt init yet");
 			return;
 		}
 		if (this.eventMappingDummys.hasOwnProperty(type)) {
