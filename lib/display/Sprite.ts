@@ -88,17 +88,8 @@ export class Sprite extends DisplayObjectContainer {
 		this.adaptee.copyTo(adaptee);
 		clone.adaptee = adaptee;
 		clone._stage = this.activeStage;
-		(<any>clone).executeConstructor = () => {
-			var events = (<any>clone).getQueuedEvents();
+		(<any>clone).executeConstructor = () => {			
 			(<any>clone).axInitializer();
-			if (events && events.length>0) {
-				
-				(<any>clone).executeQueuedEvents=()=>{
-					for(let i = 0; i < events.length; i++) {
-						(<any>clone).dispatchEvent(events[i]);
-					}
-				}
-			}
 			/*if(clone["$Bg__setPropDict"]){
 				console.log("Bg__setPropDict found");
 			}*/
