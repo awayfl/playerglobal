@@ -161,8 +161,10 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 				this._content.adaptee.reset();
 				(<any>this._content.adaptee).firstFrameOnSWFStart=true;
 				FrameScriptManager.queue_as3_constructor(<any>this._content.adaptee);
+				(<any>this._stage.adaptee).addChild(this._content.adaptee);				
 				FrameScriptManager.execute_as3_constructors();
-				this._stage.addChild(this._content);				
+				this._content.dispatchStaticEvent("added", this._content);
+				this._content.dispatch_ADDED_TO_STAGE();
 				
 			}
 		}
