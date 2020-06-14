@@ -225,26 +225,60 @@ export class Stage extends DisplayObjectContainer{
 		if((<AwayDisplayObjectContainer>this._stage.adaptee).numChildren==0){
 			return;
 		}
-	
-		// 	advance the stage - this updates the timeline
-		//	objects get removed, created and updated - framescripts get queued
-		this._stage.advanceFrame(this._events);
-		OrphanManager.updateOrphans(this._events);
 
+		/**
+		 *  todo: order of executions should look like this:
+		 * 
+		 * 		- timeline-pass1:
+		 * 
+		 * 				- remove Childs from timeline. 
+		 * 				- dispatch REMOVED and REMOVED_FROM_STAGE
+		 * 				- update childs that still exists
+		 * 				- declare new childs (not create them yet)
+		 * 				- update currentFrame and numChildren
+		 * 				- queue mcs for framescripts
+		 * 
+		 * 		- dispatch ENTER_FRAME (skip on first frame when timeline is played)
+		 * 
+		 * 		- timeline-pass2:
+		 * 
+		 * 				- add new childs + update their properties
+		 * 				- execute constructors
+		 * 				- dispatch ADDED and ADDED_TO_STAGE
+		 * 
+		 * 		- dispatch FRAME_CONSTRUCTED 
+		 * 
+		 * 		- execute framescripts
+		 * 
+		 * 		- dispatch EXIT_FRAME 
+		 * 
+		 * 		- dispatch RENDER (only if stage.invalidate was called)
+		 * */
+
+	 
+		//	in FP, the first enterFrame after a swf-load is ignored:
 		if((<any>(<AwayDisplayObjectContainer>this._stage.adaptee)._children[0]).firstFrameOnSWFStart){
 			(<any>(<AwayDisplayObjectContainer>this._stage.adaptee)._children[0]).firstFrameOnSWFStart=false;
 		}
 		else{
 			this._stage.dispatchStaticBroadCastEvent(Event.ENTER_FRAME);
 		}
-			
+
+		//	advance the stage - this updates the timeline
+		//	objects get removed, created and updated - framescripts get queued
+		this._stage.advanceFrame(this._events);
+		OrphanManager.updateOrphans(this._events);
+
+
+		// execute pending constructors:
 		FrameScriptManager.execute_as3_constructors();
 
 		// broadcast FRAME_CONSTRUCTED event to all objects
 		this._stage.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
 			
-		// run all queued framescriptsP
+		// run all queued framescripts
 		FrameScriptManager.execute_queue();
+
 		// broadcast FRAME_CONSTRUCTED event to all objects
 		this._stage.dispatchStaticBroadCastEvent(Event.EXIT_FRAME);
 		FrameScriptManager.execute_queue();
@@ -254,6 +288,7 @@ export class Stage extends DisplayObjectContainer{
 			FrameScriptManager.execute_queue();
 			this._sendEventRender=false;
 		}
+
 	}
 
 
