@@ -76,7 +76,7 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 the DisplayObjectContainer should call this function on all children if they extend DisplayObjectContainer themself.
 	 if any child is a MovieClip this function will not be called on its childrens adapter.
 	 */
-	public advanceFrame(events:any[]) {
+	public advanceFrame() {
 		var i:number=(<AwayDisplayObjectContainer> this._adaptee)._children.length;
 		while(i>0){
 			i--;
@@ -84,13 +84,13 @@ export class DisplayObjectContainer extends InteractiveObject{
 			if(oneChild){
 				if(oneChild.isAsset(AwayDisplayObjectContainer)){
 					if(oneChild.adapter){
-						(<DisplayObjectContainer>oneChild.adapter).advanceFrame(events);
+						(<DisplayObjectContainer>oneChild.adapter).advanceFrame();
 					}
 				}
 				else if(oneChild.isAsset(AwaySprite)) {
 					if (oneChild.adapter && (<any>oneChild.adapter).advanceFrame) {
 						// when Flash constructs Sprites for "Shape" it will not include the DispayObjectContainer in the inheritance chain
-						(<DisplayObjectContainer>oneChild.adapter).advanceFrame(events);
+						(<DisplayObjectContainer>oneChild.adapter).advanceFrame();
 					}
 				}
 				else if(oneChild.isAsset(AwayMovieClip)){
