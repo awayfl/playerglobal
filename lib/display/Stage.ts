@@ -125,26 +125,11 @@ export class Stage extends DisplayObjectContainer{
 
 	private _stage3Ds:AwayStage[];
 
-	private _events:any[];
-	// no need to create new events on each frame. we can reuse them
-	private _eventOnEnter: Event;
-	private _eventFrameConstructed: Event;
-	private _eventExitFrame: Event;
-	private _eventRender: Event;
 	private _sendEventRender:boolean;
 
 
 	constructor() {
 		super();
-
-		this._eventOnEnter = new (<SecurityDomain>this.sec).flash.events.Event(Event.ENTER_FRAME);
-		this._eventFrameConstructed = new (<SecurityDomain>this.sec).flash.events.Event(Event.FRAME_CONSTRUCTED);
-		this._eventExitFrame = new (<SecurityDomain>this.sec).flash.events.Event(Event.EXIT_FRAME);
-		this._eventRender = new (<SecurityDomain>this.sec).flash.events.Event(Event.RENDER);
-		this._events = [this._eventOnEnter, this._eventExitFrame];
-
-
-		this._events=[this._eventOnEnter, this._eventExitFrame];
 
 		this._stage3Ds=[];
 
@@ -266,8 +251,8 @@ export class Stage extends DisplayObjectContainer{
 
 		//	advance the stage - this updates the timeline
 		//	objects get removed, created and updated - framescripts get queued
-		this._stage.advanceFrame(this._events);
-		OrphanManager.updateOrphans(this._events);
+		this._stage.advanceFrame();
+		OrphanManager.updateOrphans();
 
 
 		// execute pending constructors:
