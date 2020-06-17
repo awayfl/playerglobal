@@ -186,11 +186,17 @@ export class Event extends ASObject {
   }
 
   stopPropagation(): void {
-    this._stopPropagation = true;
+	this._stopPropagation = true;
+	if((<any>this).adaptee){
+		(<any>this).adaptee.stopPropagation();
+	}
   }
 
   stopImmediatePropagation(): void {
     this._stopImmediatePropagation = this._stopPropagation = true;
+	if((<any>this).adaptee){
+		(<any>this).adaptee.stopImmediatePropagation();
+	}
   }
 
   preventDefault(): void {

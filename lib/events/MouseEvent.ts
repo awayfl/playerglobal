@@ -101,6 +101,7 @@ export class MouseEvent extends Event {
 	public fillFromAway (awayEvent:MouseEventAway){
 		//console.log("cloneFromAway not implemented yet in flash/MouseEvent");
 
+		this.adaptee=awayEvent;
 		// todo: set targets correctly
 		this.target = awayEvent.target;
 		//this.currentTarget = awayEvent.currentTarget;
@@ -144,6 +145,7 @@ export class MouseEvent extends Event {
   private _shiftKey: boolean;
 
   private _buttonDown: boolean;
+  private adaptee: MouseEventAway;
 
   private _relatedObject: InteractiveObject;
   private _isRelatedObjectInaccessible: boolean;
