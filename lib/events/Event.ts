@@ -150,6 +150,12 @@ export class Event extends ASObject {
   _stopImmediatePropagation: boolean;
   _isDefaultPrevented: boolean;
 
+  //	todo:
+  //	these 2 only exists to prevent errors in types for now, because for some reason
+  //	some functions use core/EventBase for type but recieve as3/Event
+  public _iAllowedToPropagate:boolean = true;
+  public _iAllowedToImmediatlyPropagate:boolean = true;
+
   /**
    * Some events don't participate in the normal capturing and bubbling phase.
    */
