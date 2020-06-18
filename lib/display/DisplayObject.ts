@@ -6,7 +6,7 @@ import { DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip,  IDispl
 import { LoaderInfo } from "./LoaderInfo";
 import { DisplayObjectContainer } from "./DisplayObjectContainer";
 import { Stage } from "./Stage";
-import { PickGroup, BasicPartition } from '@awayjs/view';
+import { PickGroup, BasicPartition, BoundsPicker } from '@awayjs/view';
 import { SceneGraphPartition } from '@awayjs/scene';
 import { constructClassFromSymbol, AXClass } from '@awayfl/avm2';
 import { Transform } from '../geom/Transform';
@@ -34,6 +34,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 	private _transform: Transform;
 	private _filters:BitmapFilter[];
+	private _boundsPicker:BoundsPicker;
+
 	public toString():string {
 		return `[object ${(<any>this).classInfo.instanceInfo.name.name}]`;
 	}
@@ -1249,20 +1251,28 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   the targetCoordinateSpace any's coordinate system.
 	 */
 	public getBounds(targetCoordinateSpace: DisplayObject): Rectangle {
-		//console.log("DisplayObject:getBounds not yet implemented");
-		// for debugging!
 
-		const picker = PickGroup.getInstance(this._stage.view);
-		const bPicker = picker.getBoundsPicker(this.adaptee.partition);
-		const box = bPicker.getBoxBounds(this.adaptee);
-	
+		const box = this.getBoundsInternal();
+		const sec = this.sec as SecurityDomain;
+
 		if(!box) {
-			return null;
+			// FLASH return strange bounds for cases when object is not has real bounds
+			return new sec.flash.geom.Rectangle( 6710886.4, 6710886.4,0,0);
 		}
 
-		const aligned = new (<SecurityDomain> this.sec).flash.geom.Rectangle(box.x - this.x, box.y - this.y, box.width, box.height);
+		return new sec.flash.geom.Rectangle(box.x - this.x, box.y - this.y, box.width, box.height);
+	}
+	
+	/**
+	 * Internal method that return Box instance of bounds of DisplayObject
+	 */
+	protected getBoundsInternal(): Box | null {
 
-		return aligned;
+		//if(!this._boundsPicker) {
+			this._boundsPicker = PickGroup.getInstance(this._stage.view).getBoundsPicker(this.adaptee.partition);
+		//}
+
+		return this._boundsPicker.getBoxBounds(this.adaptee);
 	}
 
 	/**
