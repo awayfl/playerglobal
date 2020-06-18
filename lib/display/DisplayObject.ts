@@ -671,7 +671,9 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			console.warn("Trying to get Display.height on orphan child!");
 			return 100;
 		}
-		var box: Box = PickGroup.getInstance(this._stage.view).getBoundsPicker(this.adaptee.partition).getBoxBounds(this.adaptee);
+		
+		var box: Box = this.getBoundsInternal();
+
 		return (box == null) ? 0 : box.height;
 	}
 	public set height(value: number) {
@@ -1141,7 +1143,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 		}
 
-		var box: Box = PickGroup.getInstance(this._stage.view).getBoundsPicker(this.adaptee.partition).getBoxBounds(this.adaptee);
+		var box: Box = this.getBoundsInternal();
 
 		return (box == null) ? 0 : box.width;
 
