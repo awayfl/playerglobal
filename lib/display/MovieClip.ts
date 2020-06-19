@@ -474,6 +474,9 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 
 
 	private _gotoFrame(frame: any): void {
+		if((<any>this.sec).swfVersion > 9){
+			FrameScriptManager.add_queue();
+		}
 		if (typeof frame === "string") {
 			(<AwayMovieClip>this._adaptee).jumpToLabel(<string>frame);
 		}
@@ -486,7 +489,6 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		// only in FP10 and above we want to execute scripts immediatly here
 		if((<any>this.sec).swfVersion > 9){
 			FrameScriptManager.execute_queue();
-
 		}
 	}
 	/**
@@ -498,8 +500,15 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			this.queuedNavigationAction=()=>this.nextFrame(true);
 			return;
 		}	
+		if((<any>this.sec).swfVersion > 9){
+			FrameScriptManager.add_queue();
+		}
 		(<AwayMovieClip>this._adaptee).stop();
 		++(<AwayMovieClip>this._adaptee).currentFrameIndex;
+		FrameScriptManager.execute_as3_constructors();
+		if((<any>this.sec).swfVersion > 9){
+			FrameScriptManager.execute_queue();
+		}
 	}
 
 	/**
@@ -531,9 +540,16 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			this.queuedNavigationAction=()=>this.prevFrame(true);
 			return;
 		}	
+		if((<any>this.sec).swfVersion > 9){
+			FrameScriptManager.add_queue();
+		}
 		if ((<AwayMovieClip>this._adaptee).currentFrameIndex > 0) {
 			(<AwayMovieClip>this._adaptee).currentFrameIndex = (<AwayMovieClip>this._adaptee).currentFrameIndex - 1;
 		}
+		FrameScriptManager.execute_as3_constructors();
+		if((<any>this.sec).swfVersion > 9){
+			FrameScriptManager.execute_queue();
+		}	
 	}
 
 	/**
