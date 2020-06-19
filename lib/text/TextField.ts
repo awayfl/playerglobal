@@ -75,7 +75,6 @@ export class TextField extends InteractiveObject
 	constructor (){
 		super();
 		(<AwayTextField>this.adaptee).autoSize=TextFieldAutoSize.NONE;
-		(<AwayTextField>this.adaptee).textFormat.align=TextFormatAlign.CENTER;
 		//(<AwayTextField> this._adaptee).width=100;//80pro!
 		// register all events for Textfield as dummys right now
 
