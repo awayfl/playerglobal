@@ -229,15 +229,15 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		color &= 0xffffffff;
 
 		let minX = this.rect.width,
-			minY = this.rect.height, 
-			maxX = 0, 
+			minY = this.rect.height,
+			maxX = 0,
 			maxY = 0;
-		
+
 		let c = 0;
 		let has = false;
 
-		for(let j = 0; j < size.height; j++) {
-			for(let i = 0; i < size.width; i++) {
+		for (let j = 0; j < size.height; j++) {
+			for (let i = 0; i < size.width; i++) {
 				const index = (j * size.width + i) * 4;
 				const r = buffer[index + 0];
 				const g = buffer[index + 1];
@@ -246,22 +246,25 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 
 				// inline
 				// c = ColorUtils.ARGBtoFloat32(a, r, g, b);
-				c = ((a << 24) | (r << 16) | (g << 8) | b);
+				c = (a << 24) | (r << 16) | (g << 8) | b;
 				c &= mask;
 
-				if(c === color) {
+				if (c === color) {
 					has = true;
 
-					minX = i < minX ? i : minX;// Math.min(minX, i);
-					maxX = i > maxX ? i : maxX;// Math.max(maxX, i);
+					minX = i < minX ? i : minX; // Math.min(minX, i);
+					maxX = i > maxX ? i : maxX; // Math.max(maxX, i);
 					minY = j < minY ? j : minY; //Math.min(minY, j);
-					maxY = j > maxY ? j : maxY;// Math.max(maxY, j);
+					maxY = j > maxY ? j : maxY; // Math.max(maxY, j);
 				}
-			}	
+			}
 		}
 
 		//console.log("getColorBoundsRect not implemented yet in flash/BitmapData");
-		const d = new (<SecurityDomain>this.sec).flash.geom.Rectangle(minX, minY, maxX - minX + +has, maxY - minY + +has);
+		const d = has
+			? new (<SecurityDomain>this.sec).flash.geom.Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1)
+			: new (<SecurityDomain>this.sec).flash.geom.Rectangle(0, 0, 0, 0);
+
 		console.warn("Unsage implementation `getColorBoundsRect`!");
 		console.debug("ColoreRect (mask, color, rect) ", mask.toString(16), color.toString(16), d.toString(), this);
 
