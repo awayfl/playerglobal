@@ -216,8 +216,10 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public floodFill(x: number, y: number, color: number) {
-		console.log("floodFill not implemented yet in flash/BitmapData");
+		console.warn("Unsage implementation `floodFill`");
+		this._adaptee.floodFill(x, y, color);
 	}
+
 	public generateFilterRect(sourceRect: Rectangle, filter: BitmapFilter): Rectangle {
 		console.log("generateFilterRect not implemented yet in flash/BitmapData");
 		return null;
