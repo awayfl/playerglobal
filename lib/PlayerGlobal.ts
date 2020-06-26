@@ -1,4 +1,4 @@
-import { ABCFile, ABCCatalog, ActiveLoaderContext, AVM2LoadLibrariesFlags, IPlayerGlobal } from "@awayfl/avm2";
+import { ABCFile, ABCCatalog, ActiveLoaderContext, AVM2LoadLibrariesFlags, IPlayerGlobal, AXSecurityDomain, Natives } from "@awayfl/avm2";
 import { release, assert, PromiseWrapper, AVMStage, SWFFile } from "@awayfl/swf-loader";
 import { SecurityDomain } from "./SecurityDomain";
 import { initLink } from './link';
@@ -40,6 +40,22 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 	): Promise<ISceneGraphFactory> {
 
 		this._avmStage = avmStage;
+		
+		if(this._avmStage.avmTestHandler){
+			Natives.print=function(sec: AXSecurityDomain, expression: any, arg1?: any, arg2?: any, arg3?: any, arg4?: any) {
+				let message;
+				if(arguments.length==2){
+					message=arguments[1];
+				}
+				else{
+					message=Array.prototype.slice.call(arguments, 1).join(" ");
+				}
+				console.log("%c Test-Trace from SWF:", "color: DodgerBlue", message);
+				avmStage.avmTestHandler.addMessage(message);
+			}
+		}
+
+
 		initLink();
 
 		var result = new PromiseWrapper<ISceneGraphFactory>();
