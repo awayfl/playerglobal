@@ -1107,13 +1107,13 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * it cannot be clicked.
 	 */
 	public get visible(): boolean {
-		return this.adaptee.visible;
-
+		// return raw value to avoid prototype jumping and method execution 
+		return (<any>this._adaptee)._explicitVisibility;
 	}
+
 	public set visible(value: boolean) {
 		this._visibilityByScript = true;
-		this.adaptee.visible = value;
-
+		this._adaptee.visible = value;
 	}
 
 	/**
@@ -1175,13 +1175,13 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * The any's coordinates refer to the registration point position.
 	 */
 	public get x(): number {
-		return this.adaptee.x;
-
+		// return raw value to avoid prototype jumping and method execution 
+		return (<any>this._adaptee)._transform._matrix3D._rawData[12];
 	}
+
 	public set x(value: number) {
 		this._blockedByScript = true;
-		this.adaptee.x = value;
-
+		this._adaptee.x = value;
 	}
 
 	/**
@@ -1193,11 +1193,13 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * The any's coordinates refer to the registration point position.
 	 */
 	public get y(): number {
-		return this.adaptee.y;
+		// return raw value to avoid prototype jumping and method execution 
+		return (<any>this._adaptee)._transform._matrix3D._rawData[13];
 	}
+
 	public set y(value: number) {
 		this._blockedByScript = true;
-		this.adaptee.y = value;
+		this._adaptee.y = value;
 	}
 
 	/**
@@ -1214,11 +1216,13 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * calculation puts it. The calculation is: (x~~cameraFocalLength/cameraRelativeZPosition, y~~cameraFocalLength/cameraRelativeZPosition)
 	 */
 	public get z(): number {
-		return this.adaptee.z;
+		// return raw value to avoid prototype jumping and method execution 
+		return (<any>this._adaptee)._transform._matrix3D._rawData[14];
 	}
+
 	public set z(value: number) {
 		this._blockedByScript = true;
-		this.adaptee.z = value;
+		this._adaptee.z = value;
 	}
 
 	/**
