@@ -289,11 +289,15 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 */
 	public addChild (child:DisplayObject) : DisplayObject {
 		
+		let dispatchAdded=!(child.adaptee.parent==this.adaptee);
+
         (<AwayDisplayObjectContainer> this._adaptee).addChild((<DisplayObject>child).adaptee);
-        
-		child.dispatchStaticEvent(Event.ADDED, child);
-		if(this.adaptee.isOnDisplayList()){
-			child.dispatch_ADDED_TO_STAGE(true);
+		
+		if(dispatchAdded){
+			child.dispatchStaticEvent(Event.ADDED, child);
+			if(this.adaptee.isOnDisplayList()){
+				child.dispatch_ADDED_TO_STAGE(true);
+			}
 		}
 		OrphanManager.removeOrphan(child);
 		return child;
@@ -323,6 +327,7 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 *   the caller is a child (or grandchild etc.) of the child being added.
 	 */
 	public addChildAt (child:DisplayObject, index:number) : DisplayObject {
+		let dispatchAdded=!(child.adaptee.parent==this.adaptee);
 		// todo: this should be done much more efficient (in awayjs)
 		var allChildren=[];
 		for(var i:number /*uint*/ = 0; i < (<AwayDisplayObjectContainer> this._adaptee).numChildren; i++){
@@ -343,9 +348,11 @@ export class DisplayObjectContainer extends InteractiveObject{
 				(<AwayDisplayObjectContainer> this._adaptee).addChild(allChildren[newChildCnt++]);
 			}
 		}
-		child.dispatchStaticEvent(Event.ADDED);
-		if(this.adaptee.isOnDisplayList()){
-			child.dispatch_ADDED_TO_STAGE(true);
+		if(dispatchAdded){
+			child.dispatchStaticEvent(Event.ADDED);
+			if(this.adaptee.isOnDisplayList()){
+				child.dispatch_ADDED_TO_STAGE(true);
+			}
 		}
 		return child;
 	}
