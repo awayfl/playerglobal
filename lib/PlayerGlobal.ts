@@ -180,7 +180,7 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 				(<any>this._stage.adaptee).addChild(this._content.adaptee);				
 				FrameScriptManager.execute_as3_constructors();
 				this._content.dispatchStaticEvent("added", this._content);
-				this._content.dispatch_ADDED_TO_STAGE();
+				this._content.dispatch_ADDED_TO_STAGE(true);
 				
 			}
 		}
