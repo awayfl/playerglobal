@@ -198,7 +198,14 @@ export class LoaderInfo extends EventDispatcher
 
 	private _onLoaderComplete(event:AwayLoaderEvent):void
 	{
-		this._bytesLoaded = this._bytesTotal;
+		if(event.assets && event.assets.length) {
+			// use count of assets instead real bytes
+			this._bytesLoaded = event.assets.length;
+			this._bytesTotal = event.assets.length;
+		}else {
+			this._bytesTotal = this._bytesLoaded = this._bytesTotal || 1; //avoid devide on 0
+		}
+
 		this._url = event.url;
 
 		var newEvent = new (<SecurityDomain> this.sec).flash.events.Event(Event.COMPLETE);
