@@ -2,12 +2,13 @@
 import { Graphics as AwayGraphics } from "@awayjs/graphics";
 import { notImplemented } from '@awayfl/swf-loader';
 import { ASObject } from '@awayfl/avm2';
-import { IAssetAdapter, Matrix } from '@awayjs/core';
+import { IAssetAdapter } from '@awayjs/core';
 
 import { ASArray, GenericVector, AXClass } from '@awayfl/avm2';
 import { BitmapData } from './BitmapData';
 import { LoaderInfo } from './LoaderInfo';
 import { SecurityDomain } from '../SecurityDomain';
+import { Matrix } from '../geom/Matrix';
 
 
 export class Graphics extends ASObject implements IAssetAdapter {
@@ -68,12 +69,12 @@ export class Graphics extends ASObject implements IAssetAdapter {
     public beginGradientFill(type: string, colors: ASArray, alphas: ASArray, ratios: ASArray,
         matrix: Matrix = null, spreadMethod: string = "pad",
         interpolationMethod: string = "rgb", focalPointRatio: number = 0): void {
-		this.adaptee.beginGradientFill(<any>type, colors.value, alphas.value, ratios.value, matrix, spreadMethod, interpolationMethod, focalPointRatio);
+		this.adaptee.beginGradientFill(<any>type, colors.value, alphas.value, ratios.value, matrix.adaptee, spreadMethod, interpolationMethod, focalPointRatio);
     }
 
     public beginBitmapFill(bitmap: BitmapData, matrix: Matrix = null,
         repeat: boolean = true, smooth: boolean = false): void {
-        this.adaptee.beginBitmapFill(bitmap.adaptee, matrix, repeat, smooth);
+        this.adaptee.beginBitmapFill(bitmap.adaptee, matrix.adaptee, repeat, smooth);
     }
 
     public endFill(): void {
@@ -94,12 +95,12 @@ export class Graphics extends ASObject implements IAssetAdapter {
     public lineGradientStyle(type: string, colors: ASArray, alphas: ASArray, ratios: ASArray,
         matrix: Matrix = null, spreadMethod: string = "pad",
         interpolationMethod: string = "rgb", focalPointRatio: number = 0): void {
-        this.adaptee.lineGradientStyle(<any>type, colors.value, alphas.value, ratios.value, matrix, spreadMethod, interpolationMethod, focalPointRatio);
+        this.adaptee.lineGradientStyle(<any>type, colors.value, alphas.value, ratios.value, matrix.adaptee, spreadMethod, interpolationMethod, focalPointRatio);
     }
 
     public lineBitmapStyle(bitmap: BitmapData, matrix: Matrix = null,
         repeat: boolean = true, smooth: boolean = false): void {
-    	this.adaptee.lineBitmapStyle(bitmap.adaptee, matrix, repeat, smooth);
+    	this.adaptee.lineBitmapStyle(bitmap.adaptee, matrix.adaptee, repeat, smooth);
     }
 
     public drawRect(x: number, y: number, width: number, height: number): void {
