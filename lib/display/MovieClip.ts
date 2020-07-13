@@ -62,24 +62,26 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	public queuedNavigationAction:Function=null;
 
 	public executeScript(scripts: any) {
-		if(typeof scripts==="number"){
-			scripts=(<AwayMovieClip>this.adaptee).timeline.get_script_for_frame(<AwayMovieClip>this.adaptee, scripts);
+		scripts=(<AwayMovieClip>this.adaptee).timeline.get_script_for_frame(<AwayMovieClip>this.adaptee, (<AwayMovieClip>this.adaptee).currentFrameIndex);
+		if(!scripts){
+			return;
 		}
 		if (scripts){
-			MovieClip.current_script_scope=this;
+			let prev_script_scope=MovieClip.current_script_scope;
+			MovieClip.current_script_scope = this;
 			for (let k = 0; k < scripts.length; k++) {
-				//if(this.parent){
-					scripts[k].setReceiver(this);
-					scripts[k].axCall(this);
-				//}
+				scripts[k].setReceiver(this);
+				scripts[k].axCall(this);
 			}
-			MovieClip.current_script_scope=null;
+			MovieClip.current_script_scope = prev_script_scope;
 		}
 		if(this.queuedNavigationAction){
-			this.queuedNavigationAction();
-			this.queuedNavigationAction=null;
+			// execute any pending FrameNavigation for this mc
+			let queuedNavigationAction=this.queuedNavigationAction;
+			this.queuedNavigationAction = null;
+			queuedNavigationAction();			
+			FrameScriptManager.execute_as3_constructors();
 		}
-		FrameScriptManager.execute_as3_constructors();
 	}
 
 	public initAdapter(): void {}
@@ -395,8 +397,9 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 */
 	public gotoAndPlay(frame: any, scene: string = null, force:boolean=false) {
 
+		//console.log("MovieClip.current_script_scope", this, MovieClip.current_script_scope);
 		if(!force && MovieClip.current_script_scope==this){
-			this.queuedNavigationAction=()=>this.gotoAndPlay(frame, scene, true);
+			this.queuedNavigationAction = ()=>this.gotoAndPlay(frame, scene, true);
 			return;
 		}
 		if (frame == null)
@@ -436,6 +439,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 */
 	public gotoAndStop(frame: any, scene: string = null, force:boolean=false) {
 
+		//console.log("MovieClip.current_script_scope", this, MovieClip.current_script_scope);
 		if(!force && MovieClip.current_script_scope==this){
 			this.queuedNavigationAction=()=>this.gotoAndStop(frame, scene, true);
 			return;
@@ -485,10 +489,11 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			(<AwayMovieClip>this._adaptee).currentFrameIndex = (<number>frame) - 1;
 		}
 		FrameScriptManager.execute_as3_constructors();
-		//this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
 		// only in FP10 and above we want to execute scripts immediatly here
 		if((<any>this.sec).swfVersion > 9){
+			this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
 			FrameScriptManager.execute_queue();
+			this.dispatchStaticBroadCastEvent(Event.EXIT_FRAME);
 		}
 	}
 	/**
