@@ -31,6 +31,7 @@ import { SecurityDomain } from '../SecurityDomain';
  */
 export class ApplicationDomain extends ASObject
 {
+
 	private static _systemDomain:ApplicationDomain;
 	private static getSystemDomain():ApplicationDomain{
 		if(ApplicationDomain._systemDomain==null)
@@ -44,6 +45,8 @@ export class ApplicationDomain extends ASObject
 	private _definitions:Object;
 	private _font_definitions:Object;
 	private _audio_definitions:Object;
+	/*internal*/ _memory: ByteArray;
+
 	/**
 	 * Creates a new application domain.
 	 * @param	parentDomain	If no parent domain is passed in, this application domain takes the system domain as its parent.
@@ -77,12 +80,13 @@ export class ApplicationDomain extends ASObject
 	 * Gets and sets the object on which domain-global memory operations
 	 * will operate within this ApplicationDomain.
 	 */
-	public get domainMemory () : ByteArray{
-		console.log("domainMemory not implemented yet in flash/ApplicationDomain");
-		return null;
+	public get domainMemory () : ByteArray {
+		console.log("[UNSAFE IMPLEMENTATION!] domainMemory:flash/ApplicationDomain");
+		return this._memory;
 	}
 	public set domainMemory (mem:ByteArray){
-		console.log("domainMemory not implemented yet in flash/ApplicationDomain");
+		console.log("[UNSAFE IMPLEMENTATION!] domainMemory:flash/ApplicationDomain");
+		this._memory = mem;
 	}
 
 	/**
