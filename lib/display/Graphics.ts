@@ -69,12 +69,12 @@ export class Graphics extends ASObject implements IAssetAdapter {
     public beginGradientFill(type: string, colors: ASArray, alphas: ASArray, ratios: ASArray,
         matrix: Matrix = null, spreadMethod: string = "pad",
         interpolationMethod: string = "rgb", focalPointRatio: number = 0): void {
-		this.adaptee.beginGradientFill(<any>type, colors.value, alphas.value, ratios.value, matrix.adaptee, spreadMethod, interpolationMethod, focalPointRatio);
+		this.adaptee.beginGradientFill(<any>type, colors.value, alphas.value, ratios.value, matrix?.adaptee, spreadMethod, interpolationMethod, focalPointRatio);
     }
 
     public beginBitmapFill(bitmap: BitmapData, matrix: Matrix = null,
         repeat: boolean = true, smooth: boolean = false): void {
-        this.adaptee.beginBitmapFill(bitmap.adaptee, matrix.adaptee, repeat, smooth);
+        this.adaptee.beginBitmapFill(bitmap.adaptee, matrix?.adaptee, repeat, smooth);
     }
 
     public endFill(): void {
@@ -95,12 +95,12 @@ export class Graphics extends ASObject implements IAssetAdapter {
     public lineGradientStyle(type: string, colors: ASArray, alphas: ASArray, ratios: ASArray,
         matrix: Matrix = null, spreadMethod: string = "pad",
         interpolationMethod: string = "rgb", focalPointRatio: number = 0): void {
-        this.adaptee.lineGradientStyle(<any>type, colors.value, alphas.value, ratios.value, matrix.adaptee, spreadMethod, interpolationMethod, focalPointRatio);
+        this.adaptee.lineGradientStyle(<any>type, colors.value, alphas.value, ratios.value, matrix?.adaptee, spreadMethod, interpolationMethod, focalPointRatio);
     }
 
     public lineBitmapStyle(bitmap: BitmapData, matrix: Matrix = null,
         repeat: boolean = true, smooth: boolean = false): void {
-    	this.adaptee.lineBitmapStyle(bitmap.adaptee, matrix.adaptee, repeat, smooth);
+    	this.adaptee.lineBitmapStyle(bitmap.adaptee, matrix?.adaptee, repeat, smooth);
     }
 
     public drawRect(x: number, y: number, width: number, height: number): void {
