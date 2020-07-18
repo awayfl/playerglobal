@@ -498,7 +498,13 @@ export class DisplayObjectContainer extends InteractiveObject{
 				
 				if(PickGroup.getInstance(this._stage.view).getBoundsPicker((<AwayDisplayObject>child.adaptee).partition).hitTestPoint(point.x, point.y, true))
 					children.push(<DisplayObject> child.adapter);
-				(<DisplayObjectContainer> child.adapter)._getObjectsUnderPointInternal(point, children);
+				
+				const adapt = (<DisplayObjectContainer> child.adapter);
+				if(typeof adapt._getObjectsUnderPointInternal !== 'function') {
+					//debugger;
+				} else {
+					adapt._getObjectsUnderPointInternal(point, children);
+				}
 			}
 		}
 	}
