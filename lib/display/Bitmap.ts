@@ -1,9 +1,10 @@
-import {Billboard, DisplayObject as AwayDisplayObject} from "@awayjs/scene";
+import {Billboard, DisplayObject as AwayDisplayObject, SceneImage2D} from "@awayjs/scene";
 import { DisplayObject } from "./DisplayObject";
 import { BitmapData } from "./BitmapData";
 import {ImageTexture2D, MethodMaterial} from "@awayjs/materials";
 
 import {IBitmapDataOwner} from "./IBitmapDataOwner";
+import { BitmapImage2D } from '@awayjs/stage';
 
 /**
  * The Bitmap class represents display objects that represent bitmap images. These can be images
@@ -32,10 +33,13 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner
 {
 	private _texture:ImageTexture2D;
 	private _bitmapData:BitmapData;
+	private _bitmapMappedFromAsset: boolean;
+
 	private static _bitmaps:Array<Bitmap> = new Array<Bitmap>();
 	private static argBitmapMaterial:MethodMaterial;
 	private static argPixelSnapping:string;
 	private static argSmoothing:boolean;
+
 
 	public static getNewBitmap(bitmapData:BitmapData = null, pixelSnapping:string="auto", smoothing:boolean=false):Bitmap
 	{
@@ -71,11 +75,28 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner
 		Bitmap.argSmoothing=smoothing;
 		super();
 
-		this._bitmapData = bitmapData;
+		if(bitmapData && !this._bitmapMappedFromAsset) {
+			this._bitmapData = bitmapData;
 
-		if (this._bitmapData)
-			this._bitmapData._addOwner(this);
+			if (this._bitmapData)
+				this._bitmapData._addOwner(this);
+		}
 	}
+
+	protected mapAdaptee(adaptee: any) {
+		let mappedAdapt = adaptee;
+		if(adaptee instanceof BitmapImage2D || adaptee instanceof SceneImage2D) {
+			
+			this._adaptee =  mappedAdapt = Billboard.getNewBillboard(new MethodMaterial(adaptee) , "auto", false);
+
+			const bitmap = new (<any>this.sec).flash.display.BitmapData(adaptee);
+
+			this.bitmapData = bitmap;
+			this._bitmapMappedFromAsset = true;
+		}
+
+		return super.mapAdaptee(mappedAdapt);
+	} 
 
 	protected createAdaptee():AwayDisplayObject{
 		var newAdaptee=Billboard.getNewBillboard(Bitmap.argBitmapMaterial, Bitmap.argPixelSnapping, Bitmap.argSmoothing);		
@@ -84,6 +105,7 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner
 		Bitmap.argSmoothing=null;
 		return newAdaptee;
 	}
+
 	public clone():Bitmap
 	{
 		var newInstance:Bitmap = Bitmap.getNewBitmap(this._bitmapData);

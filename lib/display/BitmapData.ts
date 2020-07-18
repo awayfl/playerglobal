@@ -1,5 +1,5 @@
 import { IAssetAdapter, ColorUtils } from "@awayjs/core";
-import { StageManager, ImageUtils } from "@awayjs/stage";
+import { StageManager, ImageUtils, BitmapImage2D } from "@awayjs/stage";
 //****************************************************************************
 // ActionScript Standard Library
 // flash.display.BitmapData object
@@ -82,11 +82,16 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	): void {
 		notImplemented("public flash.display.BitmapData::drawWithQuality");
 	}
-	constructor(width: number, height: number, transparent: boolean = true, fillColor: number = 0xffffffff) {
+	constructor(width: number | SceneImage2D | BitmapImage2D, height: number, transparent: boolean = true, fillColor: number = 0xffffffff) {
 		super();
-		this._adaptee =
-			this._adaptee ||
-			new SceneImage2D(width, height, transparent, fillColor, false, StageManager.getInstance().getStageAt(0));
+
+		if(typeof width === 'number'){
+			this._adaptee =
+				this._adaptee ||
+					new SceneImage2D(width, height, transparent, fillColor, false, StageManager.getInstance().getStageAt(0));
+		} else {
+			this._adaptee = <any>width;
+		}
 
 		this._adaptee.adapter = this;
 	}
