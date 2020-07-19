@@ -45,7 +45,8 @@ export class ApplicationDomain extends ASObject
 	private _definitions:Object;
 	private _font_definitions:Object;
 	private _audio_definitions:Object;
-	/*internal*/ _memory: ByteArray;
+	private _memoryView: DataView;
+	private _memory: ByteArray;
 
 	/**
 	 * Creates a new application domain.
@@ -80,20 +81,33 @@ export class ApplicationDomain extends ASObject
 	 * Gets and sets the object on which domain-global memory operations
 	 * will operate within this ApplicationDomain.
 	 */
-	public get domainMemory () : ByteArray {
+	public get domainMemory() :ByteArray 
+	{
 		console.log("[UNSAFE IMPLEMENTATION!] domainMemory:flash/ApplicationDomain");
 		return this._memory;
 	}
-	public set domainMemory (mem:ByteArray){
+
+	public set domainMemory(mem :ByteArray){
 		console.log("[UNSAFE IMPLEMENTATION!] domainMemory:flash/ApplicationDomain");
+
+		// Missed types! ByteArray has buffer instead arraybuffer
+		if(mem || (<any>this._memory).buffer !== (<any>mem).buffer) {
+			this._memoryView = new DataView((<any>mem).buffer);
+		}
 		this._memory = mem;
+	}
+	/**
+	 * Internal DataView for using domainMemory in runtime
+	 */
+	public get internal_memoryView(): DataView {
+		return this._memoryView;
 	}
 
 	/**
 	 * Gets the minimum memory object length required to be used as
 	 * ApplicationDomain.domainMemory.
 	 */
-	public static get MIN_DOMAIN_MEMORY_LENGTH () : number{
+	public static get MIN_DOMAIN_MEMORY_LENGTH () : number {
 		console.log("MIN_DOMAIN_MEMORY_LENGTH not implemented yet in flash/ApplicationDomain");
 		return 0;
 	}
