@@ -60,21 +60,25 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	}
 	// call this after you call scripts 
 	public queuedNavigationAction:Function=null;
+	public allowScript:boolean;
 
 	public executeScript(scripts: any) {
+		if(!this.allowScript && (<any>this.sec).swfVersion > 9){
+			return;
+		}
 		scripts=(<AwayMovieClip>this.adaptee).timeline.get_script_for_frame(<AwayMovieClip>this.adaptee, (<AwayMovieClip>this.adaptee).currentFrameIndex);
 		if(!scripts){
 			return;
 		}
-		if (scripts){
-			let prev_script_scope=MovieClip.current_script_scope;
-			MovieClip.current_script_scope = this;
-			for (let k = 0; k < scripts.length; k++) {
-				scripts[k].setReceiver(this);
-				scripts[k].axCall(this);
-			}
-			MovieClip.current_script_scope = prev_script_scope;
+		this.allowScript=false;
+		let prev_script_scope=MovieClip.current_script_scope;
+		MovieClip.current_script_scope = this;
+		for (let k = 0; k < scripts.length; k++) {
+			scripts[k].setReceiver(this);
+			scripts[k].axCall(this);
 		}
+		MovieClip.current_script_scope = prev_script_scope;
+	
 		if(this.queuedNavigationAction){
 			// execute any pending FrameNavigation for this mc
 			let queuedNavigationAction=this.queuedNavigationAction;
@@ -168,10 +172,19 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			//console.log(adaptee.timeline);
 
 			
+			
+			// for Sprite and UIComponent, we want the timeline to only use frame 1
+
 			let foundUIComponent:boolean=false;
 			let symbolClass:any=(<any>this)._symbol.symbolClass; 
 			while(symbolClass && !foundUIComponent){
 				if(symbolClass.name?.name=="UIComponent"){
+					foundUIComponent=true;
+				}
+				else if(symbolClass.name?.name=="MovieClip"){
+					symbolClass=null;
+				}
+				else if(symbolClass.name?.name=="Sprite"){
 					foundUIComponent=true;
 				}
 				else if(symbolClass.superClass){
@@ -479,7 +492,8 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 
 	private _gotoFrame(frame: any): void {
 		if((<any>this.sec).swfVersion > 9){
-			FrameScriptManager.add_queue();
+			//FrameScriptManager.add_queue();
+			FrameScriptManager.queueLevel++;
 		}
 		if (typeof frame === "string") {
 			(<AwayMovieClip>this._adaptee).jumpToLabel(<string>frame);
@@ -493,6 +507,8 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		if((<any>this.sec).swfVersion > 9){
 			this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
 			FrameScriptManager.execute_queue();
+			FrameScriptManager.queueLevel--;
+			//FrameScriptManager.execute_queue();
 			this.dispatchStaticBroadCastEvent(Event.EXIT_FRAME);
 		}
 	}

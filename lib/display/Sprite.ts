@@ -95,6 +95,18 @@ export class Sprite extends DisplayObjectContainer {
 			}*/
 		}
 		clone.adaptee.graphics = this.graphics;
+		
+		// in FP, a Sprite seem to always have only 1 frame:
+		const timeline = (<AwayMovieClip>adaptee).timeline;
+		const targetTimeline = timeline;
+
+		targetTimeline.frame_command_indices = <any>[timeline.frame_command_indices[0]];
+		targetTimeline.frame_recipe = <any>[timeline.frame_recipe[0]];
+		targetTimeline.keyframe_constructframes = [timeline.keyframe_constructframes[0]];
+		targetTimeline.keyframe_durations = <any>[timeline.keyframe_durations[0]];
+		targetTimeline.keyframe_firstframes = [timeline.keyframe_firstframes[0]];
+		targetTimeline.keyframe_indices = [timeline.keyframe_indices[0]];
+
 		return clone;
 	}
 
