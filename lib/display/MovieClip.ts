@@ -172,10 +172,19 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			//console.log(adaptee.timeline);
 
 			
+			
+			// for Sprite and UIComponent, we want the timeline to only use frame 1
+
 			let foundUIComponent:boolean=false;
 			let symbolClass:any=(<any>this)._symbol.symbolClass; 
 			while(symbolClass && !foundUIComponent){
 				if(symbolClass.name?.name=="UIComponent"){
+					foundUIComponent=true;
+				}
+				else if(symbolClass.name?.name=="MovieClip"){
+					symbolClass=null;
+				}
+				else if(symbolClass.name?.name=="Sprite"){
 					foundUIComponent=true;
 				}
 				else if(symbolClass.superClass){
