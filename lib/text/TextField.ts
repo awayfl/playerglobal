@@ -9,6 +9,7 @@ import { TextLineMetrics } from "./TextLineMetrics";
 import {DisplayObject} from "../display/DisplayObject";
 import {DisplayObject as AwayDisplayObject, TextField as AwayTextField, TextFieldAutoSize, TextFormatAlign, FrameScriptManager, TextFieldType} from "@awayjs/scene";
 import { constructClassFromSymbol } from '@awayfl/avm2';
+import { SecurityDomain } from '../SecurityDomain';
 /**
  * Flash Player dispatches the textInteractionModeChange event when a user
  * changes the interaction mode of a text field.
@@ -1008,10 +1009,10 @@ export class TextField extends InteractiveObject
 	 * @return	A TextLineMetrics object.
 	 * @throws	RangeError The line number specified is out of range.
 	 */
-	public getLineMetrics (lineIndex:number) : TextLineMetrics{
-		//todo
-		console.log("getLineMetrics not implemented yet in flash/TextField");
-		return null;
+	public getLineMetrics (lineIndex:number) : TextLineMetrics {
+
+		const lineMetrixCtr = (<SecurityDomain>this.sec).flash.text.TextLineMetrics;
+		return new lineMetrixCtr((<AwayTextField>this._adaptee).getLineMetrics(lineIndex));
 	}
 
 	/**
