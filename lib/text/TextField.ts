@@ -7,7 +7,7 @@ import { StyleSheet } from "./StyleSheet";
 import {Rectangle} from "../geom/Rectangle";
 import { TextLineMetrics } from "./TextLineMetrics";
 import {DisplayObject} from "../display/DisplayObject";
-import {DisplayObject as AwayDisplayObject, TextField as AwayTextField, TextFieldAutoSize, TextFormatAlign, FrameScriptManager, TextFieldType} from "@awayjs/scene";
+import {DisplayObject as AwayDisplayObject, TextField as AwayTextField, TextFormat as AwayTexFormat, TextFieldAutoSize, TextFormatAlign, FrameScriptManager, TextFieldType} from "@awayjs/scene";
 import { constructClassFromSymbol } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 /**
@@ -306,8 +306,14 @@ export class TextField extends InteractiveObject
 	 * @throws	Error This method cannot be used on a text field with a style sheet.
 	 */
 	public get defaultTextFormat () : TextFormat{
-		return <TextFormat><any>((<AwayTextField> this._adaptee).textFormat.adapter);
+		const tf: AwayTexFormat = (<AwayTextField> this._adaptee).textFormat;
+		if(tf.adapter || tf.adapter === tf.adaptee) {
+			tf.adapter = new (<any>this.sec).flash.text.TextFormat();
+			tf.adapter.adaptee = tf;
+		}
+		return <TextFormat><any>tf.adapter;
 	}
+
 	public set defaultTextFormat (format:TextFormat){
 		//console.log("todo TextFormat");
 		(<AwayTextField> this._adaptee).textFormat = format.adaptee;
@@ -1010,9 +1016,11 @@ export class TextField extends InteractiveObject
 	 * @throws	RangeError The line number specified is out of range.
 	 */
 	public getLineMetrics (lineIndex:number) : TextLineMetrics {
+		const {
+			x, width, height, ascent, descent, leading
+		} = (<AwayTextField>this._adaptee).getLineMetrics(lineIndex);
 
-		const lineMetrixCtr = (<SecurityDomain>this.sec).flash.text.TextLineMetrics;
-		return new lineMetrixCtr((<AwayTextField>this._adaptee).getLineMetrics(lineIndex));
+		return new (<SecurityDomain>this.sec).flash.text.TextLineMetrics(x, width, height, ascent, descent, leading);
 	}
 
 	/**
