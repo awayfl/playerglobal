@@ -71,6 +71,7 @@ import { ContextMenuBuiltInItems } from './ui/ContextMenuBuiltInItems';
 import { ContextMenu } from './ui/ContextMenu';
 import { ContextMenuItem } from './ui/ContextMenuItem';
 import { FrameLabel } from './display/FrameLabel';
+import { TextLineMetrics } from "./text/TextLineMetrics";
 
 export class Mouse{}
 
@@ -120,7 +121,8 @@ export class SecurityDomain extends AXSecurityDomain
 		text: {
 			TextField: TextField,
 			TextFormat: TextFormat,
-			TextSnapshot: TextSnapshot
+			TextSnapshot: TextSnapshot,
+			TextLineMetrics: TextLineMetrics,
 		},
 		geom: {
 			Point: Point,

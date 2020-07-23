@@ -244,6 +244,16 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		return new AwayDisplayObject();
 	}
 
+	protected mapAdaptee(adaptee: any) {		
+		if (adaptee) {
+			if (!adaptee.partition)
+				adaptee.partition = new SceneGraphPartition(adaptee);
+			adaptee.adapter = this;
+		}
+
+		return adaptee;
+	}
+
 	//---------------------------stuff added to make it work:
 
 
@@ -282,14 +292,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		if (this._adaptee)
 			this._adaptee.adapter = null;
 
-		this._adaptee = value;
-
-		if (this._adaptee) {
-			if (!this._adaptee.partition)
-				this._adaptee.partition = new SceneGraphPartition(this._adaptee);
-			this._adaptee.adapter = this;
-		}
-
+		this._adaptee = this.mapAdaptee(value);
 	}
 
 	public initAdapter(): void {}

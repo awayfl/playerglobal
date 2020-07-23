@@ -134,7 +134,9 @@ import { StaticText } from "./text/StaticText";
 import { StyleSheet } from "./text/StyleSheet";
 import { TextFormat } from "./text/TextFormat";
 import { TextRun } from "./text/TextRun";
+*/
 import { TextLineMetrics } from "./text/TextLineMetrics";
+/*
 import { Sound } from "./media/Sound";
 import { SoundChannel } from "./media/SoundChannel";
 import { SoundTransform } from "./media/SoundTransform";
@@ -288,7 +290,7 @@ export function initLink() {
 	M("flash.text.TextFormat", TextFormat);
 	// M("flash.text.TextRun", TextRun);
 	M("flash.text.TextSnapshot", TextSnapshot);
-	// M("flash.text.TextLineMetrics", TextLineMetrics);
+	M("flash.text.TextLineMetrics", TextLineMetrics);
 
 	M("flash.media.Sound", Sound);
 	M("flash.media.SoundChannel", SoundChannel);
