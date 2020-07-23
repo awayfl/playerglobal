@@ -35,7 +35,7 @@ export class ApplicationDomain extends ASObject
 	private static _systemDomain:ApplicationDomain;
 	private static getSystemDomain():ApplicationDomain{
 		if(ApplicationDomain._systemDomain==null)
-			ApplicationDomain._systemDomain=new ApplicationDomain();
+			ApplicationDomain._systemDomain=new ApplicationDomain(null, true);
 		return ApplicationDomain._systemDomain;
 	}
 
@@ -52,9 +52,9 @@ export class ApplicationDomain extends ASObject
 	 * Creates a new application domain.
 	 * @param	parentDomain	If no parent domain is passed in, this application domain takes the system domain as its parent.
 	 */
-	constructor (parentDomain:ApplicationDomain=null){
+	constructor (parentDomain:ApplicationDomain=null, isSystemDomain:boolean=false){
 		super();
-		if(parentDomain==null && ApplicationDomain._currentDomain!=null){
+		if(!isSystemDomain && parentDomain==null && ApplicationDomain._currentDomain!=null){
 			//ApplicationDomain.currentDomain;
 			parentDomain=ApplicationDomain.getSystemDomain();
 		}
