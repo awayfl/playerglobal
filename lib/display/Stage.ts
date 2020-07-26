@@ -246,7 +246,9 @@ export class Stage extends DisplayObjectContainer{
 			(<any>(<AwayDisplayObjectContainer>this._stage.adaptee)._children[0]).firstFrameOnSWFStart=false;
 		}
 		else{
-			this._stage.dispatchStaticBroadCastEvent(Event.ENTER_FRAME);
+			this._stage.dispatchStaticBroadCastEvent(Event.ENTER_FRAME);			
+			FrameScriptManager.execute_as3_constructors();
+			FrameScriptManager.execute_queue();
 		}
 
 		//	advance the stage - this updates the timeline
