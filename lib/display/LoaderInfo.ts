@@ -114,7 +114,7 @@ export class LoaderInfo extends EventDispatcher
 	private _bytesTotal:number = 0;
 	private _url:string;
 
-	public static DefaultLocation = "//";
+	public static DefaultLocation:string = null;
 
 	private _loader:ILoader;
 	private _container:AwayDisplayObject;
@@ -624,12 +624,12 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get url():string
 	{
-		//return LoaderInfo.DefaultLocation;
+		if(typeof LoaderInfo.DefaultLocation !== "undefined")
+			return LoaderInfo.DefaultLocation;
 		return this._url;
 	}
 	public set url(value:string)
 	{
-		//return LoaderInfo.DefaultLocation;
 		this._url = value;
 	}
 

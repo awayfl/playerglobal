@@ -5,6 +5,7 @@ console.debug("AwayFL - PlayerGlobal - 0.2.88");
 export { Sprite } from "./lib/display/Sprite";
 export { FlashSceneGraphFactory } from "./lib/factories/FlashSceneGraphFactory";
 export { Loader } from "./lib/display/Loader";
+export { LoaderInfo } from "./lib/display/LoaderInfo";
 export { Stage } from "./lib/display/Stage";
 export { LoaderContext } from "./lib/system/LoaderContext";
 export { Event } from "./lib/events/Event";
