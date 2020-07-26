@@ -120,6 +120,7 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 							.then(
 								() => {
 									this._contentLoaderInfo = new sec.flash.display.LoaderInfo(this, this._avmStage);
+									this._contentLoaderInfo.url=swfFile.url;
 									this._applicationDomain = new sec.flash.system.ApplicationDomain()
 									var loaderContext: LoaderContext = new sec.flash.system.LoaderContext(false, this._applicationDomain);
 									ActiveLoaderContext.loaderContext = loaderContext;

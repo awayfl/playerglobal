@@ -624,8 +624,13 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get url():string
 	{
-		return LoaderInfo.DefaultLocation;
+		//return LoaderInfo.DefaultLocation;
 		return this._url;
+	}
+	public set url(value:string)
+	{
+		//return LoaderInfo.DefaultLocation;
+		this._url = value;
 	}
 
 	/**
