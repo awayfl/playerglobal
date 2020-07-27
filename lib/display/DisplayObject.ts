@@ -2,7 +2,7 @@ import { Transform as AwayTransform, Point as AwayPoint, Box, Vector3D as AwayVe
 import { EventDispatcher, BroadcastEventDispatchQueue } from "../events/EventDispatcher";
 import { Event } from "../events/Event";
 import { StaticEvents } from "../events/StaticEvents";
-import { DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip,  IDisplayObjectAdapter, MovieClip, IFilter } from "@awayjs/scene";
+import { DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip,  IDisplayObjectAdapter, MovieClip, IFilter, TextField } from "@awayjs/scene";
 import { LoaderInfo } from "./LoaderInfo";
 import { DisplayObjectContainer } from "./DisplayObjectContainer";
 import { Stage } from "./Stage";
@@ -670,6 +670,10 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 */
 	public get height(): number {
 
+		if(this.adaptee.isAsset(TextField)){
+			return (<TextField>this.adaptee).height;
+		}
+
 		if (!this._adaptee.partition) {
 			console.warn("Trying to get Display.height on orphan child!");
 			return 100;
@@ -685,6 +689,13 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			return;
 
 		this._blockedByScript = true;
+		
+		// this should be done by overwriting the width-getter in TextField- but it doesnt work	
+		if(this.adaptee.isAsset(TextField)){
+			(<TextField>this.adaptee).height=value;
+			return;
+		}
+
 		if (!this._adaptee.partition) {
 			console.warn("Trying to set Display.height on orphan child!");
 			return;
@@ -1139,6 +1150,9 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	public get width(): number {
 
 
+		if(this.adaptee.isAsset(TextField)){
+			return (<TextField>this.adaptee).width;
+		}
 		//todo2019
 		if (!this.adaptee.partition) {
 			console.warn("Trying to get Display.width on orphan child!");
@@ -1163,6 +1177,12 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		//todo2019
 		if (isNaN(value))
 			return;
+
+		// this should be done by overwriting the width-getter in TextField- but it doesnt work	
+		if(this.adaptee.isAsset(TextField)){
+			(<TextField>this.adaptee).width=value;
+			return;
+		}
 
 		PickGroup.getInstance(this._stage.view).getBoundsPicker(this.adaptee.partition).width = value;
 
