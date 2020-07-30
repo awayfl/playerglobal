@@ -887,6 +887,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		return this.adaptee.rotationZ;
 	}
 	public set rotation(value: number) {
+		this._blockedByScript = true;
 		this.adaptee.rotationZ = isNaN(value) ? 0 : isFinite(value) ? value : -8;
 	}
 
@@ -900,6 +901,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 	}
 	public set rotationX(value: number) {
+		this._blockedByScript = true;
 		this.adaptee.rotationX = value;
 	}
 
@@ -917,6 +919,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 	}
 	public set rotationY(value: number) {
+		this._blockedByScript = true;
 		this.adaptee.rotationY = value;
 
 	}
@@ -931,6 +934,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 	}
 	public set rotationZ(value: number) {
+		this._blockedByScript = true;
 		this.adaptee.rotationZ = value;
 
 	}
