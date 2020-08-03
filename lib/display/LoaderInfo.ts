@@ -467,8 +467,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get loaderURL():string
 	{
-		release || console.log("loaderURL not implemented yet in flash/LoaderInfo");
-		return LoaderInfo.DefaultLocation;
+		return this._loader.stage.getChildAt(0).loaderInfo.url;
 		
 	}
 
