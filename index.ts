@@ -14,5 +14,3 @@ export { initLink } from './lib/link';
 
 export { SecurityDomain } from './lib/SecurityDomain';
 export { PlayerGlobal } from './lib/PlayerGlobal';
-
-export { IRedirectRule, globalRedirectRules } from "./lib/utils/redirectResolver";
