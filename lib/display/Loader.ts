@@ -597,8 +597,25 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 */
 	public loadBytes(bytes:ByteArray, context:LoaderContext = null):void
 	{
-		this.close();
-		console.log("80pro todo: loader.loadBytes");
+
+		// 80pro: todo
+		//this._isImage = (ext == "jpg" || ext == "png");
+
+		this._loaderContext = context || new LoaderContext(
+			false,
+			ApplicationDomain.currentDomain
+		);
+
+		this._contentLoaderInfo._setApplicationDomain(this._loaderContext.applicationDomain);
+
+		(<LoaderContainer> this._adaptee).loadData((<any>bytes).bytes);
+
+		/*
+		this.adaptee.addEventListener(URLLoaderEvent.LOAD_ERROR, (event: URLLoaderEvent)=>{
+			console.log("[LOADER] Error supressed by redirect rule as empty complete events!", event);
+			this._contentLoaderInfo._onLoaderCompleteDelegate(new LoaderEvent(LoaderEvent.LOADER_COMPLETE, event.urlLoader.url,null));
+		})
+		*/
 		/*
 		// TODO: properly coerce object arguments to their types.
 		var loaderClass = Loader.axClass;
