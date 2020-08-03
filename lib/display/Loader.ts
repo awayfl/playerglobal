@@ -484,6 +484,11 @@ export class Loader extends DisplayObjectContainer implements ILoader
 		const redirect = matchRedirect(directUrl, Loader.redirectRules);
 
 		if(redirect) {
+			if(redirect.supressLoad){
+				console.log("[LOADER] Load surpressed ", redirect.url);
+				return;
+
+			}
 			console.log("[LOADER] Override loading url:", redirect.url);
 			request.adaptee.url = redirect.url;
 		} else {
