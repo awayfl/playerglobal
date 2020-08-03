@@ -10,18 +10,19 @@ export const globalRedirectRules: IRedirectRule[] = [];
 export interface IRedirectRule {
 	test: string | RegExp | TLoaderRuleFunc | undefined,
 	resolve?: string | RegExp| TLoaderRuleFuncResult | undefined,
-	supressErrors?: boolean
+	supressErrors?: boolean,
+	supressLoad?: boolean,
 }
 
-export function matchRedirect(url: string, rules?: Array<IRedirectRule>): {url: string, supressErrors: boolean} | undefined {
+export function matchRedirect(url: string, rules?: Array<IRedirectRule>): {url: string, supressErrors: boolean, supressLoad: boolean} | undefined {
 
     let rule : {
-        url: string, supressErrors: boolean
+        url: string, supressErrors: boolean, supressLoad: boolean
     } = undefined;
 
     const all = rules ? globalRedirectRules.concat(rules) : globalRedirectRules;
 
-    all.forEach(({test, resolve, supressErrors = false})=>{
+    all.forEach(({test, resolve, supressErrors = false, supressLoad = false})=>{
         let passed: boolean | string = false;
 
         if(typeof test  === 'function') {
@@ -40,7 +41,7 @@ export function matchRedirect(url: string, rules?: Array<IRedirectRule>): {url: 
             }
 
             rule = {
-                url, supressErrors : supressErrors
+                url, supressErrors : supressErrors, supressLoad : supressLoad
             }
 
             if(typeof resolve === 'function') {
