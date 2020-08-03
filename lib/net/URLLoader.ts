@@ -8,7 +8,7 @@ import {IOErrorEvent} from "../events/IOErrorEvent"
 import { AXClass } from '@awayfl/avm2';
 import { URLRequest } from './URLRequest';
 import { SecurityDomain } from '../SecurityDomain';
-import { IRedirectRule, matchRedirect } from "./../utils/redirectResolver";
+import { IRedirectRule, matchRedirect } from "@awayfl/swf-loader";
 
 
 export class URLLoader extends EventDispatcher

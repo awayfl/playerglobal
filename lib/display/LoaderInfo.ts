@@ -467,6 +467,7 @@ export class LoaderInfo extends EventDispatcher
 	 */
 	public get loaderURL():string
 	{
+		return LoaderInfo.DefaultLocation;
 		return this._loader.stage.getChildAt(0).loaderInfo.url;
 		
 	}

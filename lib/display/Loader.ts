@@ -23,7 +23,7 @@ import {DisplayObjectContainer} from "./DisplayObjectContainer";
 import {DisplayObject} from "./DisplayObject";
 import {URLRequest} from "../net/URLRequest";
 import { ILoader } from '../ILoader';
-import { IRedirectRule, matchRedirect } from "./../utils/redirectResolver";
+import { IRedirectRule, matchRedirect } from "@awayfl/swf-loader";
 
 
 /**
