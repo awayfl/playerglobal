@@ -127,8 +127,9 @@ import { GameInputControlType } from "./ui/GameInputControlType";
 import { GameInputDevice } from "./ui/GameInputDevice";
 import { GameInputFinger } from "./ui/GameInputFinger";
 import { GameInputHand } from "./ui/GameInputHand";
-/*
+
 import { Font } from "./text/Font";
+/*
 import { TextField } from "./text/TextField";
 import { StaticText } from "./text/StaticText";
 import { StyleSheet } from "./text/StyleSheet";
@@ -284,7 +285,7 @@ export function initLink() {
 	M("flash.ui.MultitouchInputMode",  <any>MultitouchInputMode);
 	M("flash.events.TouchEvent", TouchEvent);
 
-	// M("flash.text.Font", Font);
+	M("flash.text.Font", <any>Font);
 	// M("flash.text.StaticText", StaticText);
 	// M("flash.text.StyleSheet", StyleSheet);
 	M("flash.text.TextFormat", TextFormat);
