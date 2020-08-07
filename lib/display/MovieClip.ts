@@ -95,7 +95,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * display object container that is onstage.
 	 */
 	constructor() {
-		super();	
+		super();
 	}
 
 	protected createAdaptee():AwayDisplayObject{
@@ -154,8 +154,9 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		newMC._stage = this.activeStage;
 
 		(<IMovieClipAdapter>newMC).executeConstructor = () => {
-			adaptee.timeline.resetScripts();				
+			//adaptee.timeline.resetScripts();				
 			(<any>newMC).axInitializer();
+			(<any>newMC).constructorHasRun=true;
 			
 		}
 
@@ -383,7 +384,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		for (var i = 0; i < numArgs; i += 2) {
 			var frameNum = (arguments[i] | 0);
 			var fn = arguments[i + 1];
-			(<AwayMovieClip>this.adaptee).timeline.add_framescript(fn, frameNum);
+			(<AwayMovieClip>this.adaptee).timeline.add_framescript(fn, frameNum, <any>this.adaptee);
 
 			// newly registered scripts get queued in FrameScriptManager.execute-as3constructor
 			//console.log("add framescript", frameNum, this.adaptee, this.adaptee.parent);
@@ -396,6 +397,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 
 			
 		}
+		(<any>this).constructorHasRun=true;	
 	}
 
 	/**
@@ -502,7 +504,9 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		else{
 			(<AwayMovieClip>this._adaptee).currentFrameIndex = (<number>frame) - 1;
 		}
-		FrameScriptManager.execute_as3_constructors();
+		//console.log("_gotoFrame", this.name);
+		FrameScriptManager.execute_as3_constructors_recursiv(<any>this.adaptee);
+		FrameScriptManager.execute_as3_constructors_finish_scene(<any>this.root.adaptee);
 		// only in FP10 and above we want to execute scripts immediatly here
 		if((<any>this.sec).swfVersion > 9){
 			this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
@@ -526,7 +530,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		}
 		(<AwayMovieClip>this._adaptee).stop();
 		++(<AwayMovieClip>this._adaptee).currentFrameIndex;
-		FrameScriptManager.execute_as3_constructors();
+		//FrameScriptManager.execute_as3_constructors();
 		if((<any>this.sec).swfVersion > 9){
 			FrameScriptManager.execute_queue();
 		}
@@ -567,7 +571,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		if ((<AwayMovieClip>this._adaptee).currentFrameIndex > 0) {
 			(<AwayMovieClip>this._adaptee).currentFrameIndex = (<AwayMovieClip>this._adaptee).currentFrameIndex - 1;
 		}
-		FrameScriptManager.execute_as3_constructors();
+		//FrameScriptManager.execute_as3_constructors();
 		if((<any>this.sec).swfVersion > 9){
 			FrameScriptManager.execute_queue();
 		}	

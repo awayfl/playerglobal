@@ -1,5 +1,5 @@
 import {Box} from "@awayjs/core";
-import {Billboard, TextField as AwayTextField, DisplayObjectContainer as AwayDisplayObjectContainer, Sprite as AwaySprite, MovieClip as AwayMovieClip, DisplayObject as AwayDisplayObject, FrameScriptManager} from "@awayjs/scene";
+import {Billboard, TextField as AwayTextField, DisplayObjectContainer as AwayDisplayObjectContainer, Sprite as AwaySprite, MovieClip as AwayMovieClip, DisplayObject as AwayDisplayObject, FrameScriptManager, IDisplayObjectAdapter} from "@awayjs/scene";
 import {DisplayObject} from "./DisplayObject";
 import {InteractiveObject} from "./InteractiveObject";
 import {Event} from "../events/Event";
@@ -53,6 +53,30 @@ export class DisplayObjectContainer extends InteractiveObject{
 	constructor()
 	{
 		super();
+		if(this.adaptee){
+			let children=(<AwayDisplayObjectContainer>this.adaptee)._children;
+			for(var i:number = 0; i<children.length; i++){
+				
+				let mc = children[i];
+				let mcadapter = mc.adapter;
+				let constructorFunc = (<IDisplayObjectAdapter>mcadapter).executeConstructor;
+				if (constructorFunc) {
+					(<IDisplayObjectAdapter>mcadapter).executeConstructor = null;
+					//console.log(randomVal, "call constructor for ", mc.parent.name, mc.name);
+					constructorFunc();
+					//(<any>mcadapter).constructorHasRun=true;
+				}
+				// if mc was created by timeline, instanceID!=""
+				if ((<any>mc).just_added_to_timeline && mc.instanceID != "" && mcadapter && (<any>mcadapter).dispatchStaticEvent) {
+
+					(<any>mcadapter).dispatchStaticEvent("added", mcadapter);
+					(<any>mc).just_added_to_timeline = false;
+					mc.hasDispatchedAddedToStage = mc.isOnDisplayList();
+					if (mc.hasDispatchedAddedToStage)
+						(<any>mcadapter).dispatchStaticEvent("addedToStage", mcadapter);
+				}
+			}
+		}
 	}
 	
 	protected createAdaptee():AwayDisplayObject{

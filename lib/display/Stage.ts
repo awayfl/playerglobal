@@ -246,8 +246,8 @@ export class Stage extends DisplayObjectContainer{
 			(<any>(<AwayDisplayObjectContainer>this._stage.adaptee)._children[0]).firstFrameOnSWFStart=false;
 		}
 		else{
-			this._stage.dispatchStaticBroadCastEvent(Event.ENTER_FRAME);			
-			FrameScriptManager.execute_as3_constructors();
+			this._stage.dispatchStaticBroadCastEvent(Event.ENTER_FRAME);	
+			FrameScriptManager.execute_as3_constructors_recursiv(<any>this._stage.adaptee);
 			FrameScriptManager.execute_queue();
 		}
 
@@ -258,7 +258,7 @@ export class Stage extends DisplayObjectContainer{
 
 
 		// execute pending constructors:
-		FrameScriptManager.execute_as3_constructors();
+		FrameScriptManager.execute_as3_constructors_recursiv(<any>this._stage.adaptee);
 
 		// broadcast FRAME_CONSTRUCTED event to all objects
 		this._stage.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);

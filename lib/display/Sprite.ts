@@ -90,6 +90,7 @@ export class Sprite extends DisplayObjectContainer {
 		clone._stage = this.activeStage;
 		(<any>clone).executeConstructor = () => {			
 			(<any>clone).axInitializer();
+			(<any>this).constructorHasRun=true;
 			/*if(clone["$Bg__setPropDict"]){
 				console.log("Bg__setPropDict found");
 			}*/
