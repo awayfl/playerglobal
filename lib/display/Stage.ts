@@ -6,7 +6,7 @@ import {IEventMapper} from "../events/IEventMapper"
 import {DisplayObjectContainer} from "./DisplayObjectContainer"
 import {DisplayObject} from "./DisplayObject"
 
-import {AssetEvent, LoaderEvent, ParserEvent, AudioManager, URLRequest, RequestAnimationFrame, CoordinateSystem, PerspectiveProjection} from "@awayjs/core";
+import {AssetEvent, LoaderEvent, ParserEvent, AudioManager, URLRequest, RequestAnimationFrame, CoordinateSystem, PerspectiveProjection, Loader} from "@awayjs/core";
 import {Graphics, GradientFillStyle, TextureAtlas} from "@awayjs/graphics";
 import {HoverController, TextField, Billboard, MouseManager, SceneGraphPartition, Camera, LoaderContainer, MovieClip, FrameScriptManager} from "@awayjs/scene";
 
@@ -20,6 +20,7 @@ import { Transform } from '../geom/Transform';
 import { Rectangle } from '../geom/Rectangle';
 import { SecurityDomain } from '../SecurityDomain'
 import { OrphanManager } from '@awayfl/avm2'
+import { Loader as PlayerGlobalLoader } from './Loader'
 import { LoaderInfo } from './LoaderInfo'
 
 
@@ -207,6 +208,7 @@ export class Stage extends DisplayObjectContainer{
 
 	public enterFrame()
 	{
+		PlayerGlobalLoader.executeQueue();
 		if((<AwayDisplayObjectContainer>this._stage.adaptee).numChildren==0){
 			return;
 		}
