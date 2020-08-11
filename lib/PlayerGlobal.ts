@@ -45,10 +45,17 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 			Natives.print=function(sec: AXSecurityDomain, expression: any, arg1?: any, arg2?: any, arg3?: any, arg4?: any) {
 				let message;
 				if(arguments.length==2){
-					message=arguments[1];
+					message=arguments[1]?arguments[1].toString():arguments[1];
 				}
 				else{
-					message=Array.prototype.slice.call(arguments, 1).join(" ");
+					message = "";
+					for(let i=1; i<arguments.length;i++){
+						message+=arguments[i]?arguments[i].toString():arguments[i];
+						if(i!=arguments.length-1){
+							message+=" ";
+						}
+
+					}
 				}
 				console.log("%c Test-Trace from SWF:", "color: DodgerBlue", message);
 				avmStage.avmTestHandler.addMessage(message);
