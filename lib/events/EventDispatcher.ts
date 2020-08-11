@@ -60,6 +60,9 @@ export class EventDispatcher extends EventDispatcherBase
 	
 	public dispatchEvent(event: EventBase): void {
 		(<any>event).currentTarget = this;
+		if(event.type=="enterFrame"){
+			(<any>event).target = this;			
+		}
 		super.dispatchEvent(event);
 
 		// workaround for now.
