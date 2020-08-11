@@ -84,7 +84,6 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			let queuedNavigationAction=this.queuedNavigationAction;
 			this.queuedNavigationAction = null;
 			queuedNavigationAction();			
-			FrameScriptManager.execute_as3_constructors();
 		}
 	}
 
@@ -493,16 +492,17 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 
 
 	private _gotoFrame(frame: any): void {
-		if((<any>this.sec).swfVersion > 9){
-			//FrameScriptManager.add_queue();
-			FrameScriptManager.queueLevel++;
-		}
+		let oldFrame=this.currentFrame;
+
 		if (typeof frame === "string") {
 			(<AwayMovieClip>this._adaptee).jumpToLabel(<string>frame);
 		}
 		else if (typeof frame === "number" && frame <= 0){}
 		else{
 			(<AwayMovieClip>this._adaptee).currentFrameIndex = (<number>frame) - 1;
+		}
+		if(this.currentFrame==oldFrame){
+			return;
 		}
 		//console.log("_gotoFrame", this.name);
 		FrameScriptManager.execute_as3_constructors_recursiv(<any>this.adaptee);
@@ -511,8 +511,6 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		if((<any>this.sec).swfVersion > 9){
 			this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
 			FrameScriptManager.execute_queue();
-			FrameScriptManager.queueLevel--;
-			//FrameScriptManager.execute_queue();
 			this.dispatchStaticBroadCastEvent(Event.EXIT_FRAME);
 		}
 	}
@@ -525,14 +523,15 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			this.queuedNavigationAction=()=>this.nextFrame(true);
 			return;
 		}	
-		if((<any>this.sec).swfVersion > 9){
-			FrameScriptManager.add_queue();
-		}
 		(<AwayMovieClip>this._adaptee).stop();
 		++(<AwayMovieClip>this._adaptee).currentFrameIndex;
-		//FrameScriptManager.execute_as3_constructors();
+		FrameScriptManager.execute_as3_constructors_recursiv(<any>this.adaptee);
+		FrameScriptManager.execute_as3_constructors_finish_scene(<any>this.root.adaptee);
+		// only in FP10 and above we want to execute scripts immediatly here
 		if((<any>this.sec).swfVersion > 9){
+			this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
 			FrameScriptManager.execute_queue();
+			this.dispatchStaticBroadCastEvent(Event.EXIT_FRAME);
 		}
 	}
 
@@ -565,15 +564,16 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			this.queuedNavigationAction=()=>this.prevFrame(true);
 			return;
 		}	
-		if((<any>this.sec).swfVersion > 9){
-			FrameScriptManager.add_queue();
-		}
 		if ((<AwayMovieClip>this._adaptee).currentFrameIndex > 0) {
 			(<AwayMovieClip>this._adaptee).currentFrameIndex = (<AwayMovieClip>this._adaptee).currentFrameIndex - 1;
 		}
-		//FrameScriptManager.execute_as3_constructors();
+		FrameScriptManager.execute_as3_constructors_recursiv(<any>this.adaptee);
+		FrameScriptManager.execute_as3_constructors_finish_scene(<any>this.root.adaptee);
+		// only in FP10 and above we want to execute scripts immediatly here
 		if((<any>this.sec).swfVersion > 9){
+			this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
 			FrameScriptManager.execute_queue();
+			this.dispatchStaticBroadCastEvent(Event.EXIT_FRAME);
 		}	
 	}
 

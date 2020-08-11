@@ -88,7 +88,7 @@ export class Sprite extends DisplayObjectContainer {
 		this.adaptee.copyTo(adaptee);
 		clone.adaptee = adaptee;
 		clone._stage = this.activeStage;
-		(<any>clone).executeConstructor = () => {			
+		(<any>clone).executeConstructor = () => {
 			(<any>clone).axInitializer();
 			(<any>this).constructorHasRun=true;
 			/*if(clone["$Bg__setPropDict"]){
