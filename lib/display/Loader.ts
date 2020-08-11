@@ -24,6 +24,7 @@ import {DisplayObject} from "./DisplayObject";
 import {URLRequest} from "../net/URLRequest";
 import { ILoader } from '../ILoader';
 import { IRedirectRule, matchRedirect } from "@awayfl/swf-loader";
+import { Event } from "../events/Event";
 
 
 /**
@@ -88,6 +89,17 @@ import { IRedirectRule, matchRedirect } from "@awayfl/swf-loader";
 export class Loader extends DisplayObjectContainer implements ILoader
 {
 	public static redirectRules: IRedirectRule[] = [];
+	public static loaderQueue: Function[] = [];
+	public static executeQueue(){
+		if(Loader.loaderQueue.length==0)
+			return;
+		let queue=Loader.loaderQueue.concat();
+		Loader.loaderQueue.length=0;
+		for(let i=0; i<queue.length; i++){
+			queue[i]();
+		}
+	};
+
 
 	private _factory:FlashSceneGraphFactory;
 	private _isImage:boolean;
@@ -224,11 +236,11 @@ export class Loader extends DisplayObjectContainer implements ILoader
 
 	protected createAdaptee():AwayDisplayObject
 	{
-		this._onAssetCompleteDelegate = (event:AssetEvent) => this._onAssetComplete(event);
 
+		this._onAssetCompleteDelegate = (event: AssetEvent) => this._onAssetComplete(event);
 		var loaderContainer:LoaderContainer = new LoaderContainer();
 		loaderContainer.addEventListener(AssetEvent.ASSET_COMPLETE, this._onAssetCompleteDelegate);
-
+		
 		return loaderContainer;
 	}
 
@@ -478,42 +490,44 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 */
 	public load(request:URLRequest, context:LoaderContext = null):void
 	{
-		// remove all after ?
-		const directUrl = request.url || '';
-		const cleanUrl = directUrl.replace(/\?.*$/, "");
-		const redirect = matchRedirect(directUrl, Loader.redirectRules);
+		Loader.loaderQueue.push((request, context)=>{			
+			// remove all after ?
+			const directUrl = request.url || '';
+			const cleanUrl = directUrl.replace(/\?.*$/, "");
+			const redirect = matchRedirect(directUrl, Loader.redirectRules);
 
-		if(redirect) {
-			if(redirect.supressLoad){
-				console.log("[LOADER] Load surpressed ", redirect.url);
-				return;
+			if(redirect) {
+				if(redirect.supressLoad){
+					console.log("[LOADER] Load surpressed ", redirect.url);
+					return;
 
+				}
+				console.log("[LOADER] Override loading url:", redirect.url);
+				request.adaptee.url = redirect.url;
+			} else {
+				console.log("[LOADER] start loading the url:", cleanUrl);
 			}
-			console.log("[LOADER] Override loading url:", redirect.url);
-			request.adaptee.url = redirect.url;
-		} else {
-			console.log("[LOADER] start loading the url:", cleanUrl);
-		}
 
-		var ext:string = request.url.substr(-3).toLocaleLowerCase();
-		this._isImage = (ext == "jpg" || ext == "png");
-		//url.url=url.url.replace(".swf", ".awd");
+			var ext:string = request.url.substr(-3).toLocaleLowerCase();
+			this._isImage = (ext == "jpg" || ext == "png");
+			//url.url=url.url.replace(".swf", ".awd");
 
-		this._loaderContext = context || new LoaderContext(
-			false,
-			ApplicationDomain.currentDomain
-		);
+			this._loaderContext = context || new LoaderContext(
+				false,
+				ApplicationDomain.currentDomain
+			);
 
-		this._contentLoaderInfo._setApplicationDomain(this._loaderContext.applicationDomain);
+			this._contentLoaderInfo._setApplicationDomain(this._loaderContext.applicationDomain);
 
-		(<LoaderContainer> this._adaptee).load(request.adaptee, null, null, (this._isImage)? new Image2DParser(this._factory) : new SWFParser(this._factory));
+			(<LoaderContainer> this._adaptee).load(request.adaptee, null, null, (this._isImage)? new Image2DParser(this._factory) : new SWFParser(this._factory));
 
-		if(redirect && redirect.supressErrors) {
-			this.adaptee.addEventListener(URLLoaderEvent.LOAD_ERROR, (event: URLLoaderEvent)=>{
-				console.log("[LOADER] Error supressed by redirect rule as empty complete events!", event);
-				this._contentLoaderInfo._onLoaderCompleteDelegate(new LoaderEvent(LoaderEvent.LOADER_COMPLETE, event.urlLoader.url,null));
-			})
-		}
+			if(redirect && redirect.supressErrors) {
+				this.adaptee.addEventListener(URLLoaderEvent.LOAD_ERROR, (event: URLLoaderEvent)=>{
+					console.log("[LOADER] Error supressed by redirect rule as empty complete events!", event);
+					this._contentLoaderInfo._onLoaderCompleteDelegate(new LoaderEvent(LoaderEvent.LOADER_COMPLETE, event.urlLoader.url,null));
+				})
+			}
+		});
 	}
 
 	/**
@@ -602,45 +616,46 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 */
 	public loadBytes(bytes:ByteArray, context:LoaderContext = null):void
 	{
+		Loader.loaderQueue.push((request, context)=>{
+			// 80pro: todo
+			//this._isImage = (ext == "jpg" || ext == "png");
 
-		// 80pro: todo
-		//this._isImage = (ext == "jpg" || ext == "png");
+			this._loaderContext = context || new LoaderContext(
+				false,
+				ApplicationDomain.currentDomain
+			);
 
-		this._loaderContext = context || new LoaderContext(
-			false,
-			ApplicationDomain.currentDomain
-		);
+			this._contentLoaderInfo._setApplicationDomain(this._loaderContext.applicationDomain);
 
-		this._contentLoaderInfo._setApplicationDomain(this._loaderContext.applicationDomain);
+			(<LoaderContainer> this._adaptee).loadData((<any>bytes).bytes);
 
-		(<LoaderContainer> this._adaptee).loadData((<any>bytes).bytes);
+			/*
+			this.adaptee.addEventListener(URLLoaderEvent.LOAD_ERROR, (event: URLLoaderEvent)=>{
+				console.log("[LOADER] Error supressed by redirect rule as empty complete events!", event);
+				this._contentLoaderInfo._onLoaderCompleteDelegate(new LoaderEvent(LoaderEvent.LOADER_COMPLETE, event.urlLoader.url,null));
+			})
+			*/
+			/*
+			// TODO: properly coerce object arguments to their types.
+			var loaderClass = Loader.axClass;
+			// In case this is the initial root loader, we won't have a loaderInfo object. That should
+			// only happen in the inspector when a file is loaded from a Blob, though.
+			this._contentLoaderInfo._url = (this.loaderInfo ? this.loaderInfo._url : '') +
+											'/[[DYNAMIC]]/' + (++loaderClass._embeddedContentLoadCount);
+			this._applyLoaderContext(context);
+			this._loadingType = LoadingType.Bytes;
+			this._fileLoader = new FileLoader(this, this._contentLoaderInfo);
+			this._queuedLoadUpdate = null;
+			if (!release && traceLoaderOption.value) {
+				console.log("Loading embedded symbol " + this._contentLoaderInfo._url);
+			}
+			// Just passing in the bytes won't do, because the buffer can contain slop at the end.
+			this._fileLoader.loadBytes(new Uint8Array((<any>data).bytes, 0, data.length));
 
-		/*
-		this.adaptee.addEventListener(URLLoaderEvent.LOAD_ERROR, (event: URLLoaderEvent)=>{
-			console.log("[LOADER] Error supressed by redirect rule as empty complete events!", event);
-			this._contentLoaderInfo._onLoaderCompleteDelegate(new LoaderEvent(LoaderEvent.LOADER_COMPLETE, event.urlLoader.url,null));
-		})
-		*/
-		/*
-		// TODO: properly coerce object arguments to their types.
-		var loaderClass = Loader.axClass;
-		// In case this is the initial root loader, we won't have a loaderInfo object. That should
-		// only happen in the inspector when a file is loaded from a Blob, though.
-		this._contentLoaderInfo._url = (this.loaderInfo ? this.loaderInfo._url : '') +
-										'/[[DYNAMIC]]/' + (++loaderClass._embeddedContentLoadCount);
-		this._applyLoaderContext(context);
-		this._loadingType = LoadingType.Bytes;
-		this._fileLoader = new FileLoader(this, this._contentLoaderInfo);
-		this._queuedLoadUpdate = null;
-		if (!release && traceLoaderOption.value) {
-			console.log("Loading embedded symbol " + this._contentLoaderInfo._url);
-		}
-		// Just passing in the bytes won't do, because the buffer can contain slop at the end.
-		this._fileLoader.loadBytes(new Uint8Array((<any>data).bytes, 0, data.length));
-
-		release || assert(loaderClass._loadQueue.indexOf(this) === -1);
-		loaderClass._loadQueue.push(this);
-		*/
+			release || assert(loaderClass._loadQueue.indexOf(this) === -1);
+			loaderClass._loadQueue.push(this);
+			*/
+		});
 	}
 
 	/**
