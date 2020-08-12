@@ -118,8 +118,9 @@ export class LoaderInfo extends EventDispatcher
 
 	private _loader:ILoader;
 	private _container:AwayDisplayObject;
+	private _onLoaderErrorDelegate:(event:AwayLoaderEvent) => void;
 	private _onLoaderStartDelegate:(event:AwayLoaderEvent) => void;
-    private _onLoadProgressDelegate:(event:URLLoaderEvent) => void;
+	private _onLoadProgressDelegate:(event:URLLoaderEvent) => void;
 	public _onLoaderCompleteDelegate:(event:AwayLoaderEvent) => void;
 
     private _swfVersion:number;
@@ -158,11 +159,12 @@ export class LoaderInfo extends EventDispatcher
 
 		this.eventMappingExtern[Event.COMPLETE]="LoaderInfo:Event.COMPLETE";
 		this.eventMappingExtern[ProgressEvent.PROGRESS]="LoaderInfo:ProgressEvent.PROGRESS";
+		this.eventMappingExtern[IOErrorEvent.IO_ERROR]="LoaderInfo:IOErrorEvent.IO_ERROR";
 
 		// Events not supported yet are registered as eventMappingDummys:
 
 		this.eventMappingDummys[Event.UNLOAD]="LoaderInfo:Event.UNLOAD";
-		this.eventMappingDummys[IOErrorEvent.IO_ERROR]="LoaderInfo:IOErrorEvent.IO_ERROR";
+		//this.eventMappingDummys[IOErrorEvent.IO_ERROR]="LoaderInfo:IOErrorEvent.IO_ERROR";
 		//this.eventMappingDummys[HTTPStatusEvent.IO_ERROR]="HTTPStatusEvent.IO_ERROR";
 		this.eventMappingDummys[Event.OPEN]="LoaderInfo:Event.OPEN";
 		this.eventMappingDummys[Event.INIT]="LoaderInfo:Event.INIT";
@@ -170,12 +172,20 @@ export class LoaderInfo extends EventDispatcher
 		this._onLoaderStartDelegate = (event:AwayLoaderEvent) => this._onLoaderStart(event);
 		this._onLoadProgressDelegate = (event:URLLoaderEvent) => this._onLoadProgress(event);
 		this._onLoaderCompleteDelegate = (event:AwayLoaderEvent) => this._onLoaderComplete(event);
+		this._onLoaderErrorDelegate = this._onLoadeError.bind(this);
 
 		this._loader = loader;
 		this._container = container;
 		this._container.addEventListener(AwayLoaderEvent.LOADER_START, this._onLoaderStartDelegate);
 		this._container.addEventListener(URLLoaderEvent.LOAD_PROGRESS, this._onLoadProgressDelegate);
 		this._container.addEventListener(AwayLoaderEvent.LOADER_COMPLETE, this._onLoaderCompleteDelegate);
+		this._container.addEventListener(URLLoaderEvent.LOAD_ERROR, this._onLoaderErrorDelegate);
+	}
+
+	private _onLoadeError(event: URLLoaderEvent): void {
+		var newEvent = new (<SecurityDomain> this.sec).flash.events.IOErrorEvent(IOErrorEvent.IO_ERROR);
+		newEvent.currentTarget = this;
+		this.dispatchEvent(newEvent);
 	}
 
 	private _onLoaderStart(event:AwayLoaderEvent):void
