@@ -89,17 +89,21 @@ import { Event } from "../events/Event";
 export class Loader extends DisplayObjectContainer implements ILoader
 {
 	public static redirectRules: IRedirectRule[] = [];
+	
 	public static loaderQueue: Function[] = [];
-	public static executeQueue(){
-		if(Loader.loaderQueue.length==0)
+	
+	public static executeQueue() {
+		if (!Loader.loaderQueue.length)
 			return;
-		let queue=Loader.loaderQueue.concat();
-		Loader.loaderQueue.length=0;
-		for(let i=0; i<queue.length; i++){
-			queue[i]();
+
+		const queue = Loader.loaderQueue.concat();
+
+		Loader.loaderQueue.length = 0;
+
+		for(const task of queue) {
+			task();
 		}
 	};
-
 
 	private _factory:FlashSceneGraphFactory;
 	private _isImage:boolean;
@@ -490,46 +494,51 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 */
 	public load(request:URLRequest, context:LoaderContext = null):void
 	{
-		Loader.loaderQueue.push(()=>{			
-			// remove all after ?
-			const directUrl = request.url || '';
-			const cleanUrl = directUrl.replace(/\?.*$/, "");
-			const redirect = matchRedirect(directUrl, Loader.redirectRules);
-
-			if(redirect) {
-				if(redirect.supressLoad){
-					console.log("[LOADER] Load surpressed ", redirect.url);
-					return;
-
-				}
-				console.log("[LOADER] Override loading url:", redirect.url);
-				request.adaptee.url = redirect.url;
-			} else {
-				console.log("[LOADER] start loading the url:", cleanUrl);
-			}
-
-			var ext:string = request.url.substr(-3).toLocaleLowerCase();
-			this._isImage = (ext == "jpg" || ext == "png");
-			//url.url=url.url.replace(".swf", ".awd");
-
-			this._loaderContext = context || new LoaderContext(
-				false,
-				ApplicationDomain.currentDomain
-			);
-
-			this._contentLoaderInfo._setApplicationDomain(this._loaderContext.applicationDomain);
-
-			(<LoaderContainer> this._adaptee).load(request.adaptee, null, null, (this._isImage)? new Image2DParser(this._factory) : new SWFParser(this._factory));
-
-			if(redirect && redirect.supressErrors) {
-				this.adaptee.addEventListener(URLLoaderEvent.LOAD_ERROR, (event: URLLoaderEvent)=>{
-					console.log("[LOADER] Error supressed by redirect rule as empty complete events!", event);
-					this._contentLoaderInfo._onLoaderCompleteDelegate(new LoaderEvent(LoaderEvent.LOADER_COMPLETE, event.urlLoader.url,null));
-				})
-			}
+		// when you create big lambda or `fuction() {}`, V8 create full function body every time
+		Loader.loaderQueue.push(() => {
+			this._delayedLoad(request, context);
 		});
 	}
 
+	private _delayedLoad(request:URLRequest, context:LoaderContext = null): void 
+	{
+		// remove all after ?
+		const directUrl = request.url || '';
+		const cleanUrl = directUrl.replace(/\?.*$/, "");
+		const redirect = matchRedirect(directUrl, Loader.redirectRules);
+
+		if(redirect) {
+			if(redirect.supressLoad){
+				console.log("[LOADER] Load surpressed ", redirect.url);
+				return;
+
+			}
+			console.log("[LOADER] Override loading url:", redirect.url);
+			request.adaptee.url = redirect.url;
+		} else {
+			console.log("[LOADER] start loading the url:", cleanUrl);
+		}
+
+		var ext:string = request.url.substr(-3).toLocaleLowerCase();
+		this._isImage = (ext == "jpg" || ext == "png");
+		//url.url=url.url.replace(".swf", ".awd");
+
+		this._loaderContext = context || new LoaderContext(
+			false,
+			ApplicationDomain.currentDomain
+		);
+
+		this._contentLoaderInfo._setApplicationDomain(this._loaderContext.applicationDomain);
+
+		(<LoaderContainer> this._adaptee).load(request.adaptee, null, null, (this._isImage)? new Image2DParser(this._factory) : new SWFParser(this._factory));
+
+		if(redirect && redirect.supressErrors) {
+			this.adaptee.addEventListener(URLLoaderEvent.LOAD_ERROR, (event: URLLoaderEvent)=>{
+				console.log("[LOADER] Error supressed by redirect rule as empty complete events!", event);
+				this._contentLoaderInfo._onLoaderCompleteDelegate(new LoaderEvent(LoaderEvent.LOADER_COMPLETE, event.urlLoader.url,null));
+			})
+		}
+	}
 	/**
 	 * Loads from binary data stored in a ByteArray object.
 	 *
