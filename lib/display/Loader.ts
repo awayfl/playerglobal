@@ -490,7 +490,7 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 */
 	public load(request:URLRequest, context:LoaderContext = null):void
 	{
-		Loader.loaderQueue.push((request, context)=>{			
+		Loader.loaderQueue.push(()=>{			
 			// remove all after ?
 			const directUrl = request.url || '';
 			const cleanUrl = directUrl.replace(/\?.*$/, "");
@@ -616,7 +616,7 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 */
 	public loadBytes(bytes:ByteArray, context:LoaderContext = null):void
 	{
-		Loader.loaderQueue.push((request, context)=>{
+		Loader.loaderQueue.push(()=>{
 			// 80pro: todo
 			//this._isImage = (ext == "jpg" || ext == "png");
 
