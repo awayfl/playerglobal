@@ -57,8 +57,12 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 
 					}
 				}
-				console.log("%c Test-Trace from SWF:", "color: DodgerBlue", message);
-				avmStage.avmTestHandler.addMessage(message);
+
+				let messageSplit=message.split("\n");
+				for(let i=0; i<messageSplit.length; i++){
+					console.log("%c Test-Trace from SWF:", "color: DodgerBlue", messageSplit[i]);
+					avmStage.avmTestHandler.addMessage(messageSplit[i]);
+				}
 			}
 		}
 
