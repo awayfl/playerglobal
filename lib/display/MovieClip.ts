@@ -109,7 +109,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	public clearPropsDic(){
 		//	this is used by CompiledClips
 		//	todo: check if "$Bg__setPropDict" can be used to identify compiledClips
-		this["$Bg__setPropDict"].map= new WeakMap();
+		//this["$Bg__setPropDict"].map= new WeakMap();
 	}
 
 	public evalScript(str: string): Function {

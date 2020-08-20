@@ -75,7 +75,7 @@ export class Sprite extends DisplayObjectContainer {
 	}
 
 	public clearPropsDic() {
-		this["$Bg__setPropDict"].map = new WeakMap();
+		//this["$Bg__setPropDict"].map = new WeakMap();
 	}
 	public clone(): Sprite {
 
