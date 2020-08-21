@@ -16,7 +16,6 @@ import { Vector3D } from '../geom/Vector3D';
 import { SecurityDomain } from '../SecurityDomain';
 import { release, FilterType } from '@awayfl/swf-loader';
 import { BitmapFilter } from '../filters/BitmapFilter';
-import { GlowFilter } from '@awayfl/swf-loader';
 
 export class DisplayObject extends EventDispatcher implements IDisplayObjectAdapter {
 	static axClass: typeof DisplayObject & AXClass;
@@ -462,12 +461,12 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 */
 	public get blendMode(): string {
 		release || console.log("blendMode not implemented yet in flash/DisplayObject");
-		// todo: translate awayblendmode to as3blendmode
 		return "";
 	}
+
 	public set blendMode(value: string) {
 		release || console.log("blendMode not implemented yet in flash/DisplayObject");
-		//this._adaptee.blendMode=value;
+		this._adaptee.blendMode = value;
 	}
 
 	/**
