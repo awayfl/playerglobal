@@ -172,7 +172,7 @@ export class EventDispatcher extends EventDispatcherBase
 			// a mapping exists for this event
 			
 			//making sure standart behaviour still works (listener is tracked in list)
-			super.addEventListener(type, listener);
+			super.addEventListener(type, listener, useCapture, priority, useWeakReference);
 
 			// call the provided "addListener" function
 			this.eventMapping[type].addListener.call(this, this.eventMapping[type].adaptedType, this.eventMapping[type].callback);
@@ -184,7 +184,7 @@ export class EventDispatcher extends EventDispatcherBase
 			// this is a external eventMapping
 			// this means that we do not need to create any mapping, and will manually dispatch the event
 			// we still need to register it on superclass, so it will work if we dispatch it manually
-			super.addEventListener(type, listener);
+			super.addEventListener(type, listener, useCapture, priority, useWeakReference);
 			return;
 		}
 		// if we make it here, the event is not handled by this dispatcher
