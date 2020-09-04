@@ -13,6 +13,7 @@ export class InteractiveObject extends DisplayObject{
 
 	private _keyDownListenersCnt:number=0;
 	private _keyUpListenersCnt:number=0;
+	private _mouseListnersByType:StringMap<number> ={};
 	/** these should be able to get setup:
 	 
 
@@ -565,10 +566,22 @@ export class InteractiveObject extends DisplayObject{
 
 	private initMouseListener(type:string, callback:(event:MouseEventAway) => void):void
 	{
-		this.adaptee.addEventListener(type, callback);
+		if(!this._mouseListnersByType[type] || this._mouseListnersByType[type]==0){
+			this._mouseListnersByType[type]=1;
+			this.adaptee.addEventListener(type, callback);
+			return;
+		}
+		this._mouseListnersByType[type]++;
+		return;
+		
 	}
 	private removeMouseListener(type:string, callback:(event:MouseEventAway) => void):void
 	{
+		if(this._mouseListnersByType[type] && this._mouseListnersByType[type]>1){
+			this._mouseListnersByType[type]--;
+			return;
+		}
+		this._mouseListnersByType[type]--;
 		this.adaptee.removeEventListener(type, callback);
 	}
 	private _mouseCallbackDelegate:(event:MouseEventAway) => void;
