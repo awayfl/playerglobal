@@ -148,9 +148,9 @@ import { TouchEvent } from "./events/TouchEvent";
 import { MultitouchInputMode } from "./ui/MultitouchInputMode";
 import { Multitouch } from "./ui/Multitouch";
 import { GameInputEvent } from "./events/GameInputEvent";
+import { NetStatusEvent } from "./events/NetStatusEvent";
 /*
 import { AsyncErrorEvent } from "./events/AsyncErrorEvent";
-import { NetStatusEvent } from "./events/NetStatusEvent";
 import { StatusEvent } from "./events/StatusEvent";
 import { GestureEvent } from "./events/GestureEvent";
 import { ID3Info } from "./media/ID3Info";
@@ -259,7 +259,7 @@ export function initLink() {
 	M("flash.events.TimerEvent", TimerEvent);
 	M("flash.events.ProgressEvent", ProgressEvent);
 	// M("flash.events.StatusEvent", StatusEvent);
-	// M("flash.events.NetStatusEvent", NetStatusEvent);
+	M("flash.events.NetStatusEvent", NetStatusEvent);
 	// M("flash.events.HTTPStatusEvent", HTTPStatusEvent);
 	// M("flash.events.AsyncErrorEvent", AsyncErrorEvent);
 	// M("flash.events.UncaughtErrorEvents", UncaughtErrorEvents);
