@@ -58,7 +58,7 @@ export class EventDispatcher extends EventDispatcherBase
 
 	}
 	
-	public dispatchEvent(event: EventBase, eventComesFromAway:boolean=false): boolean {
+	public dispatchEvent(event: EventBase): void {
 		(<any>event).currentTarget = this;
 		if(event.type=="enterFrame"){
 			(<any>event).target = this;			
@@ -68,12 +68,11 @@ export class EventDispatcher extends EventDispatcherBase
 		// workaround for now.
 		// mousevents already bubble up the scenegraph in MouseMangager
 		// for all other events, we want to bubble them up here:
-		if (!eventComesFromAway || EventDispatcher.eventsThatBubbleInAwayJS.indexOf(event.type) == -1) {
+		if (EventDispatcher.eventsThatBubbleInAwayJS.indexOf(event.type) == -1) {
 			if ((<any>this).adaptee && (<any>this).adaptee.parent) {
 				(<any>this).adaptee.parent.adapter.dispatchEvent(event);
 			}
 		}
-		return true;
 	}
 	protected eventMapping: Object;
 	protected eventMappingDummys: Object;

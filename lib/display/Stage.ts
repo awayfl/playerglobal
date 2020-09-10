@@ -973,7 +973,7 @@ export class Stage extends DisplayObjectContainer{
 	public hasEventListener(type: string): boolean {
 		return super.hasEventListener(type);}
 	public willTrigger(){return super.willTrigger();}
-	public dispatchEvent(event: Event): boolean {
+	public dispatchEvent(event: Event): void {
 		return super.dispatchEvent(event);}
 	//____________________________________
 
