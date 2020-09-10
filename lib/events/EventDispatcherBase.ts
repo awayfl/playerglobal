@@ -73,7 +73,7 @@ export class EventDispatcherBase extends ASObject
 	 * @method dispatchEvent
 	 * @param {Event} Event to dispatch
 	 */
-	public dispatchEvent(event:EventBase):void
+	public dispatchEvent(event:EventBase):boolean
 	{
 		if(!this._listenerObjects){
 			//throw("dispatching event on object that wasnt init yet");
@@ -87,6 +87,7 @@ export class EventDispatcherBase extends ASObject
 			//console.log("dispatchEvent", event.type, (<any>this).adaptee?.id);
 			l.dispatchEvent(event);
 		}
+		return true;
 	}
 
 	/**

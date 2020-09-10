@@ -592,7 +592,7 @@ export class InteractiveObject extends DisplayObject{
 		adaptedEvent.target=this;
 		//adaptedEvent.currentTarget=this;
 		
-		this.dispatchEvent(adaptedEvent);
+		this.dispatchEvent(adaptedEvent, true);
 	}
 
 	//---------------------------stuff added to make it work:
