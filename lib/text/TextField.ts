@@ -590,7 +590,7 @@ export class TextField extends InteractiveObject
 	 * The maximum value of scrollV.
 	 */
 	public get maxScrollV () : number{
-		return (<AwayTextField>this.adaptee).maxScrollV;
+		return (<AwayTextField>this.adaptee).maxScrollV+1;
 	}
 
 	/**
@@ -698,10 +698,10 @@ export class TextField extends InteractiveObject
 	 * use.
 	 */
 	public get scrollV () : number{
-		return (<AwayTextField>this.adaptee).scrollV;
+		return (<AwayTextField>this.adaptee).scrollV+1;
 	}
 	public set scrollV (value:number){
-		(<AwayTextField>this.adaptee).scrollV=value;
+		(<AwayTextField>this.adaptee).scrollV=value-1;
 	}
 
 	/**
