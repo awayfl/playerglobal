@@ -486,7 +486,8 @@ export class InteractiveObject extends DisplayObject{
 	}
 	private removeKeyUpListener(type:string, callback:(event:any) => void):void
 	{
-		this._keyUpListenersCnt--;
+		if(this._keyUpListenersCnt>0)
+			this._keyUpListenersCnt--;
 		if(this._keyUpListenersCnt==0){
 			//console.log("removeKeyUpListener", this)
 			document.removeEventListener("keyup", callback);
@@ -533,7 +534,8 @@ export class InteractiveObject extends DisplayObject{
 	}
 	private removeKeyDownListener(type:string, callback:(event:any) => void):void
 	{
-		this._keyDownListenersCnt--;
+		if(this._keyDownListenersCnt>0)
+			this._keyDownListenersCnt--;
 		if(this._keyDownListenersCnt==0){
 			//console.log("removeKeyDownListener", this)
 			document.removeEventListener("keydown", callback);
@@ -592,7 +594,7 @@ export class InteractiveObject extends DisplayObject{
 		adaptedEvent.target=this;
 		//adaptedEvent.currentTarget=this;
 		
-		this.dispatchEvent(adaptedEvent);
+		this.dispatchEvent(adaptedEvent, true);
 	}
 
 	//---------------------------stuff added to make it work:

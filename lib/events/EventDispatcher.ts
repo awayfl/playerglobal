@@ -42,8 +42,8 @@ export class EventDispatcher extends EventDispatcherBase
 		Event.ADDED_TO_STAGE,
 		Event.RESIZE,
 		Event.REMOVED_FROM_STAGE,
-		KeyboardEvent.KEY_DOWN,
-		KeyboardEvent.KEY_UP,
+		//KeyboardEvent.KEY_DOWN,
+		//KeyboardEvent.KEY_UP,
 	]
 
     public toString():string{
@@ -58,21 +58,22 @@ export class EventDispatcher extends EventDispatcherBase
 
 	}
 	
-	public dispatchEvent(event: EventBase): void {
+	public dispatchEvent(event: EventBase, comesFromAway:boolean=false): boolean {
 		(<any>event).currentTarget = this;
 		if(event.type=="enterFrame"){
 			(<any>event).target = this;			
 		}
-		super.dispatchEvent(event);
+		let returnVal=super.dispatchEvent(event);
 
 		// workaround for now.
 		// mousevents already bubble up the scenegraph in MouseMangager
 		// for all other events, we want to bubble them up here:
-		if (EventDispatcher.eventsThatBubbleInAwayJS.indexOf(event.type) == -1) {
+		if (!comesFromAway &&EventDispatcher.eventsThatBubbleInAwayJS.indexOf(event.type) == -1) {
 			if ((<any>this).adaptee && (<any>this).adaptee.parent) {
 				(<any>this).adaptee.parent.adapter.dispatchEvent(event);
 			}
 		}
+		return returnVal;
 	}
 	protected eventMapping: Object;
 	protected eventMappingDummys: Object;
