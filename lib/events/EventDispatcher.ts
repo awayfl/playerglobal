@@ -176,7 +176,7 @@ export class EventDispatcher extends EventDispatcherBase
 			super.addEventListener(type, listener, useCapture, priority, useWeakReference);
 
 			// call the provided "addListener" function
-			this.eventMapping[type].addListener.call(this, this.eventMapping[type].adaptedType, this.eventMapping[type].callback);
+			this.eventMapping[type].addListener.call(this, this.eventMapping[type].adaptedType, this.eventMapping[type].callback, listener);
 			return;
 		}
 		
@@ -207,7 +207,7 @@ export class EventDispatcher extends EventDispatcherBase
 		super.removeEventListener(type, listener);
 		if(this.eventMapping.hasOwnProperty(type)){
 			// a mapping exists
-			this.eventMapping[type].removeListener.call(this, this.eventMapping[type].adaptedType, this.eventMapping[type].callback);
+			this.eventMapping[type].removeListener.call(this, this.eventMapping[type].adaptedType, this.eventMapping[type].callback, listener);
 			if(!this.hasEventListener(type)){
 				
 				if (Event.isBroadcastEventType(type)) {

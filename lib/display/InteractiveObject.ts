@@ -11,9 +11,9 @@ import { SecurityDomain } from '../SecurityDomain';
 import { AVMStage } from '@awayfl/swf-loader';
 export class InteractiveObject extends DisplayObject{
 
-	private _keyDownListenersCnt:number=0;
-	private _keyUpListenersCnt:number=0;
-	private _mouseListnersByType:StringMap<number> ={};
+	private _keyDownListeners:Function[];
+	private _keyUpListeners:Function[];
+	private _mouseListnersCallbacksByType:StringMap<Function[]> ={};
 	/** these should be able to get setup:
 	 
 
@@ -332,8 +332,6 @@ export class InteractiveObject extends DisplayObject{
 		 this.eventMappingDummys[MouseEvent.MIDDLE_MOUSE_DOWN]="InteractiveObject:MouseEvent.MIDDLE_MOUSE_DOWN";
 		 this.eventMappingDummys[MouseEvent.MIDDLE_CLICK]="InteractiveObject:MouseEvent.MIDDLE_CLICK";
 
-		this._keyDownListenersCnt=0;
-		this._keyUpListenersCnt=0;
 		 /*
 		 //todo
 		 this.eventMappingDummys[SoftKeyboardEvent.SOFT_KEYBOARD_DEACTIVATE]="SoftKeyboardEvent.SOFT_KEYBOARD_DEACTIVATE";
@@ -475,22 +473,29 @@ export class InteractiveObject extends DisplayObject{
 	// ---------- event mapping functions for KeyboardEvent.KEY_UP:
 
 
-	private initKeyUpListener(type:string, callback:(event:any) => void):void
+	private initKeyUpListener(type:string, callback:(event:any) => void, listener:Function):void
 	{
-		if(this._keyUpListenersCnt==0){
+		if(!this._keyUpListeners){
+			this._keyUpListeners=[listener];
 			//console.log("initKeyUpListener", this)
 			document.addEventListener("keyup", callback);
 			document.addEventListener("keypress", callback);
+			return;
 		}
-		this._keyUpListenersCnt++;
+		this._keyUpListeners.push(listener);
 	}
-	private removeKeyUpListener(type:string, callback:(event:any) => void):void
+	private removeKeyUpListener(type:string, callback:(event:any) => void, listener:Function):void
 	{
-		if(this._keyUpListenersCnt>0)
-			this._keyUpListenersCnt--;
-		if(this._keyUpListenersCnt==0){
-			//console.log("removeKeyUpListener", this)
-			document.removeEventListener("keyup", callback);
+		if(this._keyUpListeners){
+			let idx=this._keyUpListeners.indexOf(listener);
+			if(idx!=-1){
+				if(this._keyUpListeners.length==1){
+					this._keyUpListeners=null;
+					document.removeEventListener("keyup", callback);
+					return;
+				}
+				this._keyUpListeners.splice(idx, 1);
+			}
 		}
 	}
 	private _keyUpCallbackDelegate:(event:any) => void;
@@ -523,23 +528,30 @@ export class InteractiveObject extends DisplayObject{
 
 	// ---------- event mapping functions for KeyboardEvent.KEY_DOWN:
 
-	private initKeyDownListener(type:string, callback:(event:any) => void):void
+	private initKeyDownListener(type:string, callback:(event:any) => void, listener:Function):void
 	{
-		if(this._keyDownListenersCnt==0){
-			//console.log("initKeyDownListener", this)
-			document.addEventListener("keydown", callback);
+		if(!this._keyDownListeners){
+			this._keyDownListeners=[listener];
+			//console.log("initKeyUpListener", this)
+			document.addEventListener("keyup", callback);
 			document.addEventListener("keypress", callback);
+			return;
 		}
-		this._keyDownListenersCnt++;
+		this._keyDownListeners.push(listener);
 	}
-	private removeKeyDownListener(type:string, callback:(event:any) => void):void
+	private removeKeyDownListener(type:string, callback:(event:any) => void, listener:Function):void
 	{
-		if(this._keyDownListenersCnt>0)
-			this._keyDownListenersCnt--;
-		if(this._keyDownListenersCnt==0){
-			//console.log("removeKeyDownListener", this)
-			document.removeEventListener("keydown", callback);
-			document.removeEventListener("keypress", callback);
+		if(this._keyDownListeners){
+			let idx=this._keyDownListeners.indexOf(listener);
+			if(idx!=-1){
+				if(this._keyDownListeners.length==1){
+					this._keyDownListeners=null;
+					document.removeEventListener("keydown", callback);
+					document.removeEventListener("keypress", callback);
+					return;
+				}
+				this._keyDownListeners.splice(idx, 1);
+			}
 		}
 	}
 	private _keyDownCallbackDelegate:(event:any) => void;
@@ -566,25 +578,29 @@ export class InteractiveObject extends DisplayObject{
 
 	// ---------- event mapping functions for MouseEvents:
 
-	private initMouseListener(type:string, callback:(event:MouseEventAway) => void):void
+	private initMouseListener(type:string, callback:(event:MouseEventAway) => void, listener:Function):void
 	{
-		if(!this._mouseListnersByType[type] || this._mouseListnersByType[type]==0){
-			this._mouseListnersByType[type]=1;
+		if(!this._mouseListnersCallbacksByType[type]){
 			this.adaptee.addEventListener(type, callback);
+			this._mouseListnersCallbacksByType[type]=[listener];
 			return;
-		}
-		this._mouseListnersByType[type]++;
-		return;
+		} 
+		this._mouseListnersCallbacksByType[type].push(listener);
 		
 	}
-	private removeMouseListener(type:string, callback:(event:MouseEventAway) => void):void
+	private removeMouseListener(type:string, callback:(event:MouseEventAway) => void, listener:Function):void
 	{
-		if(this._mouseListnersByType[type] && this._mouseListnersByType[type]>1){
-			this._mouseListnersByType[type]--;
-			return;
+		if(this._mouseListnersCallbacksByType[type]){
+			let idx=this._mouseListnersCallbacksByType[type].indexOf(listener);
+			if(idx!=-1){
+				if(this._mouseListnersCallbacksByType[type].length==1){
+					delete this._mouseListnersCallbacksByType[type];
+					this.adaptee.removeEventListener(type, callback);
+					return;
+				}
+				this._mouseListnersCallbacksByType[type].splice(idx, 1);
+			}
 		}
-		this._mouseListnersByType[type]--;
-		this.adaptee.removeEventListener(type, callback);
 	}
 	private _mouseCallbackDelegate:(event:MouseEventAway) => void;
 	private mouseCallback(event:MouseEventAway):void
