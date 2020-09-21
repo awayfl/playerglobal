@@ -5,7 +5,7 @@ import { initLink } from './link';
 import { ISceneGraphFactory, TextField, SceneImage2D, Font, Sprite, MovieClip, MorphSprite, IDisplayObjectAdapter, FrameScriptManager, DisplayObjectContainer } from '@awayjs/scene';
 import { LoaderContext } from './system/LoaderContext';
 import { FlashSceneGraphFactory } from './factories/FlashSceneGraphFactory';
-import { IAsset, WaveAudio } from '@awayjs/core';
+import { AssetBase, IAsset, WaveAudio } from '@awayjs/core';
 import { ApplicationDomain } from './system/ApplicationDomain';
 import { BitmapImage2D } from '@awayjs/stage';
 import { Graphics } from '@awayjs/graphics';
@@ -160,47 +160,69 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 	
 	public addAsset(asset: IAsset, addScene:boolean) {
 
-		if (asset.isAsset(TextField)) {
-			this._applicationDomain.addDefinition(asset.name, <TextField>asset);
-		} else if (asset.isAsset(SceneImage2D) || asset.isAsset(BitmapImage2D)) {
-
-			this._applicationDomain.addDefinition(asset.name, <SceneImage2D>asset);
-
-			// we should only do this for bitmaps loaded from jpg or png
-			// todo:
-			//if (this._isImage)
-			//	(<AwayDisplayObjectContainer> this._adaptee).addChild(new Bitmap(<BitmapData> (<SceneImage2D> asset).adapter).adaptee);
-		} else if (asset.isAsset(WaveAudio)) {
-			this._applicationDomain.addAudioDefinition(asset.name, (<WaveAudio>asset));
-		} else if (asset.isAsset(Font)) {
-			this._applicationDomain.addFontDefinition(asset.name, (<Font>asset));
-		} else if (asset.isAsset(Sprite)) {
-			//if((<AwaySprite> asset).material)
-			//	(<AwaySprite> asset).material.bothSides=false;
-			this._applicationDomain.addDefinition(asset.name, <Sprite>asset);
-		} else if (asset.isAsset(MovieClip)) {
-			this._applicationDomain.addDefinition(asset.name, <MovieClip>asset);
-
-			// if this is the "Scene 1", we make it a child of the loader
-			if (addScene && (<any>asset).isAVMScene) {// "Scene 1" when AWDParser, isAVMScene when using SWFParser
-
-				this._content = <DisplayObject>(<IDisplayObjectAdapter>asset.adapter).clone();
-				this._content.loaderInfo = this._contentLoaderInfo;
-				this._content.adaptee.reset();
-				(<any>this._content.adaptee).firstFrameOnSWFStart=true;
-				(<any>this._stage.adaptee).addChild(this._content.adaptee);			
-				FrameScriptManager.execute_as3_constructors_recursiv(<any>this._content.adaptee);	
-				this._content.dispatchStaticEvent("added", this._content);
-				this._content.dispatch_ADDED_TO_STAGE(true);
-				
+		switch(asset.assetType) {
+			case TextField.assetType: 
+			{
+				this._applicationDomain.addDefinition(asset.name, <TextField>asset);
+				break;
 			}
-		}
-		else if (asset.isAsset(Graphics)) {
-		}
-		else if (asset.isAsset(MorphSprite)) {
-		}
-		else {
-			console.log("loaded unhandled asset-type")
+			case SceneImage2D.assetType:
+			case BitmapImage2D.assetType:
+			{
+
+				this._applicationDomain.addDefinition(asset.name, <SceneImage2D>asset);
+				break;
+				// we should only do this for bitmaps loaded from jpg or png
+				// todo:
+				//if (this._isImage)
+				//	(<AwayDisplayObjectContainer> this._adaptee).addChild(new Bitmap(<BitmapData> (<SceneImage2D> asset).adapter).adaptee);
+			}
+			case WaveAudio.assetType:
+			{
+				this._applicationDomain.addAudioDefinition(asset.name, (<WaveAudio>asset));
+				break;
+			}
+			case Font.assetType:
+			{
+				this._applicationDomain.addFontDefinition(asset.name, (<Font>asset));
+				break;
+			}
+			case Sprite.assetType: 
+			{
+				this._applicationDomain.addDefinition(asset.name, <Sprite>asset);
+				break;
+			} 
+			case MovieClip.assetType: 
+			{
+				this._applicationDomain.addDefinition(asset.name, <MovieClip>asset);
+
+				// if this is the "Scene 1", we make it a child of the loader
+				if (addScene && (<any>asset).isAVMScene) {// "Scene 1" when AWDParser, isAVMScene when using SWFParser
+
+					this._content = <DisplayObject>(<IDisplayObjectAdapter>asset.adapter).clone();
+					this._content.loaderInfo = this._contentLoaderInfo;
+					this._content.adaptee.reset();
+					(<any>this._content.adaptee).firstFrameOnSWFStart=true;
+					(<any>this._stage.adaptee).addChild(this._content.adaptee);			
+					FrameScriptManager.execute_as3_constructors_recursiv(<any>this._content.adaptee);	
+					this._content.dispatchStaticEvent("added", this._content);
+					this._content.dispatch_ADDED_TO_STAGE(true);
+					
+				}
+				break;
+			}
+			case '[asset Generic]': {
+				this._applicationDomain.addDefinition(asset.name, asset as AssetBase);
+				break;
+			}
+			case Graphics.assetType:
+			case MorphSprite.assetType:
+			{ 
+				break;
+			}
+			default: {
+				console.warn("Loaded unhandled asset-type", asset.assetType);
+			}
 		}
 	}
 

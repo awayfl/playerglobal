@@ -130,6 +130,59 @@ export class ApplicationDomain extends ASObject
 	public addFontDefinition (name:string, asset:Font) : void{
 		this._font_definitions[name]=asset;
 	}
+
+	public hasSymbolForClass(className: string): boolean {
+		return this._definitions[className] || this._font_definitions[className] || this._audio_definitions[className];
+	}
+
+	public getSymbolAdaptee(className: string): any {
+		let symbol = this._definitions[className];
+
+		if (symbol) {
+			if(symbol.isAsset && symbol.isAsset(SceneImage2D) || !symbol.adapter){
+				return symbol;
+			}
+
+			const clone = symbol.adapter.clone();
+			if(clone.adaptee.isAsset(AwayMovieClip)){
+				(<AwayMovieClip>clone.adaptee).currentFrameIndex=0;
+			}
+			return clone.adaptee;
+		}
+		else if(this._font_definitions[className]) {
+			return this._font_definitions[className];
+		}
+		else if(this._audio_definitions[className]) {
+			return this._audio_definitions[className];
+		}
+		return null;
+	}
+
+	public getSymbolDefinition(className: string): any {
+		let symbol = this._definitions[className];
+
+		if (symbol) {
+			if(symbol.isAsset && symbol.isAsset(SceneImage2D)){
+				return symbol;
+			}
+
+			const clone = symbol.adapter.clone();
+			if(clone.adaptee.isAsset(AwayMovieClip)){
+				(<AwayMovieClip>clone.adaptee).currentFrameIndex=0;
+			}
+			return clone;
+		}
+		else if(this._font_definitions[name]){
+			return this._font_definitions[name];
+		}
+		else if(this._audio_definitions[name]){
+			const sound = new Sound();
+			sound.adaptee = this._audio_definitions[name];
+			//sound.adaptee.adapter=sound;
+			return sound;
+		}
+	}
+
 	/**
 	 * Gets a public definition from the specified application domain.
 	 * The definition can be that of a class, a namespace, or a function.
@@ -141,27 +194,9 @@ export class ApplicationDomain extends ASObject
 	 *   specified name.
 	 */
 	public getDefinition (name:string) : any{
-
-		if(this._definitions[name]){
-			if(this._definitions[name].isAsset && this._definitions[name].isAsset(SceneImage2D)){
-				return this._definitions[name];
-
-			}
-			var newAdapter:IDisplayObjectAdapter=this._definitions[name].adapter.clone();
-			if(newAdapter.adaptee.isAsset(AwayMovieClip)){
-				(<AwayMovieClip>newAdapter.adaptee).currentFrameIndex=0;
-			}
-			return newAdapter;
-		}
-		else if(this._font_definitions[name]){
-			return this._font_definitions[name];
-		}
-		else if(this._audio_definitions[name]){
-			var sound:Sound=new Sound();
-			sound.adaptee=this._audio_definitions[name];
-			//sound.adaptee.adapter=sound;
-			return sound;
-		}
+		
+		if(this.hasSymbolForClass(name))
+			return this.getSymbolDefinition(name);
 
 		return (<SecurityDomain>this.sec).application.getClass(Multiname.FromSimpleName(name));	
 	}
