@@ -775,23 +775,20 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * Indicates the x coordinate of the mouse or user input device position, in pixels.
 	 *
 	 *   Note: For a DisplayObject that has been rotated, the returned x coordinate will reflect the
-	 * non-rotated any.
+	 * non-rotated Point.
 	 */
 	public get mouseX(): number {
-		//console.log("mouseX not implemented yet in flash/DisplayObject");
-		//todo: theres probably a faster option than this
-		return this.adaptee.transform.globalToLocal(new AwayPoint(this.stage.mouseX, 0)).x;
+		return Math.floor(this.adaptee.transform.globalToLocal(new AwayPoint(this.stage.mouseX, this.stage.mouseY)).x);
 	}
 
 	/**
 	 * Indicates the y coordinate of the mouse or user input device position, in pixels.
 	 *
 	 *   Note: For a DisplayObject that has been rotated, the returned y coordinate will reflect the
-	 * non-rotated any.
+	 * non-rotated Point.
 	 */
 	public get mouseY(): number {
-		//todo: theres probably a faster option than this
-		return this.adaptee.transform.globalToLocal(new AwayPoint(0, this.stage.mouseY)).y;
+		return Math.floor(this.adaptee.transform.globalToLocal(new AwayPoint(this.stage.mouseX, this.stage.mouseY)).y);
 	}
 
 	/**
