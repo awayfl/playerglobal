@@ -533,7 +533,7 @@ export class InteractiveObject extends DisplayObject{
 		if(!this._keyDownListeners){
 			this._keyDownListeners=[listener];
 			//console.log("initKeyUpListener", this)
-			document.addEventListener("keyup", callback);
+			document.addEventListener("keydown", callback);
 			document.addEventListener("keypress", callback);
 			return;
 		}
