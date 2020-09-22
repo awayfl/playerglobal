@@ -60,7 +60,7 @@ export class EventDispatcher extends EventDispatcherBase
 	
 	public dispatchEvent(event: EventBase, comesFromAway:boolean=false): boolean {
 		(<any>event).currentTarget = this;
-		if(event.type=="enterFrame" || event.type=="scroll"){
+		if(event.type=="enterFrame"){//} || event.type=="scroll"){
 			(<any>event).target = this;			
 		}
 		let returnVal=super.dispatchEvent(event);
