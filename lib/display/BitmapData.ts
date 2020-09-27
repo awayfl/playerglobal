@@ -88,7 +88,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		if(typeof width === 'number'){
 
 			if(!this._adaptee) {
-				this._adaptee = new SceneImage2D(width, height, transparent, fillColor, false, StageManager.getInstance().getStageAt(0));
+				this._adaptee = SceneImage2D.getImage(width, height, transparent, fillColor, false, StageManager.getInstance().getStageAt(0));
 
 				// we construct a SceneImage2D direct, use weak, that call dispose after garbaging
 				this._adaptee.useWeakRef();
@@ -127,8 +127,9 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 			this._adaptee.width,
 			this._adaptee.height,
 			this._adaptee.transparent,
-			0x0
+			null
 		);
+
 		clone.copyPixels(this, this.rect, new (<SecurityDomain>this.sec).flash.geom.Point());
 		return clone;
 	}
