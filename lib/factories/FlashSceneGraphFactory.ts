@@ -118,6 +118,11 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 
 	public createImage2D(width:number, height:number, transparent:boolean = true, fillColor:number = null, powerOfTwo:boolean = true, symbol:any=null):Image2D
 	{
-		return <SceneImage2D> new BitmapData(width, height, transparent, fillColor).adaptee;
+		const image = <SceneImage2D> new BitmapData(width, height, transparent, fillColor).adaptee;
+		
+		// drop weak ref for symbols
+		image.unuseWeakRef();
+
+		return image;
 	}
 }

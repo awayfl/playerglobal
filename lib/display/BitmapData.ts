@@ -86,9 +86,14 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		super();
 
 		if(typeof width === 'number'){
-			this._adaptee =
-				this._adaptee ||
-					new SceneImage2D(width, height, transparent, fillColor, false, StageManager.getInstance().getStageAt(0));
+
+			if(!this._adaptee) {
+				this._adaptee = new SceneImage2D(width, height, transparent, fillColor, false, StageManager.getInstance().getStageAt(0));
+
+				// we construct a SceneImage2D direct, use weak, that call dispose after garbaging
+				this._adaptee.useWeakRef();
+			}
+
 		} else {
 			this._adaptee = <any>width;
 		}
