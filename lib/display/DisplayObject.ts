@@ -324,6 +324,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		//var clone: MovieClip = MovieClip.getNewMovieClip(AwayMovieClip.getNewMovieClip((<AwayMovieClip>this.adaptee).timeline));
 		var clone = constructClassFromSymbol((<any>this)._symbol, (<any>this)._symbol.symbolClass);
 		clone.axInitializer();
+		clone.loaderInfo=this.loaderInfo;
 		this.adaptee.copyTo(clone.adaptee);
 		return clone;
 	}

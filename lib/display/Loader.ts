@@ -256,7 +256,7 @@ export class Loader extends DisplayObjectContainer implements ILoader
 		//  and all exported symbols are handled as if exposed to as3
 
 		var asset:IAsset = event.asset;
-
+		(<any>asset.adapter).loaderInfo=this._contentLoaderInfo;
 		if (asset.isAsset(AwayTextField)) {
 			this._contentLoaderInfo.applicationDomain.addDefinition(asset.name, <AwayTextField> asset);
 		} else if (asset.isAsset(SceneImage2D) || asset.isAsset(BitmapImage2D)) {

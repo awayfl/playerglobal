@@ -160,6 +160,7 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 	
 	public addAsset(asset: IAsset, addScene:boolean) {
 
+		(<any>asset.adapter).loaderInfo=this._contentLoaderInfo;
 		switch(asset.assetType) {
 			case TextField.assetType: 
 			{
