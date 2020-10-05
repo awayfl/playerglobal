@@ -421,9 +421,6 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 
 
 		if (typeof frame === "string") {
-            if((<any>this.sec).swfVersion<=9){
-                frame=frame.toLowerCase();
-            }
 			if ((<AwayMovieClip>this.adaptee).timeline._labels[frame] == null) {
 				frame = parseInt(frame);
 				if (!isNaN(frame)) {
@@ -437,6 +434,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			return;
 		this.play();
 		this._gotoFrame(frame);
+		
 	}
 
 	/**
@@ -465,9 +463,6 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		}
 
 		if (typeof frame === "string") {
-            if((<any>this.sec).swfVersion<=9){
-                frame=frame.toLowerCase();
-            }
 			if ((<AwayMovieClip>this.adaptee).timeline._labels[frame] == null) {
 				frame = parseInt(frame);
 				if (!isNaN(frame)) {
