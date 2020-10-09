@@ -132,10 +132,11 @@ import { Font } from "./text/Font";
 /*
 import { TextField } from "./text/TextField";
 import { StaticText } from "./text/StaticText";
-import { StyleSheet } from "./text/StyleSheet";
 import { TextFormat } from "./text/TextFormat";
 import { TextRun } from "./text/TextRun";
 */
+import { StyleSheet } from "./text/StyleSheet";
+
 import { TextLineMetrics } from "./text/TextLineMetrics";
 /*
 import { Sound } from "./media/Sound";
@@ -168,6 +169,9 @@ import { FileReferenceList } from "./net/FileReferenceList";
 */
 
 import { LocalConnection } from "./net/LocalConnection";
+
+import { LocaleID } from "./globalization/LocaleID";
+
 
 /*
 import { Socket } from "./net/Socket";
@@ -287,7 +291,7 @@ export function initLink() {
 
 	M("flash.text.Font", <any>Font);
 	// M("flash.text.StaticText", StaticText);
-	// M("flash.text.StyleSheet", StyleSheet);
+	M("flash.text.StyleSheet", StyleSheet);
 	M("flash.text.TextFormat", TextFormat);
 	// M("flash.text.TextRun", TextRun);
 	M("flash.text.TextSnapshot", TextSnapshot);
@@ -336,6 +340,8 @@ export function initLink() {
 
 	M("flash.xml.XMLNode", XMLNode);
 	M("flash.xml.XMLDocument", XMLDocument);
+
+	M("flash.globalization.LocaleID", LocaleID)
 
 	registerNativeFunction('flash.system.fscommand', fscommand);
 
