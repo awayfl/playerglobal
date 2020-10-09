@@ -171,11 +171,14 @@ export class TextFormat extends ASObject {
     public set style_name(value: any) {
         this.adaptee.style_name = value;
     }
-    public get font(): Font {
-        return this.adaptee.font;
+
+    public get font(): string {
+        // font should return a `font_name`
+        return this.adaptee.font_name;
     }
-    public set font(value: Font) {
-        this.adaptee.font = value;
+
+    public set font(value: string) {
+        this.adaptee.font = <any>value;
     }
 
     constructor(
