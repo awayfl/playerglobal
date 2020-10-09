@@ -1091,7 +1091,8 @@ export class TextField extends InteractiveObject
 	public getTextFormat (beginIndex:number=-1, endIndex:number=-1) : TextFormat{
 		// todo: support multiple formats
 		console.log("todo: textformats");
-		return (<TextFormat><any>(<AwayTextField> this._adaptee).getTextFormat(beginIndex, endIndex).adapter);
+		const tf = (<TextFormat><any>(<AwayTextField> this._adaptee).getTextFormat(beginIndex, endIndex)?.adapter);
+		return tf || new (<SecurityDomain>this.sec).flash.text.TextFormat();
 	}
 
 	public getTextRuns (beginIndex:number=0, endIndex:number=2147483647) : any[]{
