@@ -116,7 +116,6 @@ import { ColorTransform } from "./geom/ColorTransform";
 import { PerspectiveProjection } from "./geom/PerspectiveProjection";
 import { KeyboardEvent } from "./events/KeyboardEvent";
 import { MouseEvent } from "./events/MouseEvent";
-import { HTTPStatusEvent } from "./events/HTTPStatusEvent";
 import { UncaughtErrorEvents } from "./events/UncaughtErrorEvents";
 import { Keyboard } from "./ui/Keyboard";
 import { MouseCursorData } from "./ui/MouseCursorData";
@@ -150,6 +149,8 @@ import { MultitouchInputMode } from "./ui/MultitouchInputMode";
 import { Multitouch } from "./ui/Multitouch";
 import { GameInputEvent } from "./events/GameInputEvent";
 import { NetStatusEvent } from "./events/NetStatusEvent";
+import { HTTPStatusEvent } from "./events/HTTPStatusEvent";
+
 /*
 import { AsyncErrorEvent } from "./events/AsyncErrorEvent";
 import { StatusEvent } from "./events/StatusEvent";
@@ -264,7 +265,7 @@ export function initLink() {
 	M("flash.events.ProgressEvent", ProgressEvent);
 	// M("flash.events.StatusEvent", StatusEvent);
 	M("flash.events.NetStatusEvent", NetStatusEvent);
-	// M("flash.events.HTTPStatusEvent", HTTPStatusEvent);
+	M("flash.events.HTTPStatusEvent", HTTPStatusEvent);
 	// M("flash.events.AsyncErrorEvent", AsyncErrorEvent);
 	// M("flash.events.UncaughtErrorEvents", UncaughtErrorEvents);
 
