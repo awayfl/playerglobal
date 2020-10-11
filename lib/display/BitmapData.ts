@@ -130,7 +130,13 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 			null
 		);
 
-		clone.copyPixels(this, this.rect, new (<SecurityDomain>this.sec).flash.geom.Point());
+		// refclone
+		if(this._adaptee.copyTo){
+			this._adaptee.copyTo(clone._adaptee);
+		} else {
+			clone.copyPixels(this, this.rect, new (<SecurityDomain>this.sec).flash.geom.Point());
+		}
+
 		return clone;
 	}
 
