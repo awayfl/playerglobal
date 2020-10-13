@@ -5,7 +5,7 @@ import {MovieClip as AwayMovieClip} from "@awayjs/scene";
 import {WaveAudio} from "@awayjs/core";
 import {MovieClip} from "../display/MovieClip";
 import {Sound} from "../media/Sound";
-import { ASObject, Multiname } from '@awayfl/avm2';
+import { AXClass, ASObject, Multiname } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 
 /**
@@ -193,20 +193,21 @@ export class ApplicationDomain extends ASObject
 	 * @throws	ReferenceError No public definition exists with the
 	 *   specified name.
 	 */
-	public getDefinition (name:string) : any{
-		
-		if(this.hasSymbolForClass(name))
-			return this.getSymbolDefinition(name);
-
+	public getDefinition (name:string) : AXClass {
+		/**
+		 * @todo Cache a FromSimpleName
+		 */
 		return (<SecurityDomain>this.sec).application.getClass(Multiname.FromSimpleName(name));	
 	}
+
 	public getFontDefinition (name:string) : Font{
 		return this._font_definitions[name];
 	}
+
 	public getAwayJSAudio(name:string):WaveAudio{
 		return this._audio_definitions[name];
-
 	}
+
 	public getAudioDefinition (name:string) : Sound{
 		var sound:Sound=new Sound();
 		sound.adaptee=this._audio_definitions[name];
@@ -230,9 +231,11 @@ export class ApplicationDomain extends ASObject
 	 * @param	name	The name of the definition.
 	 * @return	A value of true if the specified definition exists; otherwise, false.
 	 */
-	public hasDefinition (name:string) : boolean{
-		return this._definitions.hasOwnProperty(name);
+	public hasDefinition (name: string) : boolean {
+		// slow, because run lookup 
+		return !!this.getDefinition(name);
 	}
+
 	public hasFontDefinition (name:string) : boolean{
 		return this._font_definitions.hasOwnProperty(name);
 	}
