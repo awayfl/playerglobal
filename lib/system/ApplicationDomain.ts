@@ -232,8 +232,13 @@ export class ApplicationDomain extends ASObject
 	 * @return	A value of true if the specified definition exists; otherwise, false.
 	 */
 	public hasDefinition (name: string) : boolean {
-		// slow, because run lookup 
-		return !!this.getDefinition(name);
+		// Exception will thrown when definition not exist.
+		try {
+			// slow, because run lookup 
+			return !!this.getDefinition(name);
+		} catch (e) {
+			return false;
+		}
 	}
 
 	public hasFontDefinition (name:string) : boolean{
