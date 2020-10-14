@@ -1,6 +1,6 @@
 {
   "name": "@awayfl/playerglobal",
-  "version": "0.2.120",
+  "version": "0.2.121",
   "description": "Global class definitions for the AS3 language",
   "main": "bundle/awayfl-playerglobal.umd.js",
   "module": "dist/index.js",
