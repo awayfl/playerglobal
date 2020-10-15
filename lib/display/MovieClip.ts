@@ -1,14 +1,14 @@
-import { IDisplayObjectAdapter, MovieClip as AwayMovieClip, Sprite as AwaySprite, DisplayObject as AwayDisplayObject, IMovieClipAdapter, SceneGraphPartition, Timeline, FrameScriptManager } from "@awayjs/scene";
-import { Sprite } from "./Sprite";
+import { IDisplayObjectAdapter, MovieClip as AwayMovieClip, Sprite as AwaySprite, DisplayObject as AwayDisplayObject, IMovieClipAdapter, SceneGraphPartition, Timeline, FrameScriptManager } from '@awayjs/scene';
+import { Sprite } from './Sprite';
 import { Matrix3D, AssetBase } from '@awayjs/core';
 import { constructClassFromSymbol } from '@awayfl/avm2';
-import { Event } from "../events/Event";
+import { Event } from '../events/Event';
 import { FrameLabel } from './FrameLabel';
 import { SecurityDomain } from '../SecurityDomain';
 
-var includeString: string = '';//TODO
+const includeString: string = '';//TODO
 
-declare var __framescript__;
+declare let __framescript__;
 /**
  * The MovieClip class inherits from the following classes: Sprite, DisplayObjectContainer,
  * InteractiveObject, DisplayObject, and EventDispatcher.
@@ -39,7 +39,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 
 	public static getNewMovieClip(adaptee: AwayMovieClip): MovieClip {
 		if (MovieClip._movieClips.length) {
-			var movieClip: MovieClip = MovieClip._movieClips.pop();
+			const movieClip: MovieClip = MovieClip._movieClips.pop();
 			movieClip.adaptee = adaptee;
 			return movieClip;
 		}
@@ -51,39 +51,43 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	public _getAbsFrameNumber(param1: any, param2: any): number {
 		return 0;
 	}
+
 	public callFrame(param1: any) {
 	}
+
 	public _callFrame(param1: any) {
 	}
+
 	public addScript(param1: any) {
 		return param1;
 	}
-	// call this after you call scripts 
-	public queuedNavigationAction:Function=null;
-	public allowScript:boolean;
+
+	// call this after you call scripts
+	public queuedNavigationAction: Function=null;
+	public allowScript: boolean;
 
 	public executeScript(scripts: any) {
-		if(!this.allowScript && (<any>this.sec).swfVersion > 9){
+		if (!this.allowScript && (<any> this.sec).swfVersion > 9) {
 			return;
 		}
-		scripts=(<AwayMovieClip>this.adaptee).timeline.get_script_for_frame(<AwayMovieClip>this.adaptee, (<AwayMovieClip>this.adaptee).currentFrameIndex);
-		if(!scripts){
+		scripts = (<AwayMovieClip> this.adaptee).timeline.get_script_for_frame(<AwayMovieClip> this.adaptee, (<AwayMovieClip> this.adaptee).currentFrameIndex);
+		if (!scripts) {
 			return;
 		}
-		this.allowScript=false;
-		let prev_script_scope=MovieClip.current_script_scope;
+		this.allowScript = false;
+		const prev_script_scope = MovieClip.current_script_scope;
 		MovieClip.current_script_scope = this;
 		for (let k = 0; k < scripts.length; k++) {
 			scripts[k].setReceiver(this);
 			scripts[k].axCall(this);
 		}
 		MovieClip.current_script_scope = prev_script_scope;
-	
-		if(this.queuedNavigationAction){
+
+		if (this.queuedNavigationAction) {
 			// execute any pending FrameNavigation for this mc
-			let queuedNavigationAction=this.queuedNavigationAction;
+			const queuedNavigationAction = this.queuedNavigationAction;
 			this.queuedNavigationAction = null;
-			queuedNavigationAction();			
+			queuedNavigationAction();
 		}
 	}
 
@@ -97,30 +101,30 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		super();
 	}
 
-	protected createAdaptee():AwayDisplayObject{
-		var adaptee=AwayMovieClip.getNewMovieClip();
+	protected createAdaptee(): AwayDisplayObject {
+		const adaptee = AwayMovieClip.getNewMovieClip();
 		adaptee.reset();
 		//console.log("createAdaptee AwayMovieClip");
-        //FrameScriptManager.execute_queue();
+		//FrameScriptManager.execute_queue();
 		return adaptee;
 	}
 	// --------------------- stuff needed because of implementing the existing IMovieClipAdapter
 
-	public clearPropsDic(){
+	public clearPropsDic() {
 		//	this is used by CompiledClips
 		//	todo: check if "$Bg__setPropDict" can be used to identify compiledClips
 		//this["$Bg__setPropDict"].map= new WeakMap();
 	}
 
 	public evalScript(str: string): Function {
-		var tag: HTMLScriptElement = document.createElement('script');
+		const tag: HTMLScriptElement = document.createElement('script');
 		tag.text = 'var __framescript__ = function() {\n' + includeString + str + '\n}';
 
 		//add and remove script tag to dom to trigger compilation
-		var sibling = document.scripts[0];
+		const sibling = document.scripts[0];
 		sibling.parentNode.insertBefore(tag, sibling).parentNode.removeChild(tag);
 
-		var script = __framescript__;
+		const script = __framescript__;
 		window['__framescript__'] = null;
 
 		return script;
@@ -131,20 +135,21 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		super.freeFromScript();
 
 	}
-	public clone(): MovieClip {
-		const anyThis: AssetBase = <any>this;
 
-		if(!anyThis._symbol){
-			throw("_symbol not defined when cloning movieclip")
+	public clone(): MovieClip {
+		const anyThis: AssetBase = <any> this;
+
+		if (!anyThis._symbol) {
+			throw ('_symbol not defined when cloning movieclip');
 		}
 
 		//var clone: MovieClip = MovieClip.getNewMovieClip(AwayMovieClip.getNewMovieClip((<AwayMovieClip>this.adaptee).timeline));
-		const newMC:MovieClip = constructClassFromSymbol(anyThis._symbol, anyThis._symbol.symbolClass);
-		
+		const newMC: MovieClip = constructClassFromSymbol(anyThis._symbol, anyThis._symbol.symbolClass);
+
 		// console.log("Base", anyThis._symbol, anyThis._symbol.symbolClass);
 
 		//console.log("clone", (<any>this)._symbol, (<any>this)._symbol.symbolClass);
-		const adaptee = new AwayMovieClip((<AwayMovieClip>this.adaptee).timeline);
+		const adaptee = new AwayMovieClip((<AwayMovieClip> this.adaptee).timeline);
 
 		//console.log("clone mc", newMC, adaptee, adaptee.id, (<any>this)._symbol, (<any>this)._symbol.symbolClass)
 		this.adaptee.copyTo(adaptee);
@@ -153,45 +158,39 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		newMC._stage = this.activeStage;
 
 		(<IMovieClipAdapter>newMC).executeConstructor = () => {
-			//adaptee.timeline.resetScripts();				
+			//adaptee.timeline.resetScripts();
 			(<any>newMC).axInitializer();
-			(<any>newMC).constructorHasRun=true;
-			
-		}
+			(<any>newMC).constructorHasRun = true;
+
+		};
 
 		// if this is a custom class (not a plain MC or Sprite)
 		// make sure that the clone will not be reused on the timeline.
 		// it must reclone for every new instance thats added to scene, so that the as3 constructor (axInitializer) will run again...
 		// (if cloneForEveryInstance is true, the awayjs-mc will not cache the instance on the potentialinstance-list)
-		if(anyThis._symbol.className){
+		if (anyThis._symbol.className) {
 			(<any>newMC.adaptee).cloneForEveryInstance = true;
 		}
 
 		if (adaptee.timeline) {
-			
+
 			//console.log(adaptee.timeline);
 
-			
-			
 			// for Sprite and UIComponent, we want the timeline to only use frame 1
 
-			let foundUIComponent:boolean=false;
-			let symbolClass:any=(<any>this)._symbol.symbolClass; 
-			while(symbolClass && !foundUIComponent){
-				if(symbolClass.name?.name=="UIComponent"){
-					foundUIComponent=true;
-				}
-				else if(symbolClass.name?.name=="MovieClip"){
-					symbolClass=null;
-				}
-				else if(symbolClass.name?.name=="Sprite"){
-					foundUIComponent=true;
-				}
-				else if(symbolClass.superClass){
-					symbolClass=symbolClass.superClass;
-				}
-				else{
-					symbolClass=null;
+			let foundUIComponent: boolean = false;
+			let symbolClass: any = (<any> this)._symbol.symbolClass;
+			while (symbolClass && !foundUIComponent) {
+				if (symbolClass.name?.name == 'UIComponent') {
+					foundUIComponent = true;
+				} else if (symbolClass.name?.name == 'MovieClip') {
+					symbolClass = null;
+				} else if (symbolClass.name?.name == 'Sprite') {
+					foundUIComponent = true;
+				} else if (symbolClass.superClass) {
+					symbolClass = symbolClass.superClass;
+				} else {
+					symbolClass = null;
 				}
 			}
 			// 	hack to BadIceCreamFont compiledClip:
@@ -199,7 +198,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			//	it seem to always stick to frame 0,
 			//
 			//	DANGER!!!
-			//	MAY PRODUCE SIDE EFFECTS 
+			//	MAY PRODUCE SIDE EFFECTS
 
 			const cn = anyThis._symbol.className;
 			const freezeOnFirstFrame = foundUIComponent || (cn && (
@@ -207,7 +206,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 				cn.includes('Font'))
 			);
 
-			if(freezeOnFirstFrame) {
+			if (freezeOnFirstFrame) {
 				const timeline = (<AwayMovieClip>adaptee).timeline;
 				const targetTimeline = timeline;
 
@@ -216,7 +215,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 				targetTimeline.keyframe_constructframes = [timeline.keyframe_constructframes[0]];
 				targetTimeline.keyframe_durations = <any>[timeline.keyframe_durations[0]];
 				targetTimeline.keyframe_firstframes = [timeline.keyframe_firstframes[0]];
-				targetTimeline.keyframe_indices = [timeline.keyframe_indices[0]];	
+				targetTimeline.keyframe_indices = [timeline.keyframe_indices[0]];
 			}
 		}
 
@@ -240,7 +239,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * frame number in the current scene.
 	 */
 	public get currentFrame(): number {
-		return (<AwayMovieClip>this._adaptee).currentFrameIndex + 1;
+		return (<AwayMovieClip> this._adaptee).currentFrameIndex + 1;
 	}
 
 	/**
@@ -248,7 +247,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * If the current frame has no label, currentLabel is null.
 	 */
 	public get currentFrameLabel(): string {
-		return (<AwayMovieClip>this.adaptee).timeline.getCurrentFrameLabel(<AwayMovieClip>this.adaptee);
+		return (<AwayMovieClip> this.adaptee).timeline.getCurrentFrameLabel(<AwayMovieClip> this.adaptee);
 	}
 
 	/**
@@ -258,7 +257,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * currentLabel returns null.
 	 */
 	public get currentLabel(): string {
-		return (<AwayMovieClip>this.adaptee).timeline.getCurrentLabel(<AwayMovieClip>this.adaptee);
+		return (<AwayMovieClip> this.adaptee).timeline.getCurrentLabel(<AwayMovieClip> this.adaptee);
 	}
 
 	/**
@@ -269,25 +268,25 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		//	this is called quite frequently in some games
 		//	we do not 100% support scenes, yet
 		//	as long as we do not have ull scene-support, we can cache the result
-		if(this._currentLabels)
+		if (this._currentLabels)
 			return this._currentLabels;
-		const labels=(<AwayMovieClip>this.adaptee).timeline._labels;
-		const keyframe_firstframes=(<AwayMovieClip>this.adaptee).timeline.keyframe_firstframes;
-		this._currentLabels=[];
-		for(var key in labels){
-			this._currentLabels.push(new (<SecurityDomain>this.sec).flash.display.FrameLabel(labels[key].name, keyframe_firstframes[labels[key].keyFrameIndex]+1));
+		const labels = (<AwayMovieClip> this.adaptee).timeline._labels;
+		const keyframe_firstframes = (<AwayMovieClip> this.adaptee).timeline.keyframe_firstframes;
+		this._currentLabels = [];
+		for (const key in labels) {
+			this._currentLabels.push(new (<SecurityDomain> this.sec).flash.display.FrameLabel(labels[key].name, keyframe_firstframes[labels[key].keyFrameIndex] + 1));
 		}
 		return this._currentLabels;
 	}
-	private _currentLabels:FrameLabel[];
 
+	private _currentLabels: FrameLabel[];
 
 	/**
 	 * The current scene in which the playhead is located in the timeline of the MovieClip instance.
 	 */
 	public get currentScene(): any {
 		//todo
-		console.log("currentScene not implemented yet in flash/MovieClip");
+		console.log('currentScene not implemented yet in flash/MovieClip');
 		return null;
 	}
 
@@ -304,10 +303,11 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * included in automatic tab ordering.
 	 */
 	public get enabled(): boolean {
-		return (<AwayMovieClip>this.adaptee).buttonEnabled;
+		return (<AwayMovieClip> this.adaptee).buttonEnabled;
 	}
+
 	public set enabled(value: boolean) {
-		(<AwayMovieClip>this.adaptee).buttonEnabled=value;
+		(<AwayMovieClip> this.adaptee).buttonEnabled = value;
 	}
 
 	/**
@@ -322,14 +322,14 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 */
 	public get framesLoaded(): number {
 		//todo
-		console.log("framesLoaded not implemented yet in flash/MovieClip");
+		console.log('framesLoaded not implemented yet in flash/MovieClip');
 		return this.totalFrames;
 	}
 
 	public get isPlaying(): boolean {
 		//todo
 		//console.log("isPlaying not implemented yet in flash/MovieClip");
-		return (<AwayMovieClip>this.adaptee).isPlaying;
+		return (<AwayMovieClip> this.adaptee).isPlaying;
 	}
 
 	/**
@@ -338,7 +338,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 */
 	public get scenes(): any[] {
 		//todo
-		console.log("scenes not implemented yet in flash/MovieClip");
+		console.log('scenes not implemented yet in flash/MovieClip');
 		return [];
 	}
 
@@ -349,7 +349,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * the total number of frames in all scenes in the movie clip.
 	 */
 	public get totalFrames(): number {
-		return (<AwayMovieClip>this._adaptee).numFrames;
+		return (<AwayMovieClip> this._adaptee).numFrames;
 	}
 
 	/**
@@ -363,27 +363,28 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 */
 	public get trackAsMenu(): boolean {
 		//todo
-		console.log("trackAsMenu not implemented yet in flash/MovieClip");
+		console.log('trackAsMenu not implemented yet in flash/MovieClip');
 		return false;
 	}
+
 	public set trackAsMenu(value: boolean) {
 		//todo
-		
-		console.log("trackAsMenu not implemented yet in flash/MovieClip");
+
+		console.log('trackAsMenu not implemented yet in flash/MovieClip');
 	}
 
 	public addFrameScript(...args) {
 		// arguments are pairs of frameIndex and script/function
 		// frameIndex is in range 0..totalFrames-1
-		var numArgs = arguments.length;
+		const numArgs = arguments.length;
 		if (numArgs & 1) {
 			this.sec.throwError('ArgumentError TooFewArgumentsError', numArgs,
 				numArgs + 1);
 		}
-		for (var i = 0; i < numArgs; i += 2) {
-			var frameNum = (arguments[i] | 0);
-			var fn = arguments[i + 1];
-			(<AwayMovieClip>this.adaptee).timeline.add_framescript(fn, frameNum, <any>this.adaptee);
+		for (let i = 0; i < numArgs; i += 2) {
+			const frameNum = (arguments[i] | 0);
+			const fn = arguments[i + 1];
+			(<AwayMovieClip> this.adaptee).timeline.add_framescript(fn, frameNum, <any> this.adaptee);
 
 			// newly registered scripts get queued in FrameScriptManager.execute-as3constructor
 			//console.log("add framescript", frameNum, this.adaptee, this.adaptee.parent);
@@ -394,9 +395,8 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			//	FrameScriptManager.add_script_to_queue_pass2(<AwayMovieClip>this.adaptee, [fn]);
 			//}
 
-			
 		}
-		(<any>this).constructorHasRun=true;	
+		(<any> this).constructorHasRun = true;
 	}
 
 	/**
@@ -409,32 +409,31 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 *   jumps to the frame number in the specified scene.
 	 * @param	scene	The name of the scene to play. This parameter is optional.
 	 */
-	public gotoAndPlay(frame: any, scene: string = null, force:boolean=false) {
+	public gotoAndPlay(frame: any, scene: string = null, force: boolean = false) {
 
 		//console.log("MovieClip.current_script_scope", this, MovieClip.current_script_scope);
-		if(!force && MovieClip.current_script_scope==this){
+		if (!force && MovieClip.current_script_scope == this) {
 			this.queuedNavigationAction = ()=>this.gotoAndPlay(frame, scene, true);
 			return;
 		}
 		if (frame == null)
 			return;
 
-
-		if (typeof frame === "string") {
-			if ((<AwayMovieClip>this.adaptee).timeline._labels[frame] == null) {
+		if (typeof frame === 'string') {
+			if ((<AwayMovieClip> this.adaptee).timeline._labels[frame] == null) {
 				frame = parseInt(frame);
 				if (!isNaN(frame)) {
-					(<AwayMovieClip>this.adaptee).currentFrameIndex = (<number>frame) - 1;
-					(<AwayMovieClip>this.adaptee).play();
+					(<AwayMovieClip> this.adaptee).currentFrameIndex = (<number>frame) - 1;
+					(<AwayMovieClip> this.adaptee).play();
 				}
 				return;
 			}
 		}
-		if (typeof frame === "number" && frame <= 0)
+		if (typeof frame === 'number' && frame <= 0)
 			return;
 		this.play();
 		this._gotoFrame(frame);
-		
+
 	}
 
 	/**
@@ -449,35 +448,35 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * @throws	ArgumentError If the scene or frame specified are
 	 *   not found in this movie clip.
 	 */
-	public gotoAndStop(frame: any, scene: string = null, force:boolean=false) {
+	public gotoAndStop(frame: any, scene: string = null, force: boolean = false) {
 
 		//console.log("MovieClip.current_script_scope", this, MovieClip.current_script_scope);
-		if(!force && MovieClip.current_script_scope==this){
-			this.queuedNavigationAction=()=>this.gotoAndStop(frame, scene, true);
+		if (!force && MovieClip.current_script_scope == this) {
+			this.queuedNavigationAction = ()=>this.gotoAndStop(frame, scene, true);
 			return;
 		}
 		// in FP for frame==null, we need to stop the mc
-		if (frame == null){			
+		if (frame == null) {
 			this.stop();
 			return;
 		}
 
-		if (typeof frame === "string") {
-			if ((<AwayMovieClip>this.adaptee).timeline._labels[frame] == null) {
+		if (typeof frame === 'string') {
+			if ((<AwayMovieClip> this.adaptee).timeline._labels[frame] == null) {
 				frame = parseInt(frame);
 				if (!isNaN(frame)) {
-					(<AwayMovieClip>this.adaptee).currentFrameIndex = (<number>frame) - 1;
-					(<AwayMovieClip>this.adaptee).stop();
-				}	
+					(<AwayMovieClip> this.adaptee).currentFrameIndex = (<number>frame) - 1;
+					(<AwayMovieClip> this.adaptee).stop();
+				}
 				//	for FP>10 we should throw a error and stop the timeline
-				if((<any>this.sec).swfVersion > 10){
-					(<AwayMovieClip>this.adaptee).currentFrameIndex = 0;
+				if ((<any> this.sec).swfVersion > 10) {
+					(<AwayMovieClip> this.adaptee).currentFrameIndex = 0;
 				}
 				this.stop();
 				return;
 			}
 		}
-		if (typeof frame === "number" && frame <= 0){
+		if (typeof frame === 'number' && frame <= 0) {
 			this.stop();
 			return;
 		}
@@ -485,45 +484,43 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		this._gotoFrame(frame);
 	}
 
-
 	private _gotoFrame(frame: any): void {
-		let oldFrame=this.currentFrame;
+		const oldFrame = this.currentFrame;
 
-		if (typeof frame === "string") {
-			(<AwayMovieClip>this._adaptee).jumpToLabel(<string>frame);
+		if (typeof frame === 'string') {
+			(<AwayMovieClip> this._adaptee).jumpToLabel(<string>frame);
+		} else if (typeof frame === 'number' && frame <= 0) {} else {
+			(<AwayMovieClip> this._adaptee).currentFrameIndex = (<number>frame) - 1;
 		}
-		else if (typeof frame === "number" && frame <= 0){}
-		else{
-			(<AwayMovieClip>this._adaptee).currentFrameIndex = (<number>frame) - 1;
-		}
-		if(this.currentFrame==oldFrame){
+		if (this.currentFrame == oldFrame) {
 			return;
 		}
 		//console.log("_gotoFrame", this.name);
-		FrameScriptManager.execute_as3_constructors_recursiv(<any>this.adaptee);
-		FrameScriptManager.execute_as3_constructors_finish_scene(<any>this.root.adaptee);
+		FrameScriptManager.execute_as3_constructors_recursiv(<any> this.adaptee);
+		FrameScriptManager.execute_as3_constructors_finish_scene(<any> this.root.adaptee);
 		// only in FP10 and above we want to execute scripts immediatly here
-		if((<any>this.sec).swfVersion > 9){
+		if ((<any> this.sec).swfVersion > 9) {
 			this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
 			FrameScriptManager.execute_queue();
 			this.dispatchStaticBroadCastEvent(Event.EXIT_FRAME);
 		}
 	}
+
 	/**
 	 * Sends the playhead to the next frame and stops it.  This happens after all
 	 * remaining actions in the frame have finished executing.
 	 */
-	public nextFrame(force:boolean=false) {	
-		if(!force && MovieClip.current_script_scope==this){
-			this.queuedNavigationAction=()=>this.nextFrame(true);
+	public nextFrame(force: boolean = false) {
+		if (!force && MovieClip.current_script_scope == this) {
+			this.queuedNavigationAction = ()=>this.nextFrame(true);
 			return;
-		}	
-		(<AwayMovieClip>this._adaptee).stop();
-		++(<AwayMovieClip>this._adaptee).currentFrameIndex;
-		FrameScriptManager.execute_as3_constructors_recursiv(<any>this.adaptee);
-		FrameScriptManager.execute_as3_constructors_finish_scene(<any>this.root.adaptee);
+		}
+		(<AwayMovieClip> this._adaptee).stop();
+		++(<AwayMovieClip> this._adaptee).currentFrameIndex;
+		FrameScriptManager.execute_as3_constructors_recursiv(<any> this.adaptee);
+		FrameScriptManager.execute_as3_constructors_finish_scene(<any> this.root.adaptee);
 		// only in FP10 and above we want to execute scripts immediatly here
-		if((<any>this.sec).swfVersion > 9){
+		if ((<any> this.sec).swfVersion > 9) {
 			this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
 			FrameScriptManager.execute_queue();
 			this.dispatchStaticBroadCastEvent(Event.EXIT_FRAME);
@@ -534,62 +531,62 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * Moves the playhead to the next scene of the MovieClip instance.  This happens after all
 	 * remaining actions in the frame have finished executing.
 	 */
-	public nextScene(force:boolean=false) {
-		if(!force && MovieClip.current_script_scope==this){
-			this.queuedNavigationAction=()=>this.nextScene(true);
+	public nextScene(force: boolean = false) {
+		if (!force && MovieClip.current_script_scope == this) {
+			this.queuedNavigationAction = ()=>this.nextScene(true);
 			return;
-		}	
+		}
 		//todo
-		console.log("nextScene not implemented yet in flash/MovieClip");
+		console.log('nextScene not implemented yet in flash/MovieClip');
 	}
 
 	/**
 	 * Moves the playhead in the timeline of the movie clip.
 	 */
 	public play() {
-		return (<AwayMovieClip>this._adaptee).play();
+		return (<AwayMovieClip> this._adaptee).play();
 	}
 
 	/**
 	 * Sends the playhead to the previous frame and stops it.  This happens after all
 	 * remaining actions in the frame have finished executing.
 	 */
-	public prevFrame(force:boolean=false) {
-		if(!force && MovieClip.current_script_scope==this){
-			this.queuedNavigationAction=()=>this.prevFrame(true);
+	public prevFrame(force: boolean = false) {
+		if (!force && MovieClip.current_script_scope == this) {
+			this.queuedNavigationAction = ()=>this.prevFrame(true);
 			return;
-		}	
-		if ((<AwayMovieClip>this._adaptee).currentFrameIndex > 0) {
-			(<AwayMovieClip>this._adaptee).currentFrameIndex = (<AwayMovieClip>this._adaptee).currentFrameIndex - 1;
 		}
-		FrameScriptManager.execute_as3_constructors_recursiv(<any>this.adaptee);
-		FrameScriptManager.execute_as3_constructors_finish_scene(<any>this.root.adaptee);
+		if ((<AwayMovieClip> this._adaptee).currentFrameIndex > 0) {
+			(<AwayMovieClip> this._adaptee).currentFrameIndex = (<AwayMovieClip> this._adaptee).currentFrameIndex - 1;
+		}
+		FrameScriptManager.execute_as3_constructors_recursiv(<any> this.adaptee);
+		FrameScriptManager.execute_as3_constructors_finish_scene(<any> this.root.adaptee);
 		// only in FP10 and above we want to execute scripts immediatly here
-		if((<any>this.sec).swfVersion > 9){
+		if ((<any> this.sec).swfVersion > 9) {
 			this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
 			FrameScriptManager.execute_queue();
 			this.dispatchStaticBroadCastEvent(Event.EXIT_FRAME);
-		}	
+		}
 	}
 
 	/**
 	 * Moves the playhead to the previous scene of the MovieClip instance.  This happens after all
 	 * remaining actions in the frame have finished executing.
 	 */
-	public prevScene(force:boolean=false) {
-		if(!force && MovieClip.current_script_scope==this){
-			this.queuedNavigationAction=()=>this.prevScene(true);
+	public prevScene(force: boolean = false) {
+		if (!force && MovieClip.current_script_scope == this) {
+			this.queuedNavigationAction = ()=>this.prevScene(true);
 			return;
-		}	
+		}
 		//todo
-		console.log("prevScene not implemented yet in flash/MovieClip");
+		console.log('prevScene not implemented yet in flash/MovieClip');
 	}
 
 	/**
 	 * Stops the playhead in the movie clip.
 	 */
 	public stop() {
-		return (<AwayMovieClip>this._adaptee).stop();
+		return (<AwayMovieClip> this._adaptee).stop();
 	}
 
 }

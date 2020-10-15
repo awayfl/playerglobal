@@ -1,4 +1,4 @@
-import { ASObject } from "../../avm2/nat";
+import { ASObject } from '../../avm2/nat';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -18,16 +18,16 @@ import { ASObject } from "../../avm2/nat";
 // Class: SoftKeyboardTrigger
 export class SoftKeyboardTrigger extends ASObject {
 
-  static classInitializer: any = null;
+	static classInitializer: any = null;
 
-  static classSymbols: string [] = null;
-  static instanceSymbols: string [] = null;
+	static classSymbols: string [] = null;
+	static instanceSymbols: string [] = null;
 
-  constructor() {
-    super();
-  }
+	constructor() {
+		super();
+	}
 
-  // JS -> AS Bindings
-  static CONTENT_TRIGGERED: string = "contentTriggered";
-  static USER_TRIGGERED: string = "userTriggered";
+	// JS -> AS Bindings
+	static CONTENT_TRIGGERED: string = 'contentTriggered';
+	static USER_TRIGGERED: string = 'userTriggered';
 }

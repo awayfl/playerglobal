@@ -1,4 +1,4 @@
 export class Linear {
 
-	public static easeNone:String="none";
+	public static easeNone: String='none';
 }

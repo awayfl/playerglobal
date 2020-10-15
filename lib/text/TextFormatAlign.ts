@@ -1,1 +1,1 @@
-export {TextFormatAlign} from "@awayjs/scene";
+export { TextFormatAlign } from '@awayjs/scene';

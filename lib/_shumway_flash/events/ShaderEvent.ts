@@ -1,6 +1,6 @@
-import { Event } from "./Event";
-import { BitmapData } from "../display/BitmapData";
-import { ByteArray } from "../../avm2/natives/byteArray";
+import { Event } from './Event';
+import { BitmapData } from '../display/BitmapData';
+import { ByteArray } from '../../avm2/natives/byteArray';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -20,17 +20,17 @@ import { ByteArray } from "../../avm2/natives/byteArray";
 // Class: ShaderEvent
 export class ShaderEvent extends Event {
 
-  static classInitializer: any = null;
+	static classInitializer: any = null;
 
-  static classSymbols: string [] = null;
-  static instanceSymbols: string [] = null;
+	static classSymbols: string [] = null;
+	static instanceSymbols: string [] = null;
 
-  constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-              bitmap: BitmapData = null, array: ByteArray = null,
-              vector: ASVector<any> = null) {
-    super(type, bubbles, cancelable);
-  }
+	constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		bitmap: BitmapData = null, array: ByteArray = null,
+		vector: ASVector<any> = null) {
+		super(type, bubbles, cancelable);
+	}
 
-  // JS -> AS Bindings
-  static COMPLETE: string = "complete";
+	// JS -> AS Bindings
+	static COMPLETE: string = 'complete';
 }

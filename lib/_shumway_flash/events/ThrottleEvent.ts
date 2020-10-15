@@ -1,6 +1,6 @@
-import { axCoerceString } from "@awayjs/graphics";
+import { axCoerceString } from '@awayjs/graphics';
 
-import { Event } from "./Event";
+import { Event } from './Event';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -20,21 +20,21 @@ import { Event } from "./Event";
 // Class: ThrottleEvent
 export class ThrottleEvent extends Event {
 
-  static classInitializer: any = null;
+	static classInitializer: any = null;
 
-  static classSymbols: string [] = null;
-  static instanceSymbols: string [] = null;
+	static classSymbols: string [] = null;
+	static instanceSymbols: string [] = null;
 
-  state: string;
-  targetFrameRate: number;
+	state: string;
+	targetFrameRate: number;
 
-  constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-              state: string = null, targetFrameRate: number = 0) {
-    super(type, bubbles, cancelable);
-    this.state = axCoerceString(state);
-    this.targetFrameRate = +targetFrameRate;
-  }
+	constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		state: string = null, targetFrameRate: number = 0) {
+		super(type, bubbles, cancelable);
+		this.state = axCoerceString(state);
+		this.targetFrameRate = +targetFrameRate;
+	}
 
-  // JS -> AS Bindings
-  static THROTTLE: string = "throttle";
+	// JS -> AS Bindings
+	static THROTTLE: string = 'throttle';
 }

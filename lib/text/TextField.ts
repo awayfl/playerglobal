@@ -1,13 +1,13 @@
 
-import {InteractiveObject} from "../display/InteractiveObject";
-import { TextFormat } from "./TextFormat";
-import { TextEvent } from "../events/TextEvent";
-import { Event } from "../events/Event";
-import { StyleSheet } from "./StyleSheet";
-import {Rectangle} from "../geom/Rectangle";
-import { TextLineMetrics } from "./TextLineMetrics";
-import {DisplayObject} from "../display/DisplayObject";
-import {DisplayObject as AwayDisplayObject, TextField as AwayTextField, TextFormat as AwayTexFormat, TextFieldAutoSize, TextFormatAlign, FrameScriptManager, TextFieldType} from "@awayjs/scene";
+import { InteractiveObject } from '../display/InteractiveObject';
+import { TextFormat } from './TextFormat';
+import { TextEvent } from '../events/TextEvent';
+import { Event } from '../events/Event';
+import { StyleSheet } from './StyleSheet';
+import { Rectangle } from '../geom/Rectangle';
+import { TextLineMetrics } from './TextLineMetrics';
+import { DisplayObject } from '../display/DisplayObject';
+import { DisplayObject as AwayDisplayObject, TextField as AwayTextField, TextFormat as AwayTexFormat, TextFieldAutoSize, TextFormatAlign, FrameScriptManager, TextFieldType } from '@awayjs/scene';
 import { constructClassFromSymbol } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 /**
@@ -52,14 +52,12 @@ import { SecurityDomain } from '../SecurityDomain';
  * embedded media in the same way that a web browser wraps text around media embedded in an HTML document. </p><p class="- topic/p ">Flash Player supports a subset of HTML tags that you can use to format text. See the list of supported
  * HTML tags in the description of the <codeph class="+ topic/ph pr-d/codeph ">htmlText</codeph> property.</p>
  */
-export class TextField extends InteractiveObject
-{
-	private static _textFields:Array<TextField> = new Array<TextField>();
+export class TextField extends InteractiveObject {
+	private static _textFields: Array<TextField> = new Array<TextField>();
 
-	public static getNewTextField(adaptee:AwayTextField = null):TextField
-	{
+	public static getNewTextField(adaptee: AwayTextField = null): TextField {
 		if (TextField._textFields.length) {
-			var textField:TextField = TextField._textFields.pop();
+			const textField: TextField = TextField._textFields.pop();
 			textField.adaptee = adaptee || AwayTextField.getNewTextField();
 			return textField;
 		}
@@ -73,53 +71,53 @@ export class TextField extends InteractiveObject
 	 * DisplayObjectContainer object to add the TextField instance to the display list.
 	 * The default size for a text field is 100 x 100 pixels.
 	 */
-	constructor (){
+	constructor () {
 		super();
-		(<AwayTextField>this.adaptee).autoSize=TextFieldAutoSize.NONE;
+		(<AwayTextField> this.adaptee).autoSize = TextFieldAutoSize.NONE;
 		//(<AwayTextField> this._adaptee).width=100;//80pro!
 		// register all events for Textfield as dummys right now
 
-		this.eventMappingDummys[TextEvent.TEXT_INPUT]="TextField:TextEvent.TEXT_INPUT";
-		this.eventMappingDummys[TextEvent.LINK]="TextField:TextEvent.LINK";
-		this.eventMappingDummys[Event.SCROLL]="TextField:Event.SCROLL";
-		this.eventMappingDummys[Event.CHANGE]="TextField:Event.CHANGE";
-		this.eventMappingDummys[Event.TEXT_INTERACTION_MODE_CHANGE]="TextField:Event.TEXT_INTERACTION_MODE_CHANGE";
-
-
+		this.eventMappingDummys[TextEvent.TEXT_INPUT] = 'TextField:TextEvent.TEXT_INPUT';
+		this.eventMappingDummys[TextEvent.LINK] = 'TextField:TextEvent.LINK';
+		this.eventMappingDummys[Event.SCROLL] = 'TextField:Event.SCROLL';
+		this.eventMappingDummys[Event.CHANGE] = 'TextField:Event.CHANGE';
+		this.eventMappingDummys[Event.TEXT_INTERACTION_MODE_CHANGE] = 'TextField:Event.TEXT_INTERACTION_MODE_CHANGE';
 
 	}
-	protected createAdaptee():AwayDisplayObject{
-		var newAdaptee= AwayTextField.getNewTextField();
+
+	protected createAdaptee(): AwayDisplayObject {
+		const newAdaptee = AwayTextField.getNewTextField();
 		newAdaptee.reset();
 		return newAdaptee;
 	}
+
 	public initAdapter(): void {}
-	public dispatchKeyEvent(charCode, isShift, isCTRL, isAlt){
+	public dispatchKeyEvent(charCode, isShift, isCTRL, isAlt) {
 
 	}
-	public selectTextField(){
+
+	public selectTextField() {
 
 	}
-	public clone():TextField
-	{
-		var clone:TextField=constructClassFromSymbol((<any>this)._symbol, (<any>this)._symbol.symbolClass);
+
+	public clone(): TextField {
+		const clone: TextField = constructClassFromSymbol((<any> this)._symbol, (<any> this)._symbol.symbolClass);
 		//var clone:TextField = new (<SecurityDomain> this.sec).flash.text.TextField();
-		var newText:AwayTextField=new AwayTextField();
+		const newText: AwayTextField = new AwayTextField();
 		this.adaptee.copyTo(newText);
-		clone.adaptee=newText;
+		clone.adaptee = newText;
 		clone._stage = this.activeStage;
-		(<any>clone).executeConstructor=()=>{
+		(<any>clone).executeConstructor = ()=>{
 			(<any>clone).axInitializer();
-		}
+		};
 
 		return clone;
 	}
-	
+
 	/**
 	 * @inheritDoc
 	 */
-	public dispose():void
-	{
+	public dispose(): void {
 		this.disposeValues();
 
 		TextField._textFields.push(this);
@@ -130,14 +128,12 @@ export class TextField extends InteractiveObject
 	 * selection in the text field in gray. When set to false and the text field is not in
 	 * focus, Flash Player does not highlight the selection in the text field.
 	 */
-	public get alwaysShowSelection () : boolean
-	{
+	public get alwaysShowSelection (): boolean {
 		return (<AwayTextField> this._adaptee).alwaysShowSelection;
 	}
 
-	public set alwaysShowSelection (value:boolean)
-	{
-		(<AwayTextField> this._adaptee).alwaysShowSelection=value;
+	public set alwaysShowSelection (value: boolean) {
+		(<AwayTextField> this._adaptee).alwaysShowSelection = value;
 	}
 
 	/**
@@ -153,10 +149,11 @@ export class TextField extends InteractiveObject
 	 * with a lot of small text. Advanced anti-aliasing is not recommended for
 	 * fonts that are larger than 48 points.
 	 */
-	public get antiAliasType () : string{
-		return "";//(<AwayTextField> this._adaptee).antiAliasType;
+	public get antiAliasType (): string {
+		return '';//(<AwayTextField> this._adaptee).antiAliasType;
 	}
-	public set antiAliasType (antiAliasType:string){
+
+	public set antiAliasType (antiAliasType: string) {
 		//(<AwayTextField> this._adaptee).antiAliasType=value;
 	}
 
@@ -183,11 +180,12 @@ export class TextField extends InteractiveObject
 	 * right sides remain fixed.
 	 * @throws	ArgumentError The autoSize specified is not a member of flash.text.TextFieldAutoSize.
 	 */
-	public get autoSize () : string{
+	public get autoSize (): string {
 		return (<AwayTextField> this._adaptee).autoSize;
 	}
-	public set autoSize (value:string){
-		(<AwayTextField> this._adaptee).autoSize=value;
+
+	public set autoSize (value: string) {
+		(<AwayTextField> this._adaptee).autoSize = value;
 	}
 
 	/**
@@ -195,11 +193,12 @@ export class TextField extends InteractiveObject
 	 * background fill. If false, the text field has no background fill.
 	 * Use the backgroundColor property to set the background color of a text field.
 	 */
-	public get background () : boolean{
+	public get background (): boolean {
 		return (<AwayTextField> this._adaptee).background;
 	}
-	public set background (value:boolean){
-		(<AwayTextField> this._adaptee).background=value;
+
+	public set background (value: boolean) {
+		(<AwayTextField> this._adaptee).background = value;
 	}
 
 	/**
@@ -208,11 +207,12 @@ export class TextField extends InteractiveObject
 	 * color is visible only if the text field has the background property set to
 	 * true.
 	 */
-	public get backgroundColor () : number{
+	public get backgroundColor (): number {
 		return (<AwayTextField> this._adaptee).backgroundColor;
 	}
-	public set backgroundColor (value:number){
-		(<AwayTextField> this._adaptee).backgroundColor=value;
+
+	public set backgroundColor (value: number) {
+		(<AwayTextField> this._adaptee).backgroundColor = value;
 	}
 
 	/**
@@ -220,11 +220,12 @@ export class TextField extends InteractiveObject
 	 * If false, the text field has no border. Use the borderColor property
 	 * to set the border color.
 	 */
-	public get border () : boolean{
+	public get border (): boolean {
 		return (<AwayTextField> this._adaptee).border;
 	}
-	public set border (value:boolean){
-		(<AwayTextField> this._adaptee).border=value;
+
+	public set border (value: boolean) {
+		(<AwayTextField> this._adaptee).border = value;
 	}
 
 	/**
@@ -233,11 +234,12 @@ export class TextField extends InteractiveObject
 	 * color is visible only if the text field has the border property set to
 	 * true.
 	 */
-	public get borderColor () : number{
+	public get borderColor (): number {
 		return (<AwayTextField> this._adaptee).borderColor;
 	}
-	public set borderColor (value:number){
-		(<AwayTextField> this._adaptee).borderColor=value;
+
+	public set borderColor (value: number) {
+		(<AwayTextField> this._adaptee).borderColor = value;
 	}
 
 	/**
@@ -249,9 +251,9 @@ export class TextField extends InteractiveObject
 	 *   All the text between the lines indicated by scrollV and bottomScrollV
 	 * is currently visible in the text field.
 	 */
-	public get bottomScrollV () : number{
+	public get bottomScrollV (): number {
 		//todo
-		throw("bottomScrollV not implemented yet in flash/TextField");
+		throw ('bottomScrollV not implemented yet in flash/TextField');
 	}
 
 	/**
@@ -262,9 +264,9 @@ export class TextField extends InteractiveObject
 	 *   Selection span indexes are zero-based (for example, the first position is 0,
 	 * the second position is 1, and so on).
 	 */
-	public get caretIndex () : number{
+	public get caretIndex (): number {
 		//todo
-		throw("caretIndex not implemented yet in flash/TextField");
+		throw ('caretIndex not implemented yet in flash/TextField');
 	}
 
 	/**
@@ -277,13 +279,14 @@ export class TextField extends InteractiveObject
 	 *   If condenseWhite is set to true, use standard HTML commands such as
 	 * <BR> and <P> to place line breaks in the text field.Set the condenseWhite property before setting the htmlText property.
 	 */
-	public get condenseWhite () : boolean{
+	public get condenseWhite (): boolean {
 		//todo
-		throw("condenseWhite not implemented yet in flash/TextField");
+		throw ('condenseWhite not implemented yet in flash/TextField');
 	}
-	public set condenseWhite (value:boolean){
+
+	public set condenseWhite (value: boolean) {
 		//todo
-		throw("condenseWhite not implemented yet in flash/TextField");
+		throw ('condenseWhite not implemented yet in flash/TextField');
 	}
 
 	/**
@@ -305,16 +308,16 @@ export class TextField extends InteractiveObject
 	 * of its properties defined. No property is null.Note: You can't set this property if a style sheet is applied to the text field.
 	 * @throws	Error This method cannot be used on a text field with a style sheet.
 	 */
-	public get defaultTextFormat () : TextFormat{
+	public get defaultTextFormat (): TextFormat {
 		const tf: AwayTexFormat = (<AwayTextField> this._adaptee).textFormat;
-		if(tf.adapter || tf.adapter === tf.adaptee) {
-			tf.adapter = new (<any>this.sec).flash.text.TextFormat();
+		if (tf.adapter || tf.adapter === tf.adaptee) {
+			tf.adapter = new (<any> this.sec).flash.text.TextFormat();
 			tf.adapter.adaptee = tf;
 		}
 		return <TextFormat><any>tf.adapter;
 	}
 
-	public set defaultTextFormat (format:TextFormat){
+	public set defaultTextFormat (format: TextFormat) {
 		//console.log("todo TextFormat");
 		(<AwayTextField> this._adaptee).textFormat = format.adaptee;
 	}
@@ -327,11 +330,12 @@ export class TextField extends InteractiveObject
 	 * not function.  This security mechanism prevents an unscrupulous user from using the shortcuts to discover
 	 * a password on an unattended computer.
 	 */
-	public get displayAsPassword () : boolean{
+	public get displayAsPassword (): boolean {
 		return (<AwayTextField> this._adaptee).displayAsPassword;
 	}
-	public set displayAsPassword (value:boolean){
-		(<AwayTextField> this._adaptee).displayAsPassword=value;
+
+	public set displayAsPassword (value: boolean) {
+		(<AwayTextField> this._adaptee).displayAsPassword = value;
 	}
 
 	/**
@@ -344,12 +348,13 @@ export class TextField extends InteractiveObject
 	 * a TextFormat object applied to the text field.
 	 * If the specified font is not embedded in the SWF file, the text is not displayed.
 	 */
-	public get embedFonts () : boolean{
+	public get embedFonts (): boolean {
 		//todo
 		//console.log("embedFonts not implemented yet in flash/TextField");
 		return false;
 	}
-	public set embedFonts (value:boolean){
+
+	public set embedFonts (value: boolean) {
 		//todo
 		//console.log("embedFonts not implemented yet in flash/TextField");
 	}
@@ -373,12 +378,13 @@ export class TextField extends InteractiveObject
 	 * for right-aligned or centered
 	 * dynamic text, and it is sometimes a useful trade-off for animation versus text quality.
 	 */
-	public get gridFitType () : string{
+	public get gridFitType (): string {
 		//todo
-		return "";
+		return '';
 		//throw("gridFitType not implemented yet in flash/TextField");
 	}
-	public set gridFitType (gridFitType:string){
+
+	public set gridFitType (gridFitType: string) {
 		//todo
 		//throw("gridFitType not implemented yet in flash/TextField");
 	}
@@ -550,18 +556,19 @@ export class TextField extends InteractiveObject
 	 *   Flash Player and AIR also support explicit character codes, such as
 	 * &#38; (ASCII ampersand) and &#x20AC; (Unicode € symbol).
 	 */
-	public get htmlText () : string{
-		return (<AwayTextField>this.adaptee).htmlText;
+	public get htmlText (): string {
+		return (<AwayTextField> this.adaptee).htmlText;
 	}
-	public set htmlText (value:string){
-		(<AwayTextField>this.adaptee).htmlText=value;
+
+	public set htmlText (value: string) {
+		(<AwayTextField> this.adaptee).htmlText = value;
 	}
 
 	/**
 	 * The number of characters in a text field. A character such as tab (\t) counts as one
 	 * character.
 	 */
-	public get length () : number{
+	public get length (): number {
 		//todo
 		return (<AwayTextField> this._adaptee).length;
 	}
@@ -572,25 +579,26 @@ export class TextField extends InteractiveObject
 	 * indicates only how much text a user can enter. If the value of this property is 0,
 	 * a user can enter an unlimited amount of text.
 	 */
-	public get maxChars () : number{
-		return (<AwayTextField>this.adaptee).maxChars;
+	public get maxChars (): number {
+		return (<AwayTextField> this.adaptee).maxChars;
 	}
-	public set maxChars (value:number){
-		(<AwayTextField>this.adaptee).maxChars = value;
+
+	public set maxChars (value: number) {
+		(<AwayTextField> this.adaptee).maxChars = value;
 	}
 
 	/**
 	 * The maximum value of scrollH.
 	 */
-	public get maxScrollH () : number{
-		return (<AwayTextField>this.adaptee).maxScrollH;
+	public get maxScrollH (): number {
+		return (<AwayTextField> this.adaptee).maxScrollH;
 	}
 
 	/**
 	 * The maximum value of scrollV.
 	 */
-	public get maxScrollV () : number{
-		return (<AwayTextField>this.adaptee).maxScrollV+1;
+	public get maxScrollV (): number {
+		return (<AwayTextField> this.adaptee).maxScrollV + 1;
 	}
 
 	/**
@@ -599,11 +607,12 @@ export class TextField extends InteractiveObject
 	 * By default, this value is true. This property is useful if you want to prevent
 	 * mouse wheel scrolling of text fields, or implement your own text field scrolling.
 	 */
-	public get mouseWheelEnabled () : boolean{
-		return (<AwayTextField>this.adaptee).mouseWheelEnabled;
+	public get mouseWheelEnabled (): boolean {
+		return (<AwayTextField> this.adaptee).mouseWheelEnabled;
 	}
-	public set mouseWheelEnabled (value:boolean){
-		(<AwayTextField>this.adaptee).mouseWheelEnabled = value;
+
+	public set mouseWheelEnabled (value: boolean) {
+		(<AwayTextField> this.adaptee).mouseWheelEnabled = value;
 	}
 
 	/**
@@ -615,11 +624,12 @@ export class TextField extends InteractiveObject
 	 * If you paste text into a TextField with a multiline value of false,
 	 * newlines are stripped out of the text.
 	 */
-	public get multiline () : boolean{
+	public get multiline (): boolean {
 		return (<AwayTextField> this._adaptee).multiline;
 	}
-	public set multiline (value:boolean){
-		(<AwayTextField> this._adaptee).multiline=value;
+
+	public set multiline (value: boolean) {
+		(<AwayTextField> this._adaptee).multiline = value;
 	}
 
 	/**
@@ -627,7 +637,7 @@ export class TextField extends InteractiveObject
 	 * If wordWrap property is set to true,
 	 * the number of lines increases when text wraps.
 	 */
-	public get numLines () : number{
+	public get numLines (): number {
 		return (<AwayTextField> this._adaptee).numLines;
 	}
 
@@ -658,11 +668,12 @@ export class TextField extends InteractiveObject
 	 * The following code includes only the characters from ASCII 32 (space) to ASCII 126 (tilde).
 	 * my_txt.restrict = "\u0020-\u007E";
 	 */
-	public get restrict () : string{
-		return (<AwayTextField>this.adaptee).restrict;
+	public get restrict (): string {
+		return (<AwayTextField> this.adaptee).restrict;
 	}
-	public set restrict (value:string){
-		(<AwayTextField>this.adaptee).restrict=value;
+
+	public set restrict (value: string) {
+		(<AwayTextField> this.adaptee).restrict = value;
 	}
 
 	/**
@@ -678,11 +689,12 @@ export class TextField extends InteractiveObject
 	 * the largest font in use.Note: The scrollH property is zero-based, not 1-based like
 	 * the scrollV vertical scrolling property.
 	 */
-	public get scrollH () : number{
-		return (<AwayTextField>this.adaptee).scrollH;
+	public get scrollH (): number {
+		return (<AwayTextField> this.adaptee).scrollH;
 	}
-	public set scrollH (value:number){
-		(<AwayTextField>this.adaptee).scrollH=value;
+
+	public set scrollH (value: number) {
+		(<AwayTextField> this.adaptee).scrollH = value;
 	}
 
 	/**
@@ -697,11 +709,12 @@ export class TextField extends InteractiveObject
 	 * Even if there are multiple fonts on a line, the height of the line adjusts to fit the largest font in
 	 * use.
 	 */
-	public get scrollV () : number{
-		return (<AwayTextField>this.adaptee).scrollV+1;
+	public get scrollV (): number {
+		return (<AwayTextField> this.adaptee).scrollV + 1;
 	}
-	public set scrollV (value:number){
-		(<AwayTextField>this.adaptee).scrollV=value-1;
+
+	public set scrollV (value: number) {
+		(<AwayTextField> this.adaptee).scrollV = value - 1;
 	}
 
 	/**
@@ -717,17 +730,18 @@ export class TextField extends InteractiveObject
 	 * can be selected with the mouse or keyboard, and the text can be copied with the Copy command.
 	 * You can select text this way even if the text field is a dynamic text field instead of an input text field.
 	 */
-	public get selectable () : boolean{
-		return (<AwayTextField>this.adaptee).selectable;
-	}
-	public set selectable (value:boolean){
-		(<AwayTextField> this._adaptee).selectable=value;
+	public get selectable (): boolean {
+		return (<AwayTextField> this.adaptee).selectable;
 	}
 
-	public get selectedText () : string{
+	public set selectable (value: boolean) {
+		(<AwayTextField> this._adaptee).selectable = value;
+	}
+
+	public get selectedText (): string {
 		//todo
-		console.log("selectedText not implemented yet in flash/TextField");
-		return "";
+		console.log('selectedText not implemented yet in flash/TextField');
+		return '';
 	}
 
 	/**
@@ -735,8 +749,8 @@ export class TextField extends InteractiveObject
 	 * For example, the first character is 0, the second character is 1, and so on. If no
 	 * text is selected, this property is the value of caretIndex.
 	 */
-	public get selectionBeginIndex () : number{
-		return (<AwayTextField>this.adaptee).selectionBeginIndex;
+	public get selectionBeginIndex (): number {
+		return (<AwayTextField> this.adaptee).selectionBeginIndex;
 	}
 
 	/**
@@ -744,8 +758,8 @@ export class TextField extends InteractiveObject
 	 * For example, the first character is 0, the second character is 1, and so on. If no
 	 * text is selected, this property is the value of caretIndex.
 	 */
-	public get selectionEndIndex () : number{
-		return (<AwayTextField>this.adaptee).selectionEndIndex;
+	public get selectionEndIndex (): number {
+		return (<AwayTextField> this.adaptee).selectionEndIndex;
 	}
 
 	/**
@@ -756,14 +770,15 @@ export class TextField extends InteractiveObject
 	 * sharpness to a value outside that range, Flash sets the property to
 	 * the nearest value in the range (either -400 or 400).
 	 */
-	public get sharpness () : number{
+	public get sharpness (): number {
 		//todo
-		console.log("sharpness not implemented yet in flash/TextField");
+		console.log('sharpness not implemented yet in flash/TextField');
 		return 0;
 	}
-	public set sharpness (value:number){
+
+	public set sharpness (value: number) {
 		//todo
-		console.log("sharpness not implemented yet in flash/TextField");
+		console.log('sharpness not implemented yet in flash/TextField');
 	}
 
 	/**
@@ -778,14 +793,15 @@ export class TextField extends InteractiveObject
 	 * the original TextField.htmlText contents without the formatting, save the value in a variable before
 	 * removing the style sheet.
 	 */
-	public get styleSheet () : StyleSheet{
+	public get styleSheet (): StyleSheet {
 		//todo
-		console.log("styleSheet not implemented yet in flash/TextField");
+		console.log('styleSheet not implemented yet in flash/TextField');
 		return null;
 	}
-	public set styleSheet (value:StyleSheet){
+
+	public set styleSheet (value: StyleSheet) {
 		//todo
-		console.log("styleSheet not implemented yet in flash/TextField");
+		console.log('styleSheet not implemented yet in flash/TextField');
 	}
 
 	/**
@@ -795,11 +811,12 @@ export class TextField extends InteractiveObject
 	 *
 	 *   To get the text in HTML form, use the htmlText property.
 	 */
-	public get text () : string{
+	public get text (): string {
 		return (<AwayTextField> this._adaptee).text;
 	}
-	public set text (value:string){
-		(<AwayTextField> this._adaptee).text=value;
+
+	public set text (value: string) {
+		(<AwayTextField> this._adaptee).text = value;
 	}
 
 	/**
@@ -809,17 +826,18 @@ export class TextField extends InteractiveObject
 	 * 0-9 and then A-F. For example, black is 0x000000; white is
 	 * 0xFFFFFF.
 	 */
-	public get textColor () : number{
+	public get textColor (): number {
 		return (<AwayTextField> this._adaptee).textColor;
 	}
-	public set textColor (value:number){
-		(<AwayTextField> this._adaptee).textColor=value;
+
+	public set textColor (value: number) {
+		(<AwayTextField> this._adaptee).textColor = value;
 	}
 
 	/**
 	 * The height of the text in pixels.
 	 */
-	public get textHeight () : number{
+	public get textHeight (): number {
 		return (<AwayTextField> this._adaptee).textHeight;
 	}
 
@@ -829,16 +847,16 @@ export class TextField extends InteractiveObject
 	 * One can switch to the selectable mode through the in-built context menu on the text field.
 	 * On Desktop, the normal mode implies that the text is in scrollable as well as selection mode.
 	 */
-	public get textInteractionMode () : string{
+	public get textInteractionMode (): string {
 		//todo
-		console.log("textInteractionMode not implemented yet in flash/TextField");
-		return "";
+		console.log('textInteractionMode not implemented yet in flash/TextField');
+		return '';
 	}
 
 	/**
 	 * The width of the text in pixels.
 	 */
-	public get textWidth () : number{
+	public get textWidth (): number {
 		return (<AwayTextField> this._adaptee).textWidth;
 	}
 
@@ -850,14 +868,15 @@ export class TextField extends InteractiveObject
 	 * set thickness to a value outside that range, the property is set to the
 	 * nearest value in the range (either -200 or 200).
 	 */
-	public get thickness () : number{
+	public get thickness (): number {
 		//todo
-		console.log("thickness not implemented yet in flash/TextField");
+		console.log('thickness not implemented yet in flash/TextField');
 		return 0;
 	}
-	public set thickness (value:number){
+
+	public set thickness (value: number) {
 		//todo
-		console.log("thickness not implemented yet in flash/TextField");
+		console.log('thickness not implemented yet in flash/TextField');
 	}
 
 	/**
@@ -867,10 +886,11 @@ export class TextField extends InteractiveObject
 	 * which specifies an input text field, which a user can edit.
 	 * @throws	ArgumentError The type specified is not a member of flash.text.TextFieldType.
 	 */
-	public get type () : TextFieldType{
+	public get type (): TextFieldType {
 		return (<AwayTextField> this._adaptee).type;
 	}
-	public set type (value:TextFieldType){
+
+	public set type (value: TextFieldType) {
 		(<AwayTextField> this._adaptee).type = value;
 	}
 
@@ -880,14 +900,15 @@ export class TextField extends InteractiveObject
 	 * useRichTextClipboard set to true. The default value
 	 * is false.
 	 */
-	public get useRichTextClipboard () : boolean{
+	public get useRichTextClipboard (): boolean {
 		//todo
-		console.log("useRichTextClipboard not implemented yet in flash/TextField");
+		console.log('useRichTextClipboard not implemented yet in flash/TextField');
 		return false;
 	}
-	public set useRichTextClipboard (value:boolean){
+
+	public set useRichTextClipboard (value: boolean) {
 		//todo
-		console.log("useRichTextClipboard not implemented yet in flash/TextField");
+		console.log('useRichTextClipboard not implemented yet in flash/TextField');
 	}
 
 	/**
@@ -896,11 +917,12 @@ export class TextField extends InteractiveObject
 	 * if the value is false, the text field does not have word wrap. The default
 	 * value is false.
 	 */
-	public get wordWrap () : boolean{
+	public get wordWrap (): boolean {
 		return (<AwayTextField> this._adaptee).wordWrap;
 	}
-	public set wordWrap (value:boolean){
-		(<AwayTextField> this._adaptee).wordWrap=value;
+
+	public set wordWrap (value: boolean) {
+		(<AwayTextField> this._adaptee).wordWrap = value;
 	}
 
 	/**
@@ -910,14 +932,14 @@ export class TextField extends InteractiveObject
 	 * particularly for a text field that contains a significant amount of content.
 	 * @param	newText	The string to append to the existing text.
 	 */
-	public appendText (newText:string) {
+	public appendText (newText: string) {
 		(<AwayTextField> this._adaptee).appendText(newText);
 	}
 
-	public copyRichText () : string{
+	public copyRichText (): string {
 		//todo
-		console.log("copyRichText not implemented yet in flash/TextField");
-		return "";
+		console.log('copyRichText not implemented yet in flash/TextField');
+		return '';
 	}
 
 	/**
@@ -927,9 +949,9 @@ export class TextField extends InteractiveObject
 	 * @return	A rectangle with x and y minimum and maximum values
 	 *   defining the bounding box of the character.
 	 */
-	public getCharBoundaries (charIndex:number) : Rectangle{
+	public getCharBoundaries (charIndex: number): Rectangle {
 		//todo
-		console.log("getCharBoundaries not implemented yet in flash/TextField");
+		console.log('getCharBoundaries not implemented yet in flash/TextField');
 		return null;
 	}
 
@@ -941,7 +963,7 @@ export class TextField extends InteractiveObject
 	 * @return	The zero-based index value of the character (for example, the first position is 0,
 	 *   the second position is 1, and so on).  Returns -1 if the point is not over any character.
 	 */
-	public getCharIndexAtPoint (x:number, y:number) : number{
+	public getCharIndexAtPoint (x: number, y: number): number {
 		return (<AwayTextField> this._adaptee).getCharIndexAtPoint(x, y);
 	}
 
@@ -952,7 +974,7 @@ export class TextField extends InteractiveObject
 	 * @return	The zero-based index value of the first character in the same paragraph.
 	 * @throws	RangeError The character index specified is out of range.
 	 */
-	public getFirstCharInParagraph (charIndex:number) : number{
+	public getFirstCharInParagraph (charIndex: number): number {
 		return (<AwayTextField> this._adaptee).getFirstCharInParagraph(charIndex);
 	}
 
@@ -970,9 +992,9 @@ export class TextField extends InteractiveObject
 	 *   embedded in the SWF file, it is the loaded object. If no <img> tag with
 	 *   the matching id exists, the method returns null.
 	 */
-	public getImageReference (id:string) : DisplayObject{
+	public getImageReference (id: string): DisplayObject {
 		//todo
-		console.log("getImageReference not implemented yet in flash/TextField");
+		console.log('getImageReference not implemented yet in flash/TextField');
 		return null;
 	}
 
@@ -984,7 +1006,7 @@ export class TextField extends InteractiveObject
 	 * @return	The zero-based index value of the line (for example, the first line is 0, the
 	 *   second line is 1, and so on).  Returns -1 if the point is not over any line.
 	 */
-	public getLineIndexAtPoint (x:number, y:number) : number{
+	public getLineIndexAtPoint (x: number, y: number): number {
 		return (<AwayTextField> this._adaptee).getLineIndexAtPoint(x, y);
 	}
 
@@ -995,7 +1017,7 @@ export class TextField extends InteractiveObject
 	 *   the second character is 1, and so on).
 	 * @return	The zero-based index value of the line.
 	 */
-	public getLineIndexOfChar (charIndex:number) : number{
+	public getLineIndexOfChar (charIndex: number): number {
 		return (<AwayTextField> this._adaptee).getLineIndexOfChar(charIndex);
 	}
 
@@ -1005,7 +1027,7 @@ export class TextField extends InteractiveObject
 	 * @return	The number of characters in the line.
 	 * @throws	RangeError The line number specified is out of range.
 	 */
-	public getLineLength (lineIndex:number) : number{
+	public getLineLength (lineIndex: number): number {
 		return (<AwayTextField> this._adaptee).getLineLength(lineIndex);
 	}
 
@@ -1015,12 +1037,12 @@ export class TextField extends InteractiveObject
 	 * @return	A TextLineMetrics object.
 	 * @throws	RangeError The line number specified is out of range.
 	 */
-	public getLineMetrics (lineIndex:number) : TextLineMetrics {
+	public getLineMetrics (lineIndex: number): TextLineMetrics {
 		const {
 			x, width, height, ascent, descent, leading
-		} = (<AwayTextField>this._adaptee).getLineMetrics(lineIndex);
+		} = (<AwayTextField> this._adaptee).getLineMetrics(lineIndex);
 
-		return new (<SecurityDomain>this.sec).flash.text.TextLineMetrics(x, width, height, ascent, descent, leading);
+		return new (<SecurityDomain> this.sec).flash.text.TextLineMetrics(x, width, height, ascent, descent, leading);
 	}
 
 	/**
@@ -1031,7 +1053,7 @@ export class TextField extends InteractiveObject
 	 * @return	The zero-based index value of the first character in the line.
 	 * @throws	RangeError The line number specified is out of range.
 	 */
-	public getLineOffset (lineIndex:number) : number{
+	public getLineOffset (lineIndex: number): number {
 		return (<AwayTextField> this._adaptee).getLineOffset(lineIndex);
 	}
 
@@ -1042,7 +1064,7 @@ export class TextField extends InteractiveObject
 	 * @return	The text string contained in the specified line.
 	 * @throws	RangeError The line number specified is out of range.
 	 */
-	public getLineText (lineIndex:number) : string{
+	public getLineText (lineIndex: number): string {
 		return (<AwayTextField> this._adaptee).getLineText(lineIndex);
 	}
 
@@ -1055,14 +1077,14 @@ export class TextField extends InteractiveObject
 	 * @return	Returns the number of characters in the paragraph.
 	 * @throws	RangeError The character index specified is out of range.
 	 */
-	public getParagraphLength (charIndex:number) : number{
+	public getParagraphLength (charIndex: number): number {
 		return (<AwayTextField> this._adaptee).getParagraphLength(charIndex);
 	}
 
-	public getRawText () : string{
+	public getRawText (): string {
 		//todo
-		console.log("getRawText not implemented yet in flash/TextField");
-		return "";
+		console.log('getRawText not implemented yet in flash/TextField');
+		return '';
 	}
 
 	/**
@@ -1088,36 +1110,36 @@ export class TextField extends InteractiveObject
 	 * @return	The TextFormat object that represents the formatting properties for the specified text.
 	 * @throws	RangeError The beginIndex or endIndex specified is out of range.
 	 */
-	public getTextFormat (beginIndex:number=-1, endIndex:number=-1) : TextFormat{
+	public getTextFormat (beginIndex: number = -1, endIndex: number = -1): TextFormat {
 		// todo: support multiple formats
-		console.warn("[TextField] getTextFormat not implemented correctly");
+		console.warn('[TextField] getTextFormat not implemented correctly');
 		const awt = (<AwayTextField> this._adaptee).getTextFormat(beginIndex, endIndex);
-		
-		if(awt && awt.adaptee !== awt.adapter) {
+
+		if (awt && awt.adaptee !== awt.adapter) {
 			return <any>awt.adapter;
 		}
 
-		const tf = new (<SecurityDomain>this.sec).flash.text.TextFormat();
+		const tf = new (<SecurityDomain> this.sec).flash.text.TextFormat();
 		tf.adaptee = awt;// || new AwayTexFormat();
 
 		return tf;
 	}
 
-	public getTextRuns (beginIndex:number=0, endIndex:number=2147483647) : any[]{
+	public getTextRuns (beginIndex: number = 0, endIndex: number = 2147483647): any[] {
 		//todo
-		console.log("getTextRuns not implemented yet in flash/TextField");
+		console.log('getTextRuns not implemented yet in flash/TextField');
 		return [];
 	}
 
-	public getXMLText (beginIndex:number=0, endIndex:number=2147483647) : string{
+	public getXMLText (beginIndex: number = 0, endIndex: number = 2147483647): string {
 		//todo
-		console.log("getXMLText not implemented yet in flash/TextField");
-		return "";
+		console.log('getXMLText not implemented yet in flash/TextField');
+		return '';
 	}
 
-	public insertXMLText (beginIndex:number, endIndex:number, richText:string, pasting:boolean=false) {
+	public insertXMLText (beginIndex: number, endIndex: number, richText: string, pasting: boolean = false) {
 		//todo
-		console.log("insertXMLText not implemented yet in flash/TextField");
+		console.log('insertXMLText not implemented yet in flash/TextField');
 	}
 
 	/**
@@ -1137,15 +1159,15 @@ export class TextField extends InteractiveObject
 	 * @return	true if a compatible embedded font is available, otherwise false.
 	 * @throws	ArgumentError The fontStyle specified is not a member of flash.text.FontStyle.
 	 */
-	public static isFontCompatible (fontName:string, fontStyle:string) : boolean{
+	public static isFontCompatible (fontName: string, fontStyle: string): boolean {
 		//todo
-		console.log("isFontCompatible not implemented yet in flash/TextField");
+		console.log('isFontCompatible not implemented yet in flash/TextField');
 		return false;
 	}
 
-	public pasteRichText (richText:string) : boolean{
+	public pasteRichText (richText: string): boolean {
 		//todo
-		console.log("pasteRichText not implemented yet in flash/TextField");
+		console.log('pasteRichText not implemented yet in flash/TextField');
 		return false;
 	}
 
@@ -1159,7 +1181,7 @@ export class TextField extends InteractiveObject
 	 * @param	value	The string to replace the currently selected text.
 	 * @throws	Error This method cannot be used on a text field with a style sheet.
 	 */
-	public replaceSelectedText (value:string) {
+	public replaceSelectedText (value: string) {
 		return (<AwayTextField> this._adaptee).replaceSelectedText(value);
 	}
 
@@ -1175,7 +1197,7 @@ export class TextField extends InteractiveObject
 	 * @param	newText	The text to use to replace the specified range of characters.
 	 * @throws	Error This method cannot be used on a text field with a style sheet.
 	 */
-	public replaceText (beginIndex:number, endIndex:number, newText:string) {
+	public replaceText (beginIndex: number, endIndex: number, newText: string) {
 		return (<AwayTextField> this._adaptee).replaceText(beginIndex, endIndex, newText);
 	}
 
@@ -1190,7 +1212,7 @@ export class TextField extends InteractiveObject
 	 * @param	endIndex	The zero-based index value of the last character in the selection.
 	 * @internal	Need to add an example.
 	 */
-	public setSelection (beginIndex:number, endIndex:number) {
+	public setSelection (beginIndex: number, endIndex: number) {
 		return (<AwayTextField> this._adaptee).setSelection(beginIndex, endIndex);
 	}
 
@@ -1232,10 +1254,9 @@ export class TextField extends InteractiveObject
 	 * @throws	Error This method cannot be used on a text field with a style sheet.
 	 * @throws	RangeError The beginIndex or endIndex specified is out of range.
 	 */
-	public setTextFormat (format:TextFormat, beginIndex:number=-1, endIndex:number=-1) {
+	public setTextFormat (format: TextFormat, beginIndex: number = -1, endIndex: number = -1) {
 		//todo implement for multi-formats
 		(<AwayTextField> this._adaptee).setTextFormat(format.adaptee, beginIndex, endIndex);
 	}
 
 }
-

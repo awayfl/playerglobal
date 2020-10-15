@@ -11,4 +11,4 @@
  *   SWF file, and another SWF file is loaded later, the return value is relative to when the first SWF file was
  *   loaded.
  */
-export {getTimer} from "@awayjs/core";
+export { getTimer } from '@awayjs/core';

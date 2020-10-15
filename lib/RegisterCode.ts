@@ -1,12 +1,12 @@
-export class RegisterCode{};
+export class RegisterCode {}
 
-import {TextureAtlasParser, ImageCubeParser, Image2DParser} from "@awayjs/stage";
+import { TextureAtlasParser, ImageCubeParser, Image2DParser } from '@awayjs/stage';
 
-import {Skybox, DisplayObjectContainer, Scene, Billboard, LineSegment, Camera, Sprite, MorphSprite, MovieClip, TextField} from "@awayjs/scene";
+import { Skybox, DisplayObjectContainer, Scene, Billboard, LineSegment, Camera, Sprite, MorphSprite, MovieClip, TextField } from '@awayjs/scene';
 
-import {PartitionBase, EntityNode} from "@awayjs/view";
+import { PartitionBase, EntityNode } from '@awayjs/view';
 
-import {Loader, WaveAudioParser} from "@awayjs/core";
+import { Loader, WaveAudioParser } from '@awayjs/core';
 
 //enable parsers
 Loader.enableParser(WaveAudioParser);

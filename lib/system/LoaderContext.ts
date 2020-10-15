@@ -1,6 +1,6 @@
 
-import {ApplicationDomain} from "../system/ApplicationDomain";
-import {SecurityDomain} from "../system/SecurityDomain";
+import { ApplicationDomain } from '../system/ApplicationDomain';
+import { SecurityDomain } from '../system/SecurityDomain';
 import { ASObject } from '@awayfl/avm2';
 import { DisplayObjectContainer } from '../display/DisplayObjectContainer';
 
@@ -9,19 +9,19 @@ import { DisplayObjectContainer } from '../display/DisplayObjectContainer';
  * media by using the Loader class. The LoaderContext class is used as the
  * `context` parameter in the `load()` and `loadBytes()` methods of the
  * Loader class.
- * 
+ *
  * When loading SWF files with the `Loader.load()` method, you have two
  * decisions to make: into which security domain the loaded SWF file should
  * be placed, and into which application domain within that security domain?
  * For more details on these choices, see the `applicationDomain` and
  * `securityDomain` properties.
- * 
+ *
  * When loading a SWF file with the `Loader.loadBytes()` method, you have the
  * same application domain choice to make as for `Loader.load()`, but it's
  * not necessary to specify a security domain, because `Loader.loadBytes()`
  * always places its loaded SWF file into the security domain of the loading
  * SWF file.
- * 
+ *
  * When loading images (JPEG, GIF, or PNG) instead of SWF files, there is no
  * need to specify a SecurityDomain or an application domain, because those
  * concepts are meaningful only for SWF files. Instead, you have only one
@@ -33,9 +33,9 @@ import { DisplayObjectContainer } from '../display/DisplayObjectContainer';
 export class LoaderContext extends ASObject {
 
 	//for AVM1:
-	public _avm1Context:any;
+	public _avm1Context: any;
 
-	private _applicationDomain:ApplicationDomain;
+	private _applicationDomain: ApplicationDomain;
 
 	/**
 	 * Specifies whether you can use a `Loader` object to import content with
@@ -61,7 +61,7 @@ export class LoaderContext extends ASObject {
 	 * 2.0. However, this property is made available to SWF files and AIR
 	 * applications of all versions when the Flash Runtime supports it.
 	 */
-	public allowCodeImport:boolean;
+	public allowCodeImport: boolean;
 
 	/**
 	 * Legacy property, replaced by `allowCodeImport`, but still supported
@@ -75,23 +75,23 @@ export class LoaderContext extends ASObject {
 	 * specific, so now `allowCodeImport` is the preferred property name.
 	 * Setting either of `allowCodeImport` or `allowLoadBytesCodeExecution`
 	 * will affect the value of both.
-	 * 
+	 *
 	 * Specifies whether you can use a `Loader` object to import content with
 	 * executable code, such as a SWF file, into the caller's security
 	 * sandbox. With this property set to `false`, these importing operations
 	 * are restricted to safe operations, such as loading images.
-	 * 
+	 *
 	 * In AIR content in the application sandbox, the default value is
 	 * `false`. In non-application content, the default value is `true`.
 	 */
-	public allowLoadBytesCodeExecution:boolean;
+	public allowLoadBytesCodeExecution: boolean;
 
 	/**
 	 * Specifies the application domain to use for the `Loader.load()` or
 	 * `Loader.loadBytes()` method. Use this property only when loading a SWF
 	 * file written in ActionScript 3.0 (not an image or a SWF file written
 	 * in ActionScript 1.0 or ActionScript 2.0).
-	 * 
+	 *
 	 * Every security domain is divided into one or more application domains,
 	 * represented by ApplicationDomain objects. Application domains are not
 	 * for security purposes; they are for managing cooperating units of
@@ -104,14 +104,14 @@ export class LoaderContext extends ASObject {
 	 * from your own domain, or because you are importing it into your
 	 * security domain — then you can control the choice of application
 	 * domain for the loaded SWF file.
-	 * 
+	 *
 	 * You can pass an application domain only from your own security domain
 	 * in `LoaderContext.applicationDomain`. Attempting to pass an
 	 * application domain from any other security domain results in a
 	 * `SecurityError` exception.
 	 * You have four choices for what kind of `ApplicationDomain` property to
 	 * use:
-	 * 
+	 *
 	 * * **Child of loader's ApplicationDomain.** The default. You can
 	 *   explicitly represent this choice with the syntax `new
 	 *   ApplicationDomain(ApplicationDomain.currentDomain)`. This allows the
@@ -144,7 +144,7 @@ export class LoaderContext extends ASObject {
 	 *   ApplicationDomain(ApplicationDomain.currentDomain.parentDomain.parentDomain)`
 	 *   loads a SWF file into a new child of the current domain's parent's
 	 *   parent.
-	 * 
+	 *
 	 * When a load is complete, either side (loading or loaded) may need to
 	 * find its own ApplicationDomain, or the other side's ApplicationDomain,
 	 * for the purpose of calling `ApplicationDomain.getDefinition()`. Either
@@ -156,12 +156,12 @@ export class LoaderContext extends ASObject {
 	 * ApplicationDomain object. For example, if the child was loaded in the
 	 * default way, it can find the loading SWF file's application domain by
 	 * using `ApplicationDomain.currentDomain.parentDomain`.
-	 * 
+	 *
 	 * For more information, see the "ApplicationDomain class" section of the
 	 * "Client System Environment" chapter of the _ActionScript 3.0
 	 * Developer's Guide_.
 	 */
-	public applicationDomain:ApplicationDomain;
+	public applicationDomain: ApplicationDomain;
 
 	/**
 	 * Specifies whether the application should attempt to download a URL
@@ -178,7 +178,7 @@ export class LoaderContext extends ASObject {
 	 * specified `checkPolicyFile` at loading time, you may get a
 	 * `SecurityError` exception because the needed policy file has not been
 	 * downloaded yet.
-	 * 
+	 *
 	 * When you call the `Loader.load()` method with
 	 * `LoaderContext.checkPolicyFile` set to `true`, the application does
 	 * not begin downloading the specified object in `URLRequest.url` until
@@ -193,7 +193,7 @@ export class LoaderContext extends ASObject {
 	 * exist at `URLRequest.url` by virtue of the policy file's location, and
 	 * the file must permit access by virtue of one or more
 	 * `<allow-access-from>` tags.
-	 * 
+	 *
 	 * If you set `checkPolicyFile` to `true`, the main download that
 	 * specified in the `Loader.load()` method does not load until the policy
 	 * file has been completely processed. Therefore, as long as the policy
@@ -202,7 +202,7 @@ export class LoaderContext extends ASObject {
 	 * `contentLoaderInfo` property of your Loader object, the policy file
 	 * download is complete, and you can safely begin performing operations
 	 * that require the policy file.
-	 * 
+	 *
 	 * If you set `checkPolicyFile` to `true`, and no relevant policy file is
 	 * found, you will not receive any error indication until you attempt an
 	 * operation that throws a `SecurityError` exception. However, once the
@@ -210,13 +210,13 @@ export class LoaderContext extends ASObject {
 	 * `Event.COMPLETE` event, you can test whether a relevant policy file
 	 * was found by checking the value of the `LoaderInfo.childAllowsParent`
 	 * property.
-	 * 
+	 *
 	 * If you will not need pixel-level access to the image that you are
 	 * loading, you should not set the `checkPolicyFile` property to `true`.
 	 * Checking for a policy file in this case is wasteful, because it may
 	 * delay the start of your download, and it may consume network bandwidth
 	 * unnecessarily.
-	 * 
+	 *
 	 * Also try to avoid setting `checkPolicyFile` to `true` if you are using
 	 * the `Loader.load()` method to download a SWF file. This is because
 	 * SWF-to-SWF permissions are not controlled by policy files, but rather
@@ -227,7 +227,7 @@ export class LoaderContext extends ASObject {
 	 * AIR cannot tell whether your main download will be a SWF file or an
 	 * image, because the policy file download occurs before the main
 	 * download.)
-	 * 
+	 *
 	 * Be careful with `checkPolicyFile` if you are downloading an object
 	 * from a URL that may use server-side HTTP redirects. Policy files are
 	 * always retrieved from the corresponding initial URL that you specify
@@ -241,23 +241,23 @@ export class LoaderContext extends ASObject {
 	 * `Security.loadPolicyFile()` method with a policy file URL based on the
 	 * object's final URL. Then poll the value of
 	 * `LoaderInfo.childAllowsParent` until it becomes `true`.
-	 * 
+	 *
 	 * You do not need to set this property for AIR content running in the
 	 * application sandbox. Content in the AIR application sandbox can call
 	 * the `BitmapData.draw()` method using any loaded image content as the
 	 * source.
 	 */
-	public checkPolicyFile:boolean;
+	public checkPolicyFile: boolean;
 
 	/**
 	 * Specifies whether to decode image data when it is used or when it is
 	 * loaded.
-	 * 
+	 *
 	 * Under the default policy, `ImageDecodingPolicy.ON_DEMAND`, the runtime
 	 * decodes the image data when the data is needed for display or other
 	 * purpose. This policy maintains the decoding behavior used by previous
 	 * versions of the runtime.
-	 * 
+	 *
 	 * Under the `ImageDecodingPolicy.ON_LOAD` policy, the runtime decodes
 	 * the image immediately after it is loaded and before dispatching the
 	 * complete event. Decoding images on load rather than on demand can
@@ -267,13 +267,13 @@ export class LoaderContext extends ASObject {
 	 * indiscriminately can increase the peak memory usage of your
 	 * application since more decoded image data might be in memory at one
 	 * time than would be the case under the onDemand policy.
-	 * 
+	 *
 	 * Under both policies, the runtime uses the same cache and flush
 	 * behavior after the image is decoded. The runtime can flush the decoded
 	 * data at any time and re-decode the image the next time it is required.
-	 * 
+	 *
 	 * To set the image decoding policy (for example, to `ON_LOAD`):
-	 * 
+	 *
 	 * ```
 	 * var loaderContext:LoaderContext = new LoaderContext();
      * loaderContext.imageDecodingPolicy = ImageDecodingPolicy.ON_LOAD;
@@ -281,12 +281,12 @@ export class LoaderContext extends ASObject {
      * loader.load(new URLRequest("http://www.adobe.com/myimage.png"), loaderContext);
 	 * ```
 	 */
-	public imageDecodingPolicy:string;
+	public imageDecodingPolicy: string;
 
 	/**
 	 * An Object containing the parameters to pass to the LoaderInfo object
 	 * of the content.
-	 * 
+	 *
 	 * Normally, the value of the `contentLoaderInfo.parameters` property is
 	 * obtained by parsing the requesting URL. If the `parameters` var is
 	 * set, the `contentLoaderInfo.parameters` gets its value from the
@@ -294,7 +294,7 @@ export class LoaderContext extends ASObject {
 	 * `parameters` var accepts only objects containing name-value string
 	 * pairs, similar to URL parameters. If the object does not contain
 	 * name-value string pairs, an `IllegalOperationError` is thrown.
-	 * 
+	 *
 	 * The intent of this API is to enable the loading SWF file to forward
 	 * its parameters to a loaded SWF file. This functionality is especially
 	 * helpful when you use the `loadBytes()` method, since `LoadBytes` does
@@ -303,14 +303,14 @@ export class LoaderContext extends ASObject {
 	 * AS2 SWF file cannot receive the parameters in an accessible form,
 	 * although the AVM1Movie's AS3 loaderInfo.parameters object will be the
 	 * forwarded object.
-	 * 
+	 *
 	 * For example, consider the following URL:
-	 * 
+	 *
 	 * `http://yourdomain/users/jdoe/test01/child.swf?foo=bar;`
-	 * 
+	 *
 	 * The following code uses the LoaderContext.parameters property to
 	 * replicate a parameter passed to this URL:
-	 * 
+	 *
 	 * ```
 	 * import flash.system.LoaderContext;
 	 * import flash.display.Loader;
@@ -319,21 +319,21 @@ export class LoaderContext extends ASObject {
 	 * lc.parameters = { "foo": "bar" };
 	 * l.load(new URLRequest("child.swf"), lc);
 	 * ```
-	 * 
+	 *
 	 * To verify that the parameter passed properly, use the following trace
 	 * statement after you run this code:
-	 * 
+	 *
 	 * ```
 	 * trace(loaderInfo.parameters.foo);
 	 * ```
-	 * 
+	 *
 	 * If the content loaded successfully, this trace prints "bar".
 	 */
-	public parameters:any;
+	public parameters: any;
 
 	/**
 	 * The parent to which the Loader will attempt to add the loaded content.
-	 * 
+	 *
 	 * When content is completely loaded, the Loader object normally becomes
 	 * the parent of the content. If `requestedContentParent` is set, the
 	 * object that it specifies becomes the parent, unless a runtime error
@@ -341,29 +341,29 @@ export class LoaderContext extends ASObject {
 	 * `complete` event without use of this property. However, specifying the
 	 * parent with `LoaderContext.requestedContentParent` eliminates extra
 	 * events.
-	 * 
+	 *
 	 * `LoaderContext.requestedContentParent` sets the desired parent before
 	 * frame one scripts in the loaded content execute, but after the
 	 * constructor has run. If `requestedContentParent` is null (the
 	 * default), the Loader object becomes the content's parent.
-	 * 
+	 *
 	 * If the loaded content is an AVM1Movie object, or if an error is thrown
 	 * when `addChild()` is called on the `requestedContentParent` object,
 	 * then the following actions occur:
-	 * 
+	 *
 	 * * The Loader object becomes the parent of the loaded content.
 	 * * The runtime dispatches an `AsyncErrorEvent`.
-	 * 
+	 *
 	 * If the requested parent and the loaded content are in different
 	 * security sandboxes, and if the requested parent does not have access
 	 * to the loaded content, then the following actions occur:
-	 * 
+	 *
 	 * * The Loader becomes the parent of the loaded content.
 	 * * The runtime dispatches a `SecurityErrorEvent`.
-	 * 
+	 *
 	 * The following code uses `requestedContentParent` to place the loaded
 	 * content into a Sprite object:
-	 * 
+	 *
 	 * ```
 	 * import openfl.system.LoaderContext;
 	 * import openfl.display.Loader;
@@ -375,17 +375,17 @@ export class LoaderContext extends ASObject {
 	 * addChild(s);
 	 * l.load(new URLRequest("child.swf"), lc);
 	 * ```
-	 * 
+	 *
 	 * When this code runs, the child SWF file appears on stage. This fact
 	 * confirms that the Sprite object you added to the stage is the parent
 	 * of the loaded child.swf file.
 	 */
-	public requestedContentParent:DisplayObjectContainer;
+	public requestedContentParent: DisplayObjectContainer;
 
 	/**
 	 * Specifies the security domain to use for a `Loader.load()` operation.
 	 * Use this property only when loading a SWF file (not an image).
-	 * 
+	 *
 	 * The choice of security domain is meaningful only if you are loading a
 	 * SWF file that might come from a different domain (a different server)
 	 * than the loading SWF file. When you load a SWF file from your own
@@ -401,24 +401,24 @@ export class LoaderContext extends ASObject {
 	 * file to your own server and loading it from there. In order for import
 	 * loading to succeed, the loaded SWF file's server must have a policy
 	 * file trusting the domain of the loading SWF file.
-	 * 
+	 *
 	 * You can pass your own security domain only in
 	 * `LoaderContext.securityDomain`. Attempting to pass any other security
 	 * domain results in a `SecurityError` exception.
-	 * 
+	 *
 	 * Content in the AIR application security sandbox cannot load content
 	 * from other sandboxes into its SecurityDomain.
-	 * 
+	 *
 	 * For more information, see the "Security" chapter in the _ActionScript
 	 * 3.0 Developer's Guide_.
 	 */
-	public securityDomain:SecurityDomain;
+	public securityDomain: SecurityDomain;
 
 	/**
 	 * Creates a new LoaderContext object, with the specified settings. For
 	 * complete details on these settings, see the descriptions of the
 	 * properties of this class.
-	 * 
+	 *
 	 * @param checkPolicyFile   Specifies whether a check should be made for
 	 *                          the existence of a URL policy file before
 	 *                          loading the object.
@@ -430,8 +430,7 @@ export class LoaderContext extends ASObject {
 	 *                          security sandbox cannot load content from
 	 *                          other sandboxes into its SecurityDomain.
 	 */
-	constructor(checkPolicyFile:boolean = false, applicationDomain:ApplicationDomain = null, securityDomain:SecurityDomain = null)
-	{
+	constructor(checkPolicyFile: boolean = false, applicationDomain: ApplicationDomain = null, securityDomain: SecurityDomain = null) {
 		super();
 
 		this.checkPolicyFile = checkPolicyFile;

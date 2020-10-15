@@ -22,7 +22,7 @@
  * @playerversion	Flash 9
  * @playerversion	Lite 4
  */
-export const describeType = function(value:any) : any{
+export const describeType = function(value: any): any {
 	//todo: any is XML
-	console.log("describeType is not implemented yet in flash/utils");
+	console.log('describeType is not implemented yet in flash/utils');
 };

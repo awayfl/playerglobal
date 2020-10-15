@@ -1,10 +1,10 @@
-import {ByteArray, AssetBase} from "@awayjs/core";
-import {IDisplayObjectAdapter, Font, SceneImage2D} from "@awayjs/scene";
-import {DisplayObject as AwayDisplayObject} from "@awayjs/scene";
-import {MovieClip as AwayMovieClip} from "@awayjs/scene";
-import {WaveAudio} from "@awayjs/core";
-import {MovieClip} from "../display/MovieClip";
-import {Sound} from "../media/Sound";
+import { ByteArray, AssetBase } from '@awayjs/core';
+import { IDisplayObjectAdapter, Font, SceneImage2D } from '@awayjs/scene';
+import { DisplayObject as AwayDisplayObject } from '@awayjs/scene';
+import { MovieClip as AwayMovieClip } from '@awayjs/scene';
+import { WaveAudio } from '@awayjs/core';
+import { MovieClip } from '../display/MovieClip';
+import { Sound } from '../media/Sound';
 import { AXClass, ASObject, Multiname } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 
@@ -29,22 +29,21 @@ import { SecurityDomain } from '../SecurityDomain';
  * @internal	Security considerations for application domains are discussed in the
  *   applicationDomain property entries of URLRequest and LoaderInfo.
  */
-export class ApplicationDomain extends ASObject
-{
+export class ApplicationDomain extends ASObject {
 
-	private static _systemDomain:ApplicationDomain;
-	private static getSystemDomain():ApplicationDomain{
-		if(ApplicationDomain._systemDomain==null)
-			ApplicationDomain._systemDomain=new ApplicationDomain(null, true);
+	private static _systemDomain: ApplicationDomain;
+	private static getSystemDomain(): ApplicationDomain {
+		if (ApplicationDomain._systemDomain == null)
+			ApplicationDomain._systemDomain = new ApplicationDomain(null, true);
 		return ApplicationDomain._systemDomain;
 	}
 
-	private static _currentDomain:ApplicationDomain;
+	private static _currentDomain: ApplicationDomain;
 
-	private _parentDomain:ApplicationDomain;
-	private _definitions:Object;
-	private _font_definitions:Object;
-	private _audio_definitions:Object;
+	private _parentDomain: ApplicationDomain;
+	private _definitions: Object;
+	private _font_definitions: Object;
+	private _audio_definitions: Object;
 	private _memoryView: DataView;
 	private _memory: ByteArray;
 
@@ -52,25 +51,25 @@ export class ApplicationDomain extends ASObject
 	 * Creates a new application domain.
 	 * @param	parentDomain	If no parent domain is passed in, this application domain takes the system domain as its parent.
 	 */
-	constructor (parentDomain:ApplicationDomain=null, isSystemDomain:boolean=false){
+	constructor (parentDomain: ApplicationDomain = null, isSystemDomain: boolean = false) {
 		super();
-		if(!isSystemDomain && parentDomain==null && ApplicationDomain._currentDomain!=null){
+		if (!isSystemDomain && parentDomain == null && ApplicationDomain._currentDomain != null) {
 			//ApplicationDomain.currentDomain;
-			parentDomain=ApplicationDomain.getSystemDomain();
+			parentDomain = ApplicationDomain.getSystemDomain();
 		}
-		if(!ApplicationDomain._currentDomain)
+		if (!ApplicationDomain._currentDomain)
 			ApplicationDomain._currentDomain = this;
-		this._parentDomain=parentDomain;
-		this._definitions={};
-		this._font_definitions={};
-		this._audio_definitions={};
+		this._parentDomain = parentDomain;
+		this._definitions = {};
+		this._font_definitions = {};
+		this._audio_definitions = {};
 	}
 
 	/**
 	 * Gets the current application domain in which your code is executing.
 	 * @internal	Question: Do you call System.currentDomain? or Loader.currentDomain or request.currentDomain?
 	 */
-	public static get currentDomain () : ApplicationDomain{
+	public static get currentDomain (): ApplicationDomain {
 		/*if(ApplicationDomain._systemDomain==null)
 			ApplicationDomain._systemDomain=new ApplicationDomain();
 		if(ApplicationDomain._currentDomain==null)
@@ -82,21 +81,21 @@ export class ApplicationDomain extends ASObject
 	 * Gets and sets the object on which domain-global memory operations
 	 * will operate within this ApplicationDomain.
 	 */
-	public get domainMemory() :ByteArray 
-	{
-		console.log("[UNSAFE IMPLEMENTATION!] domainMemory:flash/ApplicationDomain");
+	public get domainMemory(): ByteArray {
+		console.log('[UNSAFE IMPLEMENTATION!] domainMemory:flash/ApplicationDomain');
 		return this._memory;
 	}
 
-	public set domainMemory(mem :ByteArray){
-		console.log("[UNSAFE IMPLEMENTATION!] domainMemory:flash/ApplicationDomain");
+	public set domainMemory(mem: ByteArray) {
+		console.log('[UNSAFE IMPLEMENTATION!] domainMemory:flash/ApplicationDomain');
 
 		// Missed types! ByteArray has buffer instead arraybuffer
-		if(mem || (<any>this._memory).buffer !== (<any>mem).buffer) {
+		if (mem || (<any> this._memory).buffer !== (<any>mem).buffer) {
 			this._memoryView = new DataView((<any>mem).buffer);
 		}
 		this._memory = mem;
 	}
+
 	/**
 	 * Internal DataView for using domainMemory in runtime
 	 */
@@ -108,27 +107,28 @@ export class ApplicationDomain extends ASObject
 	 * Gets the minimum memory object length required to be used as
 	 * ApplicationDomain.domainMemory.
 	 */
-	public static get MIN_DOMAIN_MEMORY_LENGTH () : number {
-		console.log("MIN_DOMAIN_MEMORY_LENGTH not implemented yet in flash/ApplicationDomain");
+	public static get MIN_DOMAIN_MEMORY_LENGTH (): number {
+		console.log('MIN_DOMAIN_MEMORY_LENGTH not implemented yet in flash/ApplicationDomain');
 		return 0;
 	}
 
 	/**
 	 * Gets the parent domain of this application domain.
 	 */
-	public get parentDomain () : ApplicationDomain{
+	public get parentDomain (): ApplicationDomain {
 		return this._parentDomain;
 	}
 
-	public addDefinition (name:string, asset:AssetBase) : void{
-		this._definitions[name]=asset;
+	public addDefinition (name: string, asset: AssetBase): void{
+		this._definitions[name] = asset;
 	}
 
-	public addAudioDefinition (name:string, asset:WaveAudio) : void{
-		this._audio_definitions[name]=asset;
+	public addAudioDefinition (name: string, asset: WaveAudio): void{
+		this._audio_definitions[name] = asset;
 	}
-	public addFontDefinition (name:string, asset:Font) : void{
-		this._font_definitions[name]=asset;
+
+	public addFontDefinition (name: string, asset: Font): void{
+		this._font_definitions[name] = asset;
 	}
 
 	public hasSymbolForClass(className: string): boolean {
@@ -136,46 +136,42 @@ export class ApplicationDomain extends ASObject
 	}
 
 	public getSymbolAdaptee(className: string): any {
-		let symbol = this._definitions[className];
+		const symbol = this._definitions[className];
 
 		if (symbol) {
-			if(symbol.isAsset && symbol.isAsset(SceneImage2D) || !symbol.adapter){
+			if (symbol.isAsset && symbol.isAsset(SceneImage2D) || !symbol.adapter) {
 				return symbol;
 			}
 
 			const clone = symbol.adapter.clone();
-			if(clone.adaptee.isAsset(AwayMovieClip)){
-				(<AwayMovieClip>clone.adaptee).currentFrameIndex=0;
+			if (clone.adaptee.isAsset(AwayMovieClip)) {
+				(<AwayMovieClip>clone.adaptee).currentFrameIndex = 0;
 			}
 			return clone.adaptee;
-		}
-		else if(this._font_definitions[className]) {
+		} else if (this._font_definitions[className]) {
 			return this._font_definitions[className];
-		}
-		else if(this._audio_definitions[className]) {
+		} else if (this._audio_definitions[className]) {
 			return this._audio_definitions[className];
 		}
 		return null;
 	}
 
 	public getSymbolDefinition(className: string): any {
-		let symbol = this._definitions[className];
+		const symbol = this._definitions[className];
 
 		if (symbol) {
-			if(symbol.isAsset && symbol.isAsset(SceneImage2D)){
+			if (symbol.isAsset && symbol.isAsset(SceneImage2D)) {
 				return symbol;
 			}
 
 			const clone = symbol.adapter.clone();
-			if(clone.adaptee.isAsset(AwayMovieClip)){
-				(<AwayMovieClip>clone.adaptee).currentFrameIndex=0;
+			if (clone.adaptee.isAsset(AwayMovieClip)) {
+				(<AwayMovieClip>clone.adaptee).currentFrameIndex = 0;
 			}
 			return clone;
-		}
-		else if(this._font_definitions[name]){
+		} else if (this._font_definitions[name]) {
 			return this._font_definitions[name];
-		}
-		else if(this._audio_definitions[name]){
+		} else if (this._audio_definitions[name]) {
 			const sound = new Sound();
 			sound.adaptee = this._audio_definitions[name];
 			//sound.adaptee.adapter=sound;
@@ -193,33 +189,33 @@ export class ApplicationDomain extends ASObject
 	 * @throws	ReferenceError No public definition exists with the
 	 *   specified name.
 	 */
-	public getDefinition (name:string) : AXClass {
+	public getDefinition (name: string): AXClass {
 		/**
 		 * @todo Cache a FromSimpleName
 		 */
-		return (<SecurityDomain>this.sec).application.getClass(Multiname.FromSimpleName(name));	
+		return (<SecurityDomain> this.sec).application.getClass(Multiname.FromSimpleName(name));
 	}
 
-	public getFontDefinition (name:string) : Font{
+	public getFontDefinition (name: string): Font {
 		return this._font_definitions[name];
 	}
 
-	public getAwayJSAudio(name:string):WaveAudio{
+	public getAwayJSAudio(name: string): WaveAudio {
 		return this._audio_definitions[name];
 	}
 
-	public getAudioDefinition (name:string) : Sound{
-		var sound:Sound=new Sound();
-		sound.adaptee=this._audio_definitions[name];
+	public getAudioDefinition (name: string): Sound {
+		const sound: Sound = new Sound();
+		sound.adaptee = this._audio_definitions[name];
 		//sound.adaptee.adapter=sound;
 		return sound;
 	}
 
-	public getQualifiedDefinitionNames () : string[]{
-		var allDefinitionsnames:string[]=[];
-		for (var key in this._definitions) {
+	public getQualifiedDefinitionNames (): string[] {
+		const allDefinitionsnames: string[] = [];
+		for (const key in this._definitions) {
 			if (this._definitions.hasOwnProperty(key)) {
-				allDefinitionsnames[allDefinitionsnames.length]=key;
+				allDefinitionsnames[allDefinitionsnames.length] = key;
 			}
 		}
 		return allDefinitionsnames;
@@ -231,20 +227,21 @@ export class ApplicationDomain extends ASObject
 	 * @param	name	The name of the definition.
 	 * @return	A value of true if the specified definition exists; otherwise, false.
 	 */
-	public hasDefinition (name: string) : boolean {
+	public hasDefinition (name: string): boolean {
 		// Exception will thrown when definition not exist.
 		try {
-			// slow, because run lookup 
+			// slow, because run lookup
 			return !!this.getDefinition(name);
 		} catch (e) {
 			return false;
 		}
 	}
 
-	public hasFontDefinition (name:string) : boolean{
+	public hasFontDefinition (name: string): boolean {
 		return this._font_definitions.hasOwnProperty(name);
 	}
-	public hasAudioDefinition (name:string) : boolean{
+
+	public hasAudioDefinition (name: string): boolean {
 		return this._audio_definitions.hasOwnProperty(name);
 	}
 }

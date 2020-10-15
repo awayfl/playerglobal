@@ -12,8 +12,8 @@
  * @param	value	Any value.
  * @return	A fully qualified base class name, or null if none exists.
  */
-export const getQualifiedSuperclassName=function(name:any){
+export const getQualifiedSuperclassName = function(name: any) {
 	//todo
-	console.log("getQualifiedSuperclassName is not implemented yet in flash/utils");
-	return ""
+	console.log('getQualifiedSuperclassName is not implemented yet in flash/utils');
+	return '';
 };

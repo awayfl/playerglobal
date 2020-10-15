@@ -1,4 +1,4 @@
-import { EventDispatcher } from "./EventDispatcher";
+import { EventDispatcher } from './EventDispatcher';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -18,12 +18,12 @@ import { EventDispatcher } from "./EventDispatcher";
 // Class: UncaughtErrorEvents
 export class UncaughtErrorEvents extends EventDispatcher {
 
-  static classInitializer: any = null;
+	static classInitializer: any = null;
 
-  static classSymbols: string [] = null;
-  static instanceSymbols: string [] = null;
+	static classSymbols: string [] = null;
+	static instanceSymbols: string [] = null;
 
-  constructor() {
-    super();
-  }
+	constructor() {
+		super();
+	}
 }

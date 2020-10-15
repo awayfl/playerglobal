@@ -1,4 +1,4 @@
-import { ASObject } from "../../avm2/nat/ASObject";
+import { ASObject } from '../../avm2/nat/ASObject';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -18,15 +18,15 @@ import { ASObject } from "../../avm2/nat/ASObject";
 // Class: TextFormatDisplay
 export class TextFormatDisplay extends ASObject {
 
-  static classInitializer: any = null;
-  static classSymbols: string [] = null;
-  static instanceSymbols: string [] = null;
+	static classInitializer: any = null;
+	static classSymbols: string [] = null;
+	static instanceSymbols: string [] = null;
 
-  constructor() {
-    super();
-  }
+	constructor() {
+		super();
+	}
 
-  // JS -> AS Bindings
-  static INLINE: string = "inline";
-  static BLOCK: string = "block";
+	// JS -> AS Bindings
+	static INLINE: string = 'inline';
+	static BLOCK: string = 'block';
 }

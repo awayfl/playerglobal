@@ -1,14 +1,14 @@
-import {EventDispatcher} from "../events/EventDispatcher";
-import {ApplicationDomain} from "../system/ApplicationDomain";
-import {IOErrorEvent} from "../events/IOErrorEvent";
-import {ProgressEvent} from "../events/ProgressEvent";
-import {Event} from "../events/Event";
+import { EventDispatcher } from '../events/EventDispatcher';
+import { ApplicationDomain } from '../system/ApplicationDomain';
+import { IOErrorEvent } from '../events/IOErrorEvent';
+import { ProgressEvent } from '../events/ProgressEvent';
+import { Event } from '../events/Event';
 import { ILoader } from '../ILoader';
-import { Loader } from "./Loader";
-import { URLLoaderEvent, LoaderEvent as AwayLoaderEvent, Box } from "@awayjs/core";
-import { DisplayObject } from "./DisplayObject";
-import {ByteArray} from "../utils/ByteArray";
-import {DisplayObject as AwayDisplayObject } from '@awayjs/scene';
+import { Loader } from './Loader';
+import { URLLoaderEvent, LoaderEvent as AwayLoaderEvent, Box } from '@awayjs/core';
+import { DisplayObject } from './DisplayObject';
+import { ByteArray } from '../utils/ByteArray';
+import { DisplayObject as AwayDisplayObject } from '@awayjs/scene';
 import { SecurityDomain } from '../SecurityDomain';
 import { PickGroup } from '@awayjs/view';
 import { AVMStage, release } from '@awayfl/swf-loader';
@@ -20,7 +20,7 @@ import { AVMStage, release } from '@awayfl/swf-loader';
  * URLs of the loader and loaded content, the number of bytes total for the
  * media, and the nominal height and width of the media.
  *
- * You can access LoaderInfo objects in two ways: 
+ * You can access LoaderInfo objects in two ways:
  *
  * * The `contentLoaderInfo` property of a flash.display.Loader
  *   object -  The `contentLoaderInfo` property is always available
@@ -33,7 +33,7 @@ import { AVMStage, release } from '@awayfl/swf-loader';
  * The `contentLoaderInfo` property of a Loader object provides
  * information about the content that the Loader object is loading, whereas
  * the `loaderInfo` property of a DisplayObject provides
- * information about the root SWF file for that display object. 
+ * information about the root SWF file for that display object.
  *
  * When you use a Loader object to load a display object(such as a SWF
  * file or a bitmap), the `loaderInfo` property of the display
@@ -63,7 +63,7 @@ import { AVMStage, release } from '@awayfl/swf-loader';
  * The `EventDispatcher.dispatchEvent()` method is not
  * applicable to LoaderInfo objects. If you call `dispatchEvent()`
  * on a LoaderInfo object, an IllegalOperationError exception is thrown.
- * 
+ *
  * @event complete   Dispatched when data has loaded successfully. In other
  *                   words, it is dispatched when all the content has been
  *                   downloaded and the loading has finished. The
@@ -78,7 +78,7 @@ import { AVMStage, release } from '@awayfl/swf-loader';
  *                   however, can still be downloading. A LoaderInfo object
  *                   dispatches the `init` event when the following
  *                   conditions exist:
- * 
+ *
  *                   * All properties and methods associated with the
  *                     loaded object and those associated with the LoaderInfo
  *                     object are accessible.
@@ -86,14 +86,14 @@ import { AVMStage, release } from '@awayfl/swf-loader';
  *                     completed.
  *                   * All ActionScript code in the first frame of the
  *                     loaded SWF's main timeline has been executed.
- * 
+ *
  *                   For example, an `Event.INIT` is dispatched
  *                   when the first frame of a movie or animation is loaded.
  *                   The movie is then accessible and can be added to the
  *                   display list. The complete movie, however, can take
  *                   longer to download. The `Event.COMPLETE` is
  *                   only dispatched once the full movie is loaded.
- * 
+ *
  *                   The `init` event always precedes the
  *                   `complete` event.
  * @event ioError    Dispatched when an input or output error occurs that
@@ -107,24 +107,23 @@ import { AVMStage, release } from '@awayfl/swf-loader';
  *                   performed by the same Loader object and the original
  *                   content is removed prior to the load beginning.
  */
-export class LoaderInfo extends EventDispatcher
-{
-	private _bytes:ByteArray;
-	private _bytesLoaded:number = 0;
-	private _bytesTotal:number = 0;
-	private _url:string;
+export class LoaderInfo extends EventDispatcher {
+	private _bytes: ByteArray;
+	private _bytesLoaded: number = 0;
+	private _bytesTotal: number = 0;
+	private _url: string;
 
-	public static DefaultLocation:string = null;
+	public static DefaultLocation: string = null;
 
-	private _loader:ILoader;
-	private _container:AwayDisplayObject;
-	private _onLoaderErrorDelegate:(event:AwayLoaderEvent) => void;
-	private _onLoaderStartDelegate:(event:AwayLoaderEvent) => void;
-	private _onLoadProgressDelegate:(event:URLLoaderEvent) => void;
-	public _onLoaderCompleteDelegate:(event:AwayLoaderEvent) => void;
+	private _loader: ILoader;
+	private _container: AwayDisplayObject;
+	private _onLoaderErrorDelegate: (event: AwayLoaderEvent) => void;
+	private _onLoaderStartDelegate: (event: AwayLoaderEvent) => void;
+	private _onLoadProgressDelegate: (event: URLLoaderEvent) => void;
+	public _onLoaderCompleteDelegate: (event: AwayLoaderEvent) => void;
 
-    private _swfVersion:number;
-	private _applicationDomain:ApplicationDomain;
+	private _swfVersion: number;
+	private _applicationDomain: ApplicationDomain;
 
 	/**
 	 * The ActionScript version of the loaded SWF file. The language
@@ -137,41 +136,39 @@ export class LoaderInfo extends EventDispatcher
 	 * ActionScript 1.0 and 2.0 are both reported as
 	 * `ActionScriptVersion.ACTIONSCRIPT2` (version 2.0). This property only
 	 * distinguishes ActionScript 1.0 and 2.0 from ActionScript 3.0.
-	 * 
+	 *
 	 * @throws	Error If the file is not downloaded sufficiently to retrieve the
 	 *                requested information.
 	 * @throws	Error If the file is not a SWF file.
 	 */
-	public get actionScriptVersion():number
-	{
-		release || console.log("actionScriptVersion not implemented yet in flash/LoaderInfo");
+	public get actionScriptVersion(): number {
+		release || console.log('actionScriptVersion not implemented yet in flash/LoaderInfo');
 		return 0;
 	}
 
 	// for AVM:
-	public getSymbolById(value:any):any{}
+	public getSymbolById(value: any): any {}
 
-	constructor(loader:ILoader, container:AwayDisplayObject)
-	{
+	constructor(loader: ILoader, container: AwayDisplayObject) {
 		super();
 
 		// Events that are supposed to be working are registered as eventMappingExtern:
 
-		this.eventMappingExtern[Event.COMPLETE]="LoaderInfo:Event.COMPLETE";
-		this.eventMappingExtern[ProgressEvent.PROGRESS]="LoaderInfo:ProgressEvent.PROGRESS";
-		this.eventMappingExtern[IOErrorEvent.IO_ERROR]="LoaderInfo:IOErrorEvent.IO_ERROR";
+		this.eventMappingExtern[Event.COMPLETE] = 'LoaderInfo:Event.COMPLETE';
+		this.eventMappingExtern[ProgressEvent.PROGRESS] = 'LoaderInfo:ProgressEvent.PROGRESS';
+		this.eventMappingExtern[IOErrorEvent.IO_ERROR] = 'LoaderInfo:IOErrorEvent.IO_ERROR';
 
 		// Events not supported yet are registered as eventMappingDummys:
 
-		this.eventMappingDummys[Event.UNLOAD]="LoaderInfo:Event.UNLOAD";
+		this.eventMappingDummys[Event.UNLOAD] = 'LoaderInfo:Event.UNLOAD';
 		//this.eventMappingDummys[IOErrorEvent.IO_ERROR]="LoaderInfo:IOErrorEvent.IO_ERROR";
 		//this.eventMappingDummys[HTTPStatusEvent.IO_ERROR]="HTTPStatusEvent.IO_ERROR";
-		this.eventMappingDummys[Event.OPEN]="LoaderInfo:Event.OPEN";
-		this.eventMappingDummys[Event.INIT]="LoaderInfo:Event.INIT";
+		this.eventMappingDummys[Event.OPEN] = 'LoaderInfo:Event.OPEN';
+		this.eventMappingDummys[Event.INIT] = 'LoaderInfo:Event.INIT';
 
-		this._onLoaderStartDelegate = (event:AwayLoaderEvent) => this._onLoaderStart(event);
-		this._onLoadProgressDelegate = (event:URLLoaderEvent) => this._onLoadProgress(event);
-		this._onLoaderCompleteDelegate = (event:AwayLoaderEvent) => this._onLoaderComplete(event);
+		this._onLoaderStartDelegate = (event: AwayLoaderEvent) => this._onLoaderStart(event);
+		this._onLoadProgressDelegate = (event: URLLoaderEvent) => this._onLoadProgress(event);
+		this._onLoaderCompleteDelegate = (event: AwayLoaderEvent) => this._onLoaderComplete(event);
 		this._onLoaderErrorDelegate = this._onLoadeError.bind(this);
 
 		this._loader = loader;
@@ -183,42 +180,39 @@ export class LoaderInfo extends EventDispatcher
 	}
 
 	private _onLoadeError(event: URLLoaderEvent): void {
-		var newEvent = new (<SecurityDomain> this.sec).flash.events.IOErrorEvent(IOErrorEvent.IO_ERROR);
+		const newEvent = new (<SecurityDomain> this.sec).flash.events.IOErrorEvent(IOErrorEvent.IO_ERROR);
 		newEvent.currentTarget = this;
 		this.dispatchEvent(newEvent);
 	}
 
-	private _onLoaderStart(event:AwayLoaderEvent):void
-	{
+	private _onLoaderStart(event: AwayLoaderEvent): void {
 		this._bytesLoaded = 0;
 		this._bytesTotal = 0;
 
 		this._url = event.url;
 	}
 
-	private _onLoadProgress(event:URLLoaderEvent):void
-	{
+	private _onLoadProgress(event: URLLoaderEvent): void {
 		this._bytesLoaded = event.urlLoader.bytesLoaded;
 		this._bytesTotal = event.urlLoader.bytesTotal;
 
-		var newEvent = new (<SecurityDomain> this.sec).flash.events.ProgressEvent(ProgressEvent.PROGRESS, null, null, event.urlLoader.bytesLoaded, event.urlLoader.bytesTotal);
+		const newEvent = new (<SecurityDomain> this.sec).flash.events.ProgressEvent(ProgressEvent.PROGRESS, null, null, event.urlLoader.bytesLoaded, event.urlLoader.bytesTotal);
 		newEvent.currentTarget = this;
 		this.dispatchEvent(newEvent);
 	}
 
-	private _onLoaderComplete(event:AwayLoaderEvent):void
-	{
-		if(event.assets && event.assets.length) {
+	private _onLoaderComplete(event: AwayLoaderEvent): void {
+		if (event.assets && event.assets.length) {
 			// use count of assets instead real bytes
 			this._bytesLoaded = event.assets.length;
 			this._bytesTotal = event.assets.length;
-		}else {
+		} else {
 			this._bytesTotal = this._bytesLoaded = this._bytesTotal || 1; //avoid devide on 0
 		}
 
 		this._url = event.url;
 
-		var newEvent = new (<SecurityDomain> this.sec).flash.events.Event(Event.COMPLETE);
+		const newEvent = new (<SecurityDomain> this.sec).flash.events.Event(Event.COMPLETE);
 		newEvent.currentTarget = this;
 		this.dispatchEvent(newEvent);
 	}
@@ -227,121 +221,31 @@ export class LoaderInfo extends EventDispatcher
 	 * When an external SWF file is loaded, all ActionScript 3.0 definitions
 	 * contained in the loaded class are stored in the
 	 * `applicationDomain` property.
-	 * 
+	 *
 	 * All code in a SWF file is defined to exist in an application domain.
 	 * The current application domain is where your main application runs. The
 	 * system domain contains all application domains, including the current
 	 * domain and all classes used by Flash Player or Adobe AIR.
-	 * 
+	 *
 	 * All application domains, except the system domain, have an associated
 	 * parent domain. The parent domain of your main application's
 	 * `applicationDomain` is the system domain. Loaded classes are
 	 * defined only when their parent doesn't already define them. You cannot
 	 * override a loaded class definition with a newer definition.
-	 * 
+	 *
 	 * For usage examples of application domains, see the "Client System
 	 * Environment" chapter in the _ActionScript 3.0 Developer's Guide_.
-	 * 
+	 *
 	 * @throws SecurityError This security sandbox of the caller is not allowed
 	 *                       to access this ApplicationDomain.
 	 */
-	public get applicationDomain():ApplicationDomain
-	{
+	public get applicationDomain(): ApplicationDomain {
 		return this._applicationDomain;
 	}
 
 	/**
 	 * The bytes associated with a LoaderInfo object.
-	 * 
-	 * @throws SecurityError If the object accessing this API is prevented from
-	 *                       accessing the loaded object due to security
-	 *                       restrictions. This situation can occur, for
-	 *                       instance, when a Loader object attempts to access
-	 *                       the `contentLoaderInfo.content` property
-	 *                       and it is not granted security permission to access
-	 *                       the loaded content.
 	 *
-	 *                       For more information related to security, see the
-	 *                       Flash Player Developer Center Topic: 
-	 *                       [Security](http://www.adobe.com/go/devnet_security_en).
-	 */
-	public get bytes():ByteArray
-	{
-		release || console.log("bytes not implemented yet in flash/LoaderInfo");
-		return null;
-		
-	}
-
-	/**
-	 * The number of bytes that are loaded for the media. When this number equals
-	 * the value of `bytesTotal`, all of the bytes are loaded.
-	 */
-	public get bytesLoaded():number
-	{
-		return this._bytesLoaded;		
-	}
-
-	/**
-	 * The number of compressed bytes in the entire media file.
-	 *
-	 * Before the first `progress` event is dispatched by this
-	 * LoaderInfo object's corresponding Loader object, `bytesTotal`
-	 * is 0. After the first `progress` event from the Loader object,
-	 * `bytesTotal` reflects the actual number of bytes to be
-	 * downloaded.
-	 */
-	public get bytesTotal():number
-	{
-		return this._bytesTotal;			
-	}
-
-	/**
-	 * Expresses the trust relationship from content (child) to the Loader (parent).
-	 * If the child has allowed the parent access, true; otherwise, false. This
-	 * property is set to true if the child object has called the `allowDomain()`
-	 * method to grant permission to the parent domain or if a URL policy is loaded
-	 * at the child domain that grants permission to the parent domain. If child
-	 * and parent are in the same domain, this property is set to true.
-	 *
-	 * For more information related to security, see the Flash Player Developer
-	 * Center Topic: [Security](http://www.adobe.com/go/devnet_security_en).
-	 * 
-	 * @throws Error Thrown if the file is not downloaded sufficiently to retrieve
-	 *               the requested information.
-	 */
-	public get childAllowsParent():boolean
-	{
-		release || console.log("childAllowsParent not implemented yet in flash/LoaderInfo");
-		return false;
-	}
-
-	/**
-	 * A object that can be set by the loaded content's code to expose properties
-	 * and methods that can be accessed  by code in the Loader object's sandbox.
-	 * This _sandbox bridge_ lets content from a non-application domain have
-	 * controlled access to scripts in the AIR application sandbox, and vice versa.
-	 * The sandbox bridge serves as a gateway between the sandboxes, providing
-	 * explicit interaction between application and non-application security
-	 * sandboxes.
-	 * 
-	 * @throws SecurityError Only content in the loaded content's sandbox can set
-	 *                       this property.
-	 */
-	public get childSandboxBridge():any
-	{
-		release || console.log("childSandboxBridge not implemented yet in flash/LoaderInfo");
-		return null;
-	}
-
-	public set childSandboxBridge(door:any)
-	{
-		release || console.log("childSandboxBridge not implemented yet in flash/LoaderInfo");
-		
-	}
-
-	/**
-	 * The loaded object associated with this LoaderInfo object.
-	 * 
 	 * @throws SecurityError If the object accessing this API is prevented from
 	 *                       accessing the loaded object due to security
 	 *                       restrictions. This situation can occur, for
@@ -354,8 +258,90 @@ export class LoaderInfo extends EventDispatcher
 	 *                       Flash Player Developer Center Topic:
 	 *                       [Security](http://www.adobe.com/go/devnet_security_en).
 	 */
-	public get content():DisplayObject
-	{
+	public get bytes(): ByteArray {
+		release || console.log('bytes not implemented yet in flash/LoaderInfo');
+		return null;
+
+	}
+
+	/**
+	 * The number of bytes that are loaded for the media. When this number equals
+	 * the value of `bytesTotal`, all of the bytes are loaded.
+	 */
+	public get bytesLoaded(): number {
+		return this._bytesLoaded;
+	}
+
+	/**
+	 * The number of compressed bytes in the entire media file.
+	 *
+	 * Before the first `progress` event is dispatched by this
+	 * LoaderInfo object's corresponding Loader object, `bytesTotal`
+	 * is 0. After the first `progress` event from the Loader object,
+	 * `bytesTotal` reflects the actual number of bytes to be
+	 * downloaded.
+	 */
+	public get bytesTotal(): number {
+		return this._bytesTotal;
+	}
+
+	/**
+	 * Expresses the trust relationship from content (child) to the Loader (parent).
+	 * If the child has allowed the parent access, true; otherwise, false. This
+	 * property is set to true if the child object has called the `allowDomain()`
+	 * method to grant permission to the parent domain or if a URL policy is loaded
+	 * at the child domain that grants permission to the parent domain. If child
+	 * and parent are in the same domain, this property is set to true.
+	 *
+	 * For more information related to security, see the Flash Player Developer
+	 * Center Topic: [Security](http://www.adobe.com/go/devnet_security_en).
+	 *
+	 * @throws Error Thrown if the file is not downloaded sufficiently to retrieve
+	 *               the requested information.
+	 */
+	public get childAllowsParent(): boolean {
+		release || console.log('childAllowsParent not implemented yet in flash/LoaderInfo');
+		return false;
+	}
+
+	/**
+	 * A object that can be set by the loaded content's code to expose properties
+	 * and methods that can be accessed  by code in the Loader object's sandbox.
+	 * This _sandbox bridge_ lets content from a non-application domain have
+	 * controlled access to scripts in the AIR application sandbox, and vice versa.
+	 * The sandbox bridge serves as a gateway between the sandboxes, providing
+	 * explicit interaction between application and non-application security
+	 * sandboxes.
+	 *
+	 * @throws SecurityError Only content in the loaded content's sandbox can set
+	 *                       this property.
+	 */
+	public get childSandboxBridge(): any {
+		release || console.log('childSandboxBridge not implemented yet in flash/LoaderInfo');
+		return null;
+	}
+
+	public set childSandboxBridge(door: any) {
+		release || console.log('childSandboxBridge not implemented yet in flash/LoaderInfo');
+
+	}
+
+	/**
+	 * The loaded object associated with this LoaderInfo object.
+	 *
+	 * @throws SecurityError If the object accessing this API is prevented from
+	 *                       accessing the loaded object due to security
+	 *                       restrictions. This situation can occur, for
+	 *                       instance, when a Loader object attempts to access
+	 *                       the `contentLoaderInfo.content` property
+	 *                       and it is not granted security permission to access
+	 *                       the loaded content.
+	 *
+	 *                       For more information related to security, see the
+	 *                       Flash Player Developer Center Topic:
+	 *                       [Security](http://www.adobe.com/go/devnet_security_en).
+	 */
+	public get content(): DisplayObject {
 		return this._loader.content;
 	}
 
@@ -363,35 +349,33 @@ export class LoaderInfo extends EventDispatcher
 	 * The MIME type of the loaded file. The value is `null` if not
 	 * enough of the file has loaded in order to determine the type. The
 	 * following list gives the possible values:
-	 * 
+	 *
 	 * * `"application/x-shockwave-flash"`
 	 * * `"image/jpeg"`
 	 * * `"image/gif"`
 	 * * `"image/png"`
 	 */
-	public get contentType():string
-	{
-		release || console.log("childSandboxBridge not implemented yet in flash/LoaderInfo");
+	public get contentType(): string {
+		release || console.log('childSandboxBridge not implemented yet in flash/LoaderInfo');
 		return null;
 	}
 
 	/**
 	 * The nominal frame rate, in frames per second, of the loaded SWF file. This
 	 * number is often an integer, but need not be.
-	 * 
+	 *
 	 * This value may differ from the actual frame rate in use. Flash Player
 	 * or Adobe AIR only uses a single frame rate for all loaded SWF files at any
 	 * one time, and this frame rate is determined by the nominal frame rate of
 	 * the main SWF file. Also, the main frame rate may not be able to be
 	 * achieved, depending on hardware, sound synchronization, and other
 	 * factors.
-	 * 
+	 *
 	 * @throws Error If the file is not downloaded sufficiently to retrieve the
 	 *               requested information.
 	 * @throws Error If the file is not a SWF file.
 	 */
-	public get frameRate():number
-	{
+	public get frameRate(): number {
 		return (<AVMStage> this._loader.stage.adaptee).frameRate;
 	}
 
@@ -399,13 +383,12 @@ export class LoaderInfo extends EventDispatcher
 	 * The nominal height of the loaded file. This value might differ from the
 	 * actual height at which the content is displayed, since the loaded content
 	 * or its parent display objects might be scaled.
-	 * 
+	 *
 	 * @throws Error If the file is not downloaded sufficiently to retrieve the
 	 *               requested information.
 	 */
-	public get height():number
-	{
-		var box: Box = PickGroup.getInstance(this._loader.stage.view).getBoundsPicker(this._container.partition).getBoxBounds(this._container);
+	public get height(): number {
+		const box: Box = PickGroup.getInstance(this._loader.stage.view).getBoundsPicker(this._container.partition).getBoxBounds(this._container);
 
 		return (box == null) ? 0 : box.height;
 
@@ -413,7 +396,7 @@ export class LoaderInfo extends EventDispatcher
 
 	/**
 	 * Indicates if the `LoaderInfo.url` property has been truncated.
-	 * 
+	 *
 	 * When the `isURLInaccessible` value is true the `LoaderInfo.url` value is only
 	 * the domain of the final URL from which the content loaded. For example, the
 	 * property is truncated if the content is loaded from
@@ -429,7 +412,7 @@ export class LoaderInfo extends EventDispatcher
 	 *   permission is granted for `BitmapData.draw()`: call `Security.allowDomain()`
 	 *   to access a SWF file (or for non-SWF file content, establish a policy
 	 *   file and use the `LoaderContext.checkPolicyFile` property).
-	 * 
+	 *
 	 * **Note:** The `isURLInaccessible` property was added for Flash Player 10.1 and
 	 * AIR 2.0. However, this property is made available to SWF files of all
 	 * versions when the Flash runtime supports it. So, using some authoring tools
@@ -437,21 +420,20 @@ export class LoaderInfo extends EventDispatcher
 	 * the indirect syntax `myLoaderInfo["isURLInaccessible"]`, or disable strict
 	 * mode. If you are using Flash Professional CS5 or Flex SDK 4.1, you can use
 	 * and compile this API for runtimes released before Flash Player 10.1 and AIR 2.
-	 * 
+	 *
 	 * For application content in AIR, the value of this property is always false.
 	 */
-	public get isURLInaccessible():boolean
-	{
-		release || console.log("isURLInaccessible not implemented yet in flash/LoaderInfo");
+	public get isURLInaccessible(): boolean {
+		release || console.log('isURLInaccessible not implemented yet in flash/LoaderInfo');
 		return false;
-		
+
 	}
 
 	/**
 	 * The Loader object associated with this LoaderInfo object. If this
 	 * LoaderInfo object is the `loaderInfo` property of the instance
 	 * of the main export class of the SWF file, no Loader object is associated.
-	 * 
+	 *
 	 * @throws SecurityError If the object accessing this API is prevented from
 	 *                       accessing the Loader object because of security
 	 *                       restrictions. This can occur, for instance, when a
@@ -464,10 +446,9 @@ export class LoaderInfo extends EventDispatcher
 	 *                       Flash Player Developer Center Topic:
 	 *                       [Security](http://www.adobe.com/go/devnet_security_en).
 	 */
-	public get loader():Loader
-	{
-		return (this._loader instanceof Loader)? this._loader : null;
-		
+	public get loader(): Loader {
+		return (this._loader instanceof Loader) ? this._loader : null;
+
 	}
 
 	/**
@@ -475,36 +456,34 @@ export class LoaderInfo extends EventDispatcher
 	 * by this LoaderInfo object. For the instance of the main class of the SWF
 	 * file, this URL is the same as the SWF file's own URL.
 	 */
-	public get loaderURL():string
-	{
+	public get loaderURL(): string {
 		return LoaderInfo.DefaultLocation;
 		return this._loader.stage.getChildAt(0).loaderInfo.url;
-		
+
 	}
 
 	/**
 	 * An object that contains name-value pairs that represent the parameters
 	 * provided to the loaded SWF file.
-	 * 
+	 *
 	 * You can use a `for-in` loop to extract all the names and
 	 * values from the `parameters` object.
-	 * 
+	 *
 	 * The two sources of parameters are: the query string in the URL of the
 	 * main SWF file, and the value of the `FlashVars` HTML parameter
 	 * (this affects only the main SWF file).
-	 * 
+	 *
 	 * The `parameters` property replaces the ActionScript 1.0 and
 	 * 2.0 technique of providing SWF file parameters as properties of the main
 	 * timeline.
-	 * 
+	 *
 	 * The value of the `parameters` property is null for Loader
 	 * objects that contain SWF files that use ActionScript 1.0 or 2.0. It is
 	 * only non-null for Loader objects that contain SWF files that use
 	 * ActionScript 3.0.
 	 */
-	public get parameters():any
-	{
-		release || console.log("parameters not implemented yet in flash/LoaderInfo");
+	public get parameters(): any {
+		release || console.log('parameters not implemented yet in flash/LoaderInfo');
 		return this.sec.createArrayUnsafe([]);
 	}
 
@@ -516,18 +495,17 @@ export class LoaderInfo extends EventDispatcher
 	 * permission to the child domain or if a URL policy file is loaded at the
 	 * parent domain granting permission to the child domain. If child and parent
 	 * are in the same domain, this property is set to `true`.
-	 * 
+	 *
 	 * For more information related to security, see the Flash Player
 	 * Developer Center Topic: [Security](http://www.adobe.com/go/devnet_security_en).
-	 * 
+	 *
 	 * @throws Error Thrown if the file is not downloaded sufficiently to
 	 *               retrieve the requested information.
 	 */
-	public get parentAllowsChild():boolean
-	{
-		release || console.log("parentAllowsChild not implemented yet in flash/LoaderInfo");
+	public get parentAllowsChild(): boolean {
+		release || console.log('parentAllowsChild not implemented yet in flash/LoaderInfo');
 		return false;
-		
+
 	}
 
 	/**
@@ -538,34 +516,31 @@ export class LoaderInfo extends EventDispatcher
 	 * The sandbox bridge serves as a gateway between the sandboxes, providing
 	 * explicit interaction between application and non-application security
 	 * sandboxes.
-	 * 
+	 *
 	 * @throws SecurityError Only content in the Loader object's sandbox can set
 	 *         this property.
 	 */
-	public get parentSandboxBridge():any
-	{
-		release || console.log("parentSandboxBridge not implemented yet in flash/LoaderInfo");
+	public get parentSandboxBridge(): any {
+		release || console.log('parentSandboxBridge not implemented yet in flash/LoaderInfo');
 		return null;
 	}
 
-	public set parentSandboxBridge(door:any)
-	{
-		release || console.log("parentSandboxBridge not implemented yet in flash/LoaderInfßo");
+	public set parentSandboxBridge(door: any) {
+		release || console.log('parentSandboxBridge not implemented yet in flash/LoaderInfßo');
 	}
 
 	/**
 	 * Expresses the domain relationship between the loader and the content:
 	 * `true` if they have the same origin domain; `false`
 	 * otherwise.
-	 * 
+	 *
 	 * @throws Error Thrown if the file is not downloaded sufficiently to
 	 *               retrieve the requested information.
 	 */
-	public get sameDomain():boolean
-	{
-		release || console.log("sameDomain not implemented yet in flash/LoaderInfo");
+	public get sameDomain(): boolean {
+		release || console.log('sameDomain not implemented yet in flash/LoaderInfo');
 		return false;
-		
+
 	}
 
 	/**
@@ -575,9 +550,8 @@ export class LoaderInfo extends EventDispatcher
 	 * access `sharedEvents` and send and receive events via this
 	 * object.
 	 */
-	public get sharedEvents():EventDispatcher
-	{
-		release || console.log("sharedEvents not implemented yet in flash/LoaderInfo");
+	public get sharedEvents(): EventDispatcher {
+		release || console.log('sharedEvents not implemented yet in flash/LoaderInfo');
 		return null;
 	}
 
@@ -585,14 +559,13 @@ export class LoaderInfo extends EventDispatcher
 	 * The file format version of the loaded SWF file. The file format is
 	 * specified using the enumerations in the SWFVersion class, such as
 	 * `SWFVersion.FLASH7` and `SWFVersion.FLASH9`.
-	 * 
+	 *
 	 * @throws Error If the file is not downloaded sufficiently to retrieve
 	 *               the requested information.
 	 * @throws Error If the file is not a SWF file.
 	 */
-	public get swfVersion():number
-	{
-		return this._swfVersion;		
+	public get swfVersion(): number {
+		return this._swfVersion;
 	}
 
 	/**
@@ -601,7 +574,7 @@ export class LoaderInfo extends EventDispatcher
 	 * uncaught error happens when an error is thrown outside of any
 	 * `try..catch` blocks or when an ErrorEvent object is dispatched
 	 * with no registered listeners.
-	 * 
+	 *
 	 * This property is created when the SWF associated with this LoaderInfo
 	 * has finished loading. Until then the `uncaughtErrorEvents`
 	 * property is `null`. In an ActionScript-only project, you can
@@ -610,17 +583,16 @@ export class LoaderInfo extends EventDispatcher
 	 * `uncaughtErrorEvents` property is available after the
 	 * `applicationComplete` event is dispatched.
 	 */
-	public get uncaughtErrorEvents():any
-	{
+	public get uncaughtErrorEvents(): any {
 		//todo: any is UncaughtErrorEvents
-		release || console.log("uncaughtErrorEvents not implemented yet in flash/LoaderInfo");
+		release || console.log('uncaughtErrorEvents not implemented yet in flash/LoaderInfo');
 		return null;
-	
-}
+
+	}
 
 	/**
 	 * The URL of the media being loaded.
-	 * 
+	 *
 	 * Before the first `progress` event is dispatched by this
 	 * LoaderInfo object's corresponding Loader object, the value of the
 	 * `url` property might reflect only the initial URL specified in
@@ -628,18 +600,17 @@ export class LoaderInfo extends EventDispatcher
 	 * first `progress` event, the `url` property reflects
 	 * the media's final URL, after any redirects and relative URLs are
 	 * resolved.
-	 * 
+	 *
 	 * In some cases, the value of the `url` property is truncated;
 	 * see the `isURLInaccessible` property for details.
 	 */
-	public get url():string
-	{
-		if(LoaderInfo.DefaultLocation!=null && typeof LoaderInfo.DefaultLocation !== "undefined")
+	public get url(): string {
+		if (LoaderInfo.DefaultLocation != null && typeof LoaderInfo.DefaultLocation !== 'undefined')
 			return LoaderInfo.DefaultLocation;
 		return this._url;
 	}
-	public set url(value:string)
-	{
+
+	public set url(value: string) {
 		this._url = value;
 	}
 
@@ -647,22 +618,20 @@ export class LoaderInfo extends EventDispatcher
 	 * The nominal width of the loaded content. This value might differ from the
 	 * actual width at which the content is displayed, since the loaded content
 	 * or its parent display objects might be scaled.
-	 * 
+	 *
 	 * @throws Error If the file is not downloaded sufficiently to retrieve the
 	 *               requested information.
 	 */
-	public get width():number
-	{
-		var box: Box = PickGroup.getInstance(this._loader.stage.view).getBoundsPicker(this._container.partition).getBoxBounds(this._container);
+	public get width(): number {
+		const box: Box = PickGroup.getInstance(this._loader.stage.view).getBoundsPicker(this._container.partition).getBoxBounds(this._container);
 
 		return (box == null) ? 0 : box.width;
 	}
-	
 
 	/**
 	 * Returns the LoaderInfo object associated with a SWF file defined as an
 	 * object.
-	 * 
+	 *
 	 * @param object The object for which you want to get an associated
 	 *               LoaderInfo object.
 	 * @return The associated LoaderInfo object. Returns null when called
@@ -672,16 +641,12 @@ export class LoaderInfo extends EventDispatcher
 	 * @throws SecurityError The caller is not running in the local trusted
 	 *                       sandbox.
 	 */
-	public static getLoaderInfoByDefinition(object:any):LoaderInfo
-	{
-		release || console.log("getLoaderInfoByDefinition not implemented yet in flash/LoaderInfo");
+	public static getLoaderInfoByDefinition(object: any): LoaderInfo {
+		release || console.log('getLoaderInfoByDefinition not implemented yet in flash/LoaderInfo');
 		return null;
 	}
 
-	
-	public _setApplicationDomain(value:ApplicationDomain)
-	{
-		this._applicationDomain = value || new (<SecurityDomain>this.sec).flash.system.ApplicationDomain(ApplicationDomain.currentDomain);
+	public _setApplicationDomain(value: ApplicationDomain) {
+		this._applicationDomain = value || new (<SecurityDomain> this.sec).flash.system.ApplicationDomain(ApplicationDomain.currentDomain);
 	}
 }
-

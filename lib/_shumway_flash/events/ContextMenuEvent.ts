@@ -1,4 +1,4 @@
-import { Event } from "./Event";
+import { Event } from './Event';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -18,24 +18,24 @@ import { Event } from "./Event";
 // Class: ContextMenuEvent
 export class ContextMenuEvent extends Event {
 
-  static classInitializer: any = null;
+	static classInitializer: any = null;
 
-  static classSymbols: string [] = null;
-  static instanceSymbols: string [] = null;
+	static classSymbols: string [] = null;
+	static instanceSymbols: string [] = null;
 
-  mouseTarget: InteractiveObject;
-  contextMenuOwner: InteractiveObject;
+	mouseTarget: InteractiveObject;
+	contextMenuOwner: InteractiveObject;
 
-  constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-              mouseTarget: InteractiveObject = null,
-              contextMenuOwner: InteractiveObject = null) {
-    super(type, bubbles, cancelable);
-    // TODO: coerce
-    this.mouseTarget = mouseTarget;
-    this.contextMenuOwner = contextMenuOwner;
-  }
+	constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		mouseTarget: InteractiveObject = null,
+		contextMenuOwner: InteractiveObject = null) {
+		super(type, bubbles, cancelable);
+		// TODO: coerce
+		this.mouseTarget = mouseTarget;
+		this.contextMenuOwner = contextMenuOwner;
+	}
 
-  // JS -> AS Bindings
-  static MENU_ITEM_SELECT: string = "menuItemSelect";
-  static MENU_SELECT: string = "menuSelect";
+	// JS -> AS Bindings
+	static MENU_ITEM_SELECT: string = 'menuItemSelect';
+	static MENU_SELECT: string = 'menuSelect';
 }

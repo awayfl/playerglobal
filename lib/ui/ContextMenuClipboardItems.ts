@@ -1,5 +1,5 @@
-import { release, warning } from "@awayfl/swf-loader";
-import { ASObject } from "@awayfl/avm2";
+import { release, warning } from '@awayfl/swf-loader';
+import { ASObject } from '@awayfl/avm2';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -47,47 +47,57 @@ export class ContextMenuClipboardItems extends ASObject {
 	_selectAll: boolean;
 
 	get cut(): boolean {
-		release || partialImp(this, "get cut");
+		release || partialImp(this, 'get cut');
 		return this._cut;
 	}
+
 	set cut(val: boolean) {
-		release || partialImp(this, "set cut");
+		release || partialImp(this, 'set cut');
 		this._cut = !!val;
 	}
+
 	get copy(): boolean {
-		release || partialImp(this, "get copy");
+		release || partialImp(this, 'get copy');
 		return this._copy;
 	}
+
 	set copy(val: boolean) {
-		release || partialImp(this, "set copy");
+		release || partialImp(this, 'set copy');
 		this._copy = !!val;
 	}
+
 	get paste(): boolean {
-		release || partialImp(this, "get paste");
+		release || partialImp(this, 'get paste');
 		return this._paste;
 	}
+
 	set paste(val: boolean) {
-		release || partialImp(this, "set paste");
+		release || partialImp(this, 'set paste');
 		this._paste = !!val;
 	}
+
 	get clear(): boolean {
-		release || partialImp(this, "get clear");
+		release || partialImp(this, 'get clear');
 		return this._clear;
 	}
+
 	set clear(val: boolean) {
-		release || partialImp(this, "set clear");
+		release || partialImp(this, 'set clear');
 		this._clear = !!val;
 	}
+
 	get selectAll(): boolean {
-		release || partialImp(this, "get selectAll");
+		release || partialImp(this, 'get selectAll');
 		return this._selectAll;
 	}
+
 	set selectAll(val: boolean) {
-		release || partialImp(this, "set selectAll");
+		release || partialImp(this, 'set selectAll');
 		this._selectAll = !!val;
 	}
+
 	clone(): ContextMenuClipboardItems {
-		var items = new ContextMenuClipboardItems();
+		const items = new ContextMenuClipboardItems();
 		items._cut = this._cut;
 		items._copy = this._copy;
 		items._paste = this._paste;

@@ -1,3 +1,3 @@
 export class RenderTexture {
-	public static optimizePersistentBuffers:boolean;
+	public static optimizePersistentBuffers: boolean;
 }

@@ -5,10 +5,10 @@
  *   instances, primitive types such as uint, and class objects.
  * @return	A string containing the fully qualified class name.
  */
-export const getQualifiedClassName=function(value:any){
-	if(value.name)
+export const getQualifiedClassName = function(value: any) {
+	if (value.name)
 		return value.name;
-	else{
+	else {
 		return value.constructor.name;
 	}
 };

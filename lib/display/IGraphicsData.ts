@@ -1,1 +1,1 @@
-export {IGraphicsData} from "@awayjs/graphics";
+export { IGraphicsData } from '@awayjs/graphics';

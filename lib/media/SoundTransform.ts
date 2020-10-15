@@ -1,42 +1,45 @@
 import { ASObject, AXClass } from '@awayfl/avm2';
 
-
 /**
  * The SoundTransform class contains properties for volume and panning.
  *
  */
-export class SoundTransform extends ASObject
-{
+export class SoundTransform extends ASObject {
 
 	static axClass: typeof SoundTransform & AXClass;
 	// for AVM1:
-	public axCallPublicProperty(value1:any, value2:any):any{
-		console.log("axCallPublicProperty not implemented yet in flash/SoundTransform");
+	public axCallPublicProperty(value1: any, value2: any): any {
+		console.log('axCallPublicProperty not implemented yet in flash/SoundTransform');
 		return null;
 	}
-	public axGetPublicProperty(value:any):any{
-		console.log("axGetPublicProperty not implemented yet in flash/SoundTransform");
+
+	public axGetPublicProperty(value: any): any {
+		console.log('axGetPublicProperty not implemented yet in flash/SoundTransform');
 		return null;
 	}
-	public axSetPublicProperty(value:any, value2:any):any{
-		console.log("axSetPublicProperty not implemented yet in flash/SoundTransform");
+
+	public axSetPublicProperty(value: any, value2: any): any {
+		console.log('axSetPublicProperty not implemented yet in flash/SoundTransform');
 		return null;
 	}
-	public axHasPublicProperty(value:any):any{
-		console.log("axHasPublicProperty not implemented yet in flash/SoundTransform");
+
+	public axHasPublicProperty(value: any): any {
+		console.log('axHasPublicProperty not implemented yet in flash/SoundTransform');
 		return null;
 	}
-	public axDeletePublicProperty(value:any):any{
-		console.log("axDeletePublicProperty not implemented yet in flash/SoundTransform");
+
+	public axDeletePublicProperty(value: any): any {
+		console.log('axDeletePublicProperty not implemented yet in flash/SoundTransform');
 		return null;
 	}
-	public axGetEnumerableKeys():string[]{
-		console.log("axGetEnumerableKeys not implemented yet in flash/SoundTransform");
+
+	public axGetEnumerableKeys(): string[] {
+		console.log('axGetEnumerableKeys not implemented yet in flash/SoundTransform');
 		return [];
 	}
 
-	private _vol:number=1;
-	private _pan:number=0.5;
+	private _vol: number=1;
+	private _pan: number=0.5;
 	/**
 	 * Creates a SoundTransform object.
 	 * @param	vol	The volume, ranging from 0 (silent) to 1 (full volume).
@@ -47,31 +50,34 @@ export class SoundTransform extends ASObject
 	 * @playerversion	Lite 4
 	 * @refpath
 	 */
-	constructor (vol:number=1, panning:number=0){
+	constructor (vol: number = 1, panning: number = 0) {
 		super();
 	}
+
 	/**
 	 * A value, from 0 (none) to 1 (all), specifying how much of the left input is played in the
 	 * left speaker.
 	 */
-	public get leftToLeft () : number{
-		console.log("leftToLeft not implemented yet in flash/SoundTransform");
+	public get leftToLeft (): number {
+		console.log('leftToLeft not implemented yet in flash/SoundTransform');
 		return 0;
 	}
-	public set leftToLeft (leftToLeft:number){
-		console.log("leftToLeft not implemented yet in flash/SoundTransform");
+
+	public set leftToLeft (leftToLeft: number) {
+		console.log('leftToLeft not implemented yet in flash/SoundTransform');
 	}
 
 	/**
 	 * A value, from 0 (none) to 1 (all), specifying how much of the left input is played in the
 	 * right speaker.
 	 */
-	public get leftToRight () : number{
-		console.log("leftToRight not implemented yet in flash/SoundTransform");
+	public get leftToRight (): number {
+		console.log('leftToRight not implemented yet in flash/SoundTransform');
 		return 0;
 	}
-	public set leftToRight (leftToRight:number){
-		console.log("leftToRight not implemented yet in flash/SoundTransform");
+
+	public set leftToRight (leftToRight: number) {
+		console.log('leftToRight not implemented yet in flash/SoundTransform');
 	}
 
 	/**
@@ -79,47 +85,49 @@ export class SoundTransform extends ASObject
 	 * to 1 (full pan right). A value of 0 represents no panning (balanced center between
 	 * right and left).
 	 */
-	public get pan () : number{
+	public get pan (): number {
 		return this._pan;
 	}
-	
-	public set pan (value:number){
-		this._pan=value;
+
+	public set pan (value: number) {
+		this._pan = value;
 	}
 
 	/**
 	 * A value, from 0 (none) to 1 (all), specifying how much of the right input is played in the
 	 * left speaker.
 	 */
-	public get rightToLeft () : number{
-		console.log("rightToLeft not implemented yet in flash/SoundTransform");
+	public get rightToLeft (): number {
+		console.log('rightToLeft not implemented yet in flash/SoundTransform');
 		return 0;
 	}
-	public set rightToLeft (rightToLeft:number){
-		console.log("rightToLeft not implemented yet in flash/SoundTransform");
+
+	public set rightToLeft (rightToLeft: number) {
+		console.log('rightToLeft not implemented yet in flash/SoundTransform');
 	}
 
 	/**
 	 * A value, from 0 (none) to 1 (all), specifying how much of the right input is played in the
 	 * right speaker.
 	 */
-	public get rightToRight () : number{
-		console.log("rightToRight not implemented yet in flash/SoundTransform");
+	public get rightToRight (): number {
+		console.log('rightToRight not implemented yet in flash/SoundTransform');
 		return 0;
 	}
-	public set rightToRight (rightToRight:number){
-		console.log("rightToRight not implemented yet in flash/SoundTransform");
+
+	public set rightToRight (rightToRight: number) {
+		console.log('rightToRight not implemented yet in flash/SoundTransform');
 	}
 
 	/**
 	 * The volume, ranging from 0 (silent) to 1 (full volume).
 	 */
-	public get volume () : number{		
+	public get volume (): number {
 		return this._vol;
 	}
-	public set volume (value:number){
-		this._vol=value;		
+
+	public set volume (value: number) {
+		this._vol = value;
 	}
 
 }
-

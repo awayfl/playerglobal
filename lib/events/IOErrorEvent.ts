@@ -1,5 +1,5 @@
-import { ErrorEvent } from "./ErrorEvent";
-import { Event } from "./Event";
+import { ErrorEvent } from './ErrorEvent';
+import { Event } from './Event';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -18,32 +18,32 @@ import { Event } from "./Event";
  */
 // Class: IOErrorEvent
 export class IOErrorEvent extends ErrorEvent {
-  static classInitializer: any = null;
+	static classInitializer: any = null;
 
-  static classSymbols: string [] = null;
-  static instanceSymbols: string [] = null;
+	static classSymbols: string [] = null;
+	static instanceSymbols: string [] = null;
 
-  constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-              text: string = "", id: number /*int*/ = 0) {
-    super(type, bubbles, cancelable, text, id);
-  }
+	constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		text: string = '', id: number /*int*/ = 0) {
+		super(type, bubbles, cancelable, text, id);
+	}
 
-  // JS -> AS Bindings
-  static IO_ERROR: string = "ioError";
-  static NETWORK_ERROR: string = "networkError";
-  static DISK_ERROR: string = "diskError";
-  static VERIFY_ERROR: string = "verifyError";
+	// JS -> AS Bindings
+	static IO_ERROR: string = 'ioError';
+	static NETWORK_ERROR: string = 'networkError';
+	static DISK_ERROR: string = 'diskError';
+	static VERIFY_ERROR: string = 'verifyError';
 
-  clone(): Event {
-    var event = new IOErrorEvent(this.type, this.bubbles,
-                                                                  this.cancelable, this.text,
-                                                                  this.errorID);
-    //this.copyNativeData(event);
-    return event;
-  }
+	clone(): Event {
+		const event = new IOErrorEvent(this.type, this.bubbles,
+			this.cancelable, this.text,
+			this.errorID);
+		//this.copyNativeData(event);
+		return event;
+	}
 
-  toString(): string {
-    return this.formatToString('IOErrorEvent', 'type', 'bubbles', 'cancelable', 'text',
-                                'errorID');
-  }
+	toString(): string {
+		return this.formatToString('IOErrorEvent', 'type', 'bubbles', 'cancelable', 'text',
+			'errorID');
+	}
 }

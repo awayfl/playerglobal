@@ -1,1 +1,1 @@
-export {AntiAliasType} from "@awayjs/scene";
+export { AntiAliasType } from '@awayjs/scene';

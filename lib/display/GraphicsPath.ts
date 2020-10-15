@@ -1,1 +1,1 @@
-export {GraphicsPath} from "@awayjs/graphics";
+export { GraphicsPath } from '@awayjs/graphics';

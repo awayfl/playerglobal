@@ -1,14 +1,14 @@
-import { axCoerceString } from "@awayfl/avm2";
+import { axCoerceString } from '@awayfl/avm2';
 
 /**
  * Copyright 2014 Mozilla Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,20 +18,20 @@ import { axCoerceString } from "@awayfl/avm2";
 // Class: FSCommand
 
 export interface IFSCommandListener {
-  executeFSCommand(command: string, args: string);
+	executeFSCommand(command: string, args: string);
 }
 
 export function fscommand(sec: any, command: string, args: string): void {
-  command = axCoerceString(command);
-  args = axCoerceString(args);
-  console.log('FSCommand: ' + command + '; ' + args);
-  command = command.toLowerCase();
-  if (command === 'debugger') {
-    /* tslint:disable */
-    debugger;
-    /* tslint:enable */
-    return;
-  }
+	command = axCoerceString(command);
+	args = axCoerceString(args);
+	console.log('FSCommand: ' + command + '; ' + args);
+	command = command.toLowerCase();
+	if (command === 'debugger') {
+		/* tslint:disable */
+		debugger;
+		/* tslint:enable */
+		return;
+	}
 
-  (<any>sec).player.executeFSCommand(command, args);
+	(<any>sec).player.executeFSCommand(command, args);
 }

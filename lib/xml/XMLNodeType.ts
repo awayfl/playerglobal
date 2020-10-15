@@ -1,5 +1,4 @@
 
-
 /**
  * The XMLNodeType class contains constants used with
  * <codeph class="+ topic/ph pr-d/codeph ">XMLNode.nodeType</codeph>. The values are defined
@@ -10,12 +9,11 @@
  * @playerversion	Flash 9
  * @playerversion	Lite 4
  */
-export class XMLNodeType
-{
+export class XMLNodeType {
 	//80pro todo: all values above 100 are value i assigned, maybe worth to check what they was in original as3
-	public static CDATA_NODE : number = 100;
-	public static COMMENT_NODE : number = 101;
-	public static DOCUMENT_TYPE_NODE : number = 102;
+	public static CDATA_NODE: number = 100;
+	public static COMMENT_NODE: number = 101;
+	public static DOCUMENT_TYPE_NODE: number = 102;
 
 	/**
 	 * Specifies that the node is an element.
@@ -27,8 +25,8 @@ export class XMLNodeType
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public static ELEMENT_NODE : number = 1;
-	public static PROCESSING_INSTRUCTION_NODE : number = 103;
+	public static ELEMENT_NODE: number = 1;
+	public static PROCESSING_INSTRUCTION_NODE: number = 103;
 
 	/**
 	 * Specifies that the node is a text node.
@@ -40,11 +38,10 @@ export class XMLNodeType
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public static TEXT_NODE : number = 3;
-	public static XML_DECLARATION : number=104;
+	public static TEXT_NODE: number = 3;
+	public static XML_DECLARATION: number=104;
 
-	constructor (){
+	constructor () {
 		// todo: why does this have a constructor ? it just provides static props...
 	}
 }
-

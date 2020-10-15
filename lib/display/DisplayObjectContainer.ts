@@ -1,28 +1,31 @@
-import {Box} from "@awayjs/core";
-import {Billboard, TextField as AwayTextField, DisplayObjectContainer as AwayDisplayObjectContainer, Sprite as AwaySprite, MovieClip as AwayMovieClip, DisplayObject as AwayDisplayObject, FrameScriptManager, IDisplayObjectAdapter} from "@awayjs/scene";
-import {DisplayObject} from "./DisplayObject";
-import {InteractiveObject} from "./InteractiveObject";
-import {Event} from "../events/Event";
-import {PickGroup} from "@awayjs/view";
+import { Box } from '@awayjs/core';
+import { Billboard, TextField as AwayTextField, DisplayObjectContainer as AwayDisplayObjectContainer, Sprite as AwaySprite, MovieClip as AwayMovieClip, DisplayObject as AwayDisplayObject, FrameScriptManager, IDisplayObjectAdapter } from '@awayjs/scene';
+import { DisplayObject } from './DisplayObject';
+import { InteractiveObject } from './InteractiveObject';
+import { Event } from '../events/Event';
+import { PickGroup } from '@awayjs/view';
 import { constructClassFromSymbol, OrphanManager } from '@awayfl/avm2';
 import { Point } from '../geom/Point';
 import { SecurityDomain } from '../SecurityDomain';
-import { StaticEvents } from "../events/StaticEvents";
+import { StaticEvents } from '../events/StaticEvents';
 
-export class DisplayObjectContainer extends InteractiveObject{
+export class DisplayObjectContainer extends InteractiveObject {
 
 	// for AVM1:
-	public _children:any[];
-	public addTimelineObjectAtDepth(child:any, depth:number){
+	public _children: any[];
+	public addTimelineObjectAtDepth(child: any, depth: number) {
 
 	}
-	public getTimelineObjectAtDepth(depth:number):any{
+
+	public getTimelineObjectAtDepth(depth: number): any {
 		return null;
 	}
-	public _lookupChildByName(name:string, lookupOptions:any=null):any{
+
+	public _lookupChildByName(name: string, lookupOptions: any = null): any {
 
 	}
-	public _lookupChildByIndex(idx:number, lookupOptions:any=null):any{
+
+	public _lookupChildByIndex(idx: number, lookupOptions: any = null): any {
 
 	}
 
@@ -50,16 +53,15 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 *
 	 *   new Loader()new Sprite()new MovieClip()
 	 */
-	constructor()
-	{
+	constructor() {
 		super();
-		if(this.adaptee){
-			let children=(<AwayDisplayObjectContainer>this.adaptee)._children;
-			for(var i:number = 0; i<children.length; i++){
-				
-				let mc = children[i];
-				let mcadapter = mc.adapter;
-				let constructorFunc = (<IDisplayObjectAdapter>mcadapter).executeConstructor;
+		if (this.adaptee) {
+			const children = (<AwayDisplayObjectContainer> this.adaptee)._children;
+			for (let i: number = 0; i < children.length; i++) {
+
+				const mc = children[i];
+				const mcadapter = mc.adapter;
+				const constructorFunc = (<IDisplayObjectAdapter>mcadapter).executeConstructor;
 				if (constructorFunc) {
 					(<IDisplayObjectAdapter>mcadapter).executeConstructor = null;
 					//console.log(randomVal, "call constructor for ", mc.parent.name, mc.name);
@@ -67,30 +69,29 @@ export class DisplayObjectContainer extends InteractiveObject{
 					//(<any>mcadapter).constructorHasRun=true;
 				}
 				// if mc was created by timeline, instanceID!=""
-				if ((<any>mc).just_added_to_timeline && mc.instanceID != "" && mcadapter && (<any>mcadapter).dispatchStaticEvent) {
+				if ((<any>mc).just_added_to_timeline && mc.instanceID != '' && mcadapter && (<any>mcadapter).dispatchStaticEvent) {
 
-					(<any>mcadapter).dispatchStaticEvent("added", mcadapter);
+					(<any>mcadapter).dispatchStaticEvent('added', mcadapter);
 					(<any>mc).just_added_to_timeline = false;
 					mc.hasDispatchedAddedToStage = mc.isOnDisplayList();
 					if (mc.hasDispatchedAddedToStage)
-						(<any>mcadapter).dispatchStaticEvent("addedToStage", mcadapter);
+						(<any>mcadapter).dispatchStaticEvent('addedToStage', mcadapter);
 				}
 			}
 		}
 	}
-	
-	protected createAdaptee():AwayDisplayObject{
+
+	protected createAdaptee(): AwayDisplayObject {
 		return new AwayDisplayObjectContainer();
 	}
 	//---------------------------stuff added to make it work:
 
-	public clone():DisplayObjectContainer
-	{
-		if(!(<any>this)._symbol){
-			throw("_symbol not defined when cloning movieclip")
+	public clone(): DisplayObjectContainer {
+		if (!(<any> this)._symbol) {
+			throw ('_symbol not defined when cloning movieclip');
 		}
 		//var clone: MovieClip = MovieClip.getNewMovieClip(AwayMovieClip.getNewMovieClip((<AwayMovieClip>this.adaptee).timeline));
-		var clone=constructClassFromSymbol((<any>this)._symbol, (<any>this)._symbol.symbolClass);
+		const clone = constructClassFromSymbol((<any> this)._symbol, (<any> this)._symbol.symbolClass);
 		clone.axInitializer();
 		this.adaptee.copyTo(clone.adaptee);
 		return clone;
@@ -101,75 +102,71 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 if any child is a MovieClip this function will not be called on its childrens adapter.
 	 */
 	public advanceFrame() {
-		var i:number=(<AwayDisplayObjectContainer> this._adaptee)._children.length;
-		while(i>0){
+		let i: number = (<AwayDisplayObjectContainer> this._adaptee)._children.length;
+		while (i > 0) {
 			i--;
-			var oneChild:AwayDisplayObject=(<AwayDisplayObjectContainer> this._adaptee)._children[i];
-			if(oneChild){
-				if(oneChild.isAsset(AwayDisplayObjectContainer)){
-					if(oneChild.adapter){
+			const oneChild: AwayDisplayObject = (<AwayDisplayObjectContainer> this._adaptee)._children[i];
+			if (oneChild) {
+				if (oneChild.isAsset(AwayDisplayObjectContainer)) {
+					if (oneChild.adapter) {
 						(<DisplayObjectContainer>oneChild.adapter).advanceFrame();
 					}
-				}
-				else if(oneChild.isAsset(AwaySprite)) {
+				} else if (oneChild.isAsset(AwaySprite)) {
 					if (oneChild.adapter && (<any>oneChild.adapter).advanceFrame) {
 						// when Flash constructs Sprites for "Shape" it will not include the DispayObjectContainer in the inheritance chain
 						(<DisplayObjectContainer>oneChild.adapter).advanceFrame();
 					}
-				}
-				else if(oneChild.isAsset(AwayMovieClip)){
+				} else if (oneChild.isAsset(AwayMovieClip)) {
 					(<AwayMovieClip>oneChild).update();
 				}
 			}
 		}
 	}
-	public debugDisplayGraph(obj:any) {
-		obj.object=this;
-		obj.rectangle="x:"+this.x+", y:"+this.y+", width:"+this.width+", height:"+this.height;
-		obj.children={};
-		var i:number=0;
-		for(i=0;i<(<AwayDisplayObjectContainer> this._adaptee).numChildren;i++){
-			var oneChild:AwayDisplayObject=(<AwayDisplayObjectContainer> this._adaptee).getChildAt(i);
-			var childname="child_"+i+" "+(<any>oneChild.adapter).constructor.name;
-			if(oneChild.isAsset(AwaySprite) || oneChild.isAsset(AwayDisplayObjectContainer)){
-				if(oneChild.adapter){
-					obj.children[childname]={};
+
+	public debugDisplayGraph(obj: any) {
+		obj.object = this;
+		obj.rectangle = 'x:' + this.x + ', y:' + this.y + ', width:' + this.width + ', height:' + this.height;
+		obj.children = {};
+		let i: number = 0;
+		for (i = 0;i < (<AwayDisplayObjectContainer> this._adaptee).numChildren;i++) {
+			const oneChild: AwayDisplayObject = (<AwayDisplayObjectContainer> this._adaptee).getChildAt(i);
+			const childname = 'child_' + i + ' ' + (<any>oneChild.adapter).constructor.name;
+			if (oneChild.isAsset(AwaySprite) || oneChild.isAsset(AwayDisplayObjectContainer)) {
+				if (oneChild.adapter) {
+					obj.children[childname] = {};
 					(<DisplayObjectContainer>oneChild.adapter).debugDisplayGraph(obj.children[childname]);
 				}
-			}
-			else if(oneChild.isAsset(Billboard)){
-				obj.children[childname]={};
-				obj.children[childname].object=oneChild.adapter;
-				obj.children[childname].name=oneChild.name;
-				obj.children[childname].rectangle="x:"+oneChild.x+", y:"+oneChild.y;//+", width:"+oneChild.width+", height:"+oneChild.height;
-				
-				/*var box:Box = PickGroup.getInstance(this._stage.view).getBoundsPicker(oneChild.partition).getBoxBounds(oneChild);				
-				obj.children[childname].width=(box == null)? 0 : box.width;		
+			} else if (oneChild.isAsset(Billboard)) {
+				obj.children[childname] = {};
+				obj.children[childname].object = oneChild.adapter;
+				obj.children[childname].name = oneChild.name;
+				obj.children[childname].rectangle = 'x:' + oneChild.x + ', y:' + oneChild.y;//+", width:"+oneChild.width+", height:"+oneChild.height;
+
+				/*var box:Box = PickGroup.getInstance(this._stage.view).getBoundsPicker(oneChild.partition).getBoxBounds(oneChild);
+				obj.children[childname].width=(box == null)? 0 : box.width;
 				obj.children[childname].height=(box == null)? 0 : box.height;*/
 				//(<AwayMovieClip>oneChild).graphics.endFill();
 				//console.log("Reached MC", oneChild);
 				//(<AwayMovieClip>oneChild).update();
-			}
-			else if(oneChild.isAsset(AwayMovieClip)){
-				obj.children[childname]={};
-				obj.children[childname].object=oneChild.adapter;
-				obj.children[childname].name=oneChild.name;
-				obj.children[childname].rectangle="x:"+oneChild.x+", y:"+oneChild.y;//+", width:"+oneChild.width+", height:"+oneChild.height;
-				/*var box:Box = PickGroup.getInstance(this._stage.view).getBoundsPicker(oneChild.partition).getBoxBounds(oneChild);				
-				obj.children[childname].width=(box == null)? 0 : box.width;		
+			} else if (oneChild.isAsset(AwayMovieClip)) {
+				obj.children[childname] = {};
+				obj.children[childname].object = oneChild.adapter;
+				obj.children[childname].name = oneChild.name;
+				obj.children[childname].rectangle = 'x:' + oneChild.x + ', y:' + oneChild.y;//+", width:"+oneChild.width+", height:"+oneChild.height;
+				/*var box:Box = PickGroup.getInstance(this._stage.view).getBoundsPicker(oneChild.partition).getBoxBounds(oneChild);
+				obj.children[childname].width=(box == null)? 0 : box.width;
 				obj.children[childname].height=(box == null)? 0 : box.height;*/
 				//(<AwayMovieClip>oneChild).graphics.endFill();
 				//console.log("Reached MC", oneChild);
 				//(<AwayMovieClip>oneChild).update();
-			}
-			else if(oneChild.isAsset(AwayTextField)){
-				obj.children[childname]={};
-				obj.children[childname].object=oneChild.adapter;
-				obj.children[childname].text=(<AwayTextField>oneChild).text;
-				obj.children[childname].rectangle="x:"+oneChild.x+", y:"+oneChild.y;//+", width:"+oneChild.width+", height:"+oneChild.height;
-				var box:Box = PickGroup.getInstance(this._stage.view).getBoundsPicker(oneChild.partition).getBoxBounds(oneChild);				
-				obj.children[childname].width=(box == null)? 0 : box.width;		
-				obj.children[childname].height=(box == null)? 0 : box.height;
+			} else if (oneChild.isAsset(AwayTextField)) {
+				obj.children[childname] = {};
+				obj.children[childname].object = oneChild.adapter;
+				obj.children[childname].text = (<AwayTextField>oneChild).text;
+				obj.children[childname].rectangle = 'x:' + oneChild.x + ', y:' + oneChild.y;//+", width:"+oneChild.width+", height:"+oneChild.height;
+				const box: Box = PickGroup.getInstance(this._stage.view).getBoundsPicker(oneChild.partition).getBoxBounds(oneChild);
+				obj.children[childname].width = (box == null) ? 0 : box.width;
+				obj.children[childname].height = (box == null) ? 0 : box.height;
 				//(<AwayMovieClip>oneChild).graphics.endFill();
 				//console.log("Reached MC", oneChild);
 				//(<AwayMovieClip>oneChild).update();
@@ -178,52 +175,49 @@ export class DisplayObjectContainer extends InteractiveObject{
 
 	}
 
-	
-	//	overwrite 
-	public dispatch_ADDED_TO_STAGE(dispatchForThisChild:boolean=false) {
-		
-		if(dispatchForThisChild){
-			if(!StaticEvents.events[Event.ADDED_TO_STAGE])
-				StaticEvents.events[Event.ADDED_TO_STAGE]=new (<SecurityDomain> this.sec).flash.events.Event(Event.ADDED_TO_STAGE);
-			StaticEvents.events[Event.ADDED_TO_STAGE].target=this;
+	//	overwrite
+	public dispatch_ADDED_TO_STAGE(dispatchForThisChild: boolean = false) {
+
+		if (dispatchForThisChild) {
+			if (!StaticEvents.events[Event.ADDED_TO_STAGE])
+				StaticEvents.events[Event.ADDED_TO_STAGE] = new (<SecurityDomain> this.sec).flash.events.Event(Event.ADDED_TO_STAGE);
+			StaticEvents.events[Event.ADDED_TO_STAGE].target = this;
 			this.dispatchEvent(StaticEvents.events[Event.ADDED_TO_STAGE]);
 		}
-		if((<AwayDisplayObjectContainer> this._adaptee)){
-			let children=(<AwayDisplayObjectContainer> this._adaptee)._children;
-			let len=children.length;
-			for(let i=0;i<len; i++){
-				let oneChild:AwayDisplayObject=children[i];
-				if(oneChild.adapter && (<any>oneChild.adapter).dispatchEventRecursive && !oneChild.hasDispatchedAddedToStage){
-					oneChild.hasDispatchedAddedToStage=true;
+		if ((<AwayDisplayObjectContainer> this._adaptee)) {
+			const children = (<AwayDisplayObjectContainer> this._adaptee)._children;
+			const len = children.length;
+			for (let i = 0;i < len; i++) {
+				const oneChild: AwayDisplayObject = children[i];
+				if (oneChild.adapter && (<any>oneChild.adapter).dispatchEventRecursive && !oneChild.hasDispatchedAddedToStage) {
+					oneChild.hasDispatchedAddedToStage = true;
 					(<DisplayObject>oneChild.adapter).dispatch_ADDED_TO_STAGE(true);
 				}
 			}
 		}
-	};
-	public dispatch_REMOVED_FROM_STAGE(dispatchForThisChild:boolean=false) {
-		
-		if(dispatchForThisChild){
-			if(!StaticEvents.events[Event.REMOVED_FROM_STAGE])
-				StaticEvents.events[Event.REMOVED_FROM_STAGE]=new (<SecurityDomain> this.sec).flash.events.Event(Event.REMOVED_FROM_STAGE);
-			StaticEvents.events[Event.REMOVED_FROM_STAGE].target=this;
+	}
+
+	public dispatch_REMOVED_FROM_STAGE(dispatchForThisChild: boolean = false) {
+
+		if (dispatchForThisChild) {
+			if (!StaticEvents.events[Event.REMOVED_FROM_STAGE])
+				StaticEvents.events[Event.REMOVED_FROM_STAGE] = new (<SecurityDomain> this.sec).flash.events.Event(Event.REMOVED_FROM_STAGE);
+			StaticEvents.events[Event.REMOVED_FROM_STAGE].target = this;
 			//FrameScriptManager.queue_removed_mc(this.adaptee, StaticEvents.events[Event.REMOVED_FROM_STAGE], this.adaptee);
 			this.dispatchEvent(StaticEvents.events[Event.REMOVED_FROM_STAGE]);
 		}
-		if((<AwayDisplayObjectContainer> this._adaptee)){
-			let children=(<AwayDisplayObjectContainer> this._adaptee)._children;
-			let len=children.length;
-			for(let i=0;i<len; i++){
-				let oneChild:AwayDisplayObject=children[i];
-				if(oneChild.adapter && (<any>oneChild.adapter).dispatchEventRecursive && oneChild.hasDispatchedAddedToStage){
-					oneChild.hasDispatchedAddedToStage=false;
+		if ((<AwayDisplayObjectContainer> this._adaptee)) {
+			const children = (<AwayDisplayObjectContainer> this._adaptee)._children;
+			const len = children.length;
+			for (let i = 0;i < len; i++) {
+				const oneChild: AwayDisplayObject = children[i];
+				if (oneChild.adapter && (<any>oneChild.adapter).dispatchEventRecursive && oneChild.hasDispatchedAddedToStage) {
+					oneChild.hasDispatchedAddedToStage = false;
 					(<DisplayObject>oneChild.adapter).dispatch_REMOVED_FROM_STAGE(true);
 				}
 			}
 		}
-	};
-	
-
-	
+	}
 
 	//---------------------------original as3 properties / methods:
 
@@ -244,11 +238,12 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public get mouseChildren () : boolean {
+	public get mouseChildren (): boolean {
 		return (<AwayDisplayObjectContainer> this._adaptee).mouseChildren;
 	}
-	public set mouseChildren (enable:boolean)  {
-		(<AwayDisplayObjectContainer> this._adaptee).mouseChildren=enable;
+
+	public set mouseChildren (enable: boolean)  {
+		(<AwayDisplayObjectContainer> this._adaptee).mouseChildren = enable;
 	}
 
 	/**
@@ -257,7 +252,7 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public get numChildren () : number{
+	public get numChildren (): number {
 		return (<AwayDisplayObjectContainer>(<AwayDisplayObjectContainer> this._adaptee)).numChildren;
 	}
 
@@ -272,12 +267,13 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 * @throws	IllegalOperationError Calling this property of the Stage object
 	 *   throws an exception. The Stage object does not implement this property.
 	 */
-	public get tabChildren () : boolean {
+	public get tabChildren (): boolean {
 		//todo
 		//console.warn("tabChildren not implemented yet in flash/DisplayObjectContainer");
 		return false;
 	}
-	public set tabChildren (enable:boolean)  {
+
+	public set tabChildren (enable: boolean)  {
 		//console.warn("tabChildren not implemented yet in flash/DisplayObjectContainer");
 		//todo
 	}
@@ -287,8 +283,8 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public get textSnapshot () : any {
-		throw("textSnapshot not implemented yet in flash/DisplayObjectContainer");
+	public get textSnapshot (): any {
+		throw ('textSnapshot not implemented yet in flash/DisplayObjectContainer');
 		// todo: flash.text.TextSnapshot;
 		//return null;
 	}
@@ -311,15 +307,15 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 * @throws	ArgumentError Throws if the child is the same as the parent.  Also throws if
 	 *   the caller is a child (or grandchild etc.) of the child being added.
 	 */
-	public addChild (child:DisplayObject) : DisplayObject {
-		
-		let dispatchAdded=!(child.adaptee.parent==this.adaptee);
+	public addChild (child: DisplayObject): DisplayObject {
 
-        (<AwayDisplayObjectContainer> this._adaptee).addChild((<DisplayObject>child).adaptee);
-		
-		if(dispatchAdded){
+		const dispatchAdded = !(child.adaptee.parent == this.adaptee);
+
+		(<AwayDisplayObjectContainer> this._adaptee).addChild((<DisplayObject>child).adaptee);
+
+		if (dispatchAdded) {
 			child.dispatchStaticEvent(Event.ADDED, child);
-			if(this.adaptee.isOnDisplayList()){
+			if (this.adaptee.isOnDisplayList()) {
 				child.dispatch_ADDED_TO_STAGE(true);
 			}
 		}
@@ -350,31 +346,30 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 * @throws	ArgumentError Throws if the child is the same as the parent.  Also throws if
 	 *   the caller is a child (or grandchild etc.) of the child being added.
 	 */
-	public addChildAt (child:DisplayObject, index:number) : DisplayObject {
-		let dispatchAdded=!(child.adaptee.parent==this.adaptee);
+	public addChildAt (child: DisplayObject, index: number): DisplayObject {
+		const dispatchAdded = !(child.adaptee.parent == this.adaptee);
 		// todo: this should be done much more efficient (in awayjs)
-		var allChildren=[];
-		for(var i:number /*uint*/ = 0; i < (<AwayDisplayObjectContainer> this._adaptee).numChildren; i++){
-			if(child.adaptee.id != (<AwayDisplayObjectContainer> this._adaptee)._children[i].id){
-				allChildren[allChildren.length]=(<AwayDisplayObjectContainer> this._adaptee)._children[i];
+		const allChildren = [];
+		for (var i: number /*uint*/ = 0; i < (<AwayDisplayObjectContainer> this._adaptee).numChildren; i++) {
+			if (child.adaptee.id != (<AwayDisplayObjectContainer> this._adaptee)._children[i].id) {
+				allChildren[allChildren.length] = (<AwayDisplayObjectContainer> this._adaptee)._children[i];
 			}
 		}
-		for(i = 0; i < allChildren.length; i++){
+		for (i = 0; i < allChildren.length; i++) {
 
 			(<AwayDisplayObjectContainer> this._adaptee).removeChild(allChildren[i]);
 		}
-		var newChildCnt=0;
-		for(i = 0; i < allChildren.length+1; i++){
-			if(i==index){
+		let newChildCnt = 0;
+		for (i = 0; i < allChildren.length + 1; i++) {
+			if (i == index) {
 				(<AwayDisplayObjectContainer> this._adaptee).addChild(child.adaptee);
-			}
-			else{
+			} else {
 				(<AwayDisplayObjectContainer> this._adaptee).addChild(allChildren[newChildCnt++]);
 			}
 		}
-		if(dispatchAdded){
+		if (dispatchAdded) {
 			child.dispatchStaticEvent(Event.ADDED);
-			if(this.adaptee.isOnDisplayList()){
+			if (this.adaptee.isOnDisplayList()) {
 				child.dispatch_ADDED_TO_STAGE(true);
 			}
 		}
@@ -402,9 +397,9 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public areInaccessibleObjectsUnderPoint (point:Point) : boolean {
+	public areInaccessibleObjectsUnderPoint (point: Point): boolean {
 		//todo
-		throw("areInaccessibleObjectsUnderPoint not implemented yet in flash/DisplayObjectContainer");
+		throw ('areInaccessibleObjectsUnderPoint not implemented yet in flash/DisplayObjectContainer');
 		//return false;
 	}
 
@@ -420,11 +415,9 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public contains(child:DisplayObject) : boolean
-	{
+	public contains(child: DisplayObject): boolean {
 		return (<AwayDisplayObjectContainer>(<AwayDisplayObjectContainer> this._adaptee)).contains(child.adaptee);
 	}
-
 
 	/**
 	 * Returns the child display object instance that exists at the specified index.
@@ -438,11 +431,11 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 *   to which you do not have access. You can avoid this situation by having
 	 *   the child movie call Security.allowDomain().
 	 */
-	public getChildAt (index:number) : DisplayObject {
+	public getChildAt (index: number): DisplayObject {
 
-		var child=(<AwayDisplayObjectContainer> this._adaptee).getChildAt(index);
-		if(!child.adapter || child.adapter==child){
-			var sprite = child.adapter=new (<SecurityDomain> this.sec).flash.display.Sprite();
+		const child = (<AwayDisplayObjectContainer> this._adaptee).getChildAt(index);
+		if (!child.adapter || child.adapter == child) {
+			const sprite = child.adapter = new (<SecurityDomain> this.sec).flash.display.Sprite();
 			sprite.adaptee = child;
 		}
 
@@ -467,8 +460,8 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 *   to which you do not have access. You can avoid this situation by having
 	 *   the child movie call the Security.allowDomain() method.
 	 */
-	public getChildByName (name:string) : DisplayObject {
-		return (<AwayDisplayObjectContainer>(<AwayDisplayObjectContainer> this._adaptee)).getChildByName(name)? (<DisplayObject>(<AwayDisplayObjectContainer>(<AwayDisplayObjectContainer> this._adaptee)).getChildByName(name).adapter) : null;
+	public getChildByName (name: string): DisplayObject {
+		return (<AwayDisplayObjectContainer>(<AwayDisplayObjectContainer> this._adaptee)).getChildByName(name) ? (<DisplayObject>(<AwayDisplayObjectContainer>(<AwayDisplayObjectContainer> this._adaptee)).getChildByName(name).adapter) : null;
 	}
 
 	/**
@@ -480,7 +473,7 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 * @playerversion	Lite 4
 	 * @throws	ArgumentError Throws if the child parameter is not a child of this object.
 	 */
-	public getChildIndex (child:DisplayObject) : number {
+	public getChildIndex (child: DisplayObject): number {
 		return (<AwayDisplayObjectContainer>(<AwayDisplayObjectContainer> this._adaptee)).getChildIndex(child.adaptee);
 	}
 
@@ -503,28 +496,26 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public getObjectsUnderPoint(point:Point):DisplayObject[]
-	{
-		var children:DisplayObject[] = [];
+	public getObjectsUnderPoint(point: Point): DisplayObject[] {
+		const children: DisplayObject[] = [];
 
 		this._getObjectsUnderPointInternal(point, children);
 
 		return children;
 	}
 
-	protected _getObjectsUnderPointInternal(point:Point, children:DisplayObject[])
-	{
-		var numChildren:number = (<AwayDisplayObjectContainer> this._adaptee).numChildren;
-		var child:AwayDisplayObject;
-		for(var i:number = 0; i < numChildren; i++){
+	protected _getObjectsUnderPointInternal(point: Point, children: DisplayObject[]) {
+		const numChildren: number = (<AwayDisplayObjectContainer> this._adaptee).numChildren;
+		let child: AwayDisplayObject;
+		for (let i: number = 0; i < numChildren; i++) {
 			child = (<AwayDisplayObjectContainer> this._adaptee)._children[i];
-			if(child.visible){
-				
-				if(PickGroup.getInstance(this._stage.view).getBoundsPicker((<AwayDisplayObject>child.adaptee).partition).hitTestPoint(point.x, point.y, true))
+			if (child.visible) {
+
+				if (PickGroup.getInstance(this._stage.view).getBoundsPicker((<AwayDisplayObject>child.adaptee).partition).hitTestPoint(point.x, point.y, true))
 					children.push(<DisplayObject> child.adapter);
-				
+
 				const adapt = (<DisplayObjectContainer> child.adapter);
-				if(typeof adapt._getObjectsUnderPointInternal !== 'function') {
+				if (typeof adapt._getObjectsUnderPointInternal !== 'function') {
 					//debugger;
 				} else {
 					adapt._getObjectsUnderPointInternal(point, children);
@@ -551,7 +542,7 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 * @playerversion	Lite 4
 	 * @throws	ArgumentError Throws if the child parameter is not a child of this object.
 	 */
-	public removeChild (child:DisplayObject) : DisplayObject {
+	public removeChild (child: DisplayObject): DisplayObject {
 		(<AwayDisplayObjectContainer> this._adaptee).removeChild(child.adaptee);
 		//console.log("removeChild not implemented yet in flash/DisplayObjectContainer");
 		return child;
@@ -576,18 +567,18 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 *   the child movie call the Security.allowDomain() method.
 	 * @throws	RangeError Throws if the index does not exist in the child list.
 	 */
-	public removeChildAt (index:number) : DisplayObject {
-		var awayChild:AwayDisplayObject=(<AwayDisplayObjectContainer> this._adaptee).removeChildAt(index);
-		var childadapter:DisplayObject=(<DisplayObject>awayChild.adapter);
+	public removeChildAt (index: number): DisplayObject {
+		const awayChild: AwayDisplayObject = (<AwayDisplayObjectContainer> this._adaptee).removeChildAt(index);
+		const childadapter: DisplayObject = (<DisplayObject>awayChild.adapter);
 		return childadapter;
 	}
 
-	public removeChildren (beginIndex:number=0, endIndex:number=2147483647)  {
+	public removeChildren (beginIndex: number = 0, endIndex: number = 2147483647)  {
 
-		if(endIndex>=(<AwayDisplayObjectContainer> this._adaptee).numChildren) {
-			endIndex=(<AwayDisplayObjectContainer> this._adaptee).numChildren-1;
+		if (endIndex >= (<AwayDisplayObjectContainer> this._adaptee).numChildren) {
+			endIndex = (<AwayDisplayObjectContainer> this._adaptee).numChildren - 1;
 		}
-		(<AwayDisplayObjectContainer> this._adaptee).removeChildren(beginIndex, endIndex+1);
+		(<AwayDisplayObjectContainer> this._adaptee).removeChildren(beginIndex, endIndex + 1);
 
 	}
 
@@ -617,29 +608,27 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 * @throws	RangeError Throws if the index does not exist in the child list.
 	 * @throws	ArgumentError Throws if the child parameter is not a child of this object.
 	 */
-	public setChildIndex (child:DisplayObject, index:number)  {
+	public setChildIndex (child: DisplayObject, index: number)  {
 
 		// todo: this should be done much more efficient (in awayjs)
-		var allChildren=[];
-		for(var i:number /*uint*/ = 0; i < (<AwayDisplayObjectContainer> this._adaptee).numChildren; i++){
-			allChildren[allChildren.length]=(<AwayDisplayObjectContainer> this._adaptee)._children[i];
+		const allChildren = [];
+		for (var i: number /*uint*/ = 0; i < (<AwayDisplayObjectContainer> this._adaptee).numChildren; i++) {
+			allChildren[allChildren.length] = (<AwayDisplayObjectContainer> this._adaptee)._children[i];
 		}
-		for(i = 0; i < allChildren.length; i++){
+		for (i = 0; i < allChildren.length; i++) {
 
 			(<AwayDisplayObjectContainer> this._adaptee).removeChild(allChildren[i]);
 		}
-		var newChildCnt=0;
-		var oldChild;
-		for(i = 0; i < allChildren.length; i++){
-			if(i==index){
+		let newChildCnt = 0;
+		let oldChild;
+		for (i = 0; i < allChildren.length; i++) {
+			if (i == index) {
 				(<AwayDisplayObjectContainer> this._adaptee).addChild(child.adaptee);
-			}
-			else{
-				oldChild=allChildren[newChildCnt++];
-				if(oldChild.id!=child.adaptee.id){
+			} else {
+				oldChild = allChildren[newChildCnt++];
+				if (oldChild.id != child.adaptee.id) {
 					(<AwayDisplayObjectContainer> this._adaptee).addChild(oldChild);
-				}
-				else{
+				} else {
 					oldChild = allChildren[newChildCnt++];
 					(<AwayDisplayObjectContainer> this._adaptee).addChild(oldChild);
 				}
@@ -649,9 +638,8 @@ export class DisplayObjectContainer extends InteractiveObject{
 
 	public stopAllMovieClips ()  {
 		//todo
-		throw("stopAllMovieClips not implemented yet in flash/DisplayObjectContainer");
+		throw ('stopAllMovieClips not implemented yet in flash/DisplayObjectContainer');
 	}
-
 
 	/**
 	 * Swaps the z-order (front-to-back order) of the two specified child objects.  All other child
@@ -663,7 +651,7 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 * @playerversion	Lite 4
 	 * @throws	ArgumentError Throws if either child parameter is not a child of this object.
 	 */
-	public swapChildren (child1:DisplayObject, child2:DisplayObject) {
+	public swapChildren (child1: DisplayObject, child2: DisplayObject) {
 		(<AwayDisplayObjectContainer> this._adaptee).swapChildren(child1.adaptee, child2.adaptee);
 
 	}
@@ -678,8 +666,8 @@ export class DisplayObjectContainer extends InteractiveObject{
 	 * @playerversion	Lite 4
 	 * @throws	RangeError If either index does not exist in the child list.
 	 */
-	public swapChildrenAt (index1:number, index2:number)  {
+	public swapChildrenAt (index1: number, index2: number)  {
 		//todo
-		throw("swapChildrenAt not implemented yet in flash/DisplayObjectContainer");
+		throw ('swapChildrenAt not implemented yet in flash/DisplayObjectContainer');
 	}
 }

@@ -1,11 +1,11 @@
-import {Event} from "./Event";
-import {InteractiveObject} from "../display/InteractiveObject";
-export class FocusEvent extends Event{
+import { Event } from './Event';
+import { InteractiveObject } from '../display/InteractiveObject';
+export class FocusEvent extends Event {
 
-	public static FOCUS_IN="focusIn";
-	public static FOCUS_OUT="focusOut";
-	public static KEY_FOCUS_CHANGE="keyFocusChange";
-	public static MOUSE_FOCUS_CHANGE="mouseFocusChange";
+	public static FOCUS_IN='focusIn';
+	public static FOCUS_OUT='focusOut';
+	public static KEY_FOCUS_CHANGE='keyFocusChange';
+	public static MOUSE_FOCUS_CHANGE='mouseFocusChange';
 	/**
 	 * If true, the relatedObject property is set to null for
 	 * reasons related to security sandboxes.  If the nominal value of relatedObject is a reference to a
@@ -18,23 +18,25 @@ export class FocusEvent extends Event{
 	 * @playerversion	Flash 10
 	 * @playerversion	Lite 4
 	 */
-	public get isRelatedObjectInaccessible () : boolean{
-		console.log("isRelatedObjectInaccessible not implemented yet in flash/FocusEvent");
+	public get isRelatedObjectInaccessible (): boolean {
+		console.log('isRelatedObjectInaccessible not implemented yet in flash/FocusEvent');
 		return false;
 	}
-	public set isRelatedObjectInaccessible (value:boolean){
-		console.log("isRelatedObjectInaccessible not implemented yet in flash/FocusEvent");
+
+	public set isRelatedObjectInaccessible (value: boolean) {
+		console.log('isRelatedObjectInaccessible not implemented yet in flash/FocusEvent');
 	}
 
 	/**
 	 * The key code value of the key pressed to trigger a keyFocusChange event.
 	 */
-	public get keyCode () : number{
-		console.log("keyCode not implemented yet in flash/FocusEvent");
+	public get keyCode (): number {
+		console.log('keyCode not implemented yet in flash/FocusEvent');
 		return 0;
 	}
-	public set keyCode (value:number){
-		console.log("keyCode not implemented yet in flash/FocusEvent");
+
+	public set keyCode (value: number) {
+		console.log('keyCode not implemented yet in flash/FocusEvent');
 	}
 
 	/**
@@ -45,12 +47,13 @@ export class FocusEvent extends Event{
 	 * or there is a related object, but it is in a security sandbox to which you don't have access.
 	 * Use the isRelatedObjectInaccessible() property to determine which of these reasons applies.
 	 */
-	public get relatedObject () : InteractiveObject{
-		console.log("relatedObject not implemented yet in flash/FocusEvent");
+	public get relatedObject (): InteractiveObject {
+		console.log('relatedObject not implemented yet in flash/FocusEvent');
 		return null;
 	}
-	public set relatedObject (value:InteractiveObject){
-		console.log("relatedObject not implemented yet in flash/FocusEvent");
+
+	public set relatedObject (value: InteractiveObject) {
+		console.log('relatedObject not implemented yet in flash/FocusEvent');
 	}
 
 	/**
@@ -58,19 +61,22 @@ export class FocusEvent extends Event{
 	 * true. Otherwise, the value is false. This property is
 	 * used only if the FocusEvent is of type keyFocusChange.
 	 */
-	public get shiftKey () : boolean{
-		console.log("shiftKey not implemented yet in flash/FocusEvent");
+	public get shiftKey (): boolean {
+		console.log('shiftKey not implemented yet in flash/FocusEvent');
 		return false;
 	}
-	public set shiftKey (value:boolean){
-		console.log("shiftKey not implemented yet in flash/FocusEvent");
+
+	public set shiftKey (value: boolean) {
+		console.log('shiftKey not implemented yet in flash/FocusEvent');
 	}
-	public clone():Event{
-		console.log("clone not implemented yet in flash/IOErrorEvent");
+
+	public clone(): Event {
+		console.log('clone not implemented yet in flash/IOErrorEvent');
 		return null;
 	}
-	public toString():string{
-		console.log("toString not implemented yet in flash/FocusEvent");
-		return "";
+
+	public toString(): string {
+		console.log('toString not implemented yet in flash/FocusEvent');
+		return '';
 	}
 }

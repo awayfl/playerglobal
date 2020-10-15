@@ -1,6 +1,6 @@
-import { assert, Bounds } from "@awayjs/graphics";
-import { release, notImplemented } from "../../base/utilities/Debug";
-import { DisplayObject, IAdvancable, DisplayObjectDirtyFlags, DisplayObjectFlags, HitTestingType, HitTestingResult } from "./DisplayObject";
+import { assert, Bounds } from '@awayjs/graphics';
+import { release, notImplemented } from '../../base/utilities/Debug';
+import { DisplayObject, IAdvancable, DisplayObjectDirtyFlags, DisplayObjectFlags, HitTestingType, HitTestingResult } from './DisplayObject';
 import { Sprite } from './Sprite';
 import { ASFunction } from '../../avm2/nat/ASFunction';
 import { SWFFrame } from '../../../parsers/SWFFrame';
@@ -43,117 +43,117 @@ import { MovieClip } from './MovieClip';
 
 export class AVM1Movie extends DisplayObject implements IAdvancable {
 
-  static classInitializer: any = null;
-  static classSymbols: string [] = null;
-  static instanceSymbols: string [] = null;
+	static classInitializer: any = null;
+	static classSymbols: string [] = null;
+	static instanceSymbols: string [] = null;
 
-  constructor(level0: DisplayObject) {
-    super();
-    this._content = Sprite.axClass.axConstruct();
-    this._children = [];
-    this._children[0] = this._content;
-    // Pretend we're a DisplayObjectContainer and can have children. See comment at the top.
-    this._content._setParent(<any>this, 0);
-    this._setDirtyFlags(DisplayObjectDirtyFlags.DirtyChildren);
-    this._invalidateFillAndLineBounds(true, true);
-    this.sec.flash.display.DisplayObject.axClass._advancableInstances.push(this);
-    this._constructed = false;
+	constructor(level0: DisplayObject) {
+		super();
+		this._content = Sprite.axClass.axConstruct();
+		this._children = [];
+		this._children[0] = this._content;
+		// Pretend we're a DisplayObjectContainer and can have children. See comment at the top.
+		this._content._setParent(<any> this, 0);
+		this._setDirtyFlags(DisplayObjectDirtyFlags.DirtyChildren);
+		this._invalidateFillAndLineBounds(true, true);
+		this.sec.flash.display.DisplayObject.axClass._advancableInstances.push(this);
+		this._constructed = false;
 
-    // Setting _level0 root.
-    this._content.addTimelineObjectAtDepth(level0, 0);
-  }
+		// Setting _level0 root.
+		this._content.addTimelineObjectAtDepth(level0, 0);
+	}
 
-  private _content: Sprite;
-  private _constructed: boolean;
+	private _content: Sprite;
+	private _constructed: boolean;
 
-  call(functionName: string): any {
-    notImplemented('AVM1Movie#call');
-  }
+	call(functionName: string): any {
+		notImplemented('AVM1Movie#call');
+	}
 
-  addCallback(functionName: string, closure: ASFunction): void {
-    notImplemented('AVM1Movie#call');
-  }
+	addCallback(functionName: string, closure: ASFunction): void {
+		notImplemented('AVM1Movie#call');
+	}
 
-  _addFrame(frame: SWFFrame) {
-    (<MovieClip>this._content._children[0])._addFrame(frame);
-  }
+	_addFrame(frame: SWFFrame) {
+		(<MovieClip> this._content._children[0])._addFrame(frame);
+	}
 
-  _initFrame(advance: boolean): void {
-    // Empty implementation: AVM1Movie doesn't have frames, and the contained MovieClip
-    // adds itself to the IAdvancables list.
-  }
+	_initFrame(advance: boolean): void {
+		// Empty implementation: AVM1Movie doesn't have frames, and the contained MovieClip
+		// adds itself to the IAdvancables list.
+	}
 
-  _constructFrame(): void {
-    // On custructFrame we need to fully construct the roots container.
-    // Once constructed, its children (which are IAdvancable type) will be
-    // receiving their own _constructFrame events.
-    if (!this._constructed) {
-      this._constructed = true;
-      this._content._constructChildren();
-    }
-  }
+	_constructFrame(): void {
+		// On custructFrame we need to fully construct the roots container.
+		// Once constructed, its children (which are IAdvancable type) will be
+		// receiving their own _constructFrame events.
+		if (!this._constructed) {
+			this._constructed = true;
+			this._content._constructChildren();
+		}
+	}
 
-  _enqueueFrameScripts() {
-    this._removeFlags(DisplayObjectFlags.ContainsFrameScriptPendingChildren);
-    this._content._enqueueFrameScripts();
-  }
+	_enqueueFrameScripts() {
+		this._removeFlags(DisplayObjectFlags.ContainsFrameScriptPendingChildren);
+		this._content._enqueueFrameScripts();
+	}
 
-  _propagateFlagsDown(flags: DisplayObjectFlags) {
-    if (this._hasFlags(flags)) {
-      return;
-    }
-    this._setFlags(flags);
-    this._content._propagateFlagsDown(flags);
-  }
+	_propagateFlagsDown(flags: DisplayObjectFlags) {
+		if (this._hasFlags(flags)) {
+			return;
+		}
+		this._setFlags(flags);
+		this._content._propagateFlagsDown(flags);
+	}
 
-  /**
+	/**
    * AVM1Movie only takes the AVM1 content into consideration when testing points against
    * bounding boxes, not otherwise.
    */
-  _containsPoint(globalX: number, globalY: number, localX: number, localY: number,
-                  testingType: HitTestingType, objects: DisplayObject[]): HitTestingResult {
-    if (testingType === HitTestingType.Mouse) {
-      return this._content._containsPoint(globalX, globalY, localX, localY, testingType, objects);
-    }
-    if (testingType !== HitTestingType.HitTestBounds ||
+	_containsPoint(globalX: number, globalY: number, localX: number, localY: number,
+		testingType: HitTestingType, objects: DisplayObject[]): HitTestingResult {
+		if (testingType === HitTestingType.Mouse) {
+			return this._content._containsPoint(globalX, globalY, localX, localY, testingType, objects);
+		}
+		if (testingType !== HitTestingType.HitTestBounds ||
         !this._getContentBounds().contains(localX, localY)) {
-      return HitTestingResult.None;
-    }
-    return HitTestingResult.Bounds;
-  }
+			return HitTestingResult.None;
+		}
+		return HitTestingResult.Bounds;
+	}
 
-  /**
+	/**
    * Override of DisplayObject#_getChildBounds that retrieves the AVM1 content's bounds.
    */
-  _getChildBounds(bounds: Bounds, includeStrokes: boolean) {
-    var childBounds = this._content._getContentBounds(includeStrokes).clone();
-    // Always apply the SimpleButton's matrix.
-    this._getConcatenatedMatrix().transformBounds(childBounds);
-    bounds.unionInPlace(childBounds);
-  }
+	_getChildBounds(bounds: Bounds, includeStrokes: boolean) {
+		const childBounds = this._content._getContentBounds(includeStrokes).clone();
+		// Always apply the SimpleButton's matrix.
+		this._getConcatenatedMatrix().transformBounds(childBounds);
+		bounds.unionInPlace(childBounds);
+	}
 
-  _getLevelForRoot(root: DisplayObject): number {
-    release || assert(root.parent === this._content);
-    return root._depth;
-  }
+	_getLevelForRoot(root: DisplayObject): number {
+		release || assert(root.parent === this._content);
+		return root._depth;
+	}
 
-  _getRootForLevel(level: number): DisplayObject  {
-    return this._content.getTimelineObjectAtDepth(level);
-  }
+	_getRootForLevel(level: number): DisplayObject  {
+		return this._content.getTimelineObjectAtDepth(level);
+	}
 
-  _addRoot(level: number, root: DisplayObject): void {
-    release || assert(MovieClip.axClass.axIsType(root));
-    this._removeRoot(level);
-    release || assert(!this._content.getTimelineObjectAtDepth(level));
-    this._content.addTimelineObjectAtDepth(root, level);
-  }
+	_addRoot(level: number, root: DisplayObject): void {
+		release || assert(MovieClip.axClass.axIsType(root));
+		this._removeRoot(level);
+		release || assert(!this._content.getTimelineObjectAtDepth(level));
+		this._content.addTimelineObjectAtDepth(root, level);
+	}
 
-  _removeRoot(level: number): boolean {
-    var root = this._content.getTimelineObjectAtDepth(level);
-    if (!root) {
-      return false;
-    }
-    this._content.removeChild(root);
-    return true;
-  }
+	_removeRoot(level: number): boolean {
+		const root = this._content.getTimelineObjectAtDepth(level);
+		if (!root) {
+			return false;
+		}
+		this._content.removeChild(root);
+		return true;
+	}
 }

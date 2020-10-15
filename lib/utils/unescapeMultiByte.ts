@@ -11,7 +11,7 @@
  *   Unescaping "Cr%C3%BCe" with System.useCodePage set to true will produce different undesired results on different systems, such as "CrÃÂ¼e" on a Latin system.
  *   Similarly, unescaping "Cr%FCe" with System.useCodePage set to false could produce "Cre" or "Cr?e" or other variations depending on the code page of the system.
  */
-export const unescapeMultiByte=function(value:string) : string{
-	console.log("unescapeMultiByte is not implemented yet in flash/utils");
-	return "";
-}
+export const unescapeMultiByte = function(value: string): string {
+	console.log('unescapeMultiByte is not implemented yet in flash/utils');
+	return '';
+};

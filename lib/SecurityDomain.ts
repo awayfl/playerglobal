@@ -71,12 +71,11 @@ import { ContextMenuBuiltInItems } from './ui/ContextMenuBuiltInItems';
 import { ContextMenu } from './ui/ContextMenu';
 import { ContextMenuItem } from './ui/ContextMenuItem';
 import { FrameLabel } from './display/FrameLabel';
-import { TextLineMetrics } from "./text/TextLineMetrics";
+import { TextLineMetrics } from './text/TextLineMetrics';
 
-export class Mouse{}
+export class Mouse {}
 
-export class SecurityDomain extends AXSecurityDomain
-{
+export class SecurityDomain extends AXSecurityDomain {
 	public flash = {
 		display: {
 			EventDispatcher: EventDispatcher,
@@ -100,8 +99,8 @@ export class SecurityDomain extends AXSecurityDomain
 			KeyboardEvent: KeyboardEvent,
 			MouseEvent: MouseEvent,
 			ProgressEvent: ProgressEvent,
-            IOErrorEvent: IOErrorEvent,
-            TimerEvent:TimerEvent,
+			IOErrorEvent: IOErrorEvent,
+			TimerEvent:TimerEvent,
 		},
 		external: {
 			ExternalInterface: ExternalInterface

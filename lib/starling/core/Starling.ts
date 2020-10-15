@@ -1,15 +1,15 @@
-import {EventDispatcher} from "../../events/EventDispatcher";
-import { Context3D } from "../../display3D/Context3D"
+import { EventDispatcher } from '../../events/EventDispatcher';
+import { Context3D } from '../../display3D/Context3D';
 //import {Juggler} from "../animation/Juggler";
 //import { Stage3D } from "../display3D/Stage3D"
-import {Stage} from "../display/Stage";
-import {DisplayObject} from "../display/DisplayObject";
+import { Stage } from '../display/Stage';
+import { DisplayObject } from '../display/DisplayObject';
 //import {TouchProcessor} from "../events/TouchProcessor";
-import { Rectangle } from "../../geom/Rectangle"
-import { Sprite } from "../display/Sprite"
-import { Event } from "../events/Event"
+import { Rectangle } from '../../geom/Rectangle';
+import { Sprite } from '../display/Sprite';
+import { Event } from '../events/Event';
 //import { Program3D } from "../display3D/Program3D"
-import { ByteArray } from "../../utils/ByteArray"
+import { ByteArray } from '../../utils/ByteArray';
 
 /// Dispatched when the display list is about to be rendered.
 /*[Event(name="render", type="starling.events.Event")]*/
@@ -78,26 +78,26 @@ import { ByteArray } from "../../utils/ByteArray"
  * <codeph>context.present()</codeph>.</li></ol><p>The Starling wiki contains a <xref href="http://goo.gl/BsXzw">tutorial</xref> with more
  * information about this topic.</p>
  */
-export class Starling extends EventDispatcher
-{
+export class Starling extends EventDispatcher {
 	/// The version of the Starling framework.
-	public static VERSION : string = "1.7";
+	public static VERSION: string = '1.7';
 
 	/// All Starling instances. CAUTION: not a copy, but the actual object! Do not modify!
-	public static get all () : Starling[]{
-		console.log("all not implemented yet in starling/Starling");
+	public static get all (): Starling[] {
+		console.log('all not implemented yet in starling/Starling');
 		return [];
 
 	}
 
 	/// The antialiasing level. 0 - no antialasing, 16 - maximum antialiasing.
-	public get antiAliasing () : number{
-		console.log("antiAliasing not implemented yet in starling/Starling");
+	public get antiAliasing (): number {
+		console.log('antiAliasing not implemented yet in starling/Starling');
 		return 0;
 
 	}
-	public set antiAliasing (value:number){
-		console.log("antiAliasing not implemented yet in starling/Starling");
+
+	public set antiAliasing (value: number) {
+		console.log('antiAliasing not implemented yet in starling/Starling');
 
 	}
 
@@ -107,8 +107,8 @@ export class Starling extends EventDispatcher
 	 * 'supportHighResolutions' setting, you have to multiply with 'backBufferPixelsPerPoint'
 	 * for the actual pixel count.
 	 */
-	public get backBufferHeight () : number{
-		console.log("backBufferHeight not implemented yet in starling/Starling");
+	public get backBufferHeight (): number {
+		console.log('backBufferHeight not implemented yet in starling/Starling');
 		return 0;
 
 	}
@@ -118,8 +118,8 @@ export class Starling extends EventDispatcher
 	 * Except for desktop HiDPI displays with an activated 'supportHighResolutions' setting,
 	 * this will always return '1'.
 	 */
-	public get backBufferPixelsPerPoint () : number{
-		console.log("backBufferPixelsPerPoint not implemented yet in starling/Starling");
+	public get backBufferPixelsPerPoint (): number {
+		console.log('backBufferPixelsPerPoint not implemented yet in starling/Starling');
 		return 0;
 
 	}
@@ -130,8 +130,8 @@ export class Starling extends EventDispatcher
 	 * 'supportHighResolutions' setting, you have to multiply with 'backBufferPixelsPerPoint'
 	 * for the actual pixel count.
 	 */
-	public get backBufferWidth () : number{
-		console.log("backBufferWidth not implemented yet in starling/Starling");
+	public get backBufferWidth (): number {
+		console.log('backBufferWidth not implemented yet in starling/Starling');
 		return 0;
 
 	}
@@ -140,30 +140,32 @@ export class Starling extends EventDispatcher
 	 * The ratio between viewPort width and stage width. Useful for choosing a different
 	 * set of textures depending on the display resolution.
 	 */
-	public get contentScaleFactor () : number{
-		console.log("contentScaleFactor not implemented yet in starling/Starling");
+	public get contentScaleFactor (): number {
+		console.log('contentScaleFactor not implemented yet in starling/Starling');
 		return 0;
 
 	}
+
 	/**
 	 * The ratio between viewPort width and stage width. Useful for choosing a different
 	 * set of textures depending on the display resolution.
 	 */
-	public static get contentScaleFactor () : number{
-		console.log("contentScaleFactor not implemented yet in starling/Starling");
+	public static get contentScaleFactor (): number {
+		console.log('contentScaleFactor not implemented yet in starling/Starling');
 		return 0;
 
 	}
 
 	/// The render context of this instance.
-	public get context () : Context3D{
-		console.log("context not implemented yet in starling/Starling");
+	public get context (): Context3D {
+		console.log('context not implemented yet in starling/Starling');
 		return null;
 
 	}
+
 	/// The render context of this instance.
-	public static get context () : Context3D{
-		console.log("context not implemented yet in starling/Starling");
+	public static get context (): Context3D {
+		console.log('context not implemented yet in starling/Starling');
 		return null;
 
 	}
@@ -176,9 +178,9 @@ export class Starling extends EventDispatcher
 	 * The Dictionary is actually bound to the stage3D instance, thus it survives a
 	 * context loss.
 	 */
-	public get contextData () : any{
+	public get contextData (): any {
 		//todo any is Objects.Dictionary
-		console.log("contextData not implemented yet in starling/Starling");
+		console.log('contextData not implemented yet in starling/Starling');
 		return null;
 
 	}
@@ -187,15 +189,15 @@ export class Starling extends EventDispatcher
 	 * Indicates if the Context3D object is currently valid (i.e. it hasn't been lost or
 	 * disposed).
 	 */
-	public get contextValid () : boolean{
-		console.log("contextValid not implemented yet in starling/Starling");
+	public get contextValid (): boolean {
+		console.log('contextValid not implemented yet in starling/Starling');
 		return false;
 
 	}
 
 	/// The currently active Starling instance.
-	public static get current () : Starling{
-		console.log("current not implemented yet in starling/Starling");
+	public static get current (): Starling {
+		console.log('current not implemented yet in starling/Starling');
 		return null;
 
 	}
@@ -204,13 +206,14 @@ export class Starling extends EventDispatcher
 	 * Indicates if Stage3D render methods will report errors. Activate only when needed,
 	 * as this has a negative impact on performance.
 	 */
-	public get enableErrorChecking () : boolean{
-		console.log("enableErrorChecking not implemented yet in starling/Starling");
+	public get enableErrorChecking (): boolean {
+		console.log('enableErrorChecking not implemented yet in starling/Starling');
 		return false;
 
 	}
-	public set enableErrorChecking (value:boolean){
-		console.log("enableErrorChecking not implemented yet in starling/Starling");
+
+	public set enableErrorChecking (value: boolean) {
+		console.log('enableErrorChecking not implemented yet in starling/Starling');
 
 	}
 
@@ -228,44 +231,47 @@ export class Starling extends EventDispatcher
 	 * roll). It's recommended to always enable this property, while using the AssetManager
 	 * for texture loading.
 	 */
-	public static get handleLostContext () : boolean{
-		console.log("handleLostContext not implemented yet in starling/Starling");
+	public static get handleLostContext (): boolean {
+		console.log('handleLostContext not implemented yet in starling/Starling');
 		return false;
 
 	}
-	public static set handleLostContext (value:boolean){
-		console.log("handleLostContext not implemented yet in starling/Starling");
+
+	public static set handleLostContext (value: boolean) {
+		console.log('handleLostContext not implemented yet in starling/Starling');
 
 	}
 
 	/// Indicates if this Starling instance is started.
-	public get isStarted () : boolean{
-		console.log("isStarted not implemented yet in starling/Starling");
+	public get isStarted (): boolean {
+		console.log('isStarted not implemented yet in starling/Starling');
 		return false;
 
 	}
 
 	/// The default juggler of this instance. Will be advanced once per frame.
-	public get juggler () : any{
-		console.log("juggler not implemented yet in starling/Starling");
+	public get juggler (): any {
+		console.log('juggler not implemented yet in starling/Starling');
 		//todo any is Jugglerg.animation.Juggler
 		return null;
 	}
+
 	/// The default juggler of this instance. Will be advanced once per frame.
-	public static get juggler () : any{
-		console.log("juggler not implemented yet in starling/Starling");
+	public static get juggler (): any {
+		console.log('juggler not implemented yet in starling/Starling');
 		//todo any is Jugglerg.animation.Juggler
 		return null;
 	}
 
 	/// Indicates if multitouch input should be supported.
-	public static get multitouchEnabled () : boolean{
-		console.log("multitouchEnabled not implemented yet in starling/Starling");
+	public static get multitouchEnabled (): boolean {
+		console.log('multitouchEnabled not implemented yet in starling/Starling');
 		return false;
 
 	}
-	public static set multitouchEnabled (value:boolean){
-		console.log("multitouchEnabled not implemented yet in starling/Starling");
+
+	public static set multitouchEnabled (value: boolean) {
+		console.log('multitouchEnabled not implemented yet in starling/Starling');
 
 	}
 
@@ -273,15 +279,15 @@ export class Starling extends EventDispatcher
 	 * A Flash Sprite placed directly on top of the Starling content. Use it to display native
 	 * Flash components.
 	 */
-	public get nativeOverlay () : Sprite{
-		console.log("nativeOverlay not implemented yet in starling/Starling");
+	public get nativeOverlay (): Sprite {
+		console.log('nativeOverlay not implemented yet in starling/Starling');
 		return null;
 
 	}
 
 	/// The Flash (2D) stage object Starling renders beneath.
-	public get nativeStage () : Stage{
-		console.log("nativeStage not implemented yet in starling/Starling");
+	public get nativeStage (): Stage {
+		console.log('nativeStage not implemented yet in starling/Starling');
 		return null;
 
 	}
@@ -291,9 +297,9 @@ export class Starling extends EventDispatcher
 	 * context in AIR 3.9 / Flash Player 11 or below, this is simply what you passed to
 	 * the Starling constructor.
 	 */
-	public get profile () : string{
-		console.log("profile not implemented yet in starling/Starling");
-		return "";
+	public get profile (): string {
+		console.log('profile not implemented yet in starling/Starling');
+		return '';
 
 	}
 
@@ -301,8 +307,8 @@ export class Starling extends EventDispatcher
 	 * The instance of the root class provided in the constructor. Available as soon as
 	 * the event 'ROOT_CREATED' has been dispatched.
 	 */
-	public get root () : DisplayObject{
-		console.log("root not implemented yet in starling/Starling");
+	public get root (): DisplayObject {
+		console.log('root not implemented yet in starling/Starling');
 		return null;
 
 	}
@@ -315,13 +321,14 @@ export class Starling extends EventDispatcher
 	 * is instantiated, Starling will dispatch a ROOT_CREATED event.Beware: you cannot change the root class once the root object has been
 	 * instantiated.
 	 */
-	public get rootClass () : any{
-		console.log("rootClass not implemented yet in starling/Starling");
+	public get rootClass (): any {
+		console.log('rootClass not implemented yet in starling/Starling');
 		return null;
 
 	}
-	public set rootClass (value:any){
-		console.log("rootClass not implemented yet in starling/Starling");
+
+	public set rootClass (value: any) {
+		console.log('rootClass not implemented yet in starling/Starling');
 
 	}
 
@@ -329,13 +336,14 @@ export class Starling extends EventDispatcher
 	 * Indicates if the Context3D render calls are managed externally to Starling,
 	 * to allow other frameworks to share the Stage3D instance.
 	 */
-	public get shareContext () : boolean{
-		console.log("shareContext not implemented yet in starling/Starling");
+	public get shareContext (): boolean {
+		console.log('shareContext not implemented yet in starling/Starling');
 		return false;
 
 	}
-	public set shareContext (value:boolean){
-		console.log("shareContext not implemented yet in starling/Starling");
+
+	public set shareContext (value: boolean) {
+		console.log('shareContext not implemented yet in starling/Starling');
 
 	}
 
@@ -347,38 +355,40 @@ export class Starling extends EventDispatcher
 	 * into account. It is recommended to use Adobe Scout for reliable and comprehensive
 	 * memory analysis.
 	 */
-	public get showStats () : boolean{
-		console.log("showStats not implemented yet in starling/Starling");
+	public get showStats (): boolean {
+		console.log('showStats not implemented yet in starling/Starling');
 		return false;
 
 	}
-	public set showStats (value:boolean){
-		console.log("showStats not implemented yet in starling/Starling");
+
+	public set showStats (value: boolean) {
+		console.log('showStats not implemented yet in starling/Starling');
 
 	}
 
 	/// Indicates if multitouch simulation with "Shift" and "Ctrl"/"Cmd"-keys is enabled.
-	public get simulateMultitouch () : boolean{
-		console.log("simulateMultitouch not implemented yet in starling/Starling");
+	public get simulateMultitouch (): boolean {
+		console.log('simulateMultitouch not implemented yet in starling/Starling');
 		return false;
 
 	}
-	public set simulateMultitouch (value:boolean){
-		console.log("simulateMultitouch not implemented yet in starling/Starling");
+
+	public set simulateMultitouch (value: boolean) {
+		console.log('simulateMultitouch not implemented yet in starling/Starling');
 
 	}
 
 	/// The Starling stage object, which is the root of the display tree that is rendered.
-	public get stage () : Stage{
-		console.log("stage not implemented yet in starling/Starling");
+	public get stage (): Stage {
+		console.log('stage not implemented yet in starling/Starling');
 		return null;
 
 	}
 
 	/// The Flash Stage3D object Starling renders into.
-	public get stage3D () : any{
+	public get stage3D (): any {
 		//todo:any is Stage3D
-		console.log("stage3D not implemented yet in starling/Starling");
+		console.log('stage3D not implemented yet in starling/Starling');
 		return null;
 	}
 
@@ -388,13 +398,14 @@ export class Starling extends EventDispatcher
 	 * on Desktop only; mobile AIR apps still use the "requestedDisplayResolution" parameter
 	 * the application descriptor XML.
 	 */
-	public get supportHighResolutions () : boolean{
-		console.log("supportHighResolutions not implemented yet in starling/Starling");
+	public get supportHighResolutions (): boolean {
+		console.log('supportHighResolutions not implemented yet in starling/Starling');
 		return false;
 
 	}
-	public set supportHighResolutions (value:boolean){
-		console.log("supportHighResolutions not implemented yet in starling/Starling");
+
+	public set supportHighResolutions (value: boolean) {
+		console.log('supportHighResolutions not implemented yet in starling/Starling');
 
 	}
 
@@ -403,26 +414,28 @@ export class Starling extends EventDispatcher
 	 * dispatching TouchEvents to the Starling display tree. If you want to handle these
 	 * types of input manually, pass your own custom subclass to this property.
 	 */
-	public get touchProcessor () : any{
+	public get touchProcessor (): any {
 		//todo: any is TouchProcessor
-		console.log("touchProcessor not implemented yet in starling/Starling");
+		console.log('touchProcessor not implemented yet in starling/Starling');
 		return null;
 
 	}
-	public set touchProcessor (value:any){
+
+	public set touchProcessor (value: any) {
 		//todo: TouchProcessor
-		console.log("touchProcessor not implemented yet in starling/Starling");
+		console.log('touchProcessor not implemented yet in starling/Starling');
 
 	}
 
 	/// The viewport into which Starling contents will be rendered.
-	public get viewPort () : Rectangle{
-		console.log("viewPort not implemented yet in starling/Starling");
+	public get viewPort (): Rectangle {
+		console.log('viewPort not implemented yet in starling/Starling');
 		return null;
 
 	}
-	public set viewPort (value:Rectangle){
-		console.log("viewPort not implemented yet in starling/Starling");
+
+	public set viewPort (value: Rectangle) {
+		console.log('viewPort not implemented yet in starling/Starling');
 
 	}
 
@@ -430,14 +443,14 @@ export class Starling extends EventDispatcher
 	 * Dispatches ENTER_FRAME events on the display list, advances the Juggler
 	 * and processes touches.
 	 */
-	public advanceTime (passedTime:number) {
-		console.log("advanceTime not implemented yet in starling/Starling");
+	public advanceTime (passedTime: number) {
+		console.log('advanceTime not implemented yet in starling/Starling');
 
 	}
 
 	/// Deletes the vertex- and fragment-programs of a certain name.
-	public deleteProgram (name:string) {
-		console.log("deleteProgram not implemented yet in starling/Starling");
+	public deleteProgram (name: string) {
+		console.log('deleteProgram not implemented yet in starling/Starling');
 
 	}
 
@@ -446,28 +459,28 @@ export class Starling extends EventDispatcher
 	 * event listeners.
 	 */
 	public dispose () {
-		console.log("dispose not implemented yet in starling/Starling");
+		console.log('dispose not implemented yet in starling/Starling');
 
 	}
 
 	/// Returns the vertex- and fragment-programs registered under a certain name.
-	public getProgram (name:string) : any{
+	public getProgram (name: string): any {
 		//todo: any is Program3D
-		console.log("getProgram not implemented yet in starling/Starling");
+		console.log('getProgram not implemented yet in starling/Starling');
 		return null;
 
 	}
 
 	/// Indicates if a set of vertex- and fragment-programs is registered under a certain name.
-	public hasProgram (name:string) : boolean{
-		console.log("hasProgram not implemented yet in starling/Starling");
+	public hasProgram (name: string): boolean {
+		console.log('hasProgram not implemented yet in starling/Starling');
 		return false;
 
 	}
 
 	/// Make this Starling instance the current one.
 	public makeCurrent () {
-		console.log("makeCurrent not implemented yet in starling/Starling");
+		console.log('makeCurrent not implemented yet in starling/Starling');
 
 	}
 
@@ -476,7 +489,7 @@ export class Starling extends EventDispatcher
 	 * and render().
 	 */
 	public nextFrame () {
-		console.log("nextFrame not implemented yet in starling/Starling");
+		console.log('nextFrame not implemented yet in starling/Starling');
 
 	}
 
@@ -484,9 +497,9 @@ export class Starling extends EventDispatcher
 	 * Registers a compiled shader-program under a certain name.
 	 * If the name was already used, the previous program is overwritten.
 	 */
-	public registerProgram (name:string, vertexShader:ByteArray, fragmentShader:ByteArray) : any{
+	public registerProgram (name: string, vertexShader: ByteArray, fragmentShader: ByteArray): any {
 		//todo: any is Program3D
-		console.log("registerProgram not implemented yet in starling/Starling");
+		console.log('registerProgram not implemented yet in starling/Starling');
 		return null;
 
 	}
@@ -495,9 +508,9 @@ export class Starling extends EventDispatcher
 	 * Compiles a shader-program and registers it under a certain name.
 	 * If the name was already used, the previous program is overwritten.
 	 */
-	public registerProgramFromSource (name:string, vertexShader:string, fragmentShader:string) : any{
+	public registerProgramFromSource (name: string, vertexShader: string, fragmentShader: string): any {
 		//todo: any is Program3D
-		console.log("registerProgramFromSource not implemented yet in starling/Starling");
+		console.log('registerProgramFromSource not implemented yet in starling/Starling');
 		return null;
 	}
 
@@ -509,13 +522,13 @@ export class Starling extends EventDispatcher
 	 * rendered.
 	 */
 	public render () {
-		console.log("render not implemented yet in starling/Starling");
+		console.log('render not implemented yet in starling/Starling');
 
 	}
 
 	/// Displays the statistics box at a certain position.
-	public showStatsAt (hAlign:string="left", vAlign:string="top", scale:number=1) {
-		console.log("showStatsAt not implemented yet in starling/Starling");
+	public showStatsAt (hAlign: string = 'left', vAlign: string = 'top', scale: number = 1) {
+		console.log('showStatsAt not implemented yet in starling/Starling');
 
 	}
 
@@ -539,7 +552,7 @@ export class Starling extends EventDispatcher
 	 *   one that works (starting with the first array element).Pass the String "auto" to make Starling pick the best available
 	 *   profile automatically.
 	 */
-	constructor (rootClass:any, stage:Stage, viewPort:Rectangle=null, stage3D:any=null, renderMode:string="auto", profile:any="baselineConstrained"){
+	constructor (rootClass: any, stage: Stage, viewPort: Rectangle = null, stage3D: any = null, renderMode: string = 'auto', profile: any = 'baselineConstrained') {
 		//todo: any is Stage3D
 		super();
 	}
@@ -551,7 +564,7 @@ export class Starling extends EventDispatcher
 	 * call that method manually.)
 	 */
 	public start () {
-		console.log("start not implemented yet in starling/Starling");
+		console.log('start not implemented yet in starling/Starling');
 
 	}
 
@@ -565,8 +578,8 @@ export class Starling extends EventDispatcher
 	 * On some mobile systems (e.g. iOS), you are even required to do so if you have
 	 * activated background code execution.
 	 */
-	public stop (suspendRendering:boolean=false){
-		console.log("stop not implemented yet in starling/Starling");
+	public stop (suspendRendering: boolean = false) {
+		console.log('stop not implemented yet in starling/Starling');
 
 	}
 
@@ -574,9 +587,8 @@ export class Starling extends EventDispatcher
 	 * Stops Starling right away and displays an error message on the native overlay.
 	 * This method will also cause Starling to dispatch a FATAL_ERROR event.
 	 */
-	public stopWithFatalError (message:string) {
-		console.log("stopWithFatalError not implemented yet in starling/Starling");
+	public stopWithFatalError (message: string) {
+		console.log('stopWithFatalError not implemented yet in starling/Starling');
 
 	}
 }
-

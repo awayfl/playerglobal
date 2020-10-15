@@ -1,4 +1,4 @@
-import { ByteArray } from "./ByteArray";
+import { ByteArray } from './ByteArray';
 
 /**
  * The IDataInput interface provides a set of methods for reading binary data.
@@ -24,20 +24,20 @@ export interface IDataInput
 	 * that sufficient data is available before trying to read
 	 * it with one of the read methods.
 	 */
-	bytesAvailable : number;
+	bytesAvailable: number;
 
 	/**
 	 * The byte order for the data, either the BIG_ENDIAN or LITTLE_ENDIAN constant
 	 * from the Endian class.
 	 */
-	endian : string;
+	endian: string;
 	/*function set endian (type:String)*/
 
 	/**
 	 * Used to determine whether the AMF3 or AMF0 format is used when writing or reading binary data using the
 	 * readObject() method. The value is a constant from the ObjectEncoding class.
 	 */
-	objectEncoding : number;
+	objectEncoding: number;
 	/*function set objectEncoding (version:uint)*/
 
 	/**
@@ -49,7 +49,7 @@ export interface IDataInput
 	 * @throws	EOFError There is not sufficient data available
 	 *   to read.
 	 */
-	readBoolean () : boolean;
+	readBoolean (): boolean;
 
 	/**
 	 * Reads a signed byte from the file stream, byte stream, or byte array.
@@ -57,7 +57,7 @@ export interface IDataInput
 	 * @throws	EOFError There is not sufficient data available
 	 *   to read.
 	 */
-	readByte () : number;
+	readByte (): number;
 
 	/**
 	 * Reads the number of data bytes, specified by the length parameter,
@@ -73,7 +73,7 @@ export interface IDataInput
 	 * @throws	EOFError There is not sufficient data available
 	 *   to read.
 	 */
-	readBytes (bytes:ByteArray, offset:number, length:number);
+	readBytes (bytes: ByteArray, offset: number, length: number);
 
 	/**
 	 * Reads an IEEE 754 double-precision floating point number from the file stream, byte stream, or byte array.
@@ -81,7 +81,7 @@ export interface IDataInput
 	 * @throws	EOFError There is not sufficient data available
 	 *   to read.
 	 */
-	readDouble () : number;
+	readDouble (): number;
 
 	/**
 	 * Reads an IEEE 754 single-precision floating point number from the file stream, byte stream, or byte array.
@@ -89,7 +89,7 @@ export interface IDataInput
 	 * @throws	EOFError There is not sufficient data available
 	 *   to read.
 	 */
-	readFloat () : number;
+	readFloat (): number;
 
 	/**
 	 * Reads a signed 32-bit integer from the file stream, byte stream, or byte array.
@@ -97,7 +97,7 @@ export interface IDataInput
 	 * @throws	EOFError There is not sufficient data available
 	 *   to read.
 	 */
-	readInt () : number;
+	readInt (): number;
 
 	/**
 	 * Reads a multibyte string of specified length from the file stream, byte stream, or byte array using the
@@ -120,7 +120,7 @@ export interface IDataInput
 	 * @throws	EOFError There is not sufficient data available
 	 *   to read.
 	 */
-	readMultiByte (length:number, charSet:string) : string;
+	readMultiByte (length: number, charSet: string): string;
 
 	/**
 	 * Reads an object from the file stream, byte stream, or byte array, encoded in AMF
@@ -129,7 +129,7 @@ export interface IDataInput
 	 * @throws	EOFError There is not sufficient data available
 	 *   to read.
 	 */
-	readObject () : any;
+	readObject (): any;
 
 	/**
 	 * Reads a signed 16-bit integer from the file stream, byte stream, or byte array.
@@ -137,7 +137,7 @@ export interface IDataInput
 	 * @throws	EOFError There is not sufficient data available
 	 *   to read.
 	 */
-	readShort () : number;
+	readShort (): number;
 
 	/**
 	 * Reads an unsigned byte from the file stream, byte stream, or byte array.
@@ -145,7 +145,7 @@ export interface IDataInput
 	 * @throws	EOFError There is not sufficient data available
 	 *   to read.
 	 */
-	readUnsignedByte () : number;
+	readUnsignedByte (): number;
 
 	/**
 	 * Reads an unsigned 32-bit integer from the file stream, byte stream, or byte array.
@@ -153,7 +153,7 @@ export interface IDataInput
 	 * @throws	EOFError There is not sufficient data available
 	 *   to read.
 	 */
-	readUnsignedInt () : number;
+	readUnsignedInt (): number;
 
 	/**
 	 * Reads an unsigned 16-bit integer from the file stream, byte stream, or byte array.
@@ -161,7 +161,7 @@ export interface IDataInput
 	 * @throws	EOFError There is not sufficient data available
 	 *   to read.
 	 */
-	readUnsignedShort () : number;
+	readUnsignedShort (): number;
 
 	/**
 	 * Reads a UTF-8 string from the file stream, byte stream, or byte array.  The string
@@ -174,7 +174,7 @@ export interface IDataInput
 	 * @throws	EOFError There is not sufficient data available
 	 *   to read.
 	 */
-	readUTF () : string;
+	readUTF (): string;
 
 	/**
 	 * Reads a sequence of UTF-8 bytes from the byte stream or byte array and returns a string.
@@ -183,6 +183,5 @@ export interface IDataInput
 	 * @throws	EOFError There is not sufficient data available
 	 *   to read.
 	 */
-	readUTFBytes (length:number) : string;
+	readUTFBytes (length: number): string;
 }
-

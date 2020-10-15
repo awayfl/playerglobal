@@ -15,7 +15,7 @@
  * @playerversion	Flash 9
  * @playerversion	Lite 4
  */
-export const escapeMultiByte = function(value:string) : string{
-	console.log("escapeMultiByte is not implemented yet in flash/utils");
-	return "";
+export const escapeMultiByte = function(value: string): string {
+	console.log('escapeMultiByte is not implemented yet in flash/utils');
+	return '';
 };

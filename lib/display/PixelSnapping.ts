@@ -1,1 +1,1 @@
-export {PixelSnapping} from "@awayjs/graphics";
+export { PixelSnapping } from '@awayjs/graphics';

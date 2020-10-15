@@ -1,5 +1,5 @@
-import { Event } from "./Event";
-import { GameInputDevice } from "../ui/GameInputDevice";
+import { Event } from './Event';
+import { GameInputDevice } from '../ui/GameInputDevice';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -19,20 +19,20 @@ import { GameInputDevice } from "../ui/GameInputDevice";
 // Class: GameInputEvent
 export class GameInputEvent extends Event {
 
-  static classInitializer: any = null;
+	static classInitializer: any = null;
 
-  static classSymbols: string [] = null;
-  static instanceSymbols: string [] = null;
-  device: GameInputDevice;
+	static classSymbols: string [] = null;
+	static instanceSymbols: string [] = null;
+	device: GameInputDevice;
 
-  constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-              device: GameInputDevice = null) {
-    super(type, bubbles, cancelable);
-    // TODO: coerce
-    this.device = device;
-  }
+	constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		device: GameInputDevice = null) {
+		super(type, bubbles, cancelable);
+		// TODO: coerce
+		this.device = device;
+	}
 
-  // JS -> AS Bindings
-  static DEVICE_ADDED: string = "deviceAdded";
-  static DEVICE_REMOVED: string = "deviceRemoved";
+	// JS -> AS Bindings
+	static DEVICE_ADDED: string = 'deviceAdded';
+	static DEVICE_REMOVED: string = 'deviceRemoved';
 }

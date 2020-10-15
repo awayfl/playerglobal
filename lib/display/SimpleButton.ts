@@ -1,7 +1,7 @@
-import { InteractiveObject } from "./InteractiveObject";
+import { InteractiveObject } from './InteractiveObject';
 
-import { DisplayObject } from "./DisplayObject";
-import {SoundTransform} from "../media/SoundTransform";
+import { DisplayObject } from './DisplayObject';
+import { SoundTransform } from '../media/SoundTransform';
 import { MovieClip } from './MovieClip';
 import { FrameScriptManager } from '@awayjs/scene';
 import { MovieClip as AwayMovieClip } from '@awayjs/scene';
@@ -40,8 +40,7 @@ import { MovieClip as AwayMovieClip } from '@awayjs/scene';
  * the constructor based on the button's state.</li></ol><codeblock xml:space="preserve" class="+ topic/pre pr-d/codeblock ">
 
  */
-export class SimpleButton extends MovieClip
-{
+export class SimpleButton extends MovieClip {
 	/**
 	 * Creates a new SimpleButton instance. Any or all of the display objects that represent
 	 * the various button states can be set as parameters in the constructor.
@@ -50,13 +49,13 @@ export class SimpleButton extends MovieClip
 	 * @param	downState	The initial value for the SimpleButton down state.
 	 * @param	hitTestState	The initial value for the SimpleButton hitTest state.
 	 */
-	constructor (upState:DisplayObject=null, overState:DisplayObject=null, downState:DisplayObject=null, hitTestState:DisplayObject=null){
+	constructor (upState: DisplayObject = null, overState: DisplayObject = null, downState: DisplayObject = null, hitTestState: DisplayObject = null) {
 		super();
-		(<AwayMovieClip>this._adaptee).addButtonListeners();
+		(<AwayMovieClip> this._adaptee).addButtonListeners();
 	}
 
 	// for AVM1:
-	public buttonMode:any;
+	public buttonMode: any;
 
 	public initAdapter(): void {}
 	public registerScriptObject(child: any): void {
@@ -65,19 +64,19 @@ export class SimpleButton extends MovieClip
 	public unregisterScriptObject(child: any): void {
 	}
 
-
 	/**
 	 * Specifies a display object that is used as the visual
 	 * object for the button "Down" state —the state that the button is in when the user
 	 * selects the hitTestState object.
 	 */
-	public get downState () : DisplayObject{
-		console.log("downState not implemented yet in flash/SimpleButton");
+	public get downState (): DisplayObject {
+		console.log('downState not implemented yet in flash/SimpleButton');
 		return null;
 
 	}
-	public set downState (value:DisplayObject){
-		console.log("downState not implemented yet in flash/SimpleButton");
+
+	public set downState (value: DisplayObject) {
+		console.log('downState not implemented yet in flash/SimpleButton');
 
 	}
 
@@ -93,13 +92,14 @@ export class SimpleButton extends MovieClip
 	 *   Note: To prevent mouseClicks on a button, set both the enabled
 	 * and mouseEnabled properties to false.
 	 */
-	public get enabled () : boolean{
-		console.log("enabled not implemented yet in flash/SimpleButton");
+	public get enabled (): boolean {
+		console.log('enabled not implemented yet in flash/SimpleButton');
 		return false;
 
 	}
-	public set enabled (value:boolean){
-		console.log("enabled not implemented yet in flash/SimpleButton");
+
+	public set enabled (value: boolean) {
+		console.log('enabled not implemented yet in flash/SimpleButton');
 
 	}
 
@@ -109,13 +109,14 @@ export class SimpleButton extends MovieClip
 	 * property. If you do not set the hitTestState property, the SimpleButton
 	 * is inactive — it does not respond to user input events.
 	 */
-	public get hitTestState () : DisplayObject{
-		console.log("hitTestState not implemented yet in flash/SimpleButton");
+	public get hitTestState (): DisplayObject {
+		console.log('hitTestState not implemented yet in flash/SimpleButton');
 		return null;
 
 	}
-	public set hitTestState (value:DisplayObject){
-		console.log("hitTestState not implemented yet in flash/SimpleButton");
+
+	public set hitTestState (value: DisplayObject) {
+		console.log('hitTestState not implemented yet in flash/SimpleButton');
 
 	}
 
@@ -124,13 +125,14 @@ export class SimpleButton extends MovieClip
 	 * object for the button over state — the state that the button is in when
 	 * the pointer is positioned over the button.
 	 */
-	public get overState () : DisplayObject{
-		console.log("overState not implemented yet in flash/SimpleButton");
+	public get overState (): DisplayObject {
+		console.log('overState not implemented yet in flash/SimpleButton');
 		return null;
 
 	}
-	public set overState (value:DisplayObject){
-		console.log("overState not implemented yet in flash/SimpleButton");
+
+	public set overState (value: DisplayObject) {
+		console.log('overState not implemented yet in flash/SimpleButton');
 
 	}
 
@@ -143,13 +145,14 @@ export class SimpleButton extends MovieClip
 	 *   how much of the left input to play in the left speaker or right speaker; it is generally
 	 *   best to use 22-KHZ 6-bit mono sounds?
 	 */
-	public get soundTransform () : SoundTransform{
-		console.log("soundTransform not implemented yet in flash/SimpleButton");
+	public get soundTransform (): SoundTransform {
+		console.log('soundTransform not implemented yet in flash/SimpleButton');
 		return null;
 
 	}
-	public set soundTransform (sndTransform:SoundTransform){
-		console.log("soundTransform not implemented yet in flash/SimpleButton");
+
+	public set soundTransform (sndTransform: SoundTransform) {
+		console.log('soundTransform not implemented yet in flash/SimpleButton');
 
 	}
 
@@ -163,13 +166,14 @@ export class SimpleButton extends MovieClip
 	 *   You can change the trackAsMenu property at any time; the
 	 * modified button immediately takes on the new behavior.
 	 */
-	public get trackAsMenu () : boolean{
-		console.log("trackAsMenu not implemented yet in flash/SimpleButton");
+	public get trackAsMenu (): boolean {
+		console.log('trackAsMenu not implemented yet in flash/SimpleButton');
 		return false;
 
 	}
-	public set trackAsMenu (value:boolean){
-		console.log("trackAsMenu not implemented yet in flash/SimpleButton");
+
+	public set trackAsMenu (value: boolean) {
+		console.log('trackAsMenu not implemented yet in flash/SimpleButton');
 
 	}
 
@@ -178,13 +182,14 @@ export class SimpleButton extends MovieClip
 	 * object for the button up state — the state that the button is in when
 	 * the pointer is not positioned over the button.
 	 */
-	public get upState () : DisplayObject{
-		console.log("upState not implemented yet in flash/SimpleButton");
+	public get upState (): DisplayObject {
+		console.log('upState not implemented yet in flash/SimpleButton');
 		return null;
 
 	}
-	public set upState (value:DisplayObject){
-		console.log("upState not implemented yet in flash/SimpleButton");
+
+	public set upState (value: DisplayObject) {
+		console.log('upState not implemented yet in flash/SimpleButton');
 
 	}
 
@@ -206,14 +211,13 @@ export class SimpleButton extends MovieClip
 		 *   }
 	 *   </listing><p class="- topic/p ">When the mouse is over and clicks <code>myBtn1_btn</code>, there is no pointing hand. However, you see the pointing hand when the button is over and clicks <code>myBtn2_btn</code>.</p>
 	 */
-	public get useHandCursor () : boolean{
-		console.log("useHandCursor not implemented yet in flash/SimpleButton");
+	public get useHandCursor (): boolean {
+		console.log('useHandCursor not implemented yet in flash/SimpleButton');
 		return false;
 	}
-	public set useHandCursor (value:boolean){
-		console.log("useHandCursor not implemented yet in flash/SimpleButton");
+
+	public set useHandCursor (value: boolean) {
+		console.log('useHandCursor not implemented yet in flash/SimpleButton');
 	}
 
-
 }
-

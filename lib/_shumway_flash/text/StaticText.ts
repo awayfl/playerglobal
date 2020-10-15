@@ -1,6 +1,6 @@
-import { DisplayObject } from "../display/DisplayObject";
-import { assert, release } from "../../base/utilities/Debug";
-import { TextSymbol } from "./TextField";
+import { DisplayObject } from '../display/DisplayObject';
+import { assert, release } from '../../base/utilities/Debug';
+import { TextSymbol } from './TextField';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -20,35 +20,35 @@ import { TextSymbol } from "./TextField";
 // Class: StaticText
 export class StaticText extends DisplayObject {
 
-  static classInitializer: any = null;
-  static classSymbols: string [] = null;
-  static instanceSymbols: string [] = null;
+	static classInitializer: any = null;
+	static classSymbols: string [] = null;
+	static instanceSymbols: string [] = null;
 
-  _symbol: TextSymbol;
-  applySymbol() {
-    release || assert(this._symbol);
-    this._initializeFields();
-    this._setStaticContentFromSymbol(this._symbol);
-  }
+	_symbol: TextSymbol;
+	applySymbol() {
+		release || assert(this._symbol);
+		this._initializeFields();
+		this._setStaticContentFromSymbol(this._symbol);
+	}
 
-  constructor () {
-    super();
-    if (!this._fieldsInitialized) {
-      this._initializeFields();
-    }
-  }
+	constructor () {
+		super();
+		if (!this._fieldsInitialized) {
+			this._initializeFields();
+		}
+	}
 
-  _canHaveTextContent(): boolean {
-    return true;
-  }
+	_canHaveTextContent(): boolean {
+		return true;
+	}
 
-  _getTextContent(): any/*TextContent*/ {
-    return this._textContent;
-  }
+	_getTextContent(): any/*TextContent*/ {
+		return this._textContent;
+	}
 
-  _textContent: any/*TextContent*/;
+	_textContent: any/*TextContent*/;
 
-  get text(): string {
-    return this._textContent.plainText;
-  }
+	get text(): string {
+		return this._textContent.plainText;
+	}
 }

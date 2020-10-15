@@ -1,8 +1,8 @@
-import { ASObject } from "@awayfl/avm2";
-import { notImplemented, warning, StringUtilities } from "@awayfl/swf-loader";
-import { axCoerceString, ObjectEncoding, AMF3, transformASValueToJS, transformJSValueToAS } from "@awayfl/avm2";
-import { ByteArray } from "../utils/ByteArray";
-import { SecurityDomain } from "../SecurityDomain";
+import { ASObject } from '@awayfl/avm2';
+import { notImplemented, warning, StringUtilities } from '@awayfl/swf-loader';
+import { axCoerceString, ObjectEncoding, AMF3, transformASValueToJS, transformJSValueToAS } from '@awayfl/avm2';
+import { ByteArray } from '../utils/ByteArray';
+import { SecurityDomain } from '../SecurityDomain';
 
 interface IStorage {
 	getItem(key: string): string;
@@ -15,23 +15,23 @@ let _sharedObjectStorage: IStorage;
 class VirtualStorage implements IStorage {
 	_values: StringMap<string> = {};
 	_realStorage: IStorage = null;
-	
+
 	getItem(key: string) {
-		if(this._realStorage) {
+		if (this._realStorage) {
 			this._values[key] = this._realStorage.getItem(key);
 		}
 		return this._values[key];
 	}
 
 	setItem(key: string, value: string) {
-		if(this._realStorage) {
+		if (this._realStorage) {
 			this._realStorage.setItem(key, value);
 		}
 		this._values[key] = value;
 	}
 
 	removeItem(key: string) {
-		if(this._realStorage) {
+		if (this._realStorage) {
 			this._realStorage.removeItem(key);
 		}
 		delete this._values[key];
@@ -41,36 +41,35 @@ class VirtualStorage implements IStorage {
 export function getSharedObjectStorage(): IStorage {
 	if (!_sharedObjectStorage) {
 		_sharedObjectStorage = new VirtualStorage();
-	
-		if(typeof Storage !== 'undefined') {
-			try{
+
+		if (typeof Storage !== 'undefined') {
+			try {
 				(_sharedObjectStorage as VirtualStorage)._realStorage = window.localStorage;
-			} catch(e) {
-				console.warn("[Shared Storage] ", e);
+			} catch (e) {
+				console.warn('[Shared Storage] ', e);
 			}
 		}
 	}
 	return _sharedObjectStorage;
 }
 
-
 export class SharedObjectDebug {
 	public static _lastRawData: any = null;
 	public static _lastDecodedData: any = null;
-	
+
 	public static decodedData() {
-		if(!USED_SEC) {
-			throw "Can't decode without security context";
+		if (!USED_SEC) {
+			throw 'Can\'t decode without security context';
 		}
 
 		const store = getSharedObjectStorage() as VirtualStorage;
 		const raw = {};
 		const dec = {};
-		
-		for(let key in store._values) {
+
+		for (const key in store._values) {
 			const d = store._values[key];
 
-			if(d !== null) {
+			if (d !== null) {
 				raw[key] = SharedObject.tryDecodeData(store._values[key]);
 				dec[key] = transformASValueToJS(USED_SEC, raw[key], true);
 			} else {
@@ -85,15 +84,15 @@ export class SharedObjectDebug {
 	}
 
 	public static encodeAndApplyData(): any {
-		if(!this._lastRawData) {
-			throw "Need call decode before encode for detecting model";
+		if (!this._lastRawData) {
+			throw 'Need call decode before encode for detecting model';
 		}
 
 		const newRaw = {};
 
-		for(let key in this._lastRawData) {
-			if(typeof this._lastDecodedData[key] === undefined) {
-				
+		for (const key in this._lastRawData) {
+			if (typeof this._lastDecodedData[key] === undefined) {
+
 				newRaw[key] = this._lastRawData[key];
 				continue;
 			}
@@ -103,8 +102,8 @@ export class SharedObjectDebug {
 
 		const so = getSharedObjectStorage();
 
-		for(let key in newRaw) {
-			if(newRaw[key] !== null){
+		for (const key in newRaw) {
+			if (newRaw[key] !== null) {
 				so.setItem(key, SharedObject.tryEncodeData(newRaw[key]));
 			}
 		}
@@ -131,19 +130,22 @@ export class SharedObject extends ASObject {
 	}
 
 	static get defaultObjectEncoding(): number /*uint*/ {
-		notImplemented("public flash.net.SharedObject::static defaultObjectEncoding");
+		notImplemented('public flash.net.SharedObject::static defaultObjectEncoding');
 		return;
 	}
+
 	static set defaultObjectEncoding(version: number /*uint*/) {
-		notImplemented("public flash.net.SharedObject::static defaultObjectEncoding");
+		notImplemented('public flash.net.SharedObject::static defaultObjectEncoding');
 		return;
 	}
+
 	public static deleteAll(url: string): number /*int*/ {
-		notImplemented("public flash.net.SharedObject::static deleteAll");
+		notImplemented('public flash.net.SharedObject::static deleteAll');
 		return;
 	}
+
 	public static getDiskUsage(url: string): number /*int*/ {
-		notImplemented("public flash.net.SharedObject::static getDiskUsage");
+		notImplemented('public flash.net.SharedObject::static getDiskUsage');
 		return 0;
 	}
 
@@ -157,9 +159,9 @@ export class SharedObject extends ASObject {
 		const bytes = StringUtilities.decodeRestrictedBase64ToBytes(data);
 		const serializedData = new ByteArray(bytes.length);
 		(<any>serializedData).sec = this.sec || USED_SEC;
-	
+
 		serializedData.setArrayBuffer(bytes.buffer);
-		
+
 		return AMF3.read(<any>serializedData);
 	}
 
@@ -170,7 +172,7 @@ export class SharedObject extends ASObject {
 		AMF3.write(<any>serializedData, data);
 
 		const bytes = new Uint8Array(serializedData.arraybytes);
-		
+
 		return StringUtilities.base64EncodeBytes(bytes);
 	}
 
@@ -180,27 +182,27 @@ export class SharedObject extends ASObject {
 		name = axCoerceString(name);
 		localPath = axCoerceString(localPath);
 		secure = !!secure;
-		var path = (localPath || "") + "/" + name;
+		const path = (localPath || '') + '/' + name;
 		/*if (this._sharedObjects[path]) {
 		return this._sharedObjects[path];
 		}*/
-		var encodedData = getSharedObjectStorage().getItem(path);
-		var data;
-		var encoding = this._defaultObjectEncoding;
+		const encodedData = getSharedObjectStorage().getItem(path);
+		let data;
+		const encoding = this._defaultObjectEncoding;
 		if (encodedData) {
 			try {
-				data = SharedObject.tryDecodeData(encodedData);		
+				data = SharedObject.tryDecodeData(encodedData);
 			} catch (e) {
-				warning("Error encountered while decoding LocalStorage entry. Resetting data.");
+				warning('Error encountered while decoding LocalStorage entry. Resetting data.');
 			}
-			if (!data || typeof data !== "object") {
+			if (!data || typeof data !== 'object') {
 				data = this.sec.createObject();
 			}
 		} else {
 			data = this.sec.createObject();
 		}
 
-		var so: SharedObject = new (<SecurityDomain>this.sec).flash.net.SharedObject();
+		const so: SharedObject = new (<SecurityDomain> this.sec).flash.net.SharedObject();
 		so._path = path;
 		so._objectEncoding = encoding;
 		so._data = data;
@@ -208,7 +210,7 @@ export class SharedObject extends ASObject {
 	}
 
 	public static getRemote(name: string, remotePath?: string, persistence?: boolean, secure?: boolean): SharedObject {
-		return new (<SecurityDomain>this.sec).flash.net.SharedObject();
+		return new (<SecurityDomain> this.sec).flash.net.SharedObject();
 	}
 
 	public flush(minDiskSpace: number = 0): void {
@@ -222,8 +224,8 @@ export class SharedObject extends ASObject {
 		minDiskSpace = minDiskSpace | 0;
 
 		// Check if the object is empty. If it is, don't create a stored object if one doesn't exist.
-		var isEmpty = true;
-		for (var key in this._data) {
+		let isEmpty = true;
+		for (const key in this._data) {
 			if (this._data.hasOwnProperty(key)) {
 				isEmpty = false;
 				break;
@@ -248,66 +250,70 @@ export class SharedObject extends ASObject {
 	public get data(): ASObject {
 		return this._data;
 	}
+
 	public set data(object: ASObject) {
 		this._data = object;
 	}
 
 	public get objectEncoding(): number /*uint*/ {
-		notImplemented("public flash.net.SharedObject::get objectEncoding");
+		notImplemented('public flash.net.SharedObject::get objectEncoding');
 		return;
 	}
+
 	public set objectEncoding(version: number /*uint*/) {
-		notImplemented("public flash.net.SharedObject::set objectEncoding");
+		notImplemented('public flash.net.SharedObject::set objectEncoding');
 		return;
 	}
 
 	public get client(): ASObject {
-		notImplemented("public flash.net.SharedObject::get client");
+		notImplemented('public flash.net.SharedObject::get client');
 		return;
 		// return this._client;
 	}
+
 	public set client(object: ASObject) {
-		notImplemented("public flash.net.SharedObject::set client");
+		notImplemented('public flash.net.SharedObject::set client');
 		return;
 		// this._client = object;
 	}
+
 	public setDirty(propertyName: string): void {
-		notImplemented("public flash.net.SharedObject::setDirty");
+		notImplemented('public flash.net.SharedObject::setDirty');
 		return;
 	}
 
 	public connect(myConnection: any, params: string = null): void {
-		notImplemented("public flash.net.SharedObject::connect");
+		notImplemented('public flash.net.SharedObject::connect');
 		return;
 	}
 
 	public send(): void {
-		notImplemented("public flash.net.SharedObject::send");
+		notImplemented('public flash.net.SharedObject::send');
 		return;
 	}
 
 	public close(): void {
-		notImplemented("public flash.net.SharedObject::close");
+		notImplemented('public flash.net.SharedObject::close');
 		return;
 	}
 
 	public clear(): void {
-		notImplemented("public flash.net.SharedObject::clear");
+		notImplemented('public flash.net.SharedObject::clear');
 		return;
 	}
 
 	public get size(): number {
-		notImplemented("public flash.net.SharedObject::get size");
+		notImplemented('public flash.net.SharedObject::get size');
 		return;
 	}
 
 	public set fps(updatesPerSecond: number) {
-		notImplemented("public flash.net.SharedObject::set fps");
+		notImplemented('public flash.net.SharedObject::set fps');
 		return;
 	}
 
 	public setProperty(propertyName: string, value: any = null): void {
-		notImplemented("public flash.net.SharedObject::setProperty");
+		notImplemented('public flash.net.SharedObject::setProperty');
 		return;
 	}
 }

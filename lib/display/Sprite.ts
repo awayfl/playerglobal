@@ -1,8 +1,8 @@
-import { Sprite as AwaySprite, DisplayObjectContainer as AwayDisplayObjectContainer, DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip, FrameScriptManager, MovieClip, MouseManager } from "@awayjs/scene";
-import { DisplayObjectContainer } from "./DisplayObjectContainer";
-import { DisplayObject } from "./DisplayObject";
-import { Rectangle, Matrix3D, Point } from "@awayjs/core";
-import { Graphics } from "./Graphics";
+import { Sprite as AwaySprite, DisplayObjectContainer as AwayDisplayObjectContainer, DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip, FrameScriptManager, MovieClip, MouseManager } from '@awayjs/scene';
+import { DisplayObjectContainer } from './DisplayObjectContainer';
+import { DisplayObject } from './DisplayObject';
+import { Rectangle, Matrix3D, Point } from '@awayjs/core';
+import { Graphics } from './Graphics';
 import { constructClassFromSymbol } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 import { release, AVMStage } from '@awayfl/swf-loader';
@@ -12,7 +12,7 @@ export class Sprite extends DisplayObjectContainer {
 
 	public static getNewSprite(adaptee: AwaySprite): Sprite {
 		if (Sprite._sprites.length) {
-			var sprite: Sprite = Sprite._sprites.pop();
+			const sprite: Sprite = Sprite._sprites.pop();
 			sprite.adaptee = adaptee;
 			return sprite;
 		}
@@ -39,14 +39,14 @@ export class Sprite extends DisplayObjectContainer {
 	 */
 	constructor() {
 		super();
-		
+
 		this.dragListenerDelegate = (event) => this.dragListener(event);
 		this.stopDragDelegate = (event) => this.stopDrag(event);
-		this._graphics = new (<SecurityDomain>this.sec).flash.display.Graphics((<AwaySprite>this._adaptee).graphics);
+		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics((<AwaySprite> this._adaptee).graphics);
 	}
 
 	protected createAdaptee(): AwayDisplayObject {
-		var newAdaptee = AwaySprite.getNewSprite();
+		const newAdaptee = AwaySprite.getNewSprite();
 
 		//console.log("createAdaptee AwaySprite");
 		newAdaptee.reset();
@@ -57,7 +57,7 @@ export class Sprite extends DisplayObjectContainer {
 
 	public registerScriptObject(child: AwayDisplayObject): void {
 		if (child.adapter == child) {
-			release || console.log("warning: child registered for script that has no avms-adapter");
+			release || console.log('warning: child registered for script that has no avms-adapter');
 			return;
 		}
 		if (child.name) {
@@ -77,26 +77,27 @@ export class Sprite extends DisplayObjectContainer {
 	public clearPropsDic() {
 		//this["$Bg__setPropDict"].map = new WeakMap();
 	}
+
 	public clone(): Sprite {
 
-		if (!(<any>this)._symbol) {
-			throw ("_symbol not defined when cloning movieclip")
+		if (!(<any> this)._symbol) {
+			throw ('_symbol not defined when cloning movieclip');
 		}
 		//var clone: MovieClip = MovieClip.getNewMovieClip(AwayMovieClip.getNewMovieClip((<AwayMovieClip>this.adaptee).timeline));
-		var clone = constructClassFromSymbol((<any>this)._symbol, (<any>this)._symbol.symbolClass);
-		var adaptee = new AwaySprite();
+		const clone = constructClassFromSymbol((<any> this)._symbol, (<any> this)._symbol.symbolClass);
+		const adaptee = new AwaySprite();
 		this.adaptee.copyTo(adaptee);
 		clone.adaptee = adaptee;
 		clone._stage = this.activeStage;
 		(<any>clone).executeConstructor = () => {
 			(<any>clone).axInitializer();
-			(<any>this).constructorHasRun=true;
+			(<any> this).constructorHasRun = true;
 			/*if(clone["$Bg__setPropDict"]){
 				console.log("Bg__setPropDict found");
 			}*/
-		}
+		};
 		clone.adaptee.graphics = this.graphics;
-		
+
 		// in FP, a Sprite seem to always have only 1 frame:
 		const timeline = (<AwayMovieClip>adaptee).timeline;
 		const targetTimeline = timeline;
@@ -151,10 +152,11 @@ export class Sprite extends DisplayObjectContainer {
 	 * to label.
 	 */
 	public get buttonMode(): boolean {
-		return (<MovieClip>this.adaptee).buttonMode;
+		return (<MovieClip> this.adaptee).buttonMode;
 	}
+
 	public set buttonMode(value: boolean) {
-		(<MovieClip>this.adaptee).buttonMode = value;
+		(<MovieClip> this.adaptee).buttonMode = value;
 	}
 
 	private _dropTarget: DisplayObject;
@@ -166,6 +168,7 @@ export class Sprite extends DisplayObjectContainer {
 		}
 		this._dropTarget = null;
 	}
+
 	/**
 	 * Specifies the display object over which the sprite is being dragged, or on
 	 * which the sprite was dropped.
@@ -197,8 +200,9 @@ export class Sprite extends DisplayObjectContainer {
 	 * of your sprite button.
 	 */
 	public get hitArea(): Sprite {
-		return <Sprite>this.adaptee.pickObject.adapter;
+		return <Sprite> this.adaptee.pickObject.adapter;
 	}
+
 	public set hitArea(value: Sprite) {
 		this.adaptee.pickObject = <AwayDisplayObjectContainer>value.adaptee;
 	}
@@ -210,12 +214,13 @@ export class Sprite extends DisplayObjectContainer {
 	 */
 	public get soundTransform(): any {
 		// todo: any = SoundTransform
-		console.log("soundTransform not implemented yet in flash/Sprite");
+		console.log('soundTransform not implemented yet in flash/Sprite');
 		return null;
 	}
+
 	public set soundTransform(sndTransform: any) {
 		//todo
-		console.log("soundTransform not implemented yet in flash/Sprite");
+		console.log('soundTransform not implemented yet in flash/Sprite');
 	}
 
 	/**
@@ -236,11 +241,12 @@ export class Sprite extends DisplayObjectContainer {
 	public get useHandCursor(): boolean {
 		//todo
 		//console.log("useHandCursor not implemented yet in flash/Sprite");
-		return (<AwayMovieClip>this.adaptee)._useHandCursor;
+		return (<AwayMovieClip> this.adaptee)._useHandCursor;
 	}
+
 	public set useHandCursor(value: boolean) {
 		//todo
-		(<AwayMovieClip>this.adaptee)._useHandCursor = value;
+		(<AwayMovieClip> this.adaptee)._useHandCursor = value;
 		//console.log("useHandCursor not implemented yet in flash/Sprite");
 	}
 
@@ -276,11 +282,11 @@ export class Sprite extends DisplayObjectContainer {
 				this.checkBounds();
 			this.startDragMCPosition.x = this.adaptee.x;
 			this.startDragMCPosition.y = this.adaptee.y;
-			(<AVMStage>this.stage.adaptee).addEventListener("mouseMove3d", this.dragListenerDelegate);
+			(<AVMStage> this.stage.adaptee).addEventListener('mouseMove3d', this.dragListenerDelegate);
 			//window.addEventListener("mouseup", this.stopDragDelegate);
 			//window.addEventListener("touchend", this.stopDragDelegate);
-			(<AVMStage>this.stage.adaptee).scene.mousePicker.dragEntity = this.adaptee;
-			MouseManager.getInstance((<AVMStage>this.stage.adaptee).scene.renderer.renderGroup.pickGroup).startDragObject(this.adaptee);
+			(<AVMStage> this.stage.adaptee).scene.mousePicker.dragEntity = this.adaptee;
+			MouseManager.getInstance((<AVMStage> this.stage.adaptee).scene.renderer.renderGroup.pickGroup).startDragObject(this.adaptee);
 
 		}
 	}
@@ -300,8 +306,9 @@ export class Sprite extends DisplayObjectContainer {
 			this.adaptee.y = this._dragBounds.bottom;
 		}
 	}
+
 	private isDragging: boolean = false;
-	private static currentDraggedMC:Sprite = null;
+	private static currentDraggedMC: Sprite = null;
 	private startDragPoint: Point = new Point();
 	private startDragMCPosition: Point = new Point();
 	private _dragBounds: any;
@@ -311,7 +318,7 @@ export class Sprite extends DisplayObjectContainer {
 		//console.log("drag", e);
 
 		if (this.adaptee.parent) {
-			var tmpPoint = this.adaptee.parent.transform.globalToLocal(new Point(this.stage.mouseX, this.stage.mouseY));
+			const tmpPoint = this.adaptee.parent.transform.globalToLocal(new Point(this.stage.mouseX, this.stage.mouseY));
 
 			this.adaptee.x = this.startDragMCPosition.x + (tmpPoint.x - this.startDragPoint.x);
 			this.adaptee.y = this.startDragMCPosition.y + (tmpPoint.y - this.startDragPoint.y);
@@ -321,7 +328,7 @@ export class Sprite extends DisplayObjectContainer {
 
 		}
 	}
-	
+
 	/**
 	 * Lets the user drag the specified sprite on a touch-enabled device. The sprite remains draggable until explicitly
 	 * stopped through a call to the Sprite.stopTouchDrag() method, or until
@@ -340,7 +347,7 @@ export class Sprite extends DisplayObjectContainer {
 	 */
 	public startTouchDrag(touchPonumberID: number, lockCenter: boolean = false, bounds: Rectangle = null) {
 		//todo
-		console.log("startTouchDrag not implemented yet in flash/Sprite");
+		console.log('startTouchDrag not implemented yet in flash/Sprite');
 	}
 
 	/**
@@ -349,17 +356,17 @@ export class Sprite extends DisplayObjectContainer {
 	 * stopDrag() method is added, or until another
 	 * sprite becomes draggable. Only one sprite is draggable at a time.
 	 */
-	
+
 	public stopDragDelegate: (e) => void;
 	public stopDrag(e = null) {
-		if(Sprite.currentDraggedMC && Sprite.currentDraggedMC!=this){
+		if (Sprite.currentDraggedMC && Sprite.currentDraggedMC != this) {
 			Sprite.currentDraggedMC.stopDrag();
 		}
 		this.isDragging = false;
 		Sprite.currentDraggedMC = null;
-		(<AVMStage>this.stage.adaptee).scene.mousePicker.dragEntity = null;
-		MouseManager.getInstance((<AVMStage>this.stage.adaptee).scene.renderer.renderGroup.pickGroup).stopDragObject();
-		(<AVMStage>this.stage.adaptee).removeEventListener("mouseMove3d", this.dragListenerDelegate);
+		(<AVMStage> this.stage.adaptee).scene.mousePicker.dragEntity = null;
+		MouseManager.getInstance((<AVMStage> this.stage.adaptee).scene.renderer.renderGroup.pickGroup).stopDragObject();
+		(<AVMStage> this.stage.adaptee).removeEventListener('mouseMove3d', this.dragListenerDelegate);
 		//window.removeEventListener("mouseup", this.stopDragDelegate);
 		//window.removeEventListener("touchend", this.stopDragDelegate);
 	}
@@ -373,7 +380,7 @@ export class Sprite extends DisplayObjectContainer {
 	 */
 	public stopTouchDrag(touchPonumberID: number) {
 		//todo
-		console.log("startTouchDrag not implemented yet in flash/Sprite");
+		console.log('startTouchDrag not implemented yet in flash/Sprite');
 	}
 
 }

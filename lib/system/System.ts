@@ -1,7 +1,7 @@
 //import { XML } from "../xml/XML";
 
-import { IME } from "./IME";
-import { ASObject } from "@awayfl/avm2";
+import { IME } from './IME';
+import { ASObject } from '@awayfl/avm2';
 
 /**
  * The System class contains properties related to local settings and operations. Among these are <ph class="- topic/ph ">
@@ -12,12 +12,12 @@ import { ASObject } from "@awayfl/avm2";
  * Security class.</p><p class="- topic/p ">This class contains only static methods and properties. You cannot
  * create new instances of the System class.</p>
  */
-export class System extends ASObject
-{
+export class System extends ASObject {
 	static axClass: typeof System;
-	constructor (){	
-		super();	
+	constructor () {
+		super();
 	}
+
 	/**
 	 * The amount of memory (in bytes) that is allocated to
 	 * Adobe® Flash® Player or
@@ -25,8 +25,8 @@ export class System extends ASObject
 	 * allocated memory (System.totalMemory) fluctuates as garbage collection takes place.
 	 * Use this property to monitor garbage collection.
 	 */
-	public static get freeMemory () : number{
-		console.log("freeMemory not implemented yet in flash/System");
+	public static get freeMemory (): number {
+		console.log('freeMemory not implemented yet in flash/System');
 		return 0;
 	}
 
@@ -35,8 +35,8 @@ export class System extends ASObject
 	 * To register for imeComposition events, call
 	 * addEventListener() on this instance.
 	 */
-	public static get ime () : IME{
-		console.log("ime not implemented yet in flash/System");
+	public static get ime (): IME {
+		console.log('ime not implemented yet in flash/System');
 		return null;
 	}
 
@@ -46,13 +46,13 @@ export class System extends ASObject
 	 *   AIR developers should use this property to determine the entire memory consumption of an application.For Flash Player, this includes the memory used by the container application,
 	 * such as the web browser.
 	 */
-	public static get privateMemory () : number{
-		console.log("privateMemory not implemented yet in flash/System");
+	public static get privateMemory (): number {
+		console.log('privateMemory not implemented yet in flash/System');
 		return 0;
 	}
 
-	public static get processCPUUsage () : number{
-		console.log("processCPUUsage not implemented yet in flash/System");
+	public static get processCPUUsage (): number {
+		console.log('processCPUUsage not implemented yet in flash/System');
 		return 0;
 	}
 
@@ -67,8 +67,8 @@ export class System extends ASObject
 	 * or 4,294,967,295), then this property is set to 0. The System.totalMemoryNumber property allows
 	 * larger values.
 	 */
-	public static get totalMemory () : number{
-		console.log("totalMemory not implemented yet in flash/System");
+	public static get totalMemory (): number {
+		console.log('totalMemory not implemented yet in flash/System');
 		return 0;
 	}
 
@@ -82,8 +82,8 @@ export class System extends ASObject
 	 * operating system may consume other memory. The System.privateMemory property reflects all memory used by
 	 * an application.
 	 */
-	public static get totalMemoryNumber () : number{
-		console.log("totalMemoryNumber not implemented yet in flash/System");
+	public static get totalMemoryNumber (): number {
+		console.log('totalMemoryNumber not implemented yet in flash/System');
 		return 0;
 	}
 
@@ -115,17 +115,18 @@ export class System extends ASObject
 	 * useCodePage set to false. This way, the application
 	 * (Flash Player 6 and later, or AIR) interprets the text as Unicode.
 	 */
-	public static get useCodePage () : boolean{
-		console.log("useCodePage not implemented yet in flash/System");
+	public static get useCodePage (): boolean {
+		console.log('useCodePage not implemented yet in flash/System');
 		return false;
 	}
-	public static set useCodePage (value:boolean){
-		console.log("useCodePage not implemented yet in flash/System");
+
+	public static set useCodePage (value: boolean) {
+		console.log('useCodePage not implemented yet in flash/System');
 	}
 
-	public static get vmVersion () : string{
-		console.log("vmVersion not implemented yet in flash/System");
-		return "";
+	public static get vmVersion (): string {
+		console.log('vmVersion not implemented yet in flash/System');
+		return '';
 	}
 
 	/**
@@ -134,8 +135,8 @@ export class System extends ASObject
 	 * for the specified XML node.
 	 * @param	node	XML reference that should be made available for garbage collection.
 	 */
-	public static disposeXML (node:any/*XML*/){
-		console.log("disposeXML not implemented yet in flash/System");
+	public static disposeXML (node: any/*XML*/) {
+		console.log('disposeXML not implemented yet in flash/System');
 	}
 
 	/**
@@ -145,8 +146,8 @@ export class System extends ASObject
 	 * @param	code	A value to pass to the operating system. Typically, if
 	 *   the process exits normally, the value is 0.
 	 */
-	public static exit (code:number){
-		console.log("exit not implemented yet in flash/System");
+	public static exit (code: number) {
+		console.log('exit not implemented yet in flash/System');
 	}
 
 	/**
@@ -157,7 +158,7 @@ export class System extends ASObject
 	 * (ADL) or, in an installed applcation, in content in the application security sandbox.
 	 */
 	public static gc () {
-		console.log("gc not implemented yet in flash/System");
+		console.log('gc not implemented yet in flash/System');
 	}
 
 	/**
@@ -166,12 +167,12 @@ export class System extends ASObject
 	 *
 	 *   For the Flash Player debugger version or the AIR Debug Launcher (ADL) only.
 	 */
-	public static pause (){
-		console.log("pause not implemented yet in flash/System");
+	public static pause () {
+		console.log('pause not implemented yet in flash/System');
 	}
 
-	public static pauseForGCIfCollectionImminent (imminence:number=0.75){
-		console.log("pauseForGCIfCollectionImminent not implemented yet in flash/System");
+	public static pauseForGCIfCollectionImminent (imminence: number = 0.75) {
+		console.log('pauseForGCIfCollectionImminent not implemented yet in flash/System');
 	}
 
 	/**
@@ -179,8 +180,8 @@ export class System extends ASObject
 	 *
 	 *   For the Flash Player debugger version or the AIR Debug Launcher (ADL) only.
 	 */
-	public static resume (){
-		console.log("resume not implemented yet in flash/System");
+	public static resume () {
+		console.log('resume not implemented yet in flash/System');
 	}
 
 	/**
@@ -192,9 +193,8 @@ export class System extends ASObject
 	 * the Clipboard.setData() method.
 	 * @param	string	A plain-text string of characters to put on the system Clipboard, replacing its current contents (if any).
 	 */
-	public static setClipboard (string:string){
-		console.log("setClipboard not implemented yet in flash/System");
+	public static setClipboard (string: string) {
+		console.log('setClipboard not implemented yet in flash/System');
 	}
 
 }
-

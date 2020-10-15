@@ -1,103 +1,101 @@
 
-import {Rectangle, EventBase} from "@awayjs/core";
-import {DisplayObject} from "./DisplayObject";
-import {DisplayObject as AwayDisplayObject, MouseEvent as MouseEventAway} from "@awayjs/scene";
-import {MouseEvent} from "../events/MouseEvent";
-import {Event} from "../events/Event";
-import {KeyboardEvent} from "../events/KeyboardEvent";
+import { Rectangle, EventBase } from '@awayjs/core';
+import { DisplayObject } from './DisplayObject';
+import { DisplayObject as AwayDisplayObject, MouseEvent as MouseEventAway } from '@awayjs/scene';
+import { MouseEvent } from '../events/MouseEvent';
+import { Event } from '../events/Event';
+import { KeyboardEvent } from '../events/KeyboardEvent';
 
-import {IEventMapper} from "../events/IEventMapper"
+import { IEventMapper } from '../events/IEventMapper';
 import { SecurityDomain } from '../SecurityDomain';
 import { AVMStage } from '@awayfl/swf-loader';
-export class InteractiveObject extends DisplayObject{
+export class InteractiveObject extends DisplayObject {
 
-	private _keyDownListeners:Function[];
-	private _keyUpListeners:Function[];
-	private _mouseListnersCallbacksByType:StringMap<Function[]> ={};
+	private _keyDownListeners: Function[];
+	private _keyUpListeners: Function[];
+	private _mouseListnersCallbacksByType: StringMap<Function[]> ={};
 	/** these should be able to get setup:
-	 
 
 	 // listen on key directly
-	 
+
 	 * Dispatched when the user releases a key.
 	 * @eventType	flash.events.KeyboardEvent.KEY_UP
 	 [Event(name="keyUp", type="flash.events.KeyboardEvent")]
-	 
+
 	 * Dispatched when the user presses a key.
 	 * @eventType	flash.events.KeyboardEvent.KEY_DOWN
 	 [Event(name="keyDown", type="flash.events.KeyboardEvent")]
-	 
+
 	 // listen on awayjs adapter and translate
-	 
+
 	 * Dispatched when a user releases the pointing device button over an
 	 * InteractiveObject instance.
 	 * @eventType	flash.events.MouseEvent.RIGHT_MOUSE_UP
 	 [Event(name="rightMouseUp", type="flash.events.MouseEvent")]
-	 
+
 	 * Dispatched when a user presses the pointing device button over an InteractiveObject instance.
 	 * @eventType	flash.events.MouseEvent.RIGHT_MOUSE_DOWN
 	 [Event(name="rightMouseDown", type="flash.events.MouseEvent")]
-	 
+
 	 * Dispatched when a user presses and releases the right button of the user's
 	 * pointing device over the same InteractiveObject.
 	 * @eventType	flash.events.MouseEvent.RIGHT_CLICK
 	 [Event(name="rightClick", type="flash.events.MouseEvent")]
-	 
+
 	 * Dispatched when a user releases the pointing device button over an
 	 * InteractiveObject instance.
 	 * @eventType	flash.events.MouseEvent.MIDDLE_MOUSE_UP
 	 [Event(name="middleMouseUp", type="flash.events.MouseEvent")]
-	 
+
 	 * Dispatched when a user presses the middle pointing device button over an InteractiveObject instance.
 	 * @eventType	flash.events.MouseEvent.MIDDLE_MOUSE_DOWN
 	 [Event(name="middleMouseDown", type="flash.events.MouseEvent")]
-	 
+
 	 * Dispatched when a user presses and releases the middle button of the user's
 	 * pointing device over the same InteractiveObject.
 	 * @eventType	flash.events.MouseEvent.MIDDLE_CLICK
 	 [Event(name="middleClick", type="flash.events.MouseEvent")]
-	 
-	 
+
 	 * Dispatched when the user moves a pointing device over an InteractiveObject instance.
 	 * @eventType	flash.events.MouseEvent.ROLL_OVER
 	 [Event(name="rollOver", type="flash.events.MouseEvent")]
-	 
+
 	 * Dispatched when the user moves a pointing device away from an InteractiveObject
 	 * instance.
 	 * @eventType	flash.events.MouseEvent.ROLL_OUT
 	 [Event(name="rollOut", type="flash.events.MouseEvent")]
-	 
+
 	 * Dispatched when a mouse wheel is spun over an InteractiveObject instance.
 	 * @eventType	flash.events.MouseEvent.MOUSE_WHEEL
 	 [Event(name="mouseWheel", type="flash.events.MouseEvent")]
-	 
+
 	 * Dispatched when a user releases the pointing device button over an
 	 * InteractiveObject instance.
 	 * @eventType	flash.events.MouseEvent.MOUSE_UP
 	 [Event(name="mouseUp", type="flash.events.MouseEvent")]
-	 
+
 	 * Dispatched when the user moves a pointing device over an InteractiveObject instance.
 	 * @eventType	flash.events.MouseEvent.MOUSE_OVER
 	 [Event(name="mouseOver", type="flash.events.MouseEvent")]
-	 
+
 	 * Dispatched when the user moves a pointing device away from an InteractiveObject instance.
 	 * @eventType	flash.events.MouseEvent.MOUSE_OUT
 	 [Event(name="mouseOut", type="flash.events.MouseEvent")]
-	 
+
 	 * Dispatched when a user moves the pointing device while it is over an InteractiveObject.
 	 * @eventType	flash.events.MouseEvent.MOUSE_MOVE
 	 [Event(name="mouseMove", type="flash.events.MouseEvent")]
-	 
+
 	 * Dispatched when a user presses the pointing device button over an InteractiveObject instance.
 	 * @eventType	flash.events.MouseEvent.MOUSE_DOWN
 	 [Event(name="mouseDown", type="flash.events.MouseEvent")]
-	 
+
 	 * Dispatched when a user presses and releases the main button of a pointing device twice in
 	 * rapid succession over the same InteractiveObject when that object's
 	 * doubleClickEnabled flag is set to true.
 	 * @eventType	flash.events.MouseEvent.DOUBLE_CLICK
 	 [Event(name="doubleClick", type="flash.events.MouseEvent")]
-	 
+
 	 * Dispatched when a user presses and releases the main button of the user's
 	 * pointing device over the same InteractiveObject.
 	 * @eventType	flash.events.MouseEvent.CLICK
@@ -319,18 +317,17 @@ export class InteractiveObject extends DisplayObject{
 	 *
 	 *   new SimpleButton()new TextField()new Loader()new Sprite()new MovieClip()
 	 */
-	constructor(){
+	constructor() {
 		super();
 
-
 		 // these events can not be mapped from awayjs: //todo (?)
-		 this.eventMappingDummys[MouseEvent.RIGHT_MOUSE_UP]="InteractiveObject:MouseEvent.RIGHT_MOUSE_UP";
-		 this.eventMappingDummys[MouseEvent.RIGHT_MOUSE_DOWN]="InteractiveObject:MouseEvent.RIGHT_MOUSE_DOWN";
-		 this.eventMappingDummys[MouseEvent.RIGHT_MOUSE_DOWN]="InteractiveObject:MouseEvent.RIGHT_MOUSE_DOWN";
-		 this.eventMappingDummys[MouseEvent.RIGHT_CLICK]="InteractiveObject:MouseEvent.RIGHT_CLICK";
-		 this.eventMappingDummys[MouseEvent.MIDDLE_MOUSE_UP]="InteractiveObject:MouseEvent.MIDDLE_MOUSE_UP";
-		 this.eventMappingDummys[MouseEvent.MIDDLE_MOUSE_DOWN]="InteractiveObject:MouseEvent.MIDDLE_MOUSE_DOWN";
-		 this.eventMappingDummys[MouseEvent.MIDDLE_CLICK]="InteractiveObject:MouseEvent.MIDDLE_CLICK";
+		 this.eventMappingDummys[MouseEvent.RIGHT_MOUSE_UP] = 'InteractiveObject:MouseEvent.RIGHT_MOUSE_UP';
+		 this.eventMappingDummys[MouseEvent.RIGHT_MOUSE_DOWN] = 'InteractiveObject:MouseEvent.RIGHT_MOUSE_DOWN';
+		 this.eventMappingDummys[MouseEvent.RIGHT_MOUSE_DOWN] = 'InteractiveObject:MouseEvent.RIGHT_MOUSE_DOWN';
+		 this.eventMappingDummys[MouseEvent.RIGHT_CLICK] = 'InteractiveObject:MouseEvent.RIGHT_CLICK';
+		 this.eventMappingDummys[MouseEvent.MIDDLE_MOUSE_UP] = 'InteractiveObject:MouseEvent.MIDDLE_MOUSE_UP';
+		 this.eventMappingDummys[MouseEvent.MIDDLE_MOUSE_DOWN] = 'InteractiveObject:MouseEvent.MIDDLE_MOUSE_DOWN';
+		 this.eventMappingDummys[MouseEvent.MIDDLE_CLICK] = 'InteractiveObject:MouseEvent.MIDDLE_CLICK';
 
 		 /*
 		 //todo
@@ -373,141 +370,134 @@ export class InteractiveObject extends DisplayObject{
 		 this.eventMappingDummys[Event.CLEAR]="Event.CLEAR";
 		  */
 
-
-
-		 
 		 // KeyboardEvent events adapt to js-events. they listen on document.onKeyUp / onKeyDown:
 
-		 this._keyUpCallbackDelegate = (event:any) => this.keyUpCallback(event);
-		 this.eventMapping[KeyboardEvent.KEY_UP]=(<IEventMapper>{
-			 adaptedType:"",
+		 this._keyUpCallbackDelegate = (event: any) => this.keyUpCallback(event);
+		 this.eventMapping[KeyboardEvent.KEY_UP] = (<IEventMapper>{
+			 adaptedType:'',
 			 addListener:this.initKeyUpListener,
 			 removeListener:this.removeKeyUpListener,
-			 callback:this._keyUpCallbackDelegate});
+			 callback:this._keyUpCallbackDelegate });
 
-		 this._keyDownCallbackDelegate = (event:any) => this.keyDownCallback(event);
-		 this.eventMapping[KeyboardEvent.KEY_DOWN]=(<IEventMapper>{
-			 adaptedType:"",
+		 this._keyDownCallbackDelegate = (event: any) => this.keyDownCallback(event);
+		 this.eventMapping[KeyboardEvent.KEY_DOWN] = (<IEventMapper>{
+			 adaptedType:'',
 			 addListener:this.initKeyDownListener,
 			 removeListener:this.removeKeyDownListener,
-			 callback:this._keyDownCallbackDelegate});
-
-			 
+			 callback:this._keyDownCallbackDelegate });
 
 		 // MouseEvent events adapt to awayjs-MouseEvents. they listen on adapter:
 		 // these mapping share the same callback, thats why we need the setup the eventMappingInvert to
 
-		 this._mouseCallbackDelegate = (event:MouseEventAway) => this.mouseCallback(event);
+		 this._mouseCallbackDelegate = (event: MouseEventAway) => this.mouseCallback(event);
 
-		 this.eventMappingInvert[MouseEventAway.MOUSE_WHEEL]=MouseEvent.MOUSE_WHEEL;
-		 this.eventMapping[MouseEvent.MOUSE_WHEEL]= (<IEventMapper>{
+		 this.eventMappingInvert[MouseEventAway.MOUSE_WHEEL] = MouseEvent.MOUSE_WHEEL;
+		 this.eventMapping[MouseEvent.MOUSE_WHEEL] = (<IEventMapper>{
 			 adaptedType:MouseEventAway.MOUSE_WHEEL,
 			 addListener:this.initMouseListener,
 			 removeListener:this.removeMouseListener,
-			 callback:this._mouseCallbackDelegate});
+			 callback:this._mouseCallbackDelegate });
 
-		 this.eventMappingInvert[MouseEventAway.MOUSE_UP]=MouseEvent.MOUSE_UP;
-		 this.eventMapping[MouseEvent.MOUSE_UP]=(<IEventMapper>{
+		 this.eventMappingInvert[MouseEventAway.MOUSE_UP] = MouseEvent.MOUSE_UP;
+		 this.eventMapping[MouseEvent.MOUSE_UP] = (<IEventMapper>{
 			 adaptedType:MouseEventAway.MOUSE_UP,
 			 addListener:this.initMouseListener,
 			 removeListener:this.removeMouseListener,
-			 callback:this._mouseCallbackDelegate});
+			 callback:this._mouseCallbackDelegate });
 
-		 this.eventMappingInvert[MouseEventAway.MOUSE_OVER]=MouseEvent.MOUSE_OVER;
-		 this.eventMapping[MouseEvent.MOUSE_OVER]=(<IEventMapper>{
+		 this.eventMappingInvert[MouseEventAway.MOUSE_OVER] = MouseEvent.MOUSE_OVER;
+		 this.eventMapping[MouseEvent.MOUSE_OVER] = (<IEventMapper>{
 			 adaptedType:MouseEventAway.MOUSE_OVER,
 			 addListener:this.initMouseListener,
 			 removeListener:this.removeMouseListener,
-			 callback:this._mouseCallbackDelegate});
+			 callback:this._mouseCallbackDelegate });
 
-		 this.eventMappingInvert[MouseEventAway.MOUSE_OUT]=MouseEvent.MOUSE_OUT;
-		 this.eventMapping[MouseEvent.MOUSE_OUT]=(<IEventMapper>{
+		 this.eventMappingInvert[MouseEventAway.MOUSE_OUT] = MouseEvent.MOUSE_OUT;
+		 this.eventMapping[MouseEvent.MOUSE_OUT] = (<IEventMapper>{
 			 adaptedType:MouseEventAway.MOUSE_OUT,
 			 addListener:this.initMouseListener,
 			 removeListener:this.removeMouseListener,
-			 callback:this._mouseCallbackDelegate});
+			 callback:this._mouseCallbackDelegate });
 
-		 this.eventMappingInvert[MouseEventAway.MOUSE_MOVE]=MouseEvent.MOUSE_MOVE;
-		 this.eventMapping[MouseEvent.MOUSE_MOVE]=(<IEventMapper>{
+		 this.eventMappingInvert[MouseEventAway.MOUSE_MOVE] = MouseEvent.MOUSE_MOVE;
+		 this.eventMapping[MouseEvent.MOUSE_MOVE] = (<IEventMapper>{
 			 adaptedType:MouseEventAway.MOUSE_MOVE,
 			 addListener:this.initMouseListener,
 			 removeListener:this.removeMouseListener,
-			 callback:this._mouseCallbackDelegate});
+			 callback:this._mouseCallbackDelegate });
 
-		 this.eventMappingInvert[MouseEventAway.MOUSE_DOWN]=MouseEvent.MOUSE_DOWN;
-		 this.eventMapping[MouseEvent.MOUSE_DOWN]=(<IEventMapper>{
+		 this.eventMappingInvert[MouseEventAway.MOUSE_DOWN] = MouseEvent.MOUSE_DOWN;
+		 this.eventMapping[MouseEvent.MOUSE_DOWN] = (<IEventMapper>{
 			 adaptedType:MouseEventAway.MOUSE_DOWN,
 			 addListener:this.initMouseListener,
 			 removeListener:this.removeMouseListener,
-			 callback:this._mouseCallbackDelegate});
+			 callback:this._mouseCallbackDelegate });
 
-		 this.eventMappingInvert[MouseEventAway.DOUBLE_CLICK]=MouseEvent.DOUBLE_CLICK;
-		 this.eventMapping[MouseEvent.DOUBLE_CLICK]=(<IEventMapper>{
+		 this.eventMappingInvert[MouseEventAway.DOUBLE_CLICK] = MouseEvent.DOUBLE_CLICK;
+		 this.eventMapping[MouseEvent.DOUBLE_CLICK] = (<IEventMapper>{
 			 adaptedType:MouseEventAway.DOUBLE_CLICK,
 			 addListener:this.initMouseListener,
 			 removeListener:this.removeMouseListener,
-			 callback:this._mouseCallbackDelegate});
+			 callback:this._mouseCallbackDelegate });
 
-		this.eventMappingInvert[MouseEventAway.CLICK]=MouseEvent.CLICK;
-		this.eventMapping[MouseEvent.CLICK]=(<IEventMapper>{
+		this.eventMappingInvert[MouseEventAway.CLICK] = MouseEvent.CLICK;
+		this.eventMapping[MouseEvent.CLICK] = (<IEventMapper>{
 			adaptedType:MouseEventAway.CLICK,
 			addListener:this.initMouseListener,
 			removeListener:this.removeMouseListener,
-			callback:this._mouseCallbackDelegate});
-			
-		this.eventMappingInvert[MouseEventAway.ROLL_OUT]=MouseEvent.ROLL_OUT;
-		this.eventMapping[MouseEvent.ROLL_OUT]=(<IEventMapper>{
+			callback:this._mouseCallbackDelegate });
+
+		this.eventMappingInvert[MouseEventAway.ROLL_OUT] = MouseEvent.ROLL_OUT;
+		this.eventMapping[MouseEvent.ROLL_OUT] = (<IEventMapper>{
 			adaptedType:MouseEventAway.ROLL_OUT,
 			addListener:this.initMouseListener,
 			removeListener:this.removeMouseListener,
-			callback:this._mouseCallbackDelegate});
-			
-		this.eventMappingInvert[MouseEventAway.ROLL_OVER]=MouseEvent.ROLL_OVER;
-		this.eventMapping[MouseEvent.ROLL_OVER]=(<IEventMapper>{
+			callback:this._mouseCallbackDelegate });
+
+		this.eventMappingInvert[MouseEventAway.ROLL_OVER] = MouseEvent.ROLL_OVER;
+		this.eventMapping[MouseEvent.ROLL_OVER] = (<IEventMapper>{
 			adaptedType:MouseEventAway.ROLL_OVER,
 			addListener:this.initMouseListener,
 			removeListener:this.removeMouseListener,
-			callback:this._mouseCallbackDelegate});
+			callback:this._mouseCallbackDelegate });
 	}
 
 	// ---------- event mapping functions for KeyboardEvent.KEY_UP:
 
-
-	private initKeyUpListener(type:string, callback:(event:any) => void, listener:Function):void
-	{
-		if(!this._keyUpListeners){
-			this._keyUpListeners=[listener];
+	private initKeyUpListener(type: string, callback: (event: any) => void, listener: Function): void {
+		if (!this._keyUpListeners) {
+			this._keyUpListeners = [listener];
 			//console.log("initKeyUpListener", this)
-			document.addEventListener("keyup", callback);
-			document.addEventListener("keypress", callback);
+			document.addEventListener('keyup', callback);
+			document.addEventListener('keypress', callback);
 			return;
 		}
 		this._keyUpListeners.push(listener);
 	}
-	private removeKeyUpListener(type:string, callback:(event:any) => void, listener:Function):void
-	{
-		if(this._keyUpListeners){
-			let idx=this._keyUpListeners.indexOf(listener);
-			if(idx!=-1){
-				if(this._keyUpListeners.length==1){
-					this._keyUpListeners=null;
-					document.removeEventListener("keyup", callback);
+
+	private removeKeyUpListener(type: string, callback: (event: any) => void, listener: Function): void {
+		if (this._keyUpListeners) {
+			const idx = this._keyUpListeners.indexOf(listener);
+			if (idx != -1) {
+				if (this._keyUpListeners.length == 1) {
+					this._keyUpListeners = null;
+					document.removeEventListener('keyup', callback);
 					return;
 				}
 				this._keyUpListeners.splice(idx, 1);
 			}
 		}
 	}
-	private _keyUpCallbackDelegate:(event:any) => void;
-	private keyUpCallback(event:any=null):boolean
-	{
-		if(AVMStage.instance().isPaused)
+
+	private _keyUpCallbackDelegate: (event: any) => void;
+	private keyUpCallback(event: any = null): boolean {
+		if (AVMStage.instance().isPaused)
 			return;
 		if (window.event) {
 			window.event.returnValue = false;
 		}
 		event.preventDefault ? event.preventDefault() : (event.returnValue = false);
-		var newkeyBoardEvent:KeyboardEvent=new (<SecurityDomain> this.sec).flash.events.KeyboardEvent(KeyboardEvent.KEY_UP,
+		const newkeyBoardEvent: KeyboardEvent = new (<SecurityDomain> this.sec).flash.events.KeyboardEvent(KeyboardEvent.KEY_UP,
 			true,
 			false,
 			event.charCode,
@@ -528,42 +518,41 @@ export class InteractiveObject extends DisplayObject{
 
 	// ---------- event mapping functions for KeyboardEvent.KEY_DOWN:
 
-	private initKeyDownListener(type:string, callback:(event:any) => void, listener:Function):void
-	{
-		if(!this._keyDownListeners){
-			this._keyDownListeners=[listener];
+	private initKeyDownListener(type: string, callback: (event: any) => void, listener: Function): void {
+		if (!this._keyDownListeners) {
+			this._keyDownListeners = [listener];
 			//console.log("initKeyUpListener", this)
-			document.addEventListener("keydown", callback);
-			document.addEventListener("keypress", callback);
+			document.addEventListener('keydown', callback);
+			document.addEventListener('keypress', callback);
 			return;
 		}
 		this._keyDownListeners.push(listener);
 	}
-	private removeKeyDownListener(type:string, callback:(event:any) => void, listener:Function):void
-	{
-		if(this._keyDownListeners){
-			let idx=this._keyDownListeners.indexOf(listener);
-			if(idx!=-1){
-				if(this._keyDownListeners.length==1){
-					this._keyDownListeners=null;
-					document.removeEventListener("keydown", callback);
-					document.removeEventListener("keypress", callback);
+
+	private removeKeyDownListener(type: string, callback: (event: any) => void, listener: Function): void {
+		if (this._keyDownListeners) {
+			const idx = this._keyDownListeners.indexOf(listener);
+			if (idx != -1) {
+				if (this._keyDownListeners.length == 1) {
+					this._keyDownListeners = null;
+					document.removeEventListener('keydown', callback);
+					document.removeEventListener('keypress', callback);
 					return;
 				}
 				this._keyDownListeners.splice(idx, 1);
 			}
 		}
 	}
-	private _keyDownCallbackDelegate:(event:any) => void;
-	private keyDownCallback(event:any=null):boolean
-	{
-		if(AVMStage.instance().isPaused)
+
+	private _keyDownCallbackDelegate: (event: any) => void;
+	private keyDownCallback(event: any = null): boolean {
+		if (AVMStage.instance().isPaused)
 			return;
 		if (window.event) {
 			window.event.returnValue = false;
 		}
 		event.preventDefault ? event.preventDefault() : (event.returnValue = false);
-		var newkeyBoardEvent:KeyboardEvent=new (<SecurityDomain> this.sec).flash.events.KeyboardEvent(KeyboardEvent.KEY_DOWN);
+		const newkeyBoardEvent: KeyboardEvent = new (<SecurityDomain> this.sec).flash.events.KeyboardEvent(KeyboardEvent.KEY_DOWN);
 		(<any>newkeyBoardEvent).axInitializer(KeyboardEvent.KEY_DOWN);
 		//newkeyBoardEvent.type=KeyboardEvent.KEY_DOWN;
 		newkeyBoardEvent.keyCode = event.keyCode;
@@ -578,22 +567,21 @@ export class InteractiveObject extends DisplayObject{
 
 	// ---------- event mapping functions for MouseEvents:
 
-	private initMouseListener(type:string, callback:(event:MouseEventAway) => void, listener:Function):void
-	{
-		if(!this._mouseListnersCallbacksByType[type]){
+	private initMouseListener(type: string, callback: (event: MouseEventAway) => void, listener: Function): void {
+		if (!this._mouseListnersCallbacksByType[type]) {
 			this.adaptee.addEventListener(type, callback);
-			this._mouseListnersCallbacksByType[type]=[listener];
+			this._mouseListnersCallbacksByType[type] = [listener];
 			return;
-		} 
+		}
 		this._mouseListnersCallbacksByType[type].push(listener);
-		
+
 	}
-	private removeMouseListener(type:string, callback:(event:MouseEventAway) => void, listener:Function):void
-	{
-		if(this._mouseListnersCallbacksByType[type]){
-			let idx=this._mouseListnersCallbacksByType[type].indexOf(listener);
-			if(idx!=-1){
-				if(this._mouseListnersCallbacksByType[type].length==1){
+
+	private removeMouseListener(type: string, callback: (event: MouseEventAway) => void, listener: Function): void {
+		if (this._mouseListnersCallbacksByType[type]) {
+			const idx = this._mouseListnersCallbacksByType[type].indexOf(listener);
+			if (idx != -1) {
+				if (this._mouseListnersCallbacksByType[type].length == 1) {
 					delete this._mouseListnersCallbacksByType[type];
 					this.adaptee.removeEventListener(type, callback);
 					return;
@@ -602,37 +590,35 @@ export class InteractiveObject extends DisplayObject{
 			}
 		}
 	}
-	private _mouseCallbackDelegate:(event:MouseEventAway) => void;
-	private mouseCallback(event:MouseEventAway):void
-	{
-		var adaptedEvent:MouseEvent=new (<SecurityDomain> this.sec).flash.events.MouseEvent(this.eventMappingInvert[event.type]);
+
+	private _mouseCallbackDelegate: (event: MouseEventAway) => void;
+	private mouseCallback(event: MouseEventAway): void {
+		const adaptedEvent: MouseEvent = new (<SecurityDomain> this.sec).flash.events.MouseEvent(this.eventMappingInvert[event.type]);
 		adaptedEvent.fillFromAway(event);
-		adaptedEvent.target=this;
+		adaptedEvent.target = this;
 		//adaptedEvent.currentTarget=this;
-		
+
 		this.dispatchEvent(adaptedEvent, true);
 	}
 
 	//---------------------------stuff added to make it work:
 
-
-
-
 	//---------------------------original as3 properties / methods:
-	
+
 	/**
 	 * The current accessibility implementation (AccessibilityImplementation)
 	 * for this InteractiveObject instance.
 	 * @langversion	3.0
 	 */
-	public get accessibilityImplementation () : any {
-		console.log("accessibilityImplementation not implemented yet in flash/InteractiveObject");
+	public get accessibilityImplementation (): any {
+		console.log('accessibilityImplementation not implemented yet in flash/InteractiveObject');
 		//todo flash.accessibility.AccessibilityImplementation;
 		return null;
 	}
-	public set accessibilityImplementation (value:any){
+
+	public set accessibilityImplementation (value: any) {
 		//todo
-		console.log("accessibilityImplementation not implemented yet in flash/InteractiveObject");
+		console.log('accessibilityImplementation not implemented yet in flash/InteractiveObject');
 
 	}
 
@@ -647,14 +633,15 @@ export class InteractiveObject extends DisplayObject{
 	 * For TextField objects, selecting these commands (or their keyboard equivalents) does not generate clear,
 	 * copy, cut, paste, or selectAll events.
 	 */
-	public get contextMenu () : any{
-		console.log("contextMenu not implemented yet in flash/InteractiveObject");
+	public get contextMenu (): any {
+		console.log('contextMenu not implemented yet in flash/InteractiveObject');
 		//todo flash.display.NativeMenu;
 		return null;
 	}
-	public set contextMenu (cm:any){
+
+	public set contextMenu (cm: any) {
 		//todo
-		console.log("contextMenu not implemented yet in flash/InteractiveObject");
+		console.log('contextMenu not implemented yet in flash/InteractiveObject');
 
 	}
 
@@ -670,14 +657,15 @@ export class InteractiveObject extends DisplayObject{
 	 * addEventListener() method to add an event listener
 	 * for the doubleClick event.
 	 */
-	public get doubleClickEnabled () : boolean{
+	public get doubleClickEnabled (): boolean {
 		//todo
-		console.log("doubleClickEnabled not implemented yet in flash/InteractiveObject");
+		console.log('doubleClickEnabled not implemented yet in flash/InteractiveObject');
 		return false;
 	}
-	public set doubleClickEnabled (enabled:boolean){
+
+	public set doubleClickEnabled (enabled: boolean) {
 		//todo
-		console.log("doubleClickEnabled not implemented yet in flash/InteractiveObject");
+		console.log('doubleClickEnabled not implemented yet in flash/InteractiveObject');
 
 	}
 
@@ -688,14 +676,15 @@ export class InteractiveObject extends DisplayObject{
 	 * appears. A value of null indicates that this object obeys the
 	 * stageFocusRect property of the Stage.
 	 */
-	public get focusRect () : any{
+	public get focusRect (): any {
 		//todo
-		console.log("focusRect not implemented yet in flash/InteractiveObject");
+		console.log('focusRect not implemented yet in flash/InteractiveObject');
 		return null;
 	}
-	public set focusRect (focusRect:any){
+
+	public set focusRect (focusRect: any) {
 		//todo
-		console.log("focusRect not implemented yet in flash/InteractiveObject");
+		console.log('focusRect not implemented yet in flash/InteractiveObject');
 
 	}
 
@@ -712,11 +701,12 @@ export class InteractiveObject extends DisplayObject{
 	 */
 	//private _mouseEnabled:boolean=true;
 
-	public get mouseEnabled () : boolean{
+	public get mouseEnabled (): boolean {
 		return this.adaptee.mouseEnabled;
 	}
-	public set mouseEnabled (enabled:boolean){
-		this.adaptee.mouseEnabled=enabled;
+
+	public set mouseEnabled (enabled: boolean) {
+		this.adaptee.mouseEnabled = enabled;
 	}
 
 	/**
@@ -732,14 +722,15 @@ export class InteractiveObject extends DisplayObject{
 	 * softKeyboardActivate, and softKeyboardDeactivate events
 	 * when the soft keyboard raises and lowers.Note: This property is not supported in AIR applications on iOS.
 	 */
-	public get needsSoftKeyboard () : boolean{
+	public get needsSoftKeyboard (): boolean {
 		//todo
-		console.log("needsSoftKeyboard not implemented yet in flash/InteractiveObject");
+		console.log('needsSoftKeyboard not implemented yet in flash/InteractiveObject');
 		return false;
 	}
-	public set needsSoftKeyboard (value:boolean){
+
+	public set needsSoftKeyboard (value: boolean) {
 		//todo
-		console.log("needsSoftKeyboard not implemented yet in flash/InteractiveObject");
+		console.log('needsSoftKeyboard not implemented yet in flash/InteractiveObject');
 
 	}
 
@@ -754,14 +745,15 @@ export class InteractiveObject extends DisplayObject{
 	 * property.Specify the softKeyboardInputAreaOfInterest in stage coordinates.Note: On Android, the softKeyboardInputAreaOfInterest is not
 	 * respected in landscape orientations.
 	 */
-	public get softKeyboardInputAreaOfInterest () : Rectangle{
+	public get softKeyboardInputAreaOfInterest (): Rectangle {
 		//todo
-		console.log("softKeyboardInputAreaOfInterest not implemented yet in flash/InteractiveObject");
+		console.log('softKeyboardInputAreaOfInterest not implemented yet in flash/InteractiveObject');
 		return null;
 	}
-	public set softKeyboardInputAreaOfInterest (value:Rectangle){
+
+	public set softKeyboardInputAreaOfInterest (value: Rectangle) {
 		//todo
-		console.log("softKeyboardInputAreaOfInterest not implemented yet in flash/InteractiveObject");
+		console.log('softKeyboardInputAreaOfInterest not implemented yet in flash/InteractiveObject');
 
 	}
 
@@ -771,12 +763,13 @@ export class InteractiveObject extends DisplayObject{
 	 * the value is false, except for the following:
 	 * For a SimpleButton object, the value is true.For a TextField object with type = "input", the value is true.For a Sprite object or MovieClip object with buttonMode = true, the value is true.
 	 */
-	public get tabEnabled () : boolean{
+	public get tabEnabled (): boolean {
 		//todo
 		//console.log("tabEnabled not implemented yet in flash/InteractiveObject");
 		return false;
 	}
-	public set tabEnabled (enabled:boolean){
+
+	public set tabEnabled (enabled: boolean) {
 		//todo
 		//console.log("tabEnabled not implemented yet in flash/InteractiveObject");
 
@@ -808,16 +801,16 @@ export class InteractiveObject extends DisplayObject{
 	 * InteractiveObject(tlfInstance2.getChildAt(1)).tabIndex = 2;
 	 * InteractiveObject(tlfInstance3.getChildAt(1)).tabIndex = 1;
 	 */
-	public get tabIndex () : number{
+	public get tabIndex (): number {
 		//todo
-		console.log("tabIndex not implemented yet in flash/InteractiveObject");
+		console.log('tabIndex not implemented yet in flash/InteractiveObject');
 		return 0;
 	}
-	public set tabIndex (index:number){
-		//todo
-		console.log("tabIndex not implemented yet in flash/InteractiveObject");
-	}
 
+	public set tabIndex (index: number) {
+		//todo
+		console.log('tabIndex not implemented yet in flash/InteractiveObject');
+	}
 
 	/**
 	 * Raises a virtual keyboard.
@@ -827,9 +820,9 @@ export class InteractiveObject extends DisplayObject{
 	 * if a hardware keyboard is available, or if the client system does not support virtual keyboards.Note: This method is not supported in AIR applications on iOS.
 	 * @return	A value of true means that the soft keyboard request was granted; false means that the soft keyboard was not raised.
 	 */
-	public requestSoftKeyboard () : boolean{
+	public requestSoftKeyboard (): boolean {
 		//todo
-		console.log("requestSoftKeyboard not implemented yet in flash/InteractiveObject");
+		console.log('requestSoftKeyboard not implemented yet in flash/InteractiveObject');
 		return false;
 	}
 

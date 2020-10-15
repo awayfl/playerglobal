@@ -1,1 +1,1 @@
-export {JointStyle} from "@awayjs/graphics";
+export { JointStyle } from '@awayjs/graphics';

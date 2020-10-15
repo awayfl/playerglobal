@@ -1,31 +1,30 @@
 
-import {IAsset, ParserBase,  AssetEvent, WaveAudio, URLLoaderEvent, LoaderEvent} from "@awayjs/core";
+import { IAsset, ParserBase,  AssetEvent, WaveAudio, URLLoaderEvent, LoaderEvent } from '@awayjs/core';
 
-import {Image2DParser, BitmapImage2D} from "@awayjs/stage";
+import { Image2DParser, BitmapImage2D } from '@awayjs/stage';
 
 import { Graphics } from '@awayjs/graphics';
 
-import {LoaderContainer, IDisplayObjectAdapter, Font, DisplayObjectContainer as AwayDisplayObjectContainer, DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip, Sprite as AwaySprite, TextField as AwayTextField, SceneImage2D} from "@awayjs/scene";
+import { LoaderContainer, IDisplayObjectAdapter, Font, DisplayObjectContainer as AwayDisplayObjectContainer, DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip, Sprite as AwaySprite, TextField as AwayTextField, SceneImage2D } from '@awayjs/scene';
 
 import { release, somewhatImplemented, SWFParser } from '@awayfl/swf-loader';
 
 import { Errors, ByteArray } from '@awayfl/avm2';
 
 import { UncaughtErrorEvents } from '../events/UncaughtErrorEvents';
-import {FlashSceneGraphFactory} from "../factories/FlashSceneGraphFactory";
-import {LoaderContext} from "../system/LoaderContext";
+import { FlashSceneGraphFactory } from '../factories/FlashSceneGraphFactory';
+import { LoaderContext } from '../system/LoaderContext';
 import { ApplicationDomain } from '../system/ApplicationDomain';
 import { SecurityDomain } from '../SecurityDomain';
-import {LoaderInfo} from "./LoaderInfo";
-import {Bitmap} from "./Bitmap";
-import {BitmapData} from "./BitmapData";
-import {DisplayObjectContainer} from "./DisplayObjectContainer";
-import {DisplayObject} from "./DisplayObject";
-import {URLRequest} from "../net/URLRequest";
+import { LoaderInfo } from './LoaderInfo';
+import { Bitmap } from './Bitmap';
+import { BitmapData } from './BitmapData';
+import { DisplayObjectContainer } from './DisplayObjectContainer';
+import { DisplayObject } from './DisplayObject';
+import { URLRequest } from '../net/URLRequest';
 import { ILoader } from '../ILoader';
-import { IRedirectRule, matchRedirect } from "@awayfl/swf-loader";
-import { Event } from "../events/Event";
-
+import { IRedirectRule, matchRedirect } from '@awayfl/swf-loader';
+import { Event } from '../events/Event';
 
 /**
  * The Loader class is used to load SWF files or image(JPG, PNG, or GIF)
@@ -41,14 +40,14 @@ import { Event } from "../events/Event";
  * `removeChild()`, `removeChildAt()`, and
  * `setChildIndex()`. To remove a loaded display object, you must
  * remove the _Loader_ object from its parent DisplayObjectContainer
- * child array. 
+ * child array.
  *
  * **Note:** The ActionScript 2.0 MovieClipLoader and LoadVars classes
  * are not used in ActionScript 3.0. The Loader and URLLoader classes replace
  * them.
  *
  * When you use the Loader class, consider the Flash Player and Adobe AIR
- * security model: 
+ * security model:
  *
  * * You can load content from any accessible source.
  * * Loading is not allowed if the calling SWF file is in a network
@@ -56,7 +55,7 @@ import { Event } from "../events/Event";
  * * If the loaded content is a SWF file written with ActionScript 3.0, it
  *   cannot be cross-scripted by a SWF file in another security sandbox unless
  *   that cross-scripting arrangement was approved through a call to the
- *   `System.allowDomain()` or the `System.allowInsecureDomain()` method 
+ *   `System.allowDomain()` or the `System.allowInsecureDomain()` method
  *   in the loaded content file.
  * * If the loaded content is an AVM1 SWF file (written using ActionScript
  *   1.0 or 2.0), it cannot be cross-scripted by an AVM2 SWF file(written using
@@ -86,12 +85,11 @@ import { Event } from "../events/Event";
  * of the Loader object) from drawing to portions of the Stage outside of that
  * mask, as shown in the following code:
  */
-export class Loader extends DisplayObjectContainer implements ILoader
-{
+export class Loader extends DisplayObjectContainer implements ILoader {
 	public static redirectRules: IRedirectRule[] = [];
-	
+
 	public static loaderQueue: Function[] = [];
-	
+
 	public static executeQueue() {
 		if (!Loader.loaderQueue.length)
 			return;
@@ -100,21 +98,21 @@ export class Loader extends DisplayObjectContainer implements ILoader
 
 		Loader.loaderQueue.length = 0;
 
-		for(const task of queue) {
+		for (const task of queue) {
 			task();
 		}
-	};
+	}
 
-	private _factory:FlashSceneGraphFactory;
-	private _isImage:boolean;
-	private _parser:ParserBase;
+	private _factory: FlashSceneGraphFactory;
+	private _isImage: boolean;
+	private _parser: ParserBase;
 	private _uncaughtErrorEvents: UncaughtErrorEvents;
 
-	private _loaderContext:LoaderContext;
+	private _loaderContext: LoaderContext;
 
-	private _content:DisplayObject;
-	private _contentLoaderInfo:LoaderInfo
-	private _onAssetCompleteDelegate:(event:AssetEvent) => void;
+	private _content: DisplayObject;
+	private _contentLoaderInfo: LoaderInfo
+	private _onAssetCompleteDelegate: (event: AssetEvent) => void;
 
 	/**
 	 * Returns a LoaderInfo object corresponding to the object being loaded.
@@ -132,8 +130,7 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 * `Loader.uncaughtErrorEvents` property, not the
 	 * `Loader.contentLoaderInfo.uncaughtErrorEvents` property.
 	 */
-	public get contentLoaderInfo():LoaderInfo
-	{
+	public get contentLoaderInfo(): LoaderInfo {
 		return this._contentLoaderInfo;
 	}
 
@@ -153,8 +150,7 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 *                       call the `load()` or
 	 *                       `loadBytes()` method.
 	 */
-	public get content():DisplayObject
-	{
+	public get content(): DisplayObject {
 		return this._content;
 	}
 
@@ -163,20 +159,19 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 * the SWF that's loaded by this Loader object. An uncaught error happens when an
 	 * error is thrown outside of any `try..catch` blocks or when an ErrorEvent object is
 	 * dispatched with no registered listeners.
-	 * 
+	 *
 	 * Note that a Loader object's `uncaughtErrorEvents` property dispatches events that
 	 * bubble through it, not events that it dispatches directly. It never dispatches an
 	 * `uncaughtErrorEvent` in the target phase. It only dispatches the event in the
 	 * capture and bubbling phases. To detect an uncaught error in the current SWF (the
 	 * SWF in which the Loader object is defined) use the `LoaderInfo.uncaughtErrorEvents`
 	 * property instead.
-	 * 
+	 *
 	 * If the content loaded by the Loader object is an AVM1 (ActionScript 2) SWF file,
 	 * uncaught errors in the AVM1 SWF file do not result in an `uncaughtError` event.
 	 */
-	public get uncaughtErrorEvents(): UncaughtErrorEvents
-	{
-		release || somewhatImplemented("public flash.display.Loader::uncaughtErrorEvents");
+	public get uncaughtErrorEvents(): UncaughtErrorEvents {
+		release || somewhatImplemented('public flash.display.Loader::uncaughtErrorEvents');
 
 		if (!this._uncaughtErrorEvents)
 			this._uncaughtErrorEvents = new UncaughtErrorEvents();
@@ -195,7 +190,7 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 * You can also use a Loader instance "offlist," that is without adding it
 	 * to a display object container on the display list. In this mode, the
 	 * Loader instance might be used to load a SWF file that contains additional
-	 * modules of an application. 
+	 * modules of an application.
 	 *
 	 * To detect when the SWF file is finished loading, you can use the events
 	 * of the LoaderInfo object associated with the
@@ -230,33 +225,31 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 *   `complete` event. For most purposes, use the `init`
 	 *   handler.
 	 */
-	constructor()
-	{
+	constructor() {
 		super();
 
 		this._contentLoaderInfo = new (<SecurityDomain> this.sec).flash.display.LoaderInfo(this, this.adaptee);
 		this._factory = new FlashSceneGraphFactory(<SecurityDomain> this.sec);
 	}
 
-	protected createAdaptee():AwayDisplayObject
-	{
+	protected createAdaptee(): AwayDisplayObject {
 
 		this._onAssetCompleteDelegate = (event: AssetEvent) => this._onAssetComplete(event);
-		var loaderContainer:LoaderContainer = new LoaderContainer();
+		const loaderContainer: LoaderContainer = new LoaderContainer();
 		loaderContainer.addEventListener(AssetEvent.ASSET_COMPLETE, this._onAssetCompleteDelegate);
-		
+
 		return loaderContainer;
 	}
 
-	private _onAssetComplete(event: AssetEvent){
-		
+	private _onAssetComplete(event: AssetEvent) {
+
 		// 	todo: take care of all needed asset-types (sounds / fonts / textfield)
-		//	todo: update awd to support as3-class-identifier as extra property. 
-		//  atm the name of the exported symbols will be the as3-class name, 
+		//	todo: update awd to support as3-class-identifier as extra property.
+		//  atm the name of the exported symbols will be the as3-class name,
 		//  and all exported symbols are handled as if exposed to as3
 
-		var asset:IAsset = event.asset;
-		(<any>asset.adapter).loaderInfo=this._contentLoaderInfo;
+		const asset: IAsset = event.asset;
+		(<any>asset.adapter).loaderInfo = this._contentLoaderInfo;
 		if (asset.isAsset(AwayTextField)) {
 			this._contentLoaderInfo.applicationDomain.addDefinition(asset.name, <AwayTextField> asset);
 		} else if (asset.isAsset(SceneImage2D) || asset.isAsset(BitmapImage2D)) {
@@ -268,21 +261,21 @@ export class Loader extends DisplayObjectContainer implements ILoader
 				this._content = new Bitmap(<BitmapData> (<SceneImage2D> asset).adapter);
 				(<AwayDisplayObjectContainer> this._adaptee).addChild(this._content.adaptee);
 			}
-				
-				//this.addChild(this._loaderInfo.content = new Bitmap(<BitmapData> (<SceneImage2D> asset).adapter));
+
+			//this.addChild(this._loaderInfo.content = new Bitmap(<BitmapData> (<SceneImage2D> asset).adapter));
 		} else if (asset.isAsset(WaveAudio)) {
 			this._contentLoaderInfo.applicationDomain.addAudioDefinition(asset.name, (<WaveAudio>asset));
 		} else if (asset.isAsset(Font)) {
 			this._contentLoaderInfo.applicationDomain.addFontDefinition(asset.name, (<Font>asset));
-		} else if(asset.isAsset(AwaySprite)) {
+		} else if (asset.isAsset(AwaySprite)) {
 			//if((<AwaySprite> asset).material)
 			//	(<AwaySprite> asset).material.bothSides=false;
 			this._contentLoaderInfo.applicationDomain.addDefinition(asset.name, <AwaySprite> asset);
-		} else if(asset.isAsset(AwayMovieClip)) {
+		} else if (asset.isAsset(AwayMovieClip)) {
 			this._contentLoaderInfo.applicationDomain.addDefinition(asset.name, <AwayMovieClip> asset);
-			
+
 			// if this is the "Scene 1", we make it a child of the loader
-			if (asset.name=="Scene 1" || (<any>asset).isAVMScene){// "Scene 1" when AWDParser, isAVMScene when using SWFParser
+			if (asset.name == 'Scene 1' || (<any>asset).isAVMScene) {// "Scene 1" when AWDParser, isAVMScene when using SWFParser
 
 				this._content = <DisplayObject>(<IDisplayObjectAdapter> asset.adapter).clone();
 				this._content.loaderInfo = this._contentLoaderInfo;
@@ -290,40 +283,33 @@ export class Loader extends DisplayObjectContainer implements ILoader
 				super.addChild(this._content);
 				//this.addChild(this._loaderInfo.content = (<MovieClip>(<AwayMovieClip>asset).adapter));
 			}
-		}
-		else if(asset.isAsset(Graphics)) {
-		}
-		else {
-			console.log("loaded unhandled asset-type")
+		} else if (asset.isAsset(Graphics)) {
+		} else {
+			console.log('loaded unhandled asset-type');
 		}
 	}
 
-	public addChild(child: DisplayObject): DisplayObject
-	{
+	public addChild(child: DisplayObject): DisplayObject {
 		this.sec.throwError('IllegalOperationError', Errors.InvalidLoaderMethodError);
 		return null;
 	}
 
-	public addChildAt(child: DisplayObject, index: number): DisplayObject
-	{
+	public addChildAt(child: DisplayObject, index: number): DisplayObject {
 		this.sec.throwError('IllegalOperationError', Errors.InvalidLoaderMethodError);
 		return null;
 	}
 
-	public removeChild(child: DisplayObject): DisplayObject
-	{
+	public removeChild(child: DisplayObject): DisplayObject {
 		this.sec.throwError('IllegalOperationError', Errors.InvalidLoaderMethodError);
 		return null;
 	}
 
-	public removeChildAt(index: number): DisplayObject
-	{
+	public removeChildAt(index: number): DisplayObject {
 		this.sec.throwError('IllegalOperationError', Errors.InvalidLoaderMethodError);
 		return null;
 	}
 
-	public setChildIndex(child: DisplayObject, index: number): void 
-	{
+	public setChildIndex(child: DisplayObject, index: number): void {
 		this.sec.throwError('IllegalOperationError', Errors.InvalidLoaderMethodError);
 	}
 
@@ -332,8 +318,7 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 * progress for the Loader instance.
 	 *
 	 */
-	public close():void
-	{
+	public close(): void {
 		(<LoaderContainer> this.adaptee).close();
 	}
 
@@ -344,50 +329,50 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 * only a single child, issuing a subsequent `load()` request
 	 * terminates the previous request, if still pending, and commences a new
 	 * load.
-	 * 
+	 *
 	 * **Note**: In AIR 1.5 and Flash Player 10, the maximum size for a
 	 * loaded image is 8,191 pixels in width or height, and the total number of
 	 * pixels cannot exceed 16,777,215 pixels.(So, if an loaded image is 8,191
 	 * pixels wide, it can only be 2,048 pixels high.) In Flash Player 9 and
 	 * earlier and AIR 1.1 and earlier, the limitation is 2,880 pixels in height
 	 * and 2,880 pixels in width.
-	 * 
+	 *
 	 * A SWF file or image loaded into a Loader object inherits the position,
 	 * rotation, and scale properties of the parent display objects of the Loader
 	 * object.
-	 * 
+	 *
 	 * Use the `unload()` method to remove movies or images loaded
 	 * with this method, or to cancel a load operation that is in progress.
-	 * 
+	 *
 	 * You can prevent a SWF file from using this method by setting the
 	 * `allowNetworking` parameter of the the `object` and
 	 * `embed` tags in the HTML page that contains the SWF
 	 * content.
-	 * 
+	 *
 	 * When you use this method, consider the Flash Player security model,
 	 * which is described in the Loader class description.
-	 * 
+	 *
 	 * In Flash Player 10 and later, if you use a multipart Content-Type(for
 	 * example "multipart/form-data") that contains an upload(indicated by a
 	 * "filename" parameter in a "content-disposition" header within the POST
 	 * body), the POST operation is subject to the security rules applied to
 	 * uploads:
-	 * 
+	 *
 	 * * The POST operation must be performed in response to a user-initiated
 	 * action, such as a mouse click or key press.
 	 * * If the POST operation is cross-domain(the POST target is not on the
 	 * same server as the SWF file that is sending the POST request), the target
 	 * server must provide a URL policy file that permits cross-domain
 	 * access.
-	 * 
+	 *
 	 * Also, for any multipart Content-Type, the syntax must be valid
 	 * (according to the RFC2046 standard). If the syntax appears to be invalid,
 	 * the POST operation is subject to the security rules applied to
 	 * uploads.
-	 * 
+	 *
 	 * For more information related to security, see the Flash Player
 	 * Developer Center Topic: [Security](http://www.adobe.com/go/devnet_security_en).
-	 * 
+	 *
 	 * @param request The absolute or relative URL of the SWF, JPEG, GIF, or PNG
 	 *                file to be loaded. A relative path must be relative to the
 	 *                main SWF file. Absolute URLs must include the protocol
@@ -395,18 +380,18 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 *                include disk drive specifications.
 	 * @param context A LoaderContext object, which has properties that define
 	 *                the following:
-	 * 
+	 *
 	 *                * Whether or not to check for the existence of a policy
 	 *                  file upon loading the object
 	 *                * The ApplicationDomain for the loaded object
 	 *                * The SecurityDomain for the loaded object
 	 *                * The ImageDecodingPolicy for the loaded image
 	 *                  object
-	 * 
+	 *
 	 *                If the `context` parameter is not specified
 	 *                or refers to a null object, the loaded content remains in
 	 *                its own security domain.
-	 * 
+	 *
 	 *                For complete details, see the description of the
 	 *                properties in the [LoaderContext](../system/LoaderContext.html)
 	 *                class.
@@ -492,35 +477,33 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 * @event unload        Dispatched by the `contentLoaderInfo`
 	 *                      object when a loaded object is removed.
 	 */
-	public load(request:URLRequest, context:LoaderContext = null):void
-	{
+	public load(request: URLRequest, context: LoaderContext = null): void {
 		// when you create big lambda or `fuction() {}`, V8 create full function body every time
 		Loader.loaderQueue.push(() => {
 			this._delayedLoad(request, context);
 		});
 	}
 
-	private _delayedLoad(request:URLRequest, context:LoaderContext = null): void 
-	{
+	private _delayedLoad(request: URLRequest, context: LoaderContext = null): void {
 		// remove all after ?
 		const directUrl = request.url || '';
-		const cleanUrl = directUrl.replace(/\?.*$/, "");
+		const cleanUrl = directUrl.replace(/\?.*$/, '');
 		const redirect = matchRedirect(directUrl, Loader.redirectRules);
 
-		if(redirect) {
-			if(redirect.supressLoad){
-				console.log("[LOADER] Load surpressed ", redirect.url);
+		if (redirect) {
+			if (redirect.supressLoad) {
+				console.log('[LOADER] Load surpressed ', redirect.url);
 				return;
 
 			}
-			console.log("[LOADER] Override loading url:", redirect.url);
+			console.log('[LOADER] Override loading url:', redirect.url);
 			request.adaptee.url = redirect.url;
 		} else {
-			console.log("[LOADER] start loading the url:", cleanUrl);
+			console.log('[LOADER] start loading the url:', cleanUrl);
 		}
 
-		var ext:string = request.url.substr(-3).toLocaleLowerCase();
-		this._isImage = (ext == "jpg" || ext == "png");
+		const ext: string = request.url.substr(-3).toLocaleLowerCase();
+		this._isImage = (ext == 'jpg' || ext == 'png');
 		//url.url=url.url.replace(".swf", ".awd");
 
 		this._loaderContext = context || new LoaderContext(
@@ -530,15 +513,16 @@ export class Loader extends DisplayObjectContainer implements ILoader
 
 		this._contentLoaderInfo._setApplicationDomain(this._loaderContext.applicationDomain);
 
-		(<LoaderContainer> this._adaptee).load(request.adaptee, null, null, (this._isImage)? new Image2DParser(this._factory) : new SWFParser(this._factory));
+		(<LoaderContainer> this._adaptee).load(request.adaptee, null, null, (this._isImage) ? new Image2DParser(this._factory) : new SWFParser(this._factory));
 
-		if(redirect && redirect.supressErrors) {
+		if (redirect && redirect.supressErrors) {
 			this.adaptee.addEventListener(URLLoaderEvent.LOAD_ERROR, (event: URLLoaderEvent)=>{
-				console.log("[LOADER] Error supressed by redirect rule as empty complete events!", event);
+				console.log('[LOADER] Error supressed by redirect rule as empty complete events!', event);
 				this._contentLoaderInfo._onLoaderCompleteDelegate(new LoaderEvent(LoaderEvent.LOADER_COMPLETE, event.urlLoader.url,null));
-			})
+			});
 		}
 	}
+
 	/**
 	 * Loads from binary data stored in a ByteArray object.
 	 *
@@ -546,7 +530,7 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 * the "init" event before accessing the properties of a loaded object.
 	 *
 	 * When you use this method, consider the Flash Player security model,
-	 * which is described in the Loader class description. 
+	 * which is described in the Loader class description.
 	 *
 	 * @param bytes   A ByteArray object. The contents of the ByteArray can be
 	 *                any of the file formats supported by the Loader class: SWF,
@@ -623,8 +607,7 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 * @event unload        Dispatched by the `contentLoaderInfo`
 	 *                      object when a loaded object is removed.
 	 */
-	public loadBytes(bytes:ByteArray, context:LoaderContext = null):void
-	{
+	public loadBytes(bytes: ByteArray, context: LoaderContext = null): void {
 		Loader.loaderQueue.push(()=>{
 			// 80pro: todo
 			//this._isImage = (ext == "jpg" || ext == "png");
@@ -673,7 +656,7 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 * LoaderInfo object is reset to `null`. The child is not
 	 * necessarily destroyed because other objects might have references to it;
 	 * however, it is no longer a child of the Loader object.
-	 * 
+	 *
 	 * As a best practice, before you unload a child SWF file, you should
 	 * explicitly close any streams in the child SWF file's objects, such as
 	 * LocalConnection, NetConnection, NetStream, and Sound objects. Otherwise,
@@ -683,7 +666,7 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 * event. When the parent calls `Loader.unload()`, the
 	 * `unload` event is dispatched to the child. The following code
 	 * shows how you might do this:
-	 * 
+	 *
 	 * ```
 	 * function closeAllStreams(evt:Event) {
 	 * 	myNetStream.close();
@@ -695,8 +678,7 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 * closeAllStreams);
 	 * ```
 	 */
-	public unload():void
-	{
+	public unload(): void {
 		this._unload(false, false);
 	}
 
@@ -715,7 +697,7 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 * * Timers are stopped.
 	 * * Camera and Microphone instances are detached
 	 * * Movie clips are stopped.
-	 * 
+	 *
 	 * @param gc Provides a hint to the garbage collector to run on the child SWF
 	 *           objects(`true`) or not(`false`). If you
 	 *           are unloading many objects asynchronously, setting the
@@ -725,16 +707,14 @@ export class Loader extends DisplayObjectContainer implements ILoader
 	 *           file might persist in memory after running the
 	 *           `unloadAndStop()` command.
 	 */
-	public unloadAndStop(gc:boolean):void
-	{
+	public unloadAndStop(gc: boolean): void {
 		// TODO: remove all DisplayObjects originating from the unloaded SWF from all lists and stop
 		// them.
 		this._unload(true, !!gc);
 	}
 
-	private _unload(stopExecution:boolean, gc:boolean):void
-	{
-		console.log("80pro todo: loader._unload");
+	private _unload(stopExecution: boolean, gc: boolean): void {
+		console.log('80pro todo: loader._unload');
 		// if (this._loadStatus < LoadStatus.Initialized) {
 		//   this._loadStatus = LoadStatus.Unloaded;
 		//   return;

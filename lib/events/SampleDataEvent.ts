@@ -1,6 +1,5 @@
-import { Event } from "./Event";
-import {ByteArray} from "../utils/ByteArray";
-
+import { Event } from './Event';
+import { ByteArray } from '../utils/ByteArray';
 
 /**
  /// @eventType	flash.events.SampleDataEvent.SAMPLE_DATA
@@ -44,40 +43,40 @@ import {ByteArray} from "../utils/ByteArray";
 	 * soundBytes.writeFloat(sample);
 	 * }</codeblock>
  */
-export class SampleDataEvent extends Event
-{
+export class SampleDataEvent extends Event {
 	/**
 	 * Defines the value of the type property of a SampleDataEvent event object.
 	 * This event has the following properties:PropertyValuebubblesfalsecancelablefalse; there is no default behavior to cancel.positionThe point from which audio data is provided.
 	 */
-	public static SAMPLE_DATA : string = "sampleData";
+	public static SAMPLE_DATA: string = 'sampleData';
 
 	/**
 	 * The data in the audio stream.
 	 */
-	public get data () : ByteArray{
-		console.log("data not implemented yet in flash/SampleDataEvent");
+	public get data (): ByteArray {
+		console.log('data not implemented yet in flash/SampleDataEvent');
 		return null;
 
 	}
-	public set data (thedata:ByteArray){
-		console.log("data not implemented yet in flash/SampleDataEvent");
+
+	public set data (thedata: ByteArray) {
+		console.log('data not implemented yet in flash/SampleDataEvent');
 
 	}
 
 	/**
 	 * The position of the data in the audio stream.
 	 */
-	public get position () : number{
-		console.log("position not implemented yet in flash/SampleDataEvent");
+	public get position (): number {
+		console.log('position not implemented yet in flash/SampleDataEvent');
 		return 0;
 
 	}
-	public set position (theposition:number){
-		console.log("position not implemented yet in flash/SampleDataEvent");
+
+	public set position (theposition: number) {
+		console.log('position not implemented yet in flash/SampleDataEvent');
 
 	}
-
 
 	/**
 	 * Creates an event object that contains information about audio data events.
@@ -88,7 +87,7 @@ export class SampleDataEvent extends Event
 	 * @param	theposition	The position of the data in the audio stream.
 	 * @param	thedata	A byte array of data.
 	 */
-	constructor (type:string, bubbles:boolean=false, cancelable:boolean=false, theposition:number=0, thedata:ByteArray=null){
+	constructor (type: string, bubbles: boolean = false, cancelable: boolean = false, theposition: number = 0, thedata: ByteArray = null) {
 		super(type, bubbles, cancelable);
 	}
 
@@ -96,20 +95,20 @@ export class SampleDataEvent extends Event
 	 * Creates a copy of the SampleDataEvent object and sets each property's value to match that of the original.
 	 * @return	A new SampleDataEvent object with property values that match those of the original.
 	 */
-	public clone () : Event{
-		console.log("clone not implemented yet in flash/SampleDataEvent");
+	public clone (): Event {
+		console.log('clone not implemented yet in flash/SampleDataEvent');
 		return null;
 
 	}
+
 	/**
 	 * Returns a string that contains all the properties of the SampleDataEvent object. The string is in the following format:
 	 * [SampleDataEvent type=value bubbles=value cancelable=value theposition=value thedata=value]
 	 * @return	A string that contains all the properties of the SampleDataEvent object.
 	 */
-	public toString () : string{
-		console.log("toString not implemented yet in flash/SampleDataEvent");
-		return "";
+	public toString (): string {
+		console.log('toString not implemented yet in flash/SampleDataEvent');
+		return '';
 
 	}
 }
-

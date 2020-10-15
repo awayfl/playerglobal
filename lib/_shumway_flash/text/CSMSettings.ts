@@ -1,4 +1,4 @@
-import { ASObject } from "../../avm2/nat";
+import { ASObject } from '../../avm2/nat';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -18,19 +18,19 @@ import { ASObject } from "../../avm2/nat";
 // Class: CSMSettings
 export class CSMSettings extends ASObject {
 
-  static classInitializer: any = null;
-  static classSymbols: string [] = null;
-  static instanceSymbols: string [] = null; // ["fontSize", "insideCutoff", "outsideCutoff"];
+	static classInitializer: any = null;
+	static classSymbols: string [] = null;
+	static instanceSymbols: string [] = null; // ["fontSize", "insideCutoff", "outsideCutoff"];
 
-  constructor(fontSize: number, insideCutoff: number, outsideCutoff: number) {
-    super();
-    this.fontSize = +fontSize;
-    this.insideCutoff = +insideCutoff;
-    this.outsideCutoff = +outsideCutoff;
-  }
+	constructor(fontSize: number, insideCutoff: number, outsideCutoff: number) {
+		super();
+		this.fontSize = +fontSize;
+		this.insideCutoff = +insideCutoff;
+		this.outsideCutoff = +outsideCutoff;
+	}
 
-  // JS -> AS Bindings
-  fontSize: number;
-  insideCutoff: number;
-  outsideCutoff: number;
+	// JS -> AS Bindings
+	fontSize: number;
+	insideCutoff: number;
+	outsideCutoff: number;
 }

@@ -1,18 +1,18 @@
-import { release, notImplemented } from "@awayfl/swf-loader";
-import { Float64Vector } from "@awayfl/avm2";
-import { Vector3D } from "./Vector3D";
-import { Matrix3D } from "./Matrix3D";
-import { ASObject } from "@awayfl/avm2";
+import { release, notImplemented } from '@awayfl/swf-loader';
+import { Float64Vector } from '@awayfl/avm2';
+import { Vector3D } from './Vector3D';
+import { Matrix3D } from './Matrix3D';
+import { ASObject } from '@awayfl/avm2';
 
 /**
  * Copyright 2014 Mozilla Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,40 +20,35 @@ import { ASObject } from "@awayfl/avm2";
  * limitations under the License.
  */
 // Class: Utils3D
-export class Utils3D extends ASObject
-{
-  
-  // Called whenever the class is initialized.
-  static classInitializer: any = null;
+export class Utils3D extends ASObject {
 
-  // List of static symbols to link.
-  static classSymbols: string [] = null; // [];
-  
-  // List of instance symbols to link.
-  static instanceSymbols: string [] = null; // [];
-  
-  constructor ()
-  {
-    super();
-  }
+	// Called whenever the class is initialized.
+	static classInitializer: any = null;
 
-  // AS -> JS Bindings
-  static projectVector(m: Matrix3D, v: Vector3D): Vector3D
-  {
-    Matrix3D
-    m = m; v = v;
-    release || notImplemented("public flash.geom.Utils3D::static projectVector"); return;
-  }
+	// List of static symbols to link.
+	static classSymbols: string [] = null; // [];
 
-  static projectVectors(m: Matrix3D, verts: Float64Vector, projectedVerts: Float64Vector, uvts: Float64Vector): void
-  {
-    m = m; verts = verts; projectedVerts = projectedVerts; uvts = uvts;
-    release || notImplemented("public flash.geom.Utils3D::static projectVectors"); return;
-  }
+	// List of instance symbols to link.
+	static instanceSymbols: string [] = null; // [];
 
-  static pointTowards(percent: number, mat: Matrix3D, pos: Vector3D, at: Vector3D = null, up: Vector3D = null): Matrix3D
-  {
-    percent = +percent; mat = mat; pos = pos; at = at; up = up;
-    release || notImplemented("public flash.geom.Utils3D::static pointTowards"); return;
-  }
+	constructor () {
+		super();
+	}
+
+	// AS -> JS Bindings
+	static projectVector(m: Matrix3D, v: Vector3D): Vector3D {
+		Matrix3D;
+		m = m; v = v;
+		release || notImplemented('public flash.geom.Utils3D::static projectVector'); return;
+	}
+
+	static projectVectors(m: Matrix3D, verts: Float64Vector, projectedVerts: Float64Vector, uvts: Float64Vector): void {
+		m = m; verts = verts; projectedVerts = projectedVerts; uvts = uvts;
+		release || notImplemented('public flash.geom.Utils3D::static projectVectors'); return;
+	}
+
+	static pointTowards(percent: number, mat: Matrix3D, pos: Vector3D, at: Vector3D = null, up: Vector3D = null): Matrix3D {
+		percent = +percent; mat = mat; pos = pos; at = at; up = up;
+		release || notImplemented('public flash.geom.Utils3D::static pointTowards'); return;
+	}
 }

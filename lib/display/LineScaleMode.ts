@@ -1,1 +1,1 @@
-export {LineScaleMode} from "@awayjs/graphics";
+export { LineScaleMode } from '@awayjs/graphics';

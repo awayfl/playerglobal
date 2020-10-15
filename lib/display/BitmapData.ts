@@ -1,21 +1,21 @@
-import { IAssetAdapter, ColorUtils } from "@awayjs/core";
-import { StageManager, ImageUtils, BitmapImage2D } from "@awayjs/stage";
+import { IAssetAdapter, ColorUtils } from '@awayjs/core';
+import { StageManager, ImageUtils, BitmapImage2D } from '@awayjs/stage';
 //****************************************************************************
 // ActionScript Standard Library
 // flash.display.BitmapData object
 //****************************************************************************
-import { Rectangle } from "../geom/Rectangle";
-import { Point } from "../geom/Point";
-import { Matrix } from "../geom/Matrix";
-import { ColorTransform } from "../geom/ColorTransform";
-import { BitmapFilter } from "../filters/BitmapFilter";
-import { IBitmapDrawable } from "./IBitmapDrawable";
-import { SceneImage2D } from "@awayjs/scene";
+import { Rectangle } from '../geom/Rectangle';
+import { Point } from '../geom/Point';
+import { Matrix } from '../geom/Matrix';
+import { ColorTransform } from '../geom/ColorTransform';
+import { BitmapFilter } from '../filters/BitmapFilter';
+import { IBitmapDrawable } from './IBitmapDrawable';
+import { SceneImage2D } from '@awayjs/scene';
 
-import { IBitmapDataOwner } from "./IBitmapDataOwner";
-import { notImplemented } from "@awayfl/swf-loader";
-import { ASObject, ByteArray, Uint32Vector, GenericVector } from "@awayfl/avm2";
-import { SecurityDomain } from "../SecurityDomain";
+import { IBitmapDataOwner } from './IBitmapDataOwner';
+import { notImplemented } from '@awayfl/swf-loader';
+import { ASObject, ByteArray, Uint32Vector, GenericVector } from '@awayfl/avm2';
+import { SecurityDomain } from '../SecurityDomain';
 
 export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapter {
 	private _adaptee: SceneImage2D;
@@ -29,48 +29,51 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	public get adaptee(): SceneImage2D {
 		return this._adaptee;
 	}
+
 	public set adaptee(value: SceneImage2D) {
 		this._adaptee = value;
 	}
+
 	static loadBitmap(id: string): BitmapData {
-		console.log("loadBitmap not implemented yet in flash/BitmapData");
+		console.log('loadBitmap not implemented yet in flash/BitmapData');
 		return null;
 	}
 
 	public setPixels(rect: Rectangle, inputByteArray: ByteArray): void {
-		console.log("todo: BitmapData.setPixels");
+		console.log('todo: BitmapData.setPixels');
 		//this._putPixelData(rect, new Int32Array(inputByteArray.readRawBytes()));
 	}
 
 	public getPixels(rect: Rectangle): ByteArray {
 		/*var outputByteArray = new ByteArray();
 		this.copyPixelsToByteArray(rect, outputByteArray);*/
-		console.log("getPixels not implemented yet in flash/BitmapData");
+		console.log('getPixels not implemented yet in flash/BitmapData');
 		return null;
 	}
 
 	public copyPixelsToByteArray(rect: Rectangle, data: ByteArray): void {
-		console.log("copyPixelsToByteArray not implemented yet in flash/BitmapData");
+		console.log('copyPixelsToByteArray not implemented yet in flash/BitmapData');
 	}
 
 	public getVector(rect: Rectangle): Uint32Vector {
-		notImplemented("public flash.display.BitmapData::getVector");
+		notImplemented('public flash.display.BitmapData::getVector');
 		return null;
 	}
 
 	public setVector(rect: Rectangle, inputVector: Uint32Vector): void {
-		notImplemented("public flash.display.BitmapData::encode");
+		notImplemented('public flash.display.BitmapData::encode');
 	}
 
 	public histogram(hRect: Rectangle = null): GenericVector {
-		notImplemented("public flash.display.BitmapData::encode");
+		notImplemented('public flash.display.BitmapData::encode');
 		return;
 	}
 
 	public encode(rect: Rectangle, compressor: ASObject, byteArray: ByteArray = null): ByteArray {
-		notImplemented("public flash.display.BitmapData::encode");
+		notImplemented('public flash.display.BitmapData::encode');
 		return;
 	}
+
 	public drawWithQuality(
 		source: IBitmapDrawable,
 		matrix: Matrix = null,
@@ -80,14 +83,15 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		smoothing: boolean = false,
 		quality: string = null
 	): void {
-		notImplemented("public flash.display.BitmapData::drawWithQuality");
+		notImplemented('public flash.display.BitmapData::drawWithQuality');
 	}
+
 	constructor(width: number | SceneImage2D | BitmapImage2D, height: number, transparent: boolean = true, fillColor: number = 0xffffffff) {
 		super();
 
-		if(typeof width === 'number'){
+		if (typeof width === 'number') {
 
-			if(!this._adaptee) {
+			if (!this._adaptee) {
 				this._adaptee = SceneImage2D.getImage(width, height, transparent, fillColor, false, StageManager.getInstance().getStageAt(0));
 
 				// we construct a SceneImage2D direct, use weak, that call dispose after garbaging
@@ -104,6 +108,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	public get transparent(): boolean {
 		return this._adaptee.transparent;
 	}
+
 	public set transparent(value: boolean) {
 		this._adaptee.transparent = value;
 	}
@@ -111,6 +116,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	public get width(): number {
 		return this._adaptee.width;
 	}
+
 	public set width(value: number) {
 		this._adaptee.width = value;
 	}
@@ -118,12 +124,13 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	public get height(): number {
 		return this._adaptee.height;
 	}
+
 	public set height(value: number) {
 		this._adaptee.height = value;
 	}
 
 	public clone(): BitmapData {
-		var clone: BitmapData = new (<SecurityDomain>this.sec).flash.display.BitmapData(
+		const clone: BitmapData = new (<SecurityDomain> this.sec).flash.display.BitmapData(
 			this._adaptee.width,
 			this._adaptee.height,
 			this._adaptee.transparent,
@@ -131,42 +138,49 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		);
 
 		// refclone
-		if(this._adaptee.copyTo){
+		if (this._adaptee.copyTo) {
 			this._adaptee.copyTo(clone._adaptee);
 		} else {
-			clone.copyPixels(this, this.rect, new (<SecurityDomain>this.sec).flash.geom.Point());
+			clone.copyPixels(this, this.rect, new (<SecurityDomain> this.sec).flash.geom.Point());
 		}
 
 		return clone;
 	}
 
 	public get rect(): Rectangle {
-		return new (<SecurityDomain>this.sec).flash.geom.Rectangle(this._adaptee.rect.clone());
+		return new (<SecurityDomain> this.sec).flash.geom.Rectangle(this._adaptee.rect.clone());
 	}
+
 	public getPixel(x: number, y: number): number {
 		return this._adaptee.getPixel(x, y);
 	}
+
 	public getPixel32(x: number, y: number): number {
 		return this._adaptee.getPixel32(x, y);
 	}
+
 	public setPixel(x: number, y: number, color: number) {
 		this._adaptee.setPixel(x, y, color);
 	}
+
 	public setPixel32(x: number, y: number, color: number) {
 		this._adaptee.setPixel32(x, y, color);
 	}
+
 	public applyFilter(
 		sourceBitmap: BitmapData,
 		sourceRect: Rectangle,
 		destPoint: Point,
 		filter: BitmapFilter
 	): number {
-		console.log("applyFilter not implemented yet in flash/BitmapData");
+		console.log('applyFilter not implemented yet in flash/BitmapData');
 		return 0;
 	}
+
 	public colorTransform(rect: Rectangle, colorTransform: ColorTransform) {
 		this._adaptee.colorTransform(rect.adaptee, colorTransform.adaptee);
 	}
+
 	public copyChannel(
 		sourceBitmap: BitmapData,
 		sourceRect: Rectangle,
@@ -182,6 +196,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 			destChannel
 		);
 	}
+
 	public copyPixels(
 		sourceBitmap: any,
 		sourceRect: Rectangle,
@@ -199,6 +214,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 			mergeAlpha
 		);
 	}
+
 	public dispose() {
 		// already disposed or not setted
 		if (!this._adaptee) {
@@ -213,7 +229,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		source: any,
 		matrix: Matrix,
 		colorTransform: ColorTransform = null,
-		blendMode: any = "",
+		blendMode: any = '',
 		clipRect: Rectangle = null,
 		smooth: boolean = false
 	) {
@@ -226,6 +242,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 			smooth
 		);
 	}
+
 	public fillRect(rect: Rectangle, color: number) {
 		// var colorArr = ColorUtils.float32ColorToARGB(color);
 		// color = ColorUtils.ARGBtoFloat32(colorArr[0], colorArr[3], colorArr[2], colorArr[1]);
@@ -233,29 +250,29 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public floodFill(x: number, y: number, color: number) {
-		console.warn("Unsage implementation `floodFill`");
+		console.warn('Unsage implementation `floodFill`');
 		this._adaptee.floodFill(x, y, color);
 	}
 
 	public generateFilterRect(sourceRect: Rectangle, filter: BitmapFilter): Rectangle {
-		console.log("generateFilterRect not implemented yet in flash/BitmapData");
+		console.log('generateFilterRect not implemented yet in flash/BitmapData');
 		return null;
 	}
 
 	public getColorBoundsRect(mask: number, color: number, findColor: boolean): Rectangle {
 
-		console.warn("Unsage implementation `getColorBoundsRect`!");
-		return  new (<SecurityDomain>this.sec).flash.geom.Rectangle(this._adaptee.getColorBoundsRect(mask, color, findColor))
+		console.warn('Unsage implementation `getColorBoundsRect`!');
+		return  new (<SecurityDomain> this.sec).flash.geom.Rectangle(this._adaptee.getColorBoundsRect(mask, color, findColor));
 	}
 
 	public hitTest(
 		firstPoint: Point,
 		firstAlphaThreshold: number,
 		secondObject: any,
-		secondBitmapPoint: Point = new (<SecurityDomain>this.sec).flash.geom.Point(0, 0),
+		secondBitmapPoint: Point = new (<SecurityDomain> this.sec).flash.geom.Point(0, 0),
 		secondAlphaThreshold: number = 0
 	): boolean {
-		console.log("hitTest not implemented yet in flash/BitmapData");
+		console.log('hitTest not implemented yet in flash/BitmapData');
 		return false;
 	}
 
@@ -282,9 +299,11 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 			alphaMult
 		);
 	}
+
 	public noise(randomSeed: number, low: number, high: number, channelOptions: number, grayScale: boolean) {
-		console.log("noise not implemented yet in flash/BitmapData");
+		console.log('noise not implemented yet in flash/BitmapData');
 	}
+
 	public paletteMap(
 		sourceBitmap: BitmapData,
 		sourceRect: Rectangle,
@@ -294,8 +313,9 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		blueArray: any[],
 		alphaArray: any[]
 	) {
-		console.log("paletteMap not implemented yet in flash/BitmapData");
+		console.log('paletteMap not implemented yet in flash/BitmapData');
 	}
+
 	public perlinNoise(
 		baseX: number,
 		baseY: number,
@@ -307,8 +327,9 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		grayScale: boolean,
 		offsets: any
 	) {
-		console.log("perlinNoise not implemented yet in flash/BitmapData");
+		console.log('perlinNoise not implemented yet in flash/BitmapData');
 	}
+
 	public pixelDissolve(
 		sourceBitmap: BitmapData,
 		sourceRect: Rectangle,
@@ -317,12 +338,14 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		numberOfPixels: number,
 		fillColor: number
 	): number {
-		console.log("pixelDissolve not implemented yet in flash/BitmapData");
+		console.log('pixelDissolve not implemented yet in flash/BitmapData');
 		return 0;
 	}
+
 	public scroll(x: number, y: number) {
-		console.log("scroll not implemented yet in flash/BitmapData");
+		console.log('scroll not implemented yet in flash/BitmapData');
 	}
+
 	public threshold(
 		sourceBitmap: BitmapData,
 		sourceRect: Rectangle,
@@ -356,7 +379,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public _removeOwner(owner: IBitmapDataOwner) {
-		var index: number = this._owners.indexOf(owner);
+		const index: number = this._owners.indexOf(owner);
 
 		if (index != -1) this._owners.splice(index, 1);
 

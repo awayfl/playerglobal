@@ -2,41 +2,41 @@
 // C:\Users\80prozent\AppData\Local\FlashDevelop\Apps\flexairsdk\4.6.0+25.0.0\frameworks\libs\player\18.0\playerglobal.swc\flash\media\Sound
 //
 
-import {EventDispatcher} from "../events/EventDispatcher";
-import {URLRequest} from "../net/URLRequest";
-import { SoundLoaderContext } from "./SoundLoaderContext";
-import { SoundChannel } from "./SoundChannel";
-import { SoundTransform } from "./SoundTransform";
-import {ByteArray} from "../utils/ByteArray";
-import { ID3Info } from "./ID3Info";
-import { WaveAudio } from "@awayjs/core";
+import { EventDispatcher } from '../events/EventDispatcher';
+import { URLRequest } from '../net/URLRequest';
+import { SoundLoaderContext } from './SoundLoaderContext';
+import { SoundChannel } from './SoundChannel';
+import { SoundTransform } from './SoundTransform';
+import { ByteArray } from '../utils/ByteArray';
+import { ID3Info } from './ID3Info';
+import { WaveAudio } from '@awayjs/core';
 import { SecurityDomain } from '../SecurityDomain';
 
 /**
  * Dispatched when data is received as a load operation progresses.
  * @eventType	flash.events.ProgressEvent.PROGRESS
  [Event(name="progress", type="flash.events.Progress [EventEvent")]
- 
+
  * Dispatched when a load operation starts.
  * @eventType	flash.events.Event.OPEN
  [Event(name="open", type="flash.events. [EventEvent")]
- 
+
  * Dispatched when an input/output error occurs that causes a load operation to fail.
  * @eventType	flash.events.IOErrorEvent.IO_ERROR
  [Event(name="ioError", type="flash.events.IOError [EventEvent")]
- 
+
  * Dispatched by a Sound object when ID3 data is available for an MP3 sound.
  * @eventType	flash.events.Event.ID3
  [Event(name="id3", type="flash.events. [EventEvent")]
- 
+
  * Dispatched when data has loaded successfully.
  * @eventType	flash.events.Event.COMPLETE
  [Event(name="complete", type="flash.events. [EventEvent")]
- 
+
  * Dispatched when the runtime requests new audio data.
  * @eventType	flash.events.SampleDataEvent.SAMPLE_DATA
  [Event(name="sampleData", type="flash.events.SampleData [EventEvent")]
- 
+
  * The Sound class lets you work with sound in an application. The Sound class
  * lets you create a Sound object, load and play an external MP3 file into that object,
  * close the sound stream, and access
@@ -63,9 +63,8 @@ import { SecurityDomain } from '../SecurityDomain';
  * installed with the AIR application) are not restricted by these security limitations.</p><p class="- topic/p ">For more information related to security, see the Flash Player Developer Center Topic:
  * <xref href="http://www.adobe.com/go/devnet_security_en" scope="external" class="- topic/xref ">Security</xref>.</p>
  */
-export class Sound extends EventDispatcher
-{
-	private _adaptee:WaveAudio;
+export class Sound extends EventDispatcher {
+	private _adaptee: WaveAudio;
 	/**
 	 * Creates a new Sound object. If you pass a valid URLRequest object to the
 	 * Sound constructor, the constructor automatically calls the load() function
@@ -90,17 +89,18 @@ export class Sound extends EventDispatcher
 	 * @playerversion	Lite 4
 	 * @refpath
 	 */
-	constructor (stream:URLRequest=null, context:SoundLoaderContext=null){
+	constructor (stream: URLRequest = null, context: SoundLoaderContext = null) {
 		super();
 		//this.adaptee=this.adaptee;
 		//console.log("sound is not implemented yet in flash/Sound");
 	}
 
-	public get adaptee():WaveAudio {
-		return (<WaveAudio>this._adaptee);
+	public get adaptee(): WaveAudio {
+		return (<WaveAudio> this._adaptee);
 	}
-	public set adaptee(adaptee:WaveAudio) {
-		this._adaptee=adaptee;
+
+	public set adaptee(adaptee: WaveAudio) {
+		this._adaptee = adaptee;
 	}
 
 	/**
@@ -111,8 +111,8 @@ export class Sound extends EventDispatcher
 	 * @playerversion	Lite 4
 	 * @refpath
 	 */
-	public get bytesLoaded () : number{
-		console.log("bytesLoaded not implemented yet in flash/Sound");
+	public get bytesLoaded (): number {
+		console.log('bytesLoaded not implemented yet in flash/Sound');
 		return 0;
 	}
 
@@ -123,8 +123,8 @@ export class Sound extends EventDispatcher
 	 * @playerversion	Lite 4
 	 * @refpath
 	 */
-	public get bytesTotal () : number{
-		console.log("bytesTotal not implemented yet in flash/Sound");
+	public get bytesTotal (): number {
+		console.log('bytesTotal not implemented yet in flash/Sound');
 		return 0;
 	}
 
@@ -159,8 +159,8 @@ export class Sound extends EventDispatcher
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public get id3 () : ID3Info{
-		console.log("id3 not implemented yet in flash/Sound");
+	public get id3 (): ID3Info {
+		console.log('id3 not implemented yet in flash/Sound');
 		return null;
 	}
 
@@ -173,8 +173,8 @@ export class Sound extends EventDispatcher
 	 * @playerversion	Lite 4
 	 * @refpath
 	 */
-	public get isBuffering () : boolean{
-		console.log("isBuffering not implemented yet in flash/Sound");
+	public get isBuffering (): boolean {
+		console.log('isBuffering not implemented yet in flash/Sound');
 		return false;
 	}
 
@@ -199,8 +199,8 @@ export class Sound extends EventDispatcher
 	 * @playerversion	Flash 10.1
 	 * @playerversion	AIR 2
 	 */
-	public get isURLInaccessible () : boolean{
-		console.log("isURLInaccessible not implemented yet in flash/Sound");
+	public get isURLInaccessible (): boolean {
+		console.log('isURLInaccessible not implemented yet in flash/Sound');
 		return false;
 	}
 
@@ -210,7 +210,7 @@ export class Sound extends EventDispatcher
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public get length () : number{
+	public get length (): number {
 		return this._adaptee.duration;
 	}
 
@@ -237,9 +237,9 @@ export class Sound extends EventDispatcher
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public get url () : string{
-		console.log("url not implemented yet in flash/Sound");
-		return "";
+	public get url (): string {
+		console.log('url not implemented yet in flash/Sound');
+		return '';
 	}
 
 	/**
@@ -253,8 +253,8 @@ export class Sound extends EventDispatcher
 	 * @throws	IOError The stream could not be closed, or
 	 *   the stream was not open.
 	 */
-	public close (){
-		console.log("close not implemented yet in flash/Sound");
+	public close () {
+		console.log('close not implemented yet in flash/Sound');
 	}
 
 	/**
@@ -281,8 +281,8 @@ export class Sound extends EventDispatcher
 	 * @playerversion	AIR 1.5
 	 * @refpath
 	 */
-	public extract (target:ByteArray, length:number, startPosition:number=-1) : number{
-		console.log("extract not implemented yet in flash/Sound");
+	public extract (target: ByteArray, length: number, startPosition: number = -1): number {
+		console.log('extract not implemented yet in flash/Sound');
 		return 0;
 	}
 
@@ -331,32 +331,32 @@ export class Sound extends EventDispatcher
 	 *   when calling the URLLoader.load() method when loading a SWZ file (an Adobe
 	 *   platform component).
 	 */
-	public load (stream:URLRequest, context:SoundLoaderContext=null) {
-		console.log("load not implemented yet in flash/Sound");
+	public load (stream: URLRequest, context: SoundLoaderContext = null) {
+		console.log('load not implemented yet in flash/Sound');
 	}
 
-	public loadCompressedDataFromByteArray (bytes:ByteArray, bytesLength:number) {
-		console.log("loadCompressedDataFromByteArray not implemented yet in flash/Sound");
+	public loadCompressedDataFromByteArray (bytes: ByteArray, bytesLength: number) {
+		console.log('loadCompressedDataFromByteArray not implemented yet in flash/Sound');
 	}
 
-	public loadPCMFromByteArray (bytes:ByteArray, samples:number, format:string="float", stereo:boolean=true, sampleRate:number=44100){
-		console.log("loadPCMFromByteArray not implemented yet in flash/Sound");
+	public loadPCMFromByteArray (bytes: ByteArray, samples: number, format: string = 'float', stereo: boolean = true, sampleRate: number = 44100) {
+		console.log('loadPCMFromByteArray not implemented yet in flash/Sound');
 	}
 
-	private _onCompleteCallback:Function;
-	private loopsToPlay:number=0;
-	private soundCompleteInternal(){
+	private _onCompleteCallback: Function;
+	private loopsToPlay: number=0;
+	private soundCompleteInternal() {
 		this.loopsToPlay--;
-		if(this.loopsToPlay>0){
+		if (this.loopsToPlay > 0) {
 			this.stop();
 			this.adaptee.play(0, false);
-		}
-		else{
-			if(this._onCompleteCallback){
+		} else {
+			if (this._onCompleteCallback) {
 				this._onCompleteCallback();
 			}
 		}
 	}
+
 	/**
 	 * Generates a new SoundChannel object to play back the sound. This method
 	 * returns a SoundChannel object, which you access to stop the sound and to monitor volume.
@@ -376,31 +376,31 @@ export class Sound extends EventDispatcher
 	 * @playerversion	Lite 4
 	 * @refpath
 	 */
-	public play (startTime:number=0, loops:number=0, sndTransform:SoundTransform=null) : SoundChannel{
-		if(!this.adaptee){
-			console.log("Sound.play : no adaptee exists!");
+	public play (startTime: number = 0, loops: number = 0, sndTransform: SoundTransform = null): SoundChannel {
+		if (!this.adaptee) {
+			console.log('Sound.play : no adaptee exists!');
 			return;
 		}
-		if(sndTransform){
-			this.adaptee.volume=sndTransform.volume;
-			this.adaptee.pan=sndTransform.pan;
+		if (sndTransform) {
+			this.adaptee.volume = sndTransform.volume;
+			this.adaptee.pan = sndTransform.pan;
 		}
-		
+
 		loops = isNaN(loops) || loops < 1 ? 1 : Math.floor(loops);
-		this.loopsToPlay=loops;
-		this._adaptee.onSoundComplete=()=>this.soundCompleteInternal();
+		this.loopsToPlay = loops;
+		this._adaptee.onSoundComplete = ()=>this.soundCompleteInternal();
 		this._adaptee.play(startTime, false);
-		var newSoundChannel:SoundChannel= new (<SecurityDomain> this.sec).flash.media.SoundChannel();
-		newSoundChannel._sound=this;
-		if(!sndTransform){
-			sndTransform=new (<SecurityDomain> this.sec).flash.media.SoundTransform();
+		const newSoundChannel: SoundChannel = new (<SecurityDomain> this.sec).flash.media.SoundChannel();
+		newSoundChannel._sound = this;
+		if (!sndTransform) {
+			sndTransform = new (<SecurityDomain> this.sec).flash.media.SoundTransform();
 		}
-		newSoundChannel.soundTransform=sndTransform;
+		newSoundChannel.soundTransform = sndTransform;
 		return newSoundChannel;
 	}
-	public stop () : void{
+
+	public stop (): void{
 		this._adaptee.stop();
 	}
 
 }
-

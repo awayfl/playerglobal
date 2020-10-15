@@ -1,4 +1,4 @@
-import { ASObject } from "@awayfl/avm2";
+import { ASObject } from '@awayfl/avm2';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -44,54 +44,69 @@ export class ContextMenuBuiltInItems extends ASObject {
 	get save(): boolean {
 		return this._save;
 	}
+
 	set save(val: boolean) {
 		this._save = !!val;
 	}
+
 	get zoom(): boolean {
 		return this._zoom;
 	}
+
 	set zoom(val: boolean) {
 		this._zoom = !!val;
 	}
+
 	get quality(): boolean {
 		return this._quality;
 	}
+
 	set quality(val: boolean) {
 		this._quality = !!val;
 	}
+
 	get play(): boolean {
 		return this._play;
 	}
+
 	set play(val: boolean) {
 		this._play = !!val;
 	}
+
 	get loop(): boolean {
 		return this._loop;
 	}
+
 	set loop(val: boolean) {
 		this._loop = !!val;
 	}
+
 	get rewind(): boolean {
 		return this._rewind;
 	}
+
 	set rewind(val: boolean) {
 		this._rewind = !!val;
 	}
+
 	get forwardAndBack(): boolean {
 		return this._forwardAndBack;
 	}
+
 	set forwardAndBack(val: boolean) {
 		this._forwardAndBack = !!val;
 	}
+
 	get print(): boolean {
 		return this._print;
 	}
+
 	set print(val: boolean) {
 		this._print = !!val;
 	}
 
 	clone(): ContextMenuBuiltInItems {
-		var items = new ContextMenuBuiltInItems();
+		const items = new ContextMenuBuiltInItems();
 		items._save = this._save;
 		items._zoom = this._zoom;
 		items._quality = this._quality;

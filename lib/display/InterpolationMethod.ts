@@ -1,1 +1,1 @@
-export {InterpolationMethod} from "@awayjs/graphics";
+export { InterpolationMethod } from '@awayjs/graphics';

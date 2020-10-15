@@ -1,6 +1,6 @@
-import { ApplicationDomain } from "./ApplicationDomain";
-import { SecurityDomain } from "./SecurityDomain";
-import { LoaderContext } from "./LoaderContext";
+import { ApplicationDomain } from './ApplicationDomain';
+import { SecurityDomain } from './SecurityDomain';
+import { LoaderContext } from './LoaderContext';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -20,24 +20,23 @@ import { LoaderContext } from "./LoaderContext";
 // Class: JPEGLoaderContext
 export class JPEGLoaderContext extends LoaderContext {
 
-  static axClass: typeof JPEGLoaderContext;
+	static axClass: typeof JPEGLoaderContext;
 
-  // Called whenever the class is initialized.
-  static classInitializer: any = null;
+	// Called whenever the class is initialized.
+	static classInitializer: any = null;
 
-  // List of static symbols to link.
-  static classSymbols: string [] = null; // [];
+	// List of static symbols to link.
+	static classSymbols: string [] = null; // [];
 
-  // List of instance symbols to link.
-  static instanceSymbols: string [] = null; // ["deblockingFilter"];
+	// List of instance symbols to link.
+	static instanceSymbols: string [] = null; // ["deblockingFilter"];
 
-  constructor(deblockingFilter: number = 0, checkPolicyFile: boolean = false,
-              applicationDomain: ApplicationDomain = null,
-              securityDomain: SecurityDomain = null)
-  {
-    super(checkPolicyFile, applicationDomain, securityDomain);
-    this.deblockingFilter = +deblockingFilter;
-  }
+	constructor(deblockingFilter: number = 0, checkPolicyFile: boolean = false,
+		applicationDomain: ApplicationDomain = null,
+		securityDomain: SecurityDomain = null) {
+		super(checkPolicyFile, applicationDomain, securityDomain);
+		this.deblockingFilter = +deblockingFilter;
+	}
 
-  deblockingFilter: number;
+	deblockingFilter: number;
 }

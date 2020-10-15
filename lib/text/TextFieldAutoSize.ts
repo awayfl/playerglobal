@@ -1,1 +1,1 @@
-export {TextFieldAutoSize} from "@awayjs/scene";
+export { TextFieldAutoSize } from '@awayjs/scene';

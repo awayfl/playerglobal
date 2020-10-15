@@ -1,1 +1,1 @@
-export {BitmapImageChannel as BitmapDataChannel} from "@awayjs/stage";
+export { BitmapImageChannel as BitmapDataChannel } from '@awayjs/stage';

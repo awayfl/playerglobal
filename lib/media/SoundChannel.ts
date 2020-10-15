@@ -1,5 +1,5 @@
-import { EventDispatcher } from "../events/EventDispatcher";
-import { SoundTransform } from "./SoundTransform";
+import { EventDispatcher } from '../events/EventDispatcher';
+import { SoundTransform } from './SoundTransform';
 import { release } from '@awayfl/swf-loader';
 
 /**
@@ -18,18 +18,23 @@ export class SoundChannel extends EventDispatcher {
 	public axCallPublicProperty(value1: any, value2: any): any {
 		return null;
 	}
+
 	public axGetPublicProperty(value: any): any {
 		return null;
 	}
+
 	public axSetPublicProperty(value: any, value2: any): any {
 		return null;
 	}
+
 	public axHasPublicProperty(value: any): any {
 		return null;
 	}
+
 	public axDeletePublicProperty(value: any): any {
 		return null;
 	}
+
 	public axGetEnumerableKeys(): string[] {
 		return [];
 	}
@@ -40,11 +45,12 @@ export class SoundChannel extends EventDispatcher {
 	constructor() {
 		super();
 	}
+
 	/**
 	 * The current amplitude (volume) of the left channel, from 0 (silent) to 1 (full amplitude).
 	 */
 	public get leftPeak(): number {
-		release || console.log("leftPeak not implemented yet in flash/SoundChannel");
+		release || console.log('leftPeak not implemented yet in flash/SoundChannel');
 		return 0;
 	}
 
@@ -58,7 +64,7 @@ export class SoundChannel extends EventDispatcher {
 	 * If the sound is looped, position is reset to 0 at the beginning of each loop.
 	 */
 	public get position(): number {
-		release || console.log("position not implemented yet in flash/SoundChannel");
+		release || console.log('position not implemented yet in flash/SoundChannel');
 		return 0;
 	}
 
@@ -66,7 +72,7 @@ export class SoundChannel extends EventDispatcher {
 	 * The current amplitude (volume) of the right channel, from 0 (silent) to 1 (full amplitude).
 	 */
 	public get rightPeak(): number {
-		release || console.log("rightPeak not implemented yet in flash/SoundChannel");
+		release || console.log('rightPeak not implemented yet in flash/SoundChannel');
 		return 0;
 	}
 
@@ -79,10 +85,11 @@ export class SoundChannel extends EventDispatcher {
 		//	we not create this in the constructor, because it gets overwritten from Sound in most cases anyway
 		//	but we still need a Soundtransform to be available in the getter
 		if (!this._soundTransform) {
-			this._soundTransform = new (<any>this.sec).flash.media.SoundTransform();
+			this._soundTransform = new (<any> this.sec).flash.media.SoundTransform();
 		}
 		return this._soundTransform;
 	}
+
 	public set soundTransform(value: SoundTransform) {
 		if (this._sound) {
 			this._sound.adaptee.volume = value.volume;
@@ -90,7 +97,6 @@ export class SoundChannel extends EventDispatcher {
 		}
 		this._soundTransform = value;
 	}
-
 
 	/**
 	 * Stops the sound playing in the channel.
@@ -101,10 +107,9 @@ export class SoundChannel extends EventDispatcher {
 	 */
 	public stop() {
 		if (!this._sound) {
-			release || console.log("SoundChannel.stop: No sound exists");
+			release || console.log('SoundChannel.stop: No sound exists');
 			return;
 		}
 		this._sound.stop();
 	}
 }
-

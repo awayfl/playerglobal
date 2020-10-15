@@ -1,1 +1,1 @@
-export {BlendMode} from "@awayjs/stage";
+export { BlendMode } from '@awayjs/stage';

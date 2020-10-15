@@ -1,4 +1,4 @@
-import {ByteArray} from "../utils/ByteArray";
+import { ByteArray } from '../utils/ByteArray';
 
 /**
  * The Clipboard class provides a container for transferring data and objects through the clipboard.
@@ -31,11 +31,10 @@ import {ByteArray} from "../utils/ByteArray";
  * will be unsuccessful. The same restriction applies in AIR for content outside the
  * application sandbox.</p><p class="- topic/p ">On Linux, clipboard data does not persist when an AIR application closes.</p>
  */
-export class Clipboard
-{
-	
+export class Clipboard {
+
 	//todo: only dummy class yet
-	
+
 	/**
 	 * An array of strings containing the names of the data formats available
 	 * in this Clipboard object.
@@ -44,8 +43,8 @@ export class Clipboard
 	 * ClipboardFormats class. Other, application-defined, strings may also be used as format
 	 * names to transfer data as an object.
 	 */
-	public get formats () : any[]{
-		console.log("formats not implemented yet in flash/Clipboard");
+	public get formats (): any[] {
+		console.log('formats not implemented yet in flash/Clipboard');
 		return [];
 
 	}
@@ -68,8 +67,8 @@ export class Clipboard
 	 * to ensure that old data in all formats is erased.The generalClipboard object cannot be passed to the AIR NativeDragManager.
 	 * Create a new Clipboard object for native drag-and-drop operations in an AIR application.
 	 */
-	public static get generalClipboard () : Clipboard{
-		console.log("generalClipboard not implemented yet in flash/Clipboard");
+	public static get generalClipboard (): Clipboard {
+		console.log('generalClipboard not implemented yet in flash/Clipboard');
 		return null;
 
 	}
@@ -81,8 +80,8 @@ export class Clipboard
 	 *   (as in a key press or mouse click). In AIR, this restriction only applies to content outside of the
 	 *   application security sandbox.
 	 */
-	public clear (){
-		console.log("clear not implemented yet in flash/Clipboard");
+	public clear () {
+		console.log('clear not implemented yet in flash/Clipboard');
 
 	}
 
@@ -94,10 +93,10 @@ export class Clipboard
 	 *   (as in a key press or mouse click). In AIR, this restriction only applies to content outside of the
 	 *   application security sandbox.
 	 */
-	public clearData (format:string){
-		console.log("clearData not implemented yet in flash/Clipboard");
+	public clearData (format: string) {
+		console.log('clearData not implemented yet in flash/Clipboard');
 
-}
+	}
 
 	/**
 	 * Creates an empty Clipboard object.
@@ -108,7 +107,7 @@ export class Clipboard
 	 * @internal	the example located at examples\Clipboard.clipboard.1.as should not be displayed with FP10 docs because FP10 will console.log an error when new Clipboard() is called.
 	 * @throws	IllegalOperationError new Clipboard() is not supported in Flash Player, since only the operating system clipboard can be used in Flash Player. For copy-and-paste operations involving the operating system clipboard, use the Clipboard.generalClipboard object rather than creating a new Clipboard object. Does not console.log an error in an AIR application.
 	 */
-	constructor (){
+	constructor () {
 
 	}
 
@@ -137,8 +136,8 @@ export class Clipboard
 	 *   In Flash Player, you can only call this method successfully during the processing of a paste event.
 	 *   In AIR, this restriction only applies to content outside of the application security sandbox.
 	 */
-	public getData (format:string, transferMode:string="originalPreferred") : any{
-		console.log("getData not implemented yet in flash/Clipboard");
+	public getData (format: string, transferMode: string = 'originalPreferred'): any {
+		console.log('getData not implemented yet in flash/Clipboard');
 		return null;
 
 	}
@@ -152,8 +151,8 @@ export class Clipboard
 	 * @throws	IllegalOperationError The Clipboard object requested is no longer in scope.
 	 * @throws	SecurityError Reading from or writing to the clipboard is not permitted in this context.
 	 */
-	public hasFormat (format:string) : boolean{
-		console.log("hasFormat not implemented yet in flash/Clipboard");
+	public hasFormat (format: string): boolean {
+		console.log('hasFormat not implemented yet in flash/Clipboard');
 		return false;
 
 	}
@@ -196,8 +195,8 @@ export class Clipboard
 	 *   application security sandbox.
 	 * @throws	TypeError format or data is null.
 	 */
-	public setData (format:string, data:any, serializable:boolean=true) : boolean{
-		console.log("setData not implemented yet in flash/Clipboard");
+	public setData (format: string, data: any, serializable: boolean = true): boolean {
+		console.log('setData not implemented yet in flash/Clipboard');
 		return false;
 
 	}
@@ -233,10 +232,9 @@ export class Clipboard
 	 *   (such as a key press or mouse click). In AIR, this restriction only applies to content outside of the
 	 *   application security sandbox.
 	 */
-	public setDataHandler (format:string, handler:Function, serializable:boolean=true) : boolean{
-		console.log("setDataHandler not implemented yet in flash/Clipboard");
+	public setDataHandler (format: string, handler: Function, serializable: boolean = true): boolean {
+		console.log('setDataHandler not implemented yet in flash/Clipboard');
 		return false;
-		
+
 	}
 }
-

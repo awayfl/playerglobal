@@ -1,5 +1,5 @@
-import {URLRequest} from "./URLRequest";
+import { URLRequest } from './URLRequest';
 
-export function navigateToURL(url:URLRequest, target:string):void{
-	window.open(url.url, "_blank"); 
+export function navigateToURL(url: URLRequest, target: string): void{
+	window.open(url.url, '_blank');
 }

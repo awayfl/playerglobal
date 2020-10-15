@@ -1,1 +1,1 @@
-export {CapsStyle} from "@awayjs/graphics";
+export { CapsStyle } from '@awayjs/graphics';

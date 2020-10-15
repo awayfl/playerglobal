@@ -1,1 +1,1 @@
-export {URLRequestMethod} from "@awayjs/core";
+export { URLRequestMethod } from '@awayjs/core';

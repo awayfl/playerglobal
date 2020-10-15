@@ -1,13 +1,11 @@
 
-
 /**
  * The SoundLoaderContext class provides security checks for files that load sound.
  * SoundLoaderContext objects are passed as an argument to the constructor and the
  * <codeph class="+ topic/ph pr-d/codeph ">load()</codeph> method of the Sound class.
  *
  */
-export class SoundLoaderContext
-{
+export class SoundLoaderContext {
 
 	/**
 	 * Creates a new sound loader context object.
@@ -16,9 +14,10 @@ export class SoundLoaderContext
 	 * @param	checkPolicyFile	Specifies whether the existence of a URL policy file
 	 *   should be checked upon loading the object (true) or not.
 	 */
-	constructor (bufferTime:number=1000, checkPolicyFile:boolean=false){
+	constructor (bufferTime: number = 1000, checkPolicyFile: boolean = false) {
 
 	}
+
 	/**
 	 * The number of milliseconds to preload a streaming sound into a buffer
 	 * before the sound starts to stream.
@@ -32,7 +31,7 @@ export class SoundLoaderContext
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public bufferTime : number;
+	public bufferTime: number;
 
 	/**
 	 * Specifies whether the application should try to download a URL policy file from the
@@ -97,6 +96,5 @@ export class SoundLoaderContext
 	 * @playerversion	Lite 4
 	 * @internal	: please review at same time: checkPolicyFile property in LoaderContext, NetStream
 	 */
-	public checkPolicyFile : boolean;
+	public checkPolicyFile: boolean;
 }
-

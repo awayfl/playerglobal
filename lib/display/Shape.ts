@@ -1,4 +1,4 @@
-export {Sprite as Shape} from "./Sprite";
+export { Sprite as Shape } from './Sprite';
 /*
 import { DisplayObject } from "./DisplayObject";
 import { Graphics } from "./Graphics";
@@ -13,19 +13,19 @@ import { Sprite } from "./Sprite";
  * child display objects). For this reason, Shape objects consume less memory than Sprite objects that contain the
  * same graphics. However, a Sprite object supports user input events, while a Shape object does not.</p>
  */
-	/*
+/*
 export class Shape extends DisplayObject
 {
 */
-	/**
+/**
 	 * Creates a new Shape object.
 	 */
-	/*
+/*
 	constructor (){
 		super(null)//todo;
 	}
 	*/
-	/**
+/**
 	 * Specifies the Graphics object belonging to this Shape object, where vector
 	 * drawing commands can occur.
 	 */

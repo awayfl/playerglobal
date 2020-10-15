@@ -1,18 +1,18 @@
-import { ASObject } from "@awayfl/avm2";
-import { DataBuffer } from "@awayjs/graphics";
-import { Point } from "./Point";
-import { Vector3D } from "./Vector3D";
+import { ASObject } from '@awayfl/avm2';
+import { DataBuffer } from '@awayjs/graphics';
+import { Point } from './Point';
+import { Vector3D } from './Vector3D';
 import { Matrix as AwayMatrix } from '@awayjs/core';
 import { SecurityDomain } from '../SecurityDomain';
 /**
  * Copyright 2014 Mozilla Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,114 +20,100 @@ import { SecurityDomain } from '../SecurityDomain';
  * limitations under the License.
  */
 // Class: Matrix
-export class Matrix extends ASObject
-{
-  private _adaptee:AwayMatrix;
+export class Matrix extends ASObject {
+	private _adaptee: AwayMatrix;
 
-  static axClass: typeof Matrix;
+	static axClass: typeof Matrix;
 
-  static classInitializer() {
-    this.FROZEN_IDENTITY_MATRIX = Object.freeze(this.axConstruct([]));
-    this.TEMP_MATRIX = this.axConstruct([]);
-  }
-  static classSymbols: string [] = null; // [];
-  static instanceSymbols: string [] = null; // ["a", "b", "c", "d", "tx", "ty", "concat",
-                                            // "invert", "identity", "createBox",
-                                            // "createGradientBox", "rotate", "translate",
-                                            // "scale", "deltaTransformPoint", "transformPoint",
-                                            // "copyFrom", "setTo", "copyRowTo", "copyColumnTo",
-                                            // "copyRowFrom", "copyColumnFrom", "clone",
-                                            // "toString"];
+	static classInitializer() {
+		this.FROZEN_IDENTITY_MATRIX = Object.freeze(this.axConstruct([]));
+		this.TEMP_MATRIX = this.axConstruct([]);
+	}
 
-                                              
-  public get adaptee():AwayMatrix
-  {
-    return this._adaptee;
-  }
+	static classSymbols: string [] = null; // [];
+	static instanceSymbols: string [] = null; // ["a", "b", "c", "d", "tx", "ty", "concat",
+	// "invert", "identity", "createBox",
+	// "createGradientBox", "rotate", "translate",
+	// "scale", "deltaTransformPoint", "transformPoint",
+	// "copyFrom", "setTo", "copyRowTo", "copyColumnTo",
+	// "copyRowFrom", "copyColumnFrom", "clone",
+	// "toString"];
 
-  /**
+	public get adaptee(): AwayMatrix {
+		return this._adaptee;
+	}
+
+	/**
    * The value that affects the positioning of pixels along the <i>x</i> axis
    * when scaling or rotating an image.
    */
-  public get a():number
-  {
-    return this._adaptee.rawData[0];
-  }
+	public get a(): number {
+		return this._adaptee.rawData[0];
+	}
 
-  public set a(value:number)
-  {
-    this._adaptee.rawData[0] = value;
-  }
+	public set a(value: number) {
+		this._adaptee.rawData[0] = value;
+	}
 
-  /**
+	/**
    * The value that affects the positioning of pixels along the <i>y</i> axis
    * when rotating or skewing an image.
    */
-  public get b():number
-  {
-    return this._adaptee.rawData[2];
-  }
+	public get b(): number {
+		return this._adaptee.rawData[2];
+	}
 
-  public set b(value:number)
-  {
-    this._adaptee.rawData[2] = value;
-  }
+	public set b(value: number) {
+		this._adaptee.rawData[2] = value;
+	}
 
-  /**
+	/**
    * The value that affects the positioning of pixels along the <i>x</i> axis
    * when rotating or skewing an image.
    */
-  public get c():number
-  {
-    return this._adaptee.rawData[1];
-  }
+	public get c(): number {
+		return this._adaptee.rawData[1];
+	}
 
-  public set c(value:number)
-  {
-    this._adaptee.rawData[1] = value;
-  }
+	public set c(value: number) {
+		this._adaptee.rawData[1] = value;
+	}
 
-  /**
+	/**
    * The value that affects the positioning of pixels along the <i>y</i> axis
    * when scaling or rotating an image.
    */
-  public get d():number
-  {
-    return this._adaptee.rawData[3];
-  }
+	public get d(): number {
+		return this._adaptee.rawData[3];
+	}
 
-  public set d(value:number)
-  {
-    this._adaptee.rawData[3] = value;
-  }
+	public set d(value: number) {
+		this._adaptee.rawData[3] = value;
+	}
 
-  /**
+	/**
    * The distance by which to translate each point along the <i>x</i> axis.
    */
-  public get tx():number
-  {
-    return this._adaptee.rawData[4];
-  }
+	public get tx(): number {
+		return this._adaptee.rawData[4];
+	}
 
-  public set tx(value:number)
-  {
-    this._adaptee.rawData[4] = value;
-  }
+	public set tx(value: number) {
+		this._adaptee.rawData[4] = value;
+	}
 
-  /**
+	/**
    * The distance by which to translate each point along the <i>y</i> axis.
    */
-  public get ty():number
-  {
-    return this._adaptee.rawData[5];
-  }
+	public get ty(): number {
+		return this._adaptee.rawData[5];
+	}
 
-  public set ty(value:number)
-  {
-    this._adaptee.rawData[5] = value;
-  }
+	public set ty(value: number) {
+		this._adaptee.rawData[5] = value;
+	}
 
-  /**
+	/**
    * Creates a new Matrix object with the specified parameters. In matrix
    * notation, the properties are organized like this:
    *
@@ -150,31 +136,30 @@ export class Matrix extends ASObject
    * @param ty The distance by which to translate each point along the <i>y</i>
    *           axis.
    */
-  constructor(aAdaptee: number | AwayMatrix = 1, b: number = 0, c: number = 0, d: number = 1, tx: number = 0, ty: number = 0)
-  {
-    super();
+	constructor(aAdaptee: number | AwayMatrix = 1, b: number = 0, c: number = 0, d: number = 1, tx: number = 0, ty: number = 0) {
+		super();
 
-    this._adaptee = (aAdaptee instanceof AwayMatrix)? aAdaptee : new AwayMatrix(+aAdaptee, +b, +c, +d, +tx, +ty);
-  }
+		this._adaptee = (aAdaptee instanceof AwayMatrix) ? aAdaptee : new AwayMatrix(+aAdaptee, +b, +c, +d, +tx, +ty);
+	}
 
-  public static FromUntyped(object: any): Matrix {
-    return new (<SecurityDomain> this.sec).flash.geom.Matrix(object.a, object.b, object.c, object.d,
-                                          object.tx, object.ty);
-  }
+	public static FromUntyped(object: any): Matrix {
+		return new (<SecurityDomain> this.sec).flash.geom.Matrix(object.a, object.b, object.c, object.d,
+			object.tx, object.ty);
+	}
 
-  // Keep in sync with writeExternal below!
-  public static FromDataBuffer(input: DataBuffer) {
-    return new (<SecurityDomain> this.sec).flash.geom.Matrix(input.readFloat(), input.readFloat(),
-                                          input.readFloat(), input.readFloat(),
-                                          input.readFloat(), input.readFloat());
-  }
+	// Keep in sync with writeExternal below!
+	public static FromDataBuffer(input: DataBuffer) {
+		return new (<SecurityDomain> this.sec).flash.geom.Matrix(input.readFloat(), input.readFloat(),
+			input.readFloat(), input.readFloat(),
+			input.readFloat(), input.readFloat());
+	}
 
-  public static FROZEN_IDENTITY_MATRIX: Matrix;
+	public static FROZEN_IDENTITY_MATRIX: Matrix;
 
-  // Must only be used in cases where the members are fully initialized and then directly used.
-  public static TEMP_MATRIX: Matrix;
+	// Must only be used in cases where the members are fully initialized and then directly used.
+	public static TEMP_MATRIX: Matrix;
 
-  /**
+	/**
    * Concatenates a matrix with the current matrix, effectively combining the
    * geometric effects of the two. In mathematical terms, concatenating two
    * matrixes is the same as combining them using matrix multiplication.
@@ -192,22 +177,20 @@ export class Matrix extends ASObject
    *
    * @param matrix The matrix to be concatenated to the source matrix.
    */
-  public concat(other: Matrix): void
-  {
-    this._adaptee.concat(other.adaptee);
-  }
+	public concat(other: Matrix): void {
+		this._adaptee.concat(other.adaptee);
+	}
 
-  /**
+	/**
    * Performs the opposite transformation of the original matrix. You can apply
    * an inverted matrix to an object to undo the transformation performed when
    * applying the original matrix.
    */
-  public invert(): void
-  {
-    this._adaptee.invert();
-  }
+	public invert(): void {
+		this._adaptee.invert();
+	}
 
-  /**
+	/**
    * Sets each matrix property to a value that causes a null transformation. An
    * object transformed by applying an identity matrix will be identical to the
    * original.
@@ -220,11 +203,11 @@ export class Matrix extends ASObject
    * <p>In matrix notation, the identity matrix looks like this:</p>
    *
    */
-  public identity(): void {
-    this._adaptee.identity();
-  }
+	public identity(): void {
+		this._adaptee.identity();
+	}
 
-    /**
+	/**
    * Includes parameters for scaling, rotation, and translation. When applied
    * to a matrix it sets the matrix's values based on those parameters.
    *
@@ -242,13 +225,11 @@ export class Matrix extends ASObject
    * @param ty       The number of pixels to translate(move) down along the
    *                 <i>y</i> axis.
    */
-  public createBox(scaleX: number, scaleY: number, rotation: number = 0, tx: number = 0, ty: number = 0): void
-  {
-    this._adaptee.createBox(scaleX, scaleY, rotation, tx, ty);
-  }
+	public createBox(scaleX: number, scaleY: number, rotation: number = 0, tx: number = 0, ty: number = 0): void {
+		this._adaptee.createBox(scaleX, scaleY, rotation, tx, ty);
+	}
 
-  
-  /**
+	/**
    * Creates the specific style of matrix expected by the
    * <code>beginGradientFill()</code> and <code>lineGradientStyle()</code>
    * methods of the Graphics class. Width and height are scaled to a
@@ -281,13 +262,11 @@ export class Matrix extends ASObject
    *                 <i>y</i> axis. This value is offset by half of the
    *                 <code>height</code> parameter.
    */
-  public createGradientBox(width: number, height: number, rotation: number = 0, tx: number = 0, ty: number = 0): void
-  {
-    this._adaptee.createGradientBox(width, height, rotation, tx, ty);
-  }
+	public createGradientBox(width: number, height: number, rotation: number = 0, tx: number = 0, ty: number = 0): void {
+		this._adaptee.createGradientBox(width, height, rotation, tx, ty);
+	}
 
-  
-  /**
+	/**
    * Applies a rotation transformation to the Matrix object.
    *
    * <p>The <code>rotate()</code> method alters the <code>a</code>,
@@ -297,13 +276,11 @@ export class Matrix extends ASObject
    *
    * @param angle The rotation angle in radians.
    */
-  public rotate(angle: number): void
-  {
-    this._adaptee.rotate(angle);
-  }
+	public rotate(angle: number): void {
+		this._adaptee.rotate(angle);
+	}
 
-  
-  /**
+	/**
    * Translates the matrix along the <i>x</i> and <i>y</i> axes, as specified
    * by the <code>dx</code> and <code>dy</code> parameters.
    *
@@ -311,13 +288,11 @@ export class Matrix extends ASObject
    *           pixels.
    * @param dy The amount of movement down along the <i>y</i> axis, in pixels.
    */
-  public translate(dx: number, dy: number): void
-  {
-    this._adaptee.translate(dx, dy);
-  }
+	public translate(dx: number, dy: number): void {
+		this._adaptee.translate(dx, dy);
+	}
 
-  
-  /**
+	/**
    * Applies a scaling transformation to the matrix. The <i>x</i> axis is
    * multiplied by <code>sx</code>, and the <i>y</i> axis it is multiplied by
    * <code>sy</code>.
@@ -330,12 +305,11 @@ export class Matrix extends ASObject
    * @param sx A multiplier used to scale the object along the <i>x</i> axis.
    * @param sy A multiplier used to scale the object along the <i>y</i> axis.
    */
-  public scale(sx: number, sy: number): void
-  {
-    this._adaptee.scale(sx, sy);
-  }
+	public scale(sx: number, sy: number): void {
+		this._adaptee.scale(sx, sy);
+	}
 
-  /**
+	/**
    * Given a point in the pretransform coordinate space, returns the
    * coordinates of that point after the transformation occurs. Unlike the
    * standard transformation applied using the <code>transformPoint()</code>
@@ -347,12 +321,11 @@ export class Matrix extends ASObject
    *              transformation.
    * @return The point resulting from applying the matrix transformation.
    */
-  public deltaTransformPoint(point: Point): Point
-  {
-    return new (<SecurityDomain> this.sec).flash.geom.Point(this._adaptee.deltaTransformPoint(point.adaptee));
-  }
+	public deltaTransformPoint(point: Point): Point {
+		return new (<SecurityDomain> this.sec).flash.geom.Point(this._adaptee.deltaTransformPoint(point.adaptee));
+	}
 
-  /**
+	/**
    * Returns the result of applying the geometric transformation represented by
    * the Matrix object to the specified point.
    *
@@ -360,23 +333,21 @@ export class Matrix extends ASObject
    *              transformation.
    * @return The point resulting from applying the Matrix transformation.
    */
-  public transformPoint(point: Point): Point
-  {
-    return new (<SecurityDomain> this.sec).flash.geom.Point(this._adaptee.transformPoint(point.adaptee));
-  }
-  
-  /**
+	public transformPoint(point: Point): Point {
+		return new (<SecurityDomain> this.sec).flash.geom.Point(this._adaptee.transformPoint(point.adaptee));
+	}
+
+	/**
    * Copies all of the matrix data from the source Point object into the
    * calling Matrix object.
    *
    * @param sourceMatrix The Matrix object from which to copy the data.
    */
-  public copyFrom(sourceMatrix: Matrix): void
-  {
-    this._adaptee.copyFrom(sourceMatrix.adaptee);
-  }
+	public copyFrom(sourceMatrix: Matrix): void {
+		this._adaptee.copyFrom(sourceMatrix.adaptee);
+	}
 
-  /**
+	/**
    * Sets the members of Matrix to the specified values.
    *
    * @param a  The value that affects the positioning of pixels along the
@@ -392,46 +363,41 @@ export class Matrix extends ASObject
    * @param ty The distance by which to translate each point along the <i>y</i>
    *           axis.
    */
-  public setTo(a: number, b: number, c: number, d: number, tx: number, ty: number): void
-  {
-    this._adaptee.setTo(a, b, c, d, tx, ty);
-  }
+	public setTo(a: number, b: number, c: number, d: number, tx: number, ty: number): void {
+		this._adaptee.setTo(a, b, c, d, tx, ty);
+	}
 
-  /**
+	/**
    * Copies specific row of the calling Matrix object into the Vector3D object.
    * The w element of the Vector3D object will not be changed.
    *
    * @param row      The row from which to copy the data from.
    * @param vector3D The Vector3D object from which to copy the data.
    */
-  public copyRowTo(row: number, vector3D: Vector3D): void
-  {
-    this._adaptee.copyRowTo(row, vector3D.adaptee);
-  }
+	public copyRowTo(row: number, vector3D: Vector3D): void {
+		this._adaptee.copyRowTo(row, vector3D.adaptee);
+	}
 
-  /**
+	/**
    * Copies specific column of the calling Matrix object into the Vector3D
    * object. The w element of the Vector3D object will not be changed.
    *
    * @param column   The column from which to copy the data from.
    * @param vector3D The Vector3D object from which to copy the data.
    */
-  public copyColumnTo(column: number, vector3D: Vector3D): void
-  {
-    this._adaptee.copyColumnTo(column, vector3D.adaptee);
-  }
+	public copyColumnTo(column: number, vector3D: Vector3D): void {
+		this._adaptee.copyColumnTo(column, vector3D.adaptee);
+	}
 
-  
 	/**
 	 * Copies a Vector3D object into specific row of the calling Matrix object.
 	 *
 	 * @param row      The row from which to copy the data from.
 	 * @param vector3D The Vector3D object from which to copy the data.
 	 */
-  public copyRowFrom(row: number, vector3D: Vector3D): void
-  {
-    this._adaptee.copyRowFrom(row, vector3D.adaptee);
-  }
+	public copyRowFrom(row: number, vector3D: Vector3D): void {
+		this._adaptee.copyRowFrom(row, vector3D.adaptee);
+	}
 
 	/**
 	 * Copies a Vector3D object into specific column of the calling Matrix3D
@@ -440,10 +406,9 @@ export class Matrix extends ASObject
 	 * @param column   The column from which to copy the data from.
 	 * @param vector3D The Vector3D object from which to copy the data.
 	 */
-  public copyColumnFrom(column: number, vector3D: Vector3D): void
-  {
-    this._adaptee.copyColumnFrom(column, vector3D.adaptee);
-  }
+	public copyColumnFrom(column: number, vector3D: Vector3D): void {
+		this._adaptee.copyColumnFrom(column, vector3D.adaptee);
+	}
 
 	/**
 	 * Returns a new Matrix object that is a clone of this matrix, with an exact
@@ -451,28 +416,25 @@ export class Matrix extends ASObject
 	 *
 	 * @return A Matrix object.
 	 */
-  public clone(): Matrix
-  {
-    return new (<SecurityDomain> this.sec).flash.geom.Matrix(this._adaptee.clone());
-  }
+	public clone(): Matrix {
+		return new (<SecurityDomain> this.sec).flash.geom.Matrix(this._adaptee.clone());
+	}
 
-  public toString(): string
-  {
-    var m = this._adaptee.rawData;
+	public toString(): string {
+		const m = this._adaptee.rawData;
 
-    return "(a=" + m[0] + ", b=" + m[1] + ", c=" + m[2] + ", d=" + m[3] + ", tx=" + m[4] + ", ty=" + m[5] + ")";
-  }
+		return '(a=' + m[0] + ', b=' + m[1] + ', c=' + m[2] + ', d=' + m[3] + ', tx=' + m[4] + ', ty=' + m[5] + ')';
+	}
 
-  // Keep in sync with static FromDataBuffer above!
-  public writeExternal(output: DataBuffer)
-  {
-    var m = this._adaptee.rawData;
+	// Keep in sync with static FromDataBuffer above!
+	public writeExternal(output: DataBuffer) {
+		const m = this._adaptee.rawData;
 
-    output.writeFloat(m[0]);
-    output.writeFloat(m[1]);
-    output.writeFloat(m[2]);
-    output.writeFloat(m[3]);
-    output.writeFloat(m[4]);
-    output.writeFloat(m[5]);
-  }
+		output.writeFloat(m[0]);
+		output.writeFloat(m[1]);
+		output.writeFloat(m[2]);
+		output.writeFloat(m[3]);
+		output.writeFloat(m[4]);
+		output.writeFloat(m[5]);
+	}
 }

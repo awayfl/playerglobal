@@ -1,4 +1,4 @@
-import { ASObject } from "@awayfl/avm2";
+import { ASObject } from '@awayfl/avm2';
 
 import { Point as AwayPoint } from '@awayjs/core';
 import { SecurityDomain } from '../SecurityDomain';
@@ -19,73 +19,65 @@ import { SecurityDomain } from '../SecurityDomain';
  * limitations under the License.
  */
 // Class: Point
-export class Point extends ASObject
-{
-  private _adaptee:AwayPoint;
+export class Point extends ASObject {
+	private _adaptee: AwayPoint;
 
-  // Called whenever the class is initialized.
-  static classInitializer: any = null;
+	// Called whenever the class is initialized.
+	static classInitializer: any = null;
 
-  // List of static symbols to link.
-  static classSymbols: string [] = null; // ["interpolate", "distance", "polar"];
+	// List of static symbols to link.
+	static classSymbols: string [] = null; // ["interpolate", "distance", "polar"];
 
-  // List of instance symbols to link.
-  static instanceSymbols: string [] = null; // ["x", "y", "length", "clone", "offset", "equals", "subtract", "add", "normalize", "copyFrom", "setTo", "toString"];
-                                         
-  public get adaptee():AwayPoint
-  {
-    return this._adaptee;
-  }
+	// List of instance symbols to link.
+	static instanceSymbols: string [] = null; // ["x", "y", "length", "clone", "offset", "equals", "subtract", "add", "normalize", "copyFrom", "setTo", "toString"];
 
-  /**
+	public get adaptee(): AwayPoint {
+		return this._adaptee;
+	}
+
+	/**
    * The horizontal coordinate of the point. The default value is 0.
    */
-  public get x():number
-  {
-    return this._adaptee._rawData[0];
-  }
+	public get x(): number {
+		return this._adaptee._rawData[0];
+	}
 
-  public set x(value:number)
-  {
-    this._adaptee._rawData[0] = value;
-  }
+	public set x(value: number) {
+		this._adaptee._rawData[0] = value;
+	}
 
-  /**
+	/**
    * The vertical coordinate of the point. The default value is 0.
    */
-  public get y():number
-  {
-    return this._adaptee._rawData[1];
-  }
+	public get y(): number {
+		return this._adaptee._rawData[1];
+	}
 
-  public set y(value:number)
-  {
-    this._adaptee._rawData[1] = value;
-  }
+	public set y(value: number) {
+		this._adaptee._rawData[1] = value;
+	}
 
-  /**
+	/**
    * The length of the line segment from(0,0) to this point.
    */
-  public get length(): number
-  {
-    return this._adaptee.length;
-  }
+	public get length(): number {
+		return this._adaptee.length;
+	}
 
-  /**
+	/**
    * Creates a new point. If you pass no parameters to this method, a point is
    * created at(0,0).
    *
    * @param x The horizontal coordinate.
    * @param y The vertical coordinate.
    */
-  constructor(xAdaptee: number | AwayPoint = 0, y: number = 0)
-  {
-    super();
+	constructor(xAdaptee: number | AwayPoint = 0, y: number = 0) {
+		super();
 
-    this._adaptee = (xAdaptee instanceof AwayPoint)? xAdaptee : new AwayPoint(+xAdaptee, +y);
-  }
+		this._adaptee = (xAdaptee instanceof AwayPoint) ? xAdaptee : new AwayPoint(+xAdaptee, +y);
+	}
 
-  /**
+	/**
    * Determines a point between two specified points. The parameter
    * <code>f</code> determines where the new interpolated point is located
    * relative to the two end points specified by parameters <code>pt1</code>
@@ -104,46 +96,42 @@ export class Point extends ASObject
    *            <code>pt2</code> is returned.
    * @return The new, interpolated point.
    */
-  public static interpolate(pt1: Point, pt2: Point, f: number): Point
-  {
-    return new (<SecurityDomain> this.sec).flash.geom.Point(AwayPoint.interpolate(pt1.adaptee, pt2.adaptee, f));
-  }
+	public static interpolate(pt1: Point, pt2: Point, f: number): Point {
+		return new (<SecurityDomain> this.sec).flash.geom.Point(AwayPoint.interpolate(pt1.adaptee, pt2.adaptee, f));
+	}
 
-  /**
+	/**
    * Returns the distance between <code>pt1</code> and <code>pt2</code>.
    *
    * @param pt1 The first point.
    * @param pt2 The second point.
    * @return The distance between the first and second points.
    */
-  public static distance(pt1: Point, pt2: Point): number
-  {
-    return AwayPoint.distance(pt1.adaptee, pt2.adaptee);
-  }
+	public static distance(pt1: Point, pt2: Point): number {
+		return AwayPoint.distance(pt1.adaptee, pt2.adaptee);
+	}
 
-  /**
+	/**
    * Converts a pair of polar coordinates to a Cartesian point coordinate.
    *
    * @param len   The length coordinate of the polar pair.
    * @param angle The angle, in radians, of the polar pair.
    * @return The Cartesian point.
    */
-  public static polar(len: number, angle: number): Point
-  {
-    return new (<SecurityDomain> this.sec).flash.geom.Point(AwayPoint.polar(+len, +angle));
-  }
+	public static polar(len: number, angle: number): Point {
+		return new (<SecurityDomain> this.sec).flash.geom.Point(AwayPoint.polar(+len, +angle));
+	}
 
-  /**
+	/**
    * Creates a copy of this Point object.
    *
    * @return The new Point object.
    */
-  public clone(): Point
-  {
-    return new (<SecurityDomain> this.sec).flash.geom.Point(this._adaptee.clone());
-  }
+	public clone(): Point {
+		return new (<SecurityDomain> this.sec).flash.geom.Point(this._adaptee.clone());
+	}
 
-  /**
+	/**
    * Offsets the Point object by the specified amount. The value of
    * <code>dx</code> is added to the original value of <i>x</i> to create the
    * new <i>x</i> value. The value of <code>dy</code> is added to the original
@@ -153,12 +141,11 @@ export class Point extends ASObject
    *           <i>x</i>.
    * @param dy The amount by which to offset the vertical coordinate, <i>y</i>.
    */
-  public offset(dx: number, dy: number): void
-  {
-    this._adaptee.offset(dx, dy);
-  }
+	public offset(dx: number, dy: number): void {
+		this._adaptee.offset(dx, dy);
+	}
 
-  /**
+	/**
    * Determines whether two points are equal. Two points are equal if they have
    * the same <i>x</i> and <i>y</i> values.
    *
@@ -166,37 +153,33 @@ export class Point extends ASObject
    * @return A value of <code>true</code> if the object is equal to this Point
    *         object; <code>false</code> if it is not equal.
    */
-  public equals(toCompare: Point): boolean
-  {
-    return this._adaptee.equals(toCompare.adaptee);
-  }
+	public equals(toCompare: Point): boolean {
+		return this._adaptee.equals(toCompare.adaptee);
+	}
 
-  /**
+	/**
    * Subtracts the coordinates of another point from the coordinates of this
    * point to create a new point.
    *
    * @param v The point to be subtracted.
    * @return The new point.
    */
-  public subtract(v: Point): Point
-  {
-    return new (<SecurityDomain> this.sec).flash.geom.Point(this._adaptee.subtract(v.adaptee));
-  }
+	public subtract(v: Point): Point {
+		return new (<SecurityDomain> this.sec).flash.geom.Point(this._adaptee.subtract(v.adaptee));
+	}
 
-
-  /**
+	/**
    * Adds the coordinates of another point to the coordinates of this point to
    * create a new point.
    *
    * @param v The point to be added.
    * @return The new point.
    */
-  public add(v: Point): Point
-  {
-    return new (<SecurityDomain> this.sec).flash.geom.Point(this._adaptee.add(v.adaptee));
-  }
+	public add(v: Point): Point {
+		return new (<SecurityDomain> this.sec).flash.geom.Point(this._adaptee.add(v.adaptee));
+	}
 
-  /**
+	/**
    * Scales the line segment between(0,0) and the current point to a set
    * length.
    *
@@ -204,23 +187,19 @@ export class Point extends ASObject
    *                 (0,5), and you normalize it to 1, the point returned is
    *                  at(0,1).
    */
-  public normalize(thickness: number = 1): void
-  {
-    this._adaptee.normalize(+thickness);
-  }
+	public normalize(thickness: number = 1): void {
+		this._adaptee.normalize(+thickness);
+	}
 
-  public copyFrom(sourcePoint: Point): void
-  {
-    this._adaptee.copyFrom(sourcePoint.adaptee);
-  }
+	public copyFrom(sourcePoint: Point): void {
+		this._adaptee.copyFrom(sourcePoint.adaptee);
+	}
 
-  public setTo(x: number, y: number): void
-  {
-    this._adaptee.setTo(x, y);
-  }
+	public setTo(x: number, y: number): void {
+		this._adaptee.setTo(x, y);
+	}
 
-  public toString(): string
-  {
-    return "(x=" + this.x + ", y=" + this.y + ")";
-  }
+	public toString(): string {
+		return '(x=' + this.x + ', y=' + this.y + ')';
+	}
 }

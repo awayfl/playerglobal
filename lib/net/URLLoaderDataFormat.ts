@@ -1,1 +1,1 @@
-export {URLLoaderDataFormat} from "@awayjs/core";
+export { URLLoaderDataFormat } from '@awayjs/core';

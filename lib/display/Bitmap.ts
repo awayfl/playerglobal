@@ -1,9 +1,9 @@
-import {Billboard, DisplayObject as AwayDisplayObject, SceneImage2D} from "@awayjs/scene";
-import { DisplayObject } from "./DisplayObject";
-import { BitmapData } from "./BitmapData";
-import {ImageTexture2D, MethodMaterial} from "@awayjs/materials";
+import { Billboard, DisplayObject as AwayDisplayObject, SceneImage2D } from '@awayjs/scene';
+import { DisplayObject } from './DisplayObject';
+import { BitmapData } from './BitmapData';
+import { ImageTexture2D, MethodMaterial } from '@awayjs/materials';
 
-import {IBitmapDataOwner} from "./IBitmapDataOwner";
+import { IBitmapDataOwner } from './IBitmapDataOwner';
 import { BitmapImage2D } from '@awayjs/stage';
 
 /**
@@ -29,26 +29,23 @@ import { BitmapImage2D } from '@awayjs/stage';
  * it cannot dispatch mouse events. However, you can use the <codeph class="+ topic/ph pr-d/codeph ">addEventListener()</codeph> method
  * of the display object container that contains the Bitmap object.</p>
  */
-export class Bitmap extends DisplayObject implements IBitmapDataOwner
-{
-	private _texture:ImageTexture2D;
-	private _bitmapData:BitmapData;
+export class Bitmap extends DisplayObject implements IBitmapDataOwner {
+	private _texture: ImageTexture2D;
+	private _bitmapData: BitmapData;
 	private _bitmapMappedFromAsset: boolean;
 
-	private static _bitmaps:Array<Bitmap> = new Array<Bitmap>();
-	private static argBitmapMaterial:MethodMaterial;
-	private static argPixelSnapping:string;
-	private static argSmoothing:boolean;
+	private static _bitmaps: Array<Bitmap> = new Array<Bitmap>();
+	private static argBitmapMaterial: MethodMaterial;
+	private static argPixelSnapping: string;
+	private static argSmoothing: boolean;
 
-
-	public static getNewBitmap(bitmapData:BitmapData = null, pixelSnapping:string="auto", smoothing:boolean=false):Bitmap
-	{
+	public static getNewBitmap(bitmapData: BitmapData = null, pixelSnapping: string = 'auto', smoothing: boolean = false): Bitmap {
 		if (Bitmap._bitmaps.length) {
-			var newMaterial:MethodMaterial = bitmapData? new MethodMaterial(bitmapData.adaptee) : new MethodMaterial(0x0);
+			const newMaterial: MethodMaterial = bitmapData ? new MethodMaterial(bitmapData.adaptee) : new MethodMaterial(0x0);
 			newMaterial.alphaBlending = true;
 			newMaterial.useColorTransform = true;
-			
-			var bitmap:Bitmap = Bitmap._bitmaps.pop();
+
+			const bitmap: Bitmap = Bitmap._bitmaps.pop();
 			bitmap.adaptee = Billboard.getNewBillboard(newMaterial, pixelSnapping, smoothing);
 			return bitmap;
 		}
@@ -64,18 +61,17 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner
 	 *   following examples show the same bitmap scaled by a factor of 3, with
 	 *   smoothing set to false (left) and true (right):
 	 */
-	constructor(bitmapData:BitmapData = null, pixelSnapping:string="auto", smoothing:boolean=false)
-	{
-		var newMaterial:MethodMaterial = bitmapData? new MethodMaterial(bitmapData.adaptee) : new MethodMaterial(0x0);
+	constructor(bitmapData: BitmapData = null, pixelSnapping: string = 'auto', smoothing: boolean = false) {
+		const newMaterial: MethodMaterial = bitmapData ? new MethodMaterial(bitmapData.adaptee) : new MethodMaterial(0x0);
 		newMaterial.alphaBlending = true;
 		newMaterial.useColorTransform = true;
 
-		Bitmap.argBitmapMaterial=newMaterial;
-		Bitmap.argPixelSnapping=pixelSnapping;
-		Bitmap.argSmoothing=smoothing;
+		Bitmap.argBitmapMaterial = newMaterial;
+		Bitmap.argPixelSnapping = pixelSnapping;
+		Bitmap.argSmoothing = smoothing;
 		super();
 
-		if(bitmapData && !this._bitmapMappedFromAsset) {
+		if (bitmapData && !this._bitmapMappedFromAsset) {
 			this._bitmapData = bitmapData;
 
 			if (this._bitmapData)
@@ -85,30 +81,29 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner
 
 	protected mapAdaptee(adaptee: any) {
 		let mappedAdapt = adaptee;
-		if(adaptee instanceof BitmapImage2D || adaptee instanceof SceneImage2D) {
-			
-			this._adaptee =  mappedAdapt = Billboard.getNewBillboard(new MethodMaterial(adaptee) , "auto", false);
+		if (adaptee instanceof BitmapImage2D || adaptee instanceof SceneImage2D) {
 
-			const bitmap = new (<any>this.sec).flash.display.BitmapData(adaptee);
+			this._adaptee =  mappedAdapt = Billboard.getNewBillboard(new MethodMaterial(adaptee) , 'auto', false);
+
+			const bitmap = new (<any> this.sec).flash.display.BitmapData(adaptee);
 
 			this.bitmapData = bitmap;
 			this._bitmapMappedFromAsset = true;
 		}
 
 		return super.mapAdaptee(mappedAdapt);
-	} 
+	}
 
-	protected createAdaptee():AwayDisplayObject{
-		var newAdaptee=Billboard.getNewBillboard(Bitmap.argBitmapMaterial, Bitmap.argPixelSnapping, Bitmap.argSmoothing);		
-		Bitmap.argBitmapMaterial=null;
-		Bitmap.argPixelSnapping=null;
-		Bitmap.argSmoothing=null;
+	protected createAdaptee(): AwayDisplayObject {
+		const newAdaptee = Billboard.getNewBillboard(Bitmap.argBitmapMaterial, Bitmap.argPixelSnapping, Bitmap.argSmoothing);
+		Bitmap.argBitmapMaterial = null;
+		Bitmap.argPixelSnapping = null;
+		Bitmap.argSmoothing = null;
 		return newAdaptee;
 	}
 
-	public clone():Bitmap
-	{
-		var newInstance:Bitmap = Bitmap.getNewBitmap(this._bitmapData);
+	public clone(): Bitmap {
+		const newInstance: Bitmap = Bitmap.getNewBitmap(this._bitmapData);
 
 		this._adaptee.copyTo(newInstance.adaptee);
 
@@ -118,15 +113,13 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner
 	/**
 	 * @inheritDoc
 	 */
-	public dispose():void
-	{
+	public dispose(): void {
 		this.disposeValues();
 
 		Bitmap._bitmaps.push(this);
 	}
 
-	public disposeValues():void
-	{
+	public disposeValues(): void {
 		this.bitmapData = null;
 
 		super.disposeValues();
@@ -135,13 +128,11 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner
 	/**
 	 * The BitmapData object being referenced.
 	 */
-	public get bitmapData () : BitmapData
-	{
+	public get bitmapData (): BitmapData {
 		return this._bitmapData;
 	}
 
-	public set bitmapData (value:BitmapData)
-	{
+	public set bitmapData (value: BitmapData) {
 		if (this._bitmapData == value)
 			return;
 
@@ -153,7 +144,7 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner
 		if (this._bitmapData)
 			this._bitmapData._addOwner(this);
 
-		var material:MethodMaterial = <MethodMaterial> (<Billboard> this._adaptee).material;
+		const material: MethodMaterial = <MethodMaterial> (<Billboard> this._adaptee).material;
 		if (this._bitmapData) {
 			if (!material.ambientMethod.texture)
 				material.ambientMethod.texture = new ImageTexture2D();
@@ -181,24 +172,25 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner
 	 * the bitmap image is drawn at 100% scale, snapped to the nearest pixel. Internally, this value allows the image
 	 * to be drawn as fast as possible using the vector renderer.
 	 */
-	public get pixelSnapping () : string{
-		return "";
+	public get pixelSnapping (): string {
+		return '';
 	}
-	public set pixelSnapping (value:string){
-		console.log("pixelSnapping not implemented yet in flash/Bitmap");
+
+	public set pixelSnapping (value: string) {
+		console.log('pixelSnapping not implemented yet in flash/Bitmap');
 	}
 
 	/**
 	 * Controls whether or not the bitmap is smoothed when scaled. If true, the bitmap is
 	 * smoothed when scaled. If false, the bitmap is not smoothed when scaled.
 	 */
-	public get smoothing () : boolean{
-		console.log("smoothing not implemented yet in flash/Bitmap");
+	public get smoothing (): boolean {
+		console.log('smoothing not implemented yet in flash/Bitmap');
 		return false;
 	}
-	public set smoothing (value:boolean){
-		console.log("smoothing not implemented yet in flash/Bitmap");
+
+	public set smoothing (value: boolean) {
+		console.log('smoothing not implemented yet in flash/Bitmap');
 	}
 
 }
-

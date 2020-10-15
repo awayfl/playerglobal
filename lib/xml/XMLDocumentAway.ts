@@ -1,5 +1,5 @@
-import { XMLNode } from "./XMLNode";
-import { XMLNodeType } from "./XMLNodeType";
+import { XMLNode } from './XMLNode';
+import { XMLNodeType } from './XMLNodeType';
 
 /**
  * The XMLDocument class represents the legacy XML object
@@ -14,27 +14,30 @@ import { XMLNodeType } from "./XMLNodeType";
  * compatibility. The functionality for loading XML documents can now be found in the
  * URLLoader class.</p>
  */
-export class XMLDocumentAway extends XMLNode
-{
+export class XMLDocumentAway extends XMLNode {
 
 	// for AVM1:
-	public axCallPublicProperty(value1:any, value2:any):any{
+	public axCallPublicProperty(value1: any, value2: any): any {
 		return null;
 	}
-	public axGetPublicProperty(value:any):any{
+
+	public axGetPublicProperty(value: any): any {
 		return null;
 	}
-	public axSetPublicProperty(value:any, value2:any):any{
+
+	public axSetPublicProperty(value: any, value2: any): any {
 		return null;
 	}
+
 	/**
 	 * Creates a new XMLDocument object. You must use the constructor to create an XMLDocument object before you call any of the methods of the XMLDocument class.
 	 * Note: Use the createElement() and createTextNode() methods to add elements and text nodes to an XML document tree.
 	 * @param	source	The XML text parsed to create the new XMLDocument object.
 	 */
-	constructor(source:string=null){
-		super(XMLNodeType.DOCUMENT_TYPE_NODE, "null");
+	constructor(source: string = null) {
+		super(XMLNodeType.DOCUMENT_TYPE_NODE, 'null');
 	}
+
 	/**
 	 * Specifies information about the XML document's DOCTYPE declaration.
 	 * After the XML text has been parsed into an XMLDocument object, the
@@ -52,7 +55,7 @@ export class XMLDocumentAway extends XMLNode
 	 * text in the XML object. If XMLDocument.docTypeDecl is null, no
 	 * DOCTYPE declaration is output.
 	 */
-	public docTypeDecl : any;
+	public docTypeDecl: any;
 
 	/**
 	 * An Object containing the nodes of the XML that have an id attribute assigned.
@@ -60,12 +63,12 @@ export class XMLDocumentAway extends XMLNode
 	 * id attributes.
 	 *
 	 */
-	public idMap : any;
+	public idMap: any;
 
 	/**
 	 * When set to true, text nodes that contain only white space are discarded during the parsing process. Text nodes with leading or trailing white space are unaffected. The default setting is false.
 	  */
-	public ignoreWhite : boolean;
+	public ignoreWhite: boolean;
 
 	/**
 	 * A string that specifies information about a document's XML declaration.
@@ -78,7 +81,7 @@ export class XMLDocumentAway extends XMLNode
 	 * If the XML.xmlDecl property contains null,
 	 * no XML declaration is output.
 	 * */
-	public xmlDecl : any;
+	public xmlDecl: any;
 
 	/**
 	 * Creates a new XMLNode object with the name specified in the parameter.
@@ -89,8 +92,8 @@ export class XMLDocumentAway extends XMLNode
 	 * @param	name	The tag name of the XMLDocument element being created.
 	 * @return	An XMLNode object.
 	 * */
-	public createElement (name:string) : XMLNode{
-		console.log("createElement not implemented yet in flash/XMLDocument");
+	public createElement (name: string): XMLNode {
+		console.log('createElement not implemented yet in flash/XMLDocument');
 		return null;
 	}
 
@@ -99,8 +102,8 @@ export class XMLDocumentAway extends XMLNode
 	 * @param	text	The text used to create the new text node.
 	 * @return	An XMLNode object.
 	 */
-	public createTextNode (text:string) : XMLNode{
-		console.log("createTextNode not implemented yet in flash/XMLDocument");
+	public createTextNode (text: string): XMLNode {
+		console.log('createTextNode not implemented yet in flash/XMLDocument');
 		return null;
 	}
 
@@ -109,18 +112,17 @@ export class XMLDocumentAway extends XMLNode
 	 * and populates the specified XMLDocument object with the resulting XML tree. Any existing trees in the XMLDocument object are discarded.
 	 * @param	source	The XML text to be parsed and passed to the specified XMLDocument object.
 	 */
-	public parseXML (source:string){
-		console.log("parseXML not implemented yet in flash/XMLDocument");
+	public parseXML (source: string) {
+		console.log('parseXML not implemented yet in flash/XMLDocument');
 	}
 
 	/**
 	 * Returns a string representation of the XML object.
 	 * @return	A string representation of the XML object.
 	 */
-	public toString () : string{
-		console.log("toString not implemented yet in flash/XMLDocument");
-		return "";
+	public toString (): string {
+		console.log('toString not implemented yet in flash/XMLDocument');
+		return '';
 	}
 
 }
-

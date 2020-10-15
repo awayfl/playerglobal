@@ -1,28 +1,27 @@
 
-import {StageAlign, StageScaleMode, AVMStage, release} from "@awayfl/swf-loader"
-import {Sprite} from "./Sprite"
-import {Event} from "../events/Event"
-import {IEventMapper} from "../events/IEventMapper"
-import {DisplayObjectContainer} from "./DisplayObjectContainer"
-import {DisplayObject} from "./DisplayObject"
+import { StageAlign, StageScaleMode, AVMStage, release } from '@awayfl/swf-loader';
+import { Sprite } from './Sprite';
+import { Event } from '../events/Event';
+import { IEventMapper } from '../events/IEventMapper';
+import { DisplayObjectContainer } from './DisplayObjectContainer';
+import { DisplayObject } from './DisplayObject';
 
-import {AssetEvent, LoaderEvent, ParserEvent, AudioManager, URLRequest, RequestAnimationFrame, CoordinateSystem, PerspectiveProjection, Loader} from "@awayjs/core";
-import {Graphics, GradientFillStyle, TextureAtlas} from "@awayjs/graphics";
-import {HoverController, TextField, Billboard, MouseManager, SceneGraphPartition, Camera, LoaderContainer, MovieClip, FrameScriptManager} from "@awayjs/scene";
+import { AssetEvent, LoaderEvent, ParserEvent, AudioManager, URLRequest, RequestAnimationFrame, CoordinateSystem, PerspectiveProjection, Loader } from '@awayjs/core';
+import { Graphics, GradientFillStyle, TextureAtlas } from '@awayjs/graphics';
+import { HoverController, TextField, Billboard, MouseManager, SceneGraphPartition, Camera, LoaderContainer, MovieClip, FrameScriptManager } from '@awayjs/scene';
 
-import {MethodMaterial, MaterialBase}	from "@awayjs/materials";
-import {View, BasicPartition} from "@awayjs/view";
-import {Stage as AwayStage, StageManager} from "@awayjs/stage";
-import {MouseEvent as MouseEventAway, DisplayObject as AwayDisplayObject, Sprite as AwaySprite, Scene, DisplayObjectContainer as AwayDisplayObjectContainer} from "@awayjs/scene";
+import { MethodMaterial, MaterialBase }	from '@awayjs/materials';
+import { View, BasicPartition } from '@awayjs/view';
+import { Stage as AwayStage, StageManager } from '@awayjs/stage';
+import { MouseEvent as MouseEventAway, DisplayObject as AwayDisplayObject, Sprite as AwaySprite, Scene, DisplayObjectContainer as AwayDisplayObjectContainer } from '@awayjs/scene';
 
-import {MouseEvent} from "../events/MouseEvent";
+import { MouseEvent } from '../events/MouseEvent';
 import { Transform } from '../geom/Transform';
 import { Rectangle } from '../geom/Rectangle';
-import { SecurityDomain } from '../SecurityDomain'
-import { OrphanManager } from '@awayfl/avm2'
-import { Loader as PlayerGlobalLoader } from './Loader'
-import { LoaderInfo } from './LoaderInfo'
-
+import { SecurityDomain } from '../SecurityDomain';
+import { OrphanManager } from '@awayfl/avm2';
+import { Loader as PlayerGlobalLoader } from './Loader';
+import { LoaderInfo } from './LoaderInfo';
 
 /**
  * Dispatched by the Stage object when the state of the stageVideos property changes.
@@ -96,20 +95,20 @@ import { LoaderInfo } from './LoaderInfo'
 	 * import flash.display.StageAlign;
 	 * import flash.display.StageScaleMode;
 	 * import flash.events.Event;
-	 * 
+	 *
 	 *   public class StageExample extends Sprite {
-	 * 
+	 *
 	 *   public StageExample() {
 	 * stage.scaleMode = StageScaleMode.NO_SCALE;
 	 * stage.align = StageAlign.TOP_LEFT;
 	 * stage.addEventListener(Event.ACTIVATE, activateHandler);
 	 * stage.addEventListener(Event.RESIZE, resizeHandler);
 	 * }
-	 * 
+	 *
 	 *   private activateHandler(event:Event):void {
 	 * trace("activateHandler: " + event);
 	 * }
-	 * 
+	 *
 	 *   private resizeHandler(event:Event):void {
 	 * trace("resizeHandler: " + event);
 	 * trace("stageWidth: " + stage.stageWidth + " stageHeight: " + stage.stageHeight);
@@ -119,137 +118,122 @@ import { LoaderInfo } from './LoaderInfo'
  * </codeblock>
  */
 
+export class Stage extends DisplayObjectContainer {
 
+	private _stage3Ds: AwayStage[];
 
-
-export class Stage extends DisplayObjectContainer{
-
-	private _stage3Ds:AwayStage[];
-
-	private _sendEventRender:boolean;
-
+	private _sendEventRender: boolean;
 
 	constructor() {
 		super();
 
-		this._stage3Ds=[];
+		this._stage3Ds = [];
 
 		// resize event listens on window
-		this._resizeCallbackDelegate = (event:any) => this.resizeCallback(event);
-		window.addEventListener("resize", this._resizeCallbackDelegate);
-		this.eventMapping[Event.RESIZE]=(<IEventMapper>{
-			adaptedType:"",
+		this._resizeCallbackDelegate = (event: any) => this.resizeCallback(event);
+		window.addEventListener('resize', this._resizeCallbackDelegate);
+		this.eventMapping[Event.RESIZE] = (<IEventMapper>{
+			adaptedType:'',
 			addListener:this.initResizeListener,
 			removeListener:this.removeResizeListener,
-			callback:this._resizeCallbackDelegate});
+			callback:this._resizeCallbackDelegate });
 
 		// mouse leave event listens on window
-		this._mouseLeaveCallbackDelegate = (event:any) => this.mouseLeaveCallback(event);
-		this.eventMapping[Event.MOUSE_LEAVE]=(<IEventMapper>{
-			adaptedType:"",
+		this._mouseLeaveCallbackDelegate = (event: any) => this.mouseLeaveCallback(event);
+		this.eventMapping[Event.MOUSE_LEAVE] = (<IEventMapper>{
+			adaptedType:'',
 			addListener:this.initMouseLeaveListener,
 			removeListener:this.removeMouseLeaveListener,
-			callback:this._mouseLeaveCallbackDelegate});
+			callback:this._mouseLeaveCallbackDelegate });
 
 		// set this as active stage.
 		// this makes sure all DisplayObject.constructor can set a reference to stage,
 		// befor constructors of Sprite or MovieClips are processed
-		(<SecurityDomain> this.sec).flash.display.DisplayObject.axClass._activeStage=this;
-		this._stage=this;
+		(<SecurityDomain> this.sec).flash.display.DisplayObject.axClass._activeStage = this;
+		this._stage = this;
 
 		this._resizeCallbackDelegate(null);
 
-
-
 	}
-	
 
 	public get view(): View {
-		return (<AVMStage>this.adaptee).scene.renderer.view;
+		return (<AVMStage> this.adaptee).scene.renderer.view;
 	}
 
 	// ---------- event mapping functions Event.RESIZE
 
-	private initResizeListener(type:string, callback:(event:any) => void):void
-	{
+	private initResizeListener(type: string, callback: (event: any) => void): void {
 		//window.addEventListener("resize", callback);
 	}
-	private removeResizeListener(type:string, callback:(event:any) => void):void
-	{
+
+	private removeResizeListener(type: string, callback: (event: any) => void): void {
 		//window.removeEventListener("resize", callback);
 	}
 
-	private _resizeCallbackDelegate:(event:any) => void;
-	public resizeCallback(event:any=null):void
-	{
+	private _resizeCallbackDelegate: (event: any) => void;
+	public resizeCallback(event: any = null): void {
 		this.dispatchEvent(new (<SecurityDomain> this.sec).flash.events.Event(Event.RESIZE));
 	}
 
-	public show (){
+	public show () {
 		//this._view.renderer.stage.container.style.display="initial";
 	}
 	// ---------- event mapping functions Event.MOUSE_LEAVE
 
-	private initMouseLeaveListener(type:string, callback:(event:any) => void):void
-	{
-		window.addEventListener("mouseleave", callback);
-	}
-	private removeMouseLeaveListener(type:string, callback:(event:any) => void):void
-	{
-		window.removeEventListener("mouseleave", callback);
+	private initMouseLeaveListener(type: string, callback: (event: any) => void): void {
+		window.addEventListener('mouseleave', callback);
 	}
 
-	private _mouseLeaveCallbackDelegate:(event:any) => void;
-	private mouseLeaveCallback(event:any=null):void
-	{
+	private removeMouseLeaveListener(type: string, callback: (event: any) => void): void {
+		window.removeEventListener('mouseleave', callback);
+	}
+
+	private _mouseLeaveCallbackDelegate: (event: any) => void;
+	private mouseLeaveCallback(event: any = null): void {
 		this.dispatchEvent(new Event(Event.MOUSE_LEAVE));
 	}
 
-
-	public enterFrame()
-	{
+	public enterFrame() {
 		PlayerGlobalLoader.executeQueue();
-		if((<AwayDisplayObjectContainer>this._stage.adaptee).numChildren==0){
+		if ((<AwayDisplayObjectContainer> this._stage.adaptee).numChildren == 0) {
 			return;
 		}
 
 		/**
 		 *  todo: order of executions should look like this:
-		 * 
+		 *
 		 * 		- timeline-pass1:
-		 * 
-		 * 				- remove Childs from timeline. 
+		 *
+		 * 				- remove Childs from timeline.
 		 * 				- dispatch REMOVED and REMOVED_FROM_STAGE
 		 * 				- update childs that still exists
 		 * 				- declare new childs (not create them yet)
 		 * 				- update currentFrame and numChildren
 		 * 				- queue mcs for framescripts
-		 * 
+		 *
 		 * 		- dispatch ENTER_FRAME (skip on first frame when timeline is played)
-		 * 
+		 *
 		 * 		- timeline-pass2:
-		 * 
+		 *
 		 * 				- add new childs + update their properties
 		 * 				- execute constructors
 		 * 				- dispatch ADDED and ADDED_TO_STAGE
-		 * 
-		 * 		- dispatch FRAME_CONSTRUCTED 
-		 * 
+		 *
+		 * 		- dispatch FRAME_CONSTRUCTED
+		 *
 		 * 		- execute framescripts
-		 * 
-		 * 		- dispatch EXIT_FRAME 
-		 * 
+		 *
+		 * 		- dispatch EXIT_FRAME
+		 *
 		 * 		- dispatch RENDER (only if stage.invalidate was called)
 		 * */
 
-	 
 		//	in FP, the first enterFrame after a swf-load is ignored:
-		if((<any>(<AwayDisplayObjectContainer>this._stage.adaptee)._children[0]).firstFrameOnSWFStart){
-			(<any>(<AwayDisplayObjectContainer>this._stage.adaptee)._children[0]).firstFrameOnSWFStart=false;
-		}
-		else{
-			this._stage.dispatchStaticBroadCastEvent(Event.ENTER_FRAME);	
-			FrameScriptManager.execute_as3_constructors_recursiv(<any>this._stage.adaptee);
+		if ((<any>(<AwayDisplayObjectContainer> this._stage.adaptee)._children[0]).firstFrameOnSWFStart) {
+			(<any>(<AwayDisplayObjectContainer> this._stage.adaptee)._children[0]).firstFrameOnSWFStart = false;
+		} else {
+			this._stage.dispatchStaticBroadCastEvent(Event.ENTER_FRAME);
+			FrameScriptManager.execute_as3_constructors_recursiv(<any> this._stage.adaptee);
 			FrameScriptManager.execute_queue();
 		}
 
@@ -258,13 +242,12 @@ export class Stage extends DisplayObjectContainer{
 		this._stage.advanceFrame();
 		OrphanManager.updateOrphans();
 
-
 		// execute pending constructors:
-		FrameScriptManager.execute_as3_constructors_recursiv(<any>this._stage.adaptee);
+		FrameScriptManager.execute_as3_constructors_recursiv(<any> this._stage.adaptee);
 
 		// broadcast FRAME_CONSTRUCTED event to all objects
 		this._stage.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
-			
+
 		// run all queued framescripts
 		FrameScriptManager.execute_queue();
 
@@ -272,20 +255,19 @@ export class Stage extends DisplayObjectContainer{
 		this._stage.dispatchStaticBroadCastEvent(Event.EXIT_FRAME);
 		FrameScriptManager.execute_queue();
 
-		if(this._sendEventRender){
+		if (this._sendEventRender) {
 			this._stage.dispatchStaticBroadCastEvent(Event.RENDER);
 			FrameScriptManager.execute_queue();
-			this._sendEventRender=false;
+			this._sendEventRender = false;
 		}
 
 	}
 
-
 	//---------------------------original as3 properties / methods:
 
-	public get mouseX () : number{
+	public get mouseX (): number {
 		//console.log("mouseX not implemented yet in flash/DisplayObject");
-		return (<AVMStage>this.adaptee).scene.getLocalMouseX(this.adaptee) | 0;
+		return (<AVMStage> this.adaptee).scene.getLocalMouseX(this.adaptee) | 0;
 	}
 
 	/**
@@ -294,16 +276,15 @@ export class Stage extends DisplayObjectContainer{
 	 *   Note: For a DisplayObject that has been rotated, the returned y coordinate will reflect the
 	 * non-rotated any.
 	 */
-	public get mouseY () : number{
+	public get mouseY (): number {
 		//console.log("mouseY not implemented yet in flash/DisplayObject");
-		return (<AVMStage>this.adaptee).scene.getLocalMouseY(this.adaptee) | 0;
+		return (<AVMStage> this.adaptee).scene.getLocalMouseY(this.adaptee) | 0;
 	}
 
-	public set accessibilityImplementation (value:any){
+	public set accessibilityImplementation (value: any) {
 		//todo: any is AccessibilityImplementation
-		console.log("textSnapshot not implemented yet in flash/Stage");
+		console.log('textSnapshot not implemented yet in flash/Stage');
 	}
-
 
 	/**
 	 * A value from the StageAlign class that specifies the alignment of the stage in
@@ -315,13 +296,12 @@ export class Stage extends DisplayObjectContainer{
 	 * calling object by calling the Security.allowDomain() method or the Security.alowInsecureDomain() method.
 	 * For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
-	public get align():StageAlign
-	{
-		return (<AVMStage>this.adaptee).align;
+	public get align(): StageAlign {
+		return (<AVMStage> this.adaptee).align;
 	}
-	public set align(value:StageAlign)
-	{
-		(<AVMStage>this.adaptee).align=value;
+
+	public set align(value: StageAlign) {
+		(<AVMStage> this.adaptee).align = value;
 	}
 
 	/**
@@ -333,32 +313,30 @@ export class Stage extends DisplayObjectContainer{
 	 *   trace(Stage.allowsFullsreen);
 	 *   </pre>
 	 */
-	public get allowsFullScreen () : boolean{
+	public get allowsFullScreen (): boolean {
 		//todo
-		console.log("allowsFullScreen not implemented yet in flash/Stage");
+		console.log('allowsFullScreen not implemented yet in flash/Stage');
 		return false;
 	}
 
-	public get allowsFullScreenInteractive () : boolean{
-		console.log("allowsFullScreen not implemented yet in flash/Stage");
+	public get allowsFullScreenInteractive (): boolean {
+		console.log('allowsFullScreen not implemented yet in flash/Stage');
 		return null;
 	}
 
-
-	public get browserZoomFactor () : number{
+	public get browserZoomFactor (): number {
 		//todo
-		console.log("browserZoomFactor not implemented yet in flash/Stage");
+		console.log('browserZoomFactor not implemented yet in flash/Stage');
 		return 0;
 	}
 
-
-	public get color():number{
-		return (<AVMStage>this.adaptee).color;
-	}
-	public set color(color:number){
-		(<AVMStage>this.adaptee).color = color;
+	public get color(): number {
+		return (<AVMStage> this.adaptee).color;
 	}
 
+	public set color(color: number) {
+		(<AVMStage> this.adaptee).color = color;
+	}
 
 	/**
 	 * Controls Flash runtime color correction for displays.
@@ -383,14 +361,15 @@ export class Stage extends DisplayObjectContainer{
 	 * Flash runtimes only compensates for differences between monitors, not for differences between input devices (camera/scanner/etc.).
 	 * The three possible values are strings with corresponding constants in the flash.display.ColorCorrection class:"default": Use the same color correction as the host system."on": Always perform color correction."off": Never perform color correction.
 	 */
-	public get colorCorrection () : string{
+	public get colorCorrection (): string {
 		//todo
-		console.log("colorCorrection not implemented yet in flash/Stage");
-		return "";
+		console.log('colorCorrection not implemented yet in flash/Stage');
+		return '';
 	}
-	public set colorCorrection (value:string){
+
+	public set colorCorrection (value: string) {
 		//todo
-		console.log("colorCorrection not implemented yet in flash/Stage");
+		console.log('colorCorrection not implemented yet in flash/Stage');
 	}
 
 	/**
@@ -402,22 +381,22 @@ export class Stage extends DisplayObjectContainer{
 	 * The three possible values are strings with corresponding constants in the flash.display.ColorCorrectionSupport class:"unsupported": Color correction is not available."defaultOn": Always performs color correction."defaultOff": Never performs color correction.
 
 	 */
-	public get colorCorrectionSupport () : string{
+	public get colorCorrectionSupport (): string {
 		//todo
-		console.log("colorCorrectionSupport not implemented yet in flash/Stage");
-		return "";
+		console.log('colorCorrectionSupport not implemented yet in flash/Stage');
+		return '';
 	}
 
-	public get contentsScaleFactor () : number{
+	public get contentsScaleFactor (): number {
 		//todo
-		console.log("contentsScaleFactor not implemented yet in flash/Stage");
+		console.log('contentsScaleFactor not implemented yet in flash/Stage');
 		return 0;
 	}
 
-	public get displayContextInfo () : string{
+	public get displayContextInfo (): string {
 		//todo
-		console.log("displayContextInfo not implemented yet in flash/Stage");
-		return "";
+		console.log('displayContextInfo not implemented yet in flash/Stage');
+		return '';
 	}
 
 	/**
@@ -473,16 +452,16 @@ export class Stage extends DisplayObjectContainer{
 	 *   if the param or embed HTML tag's allowFullScreen attribute is not set to
 	 *   true throws a security error.
 	 */
-	public get displayState () : string{
+	public get displayState (): string {
 		//todo
-		console.log("displayState not implemented yet in flash/Stage");
-		return "";
-	}
-	public set displayState (value:string) {
-		//todo
-		console.log("displayState not implemented yet in flash/Stage");
+		console.log('displayState not implemented yet in flash/Stage');
+		return '';
 	}
 
+	public set displayState (value: string) {
+		//todo
+		console.log('displayState not implemented yet in flash/Stage');
+	}
 
 	/**
 	 * The interactive object with keyboard focus; or null if focus is not set
@@ -490,16 +469,16 @@ export class Stage extends DisplayObjectContainer{
 	 * have access.
 	 * @throws	Error Throws an error if focus cannot be set to the target.
 	 */
-	public get focus () : any{
+	public get focus (): any {
 		//todo: any is InteractiveObject
 		//console.log("focus not implemented yet in flash/Stage");
 		return null;
 	}
-	public set focus (newFocus:any){
+
+	public set focus (newFocus: any) {
 		//todo: any is InteractiveObject
 		//console.log("focus not implemented yet in flash/Stage");
 	}
-
 
 	/**
 	 * Gets and sets the frame rate of the stage. The frame rate is defined as frames per second.
@@ -518,12 +497,12 @@ export class Stage extends DisplayObjectContainer{
 	 *   the Security.allowDomain() method or the Security.allowInsecureDomain() method.
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
-	public get frameRate () : number{
-		return (<AVMStage>this.adaptee).frameRate;
+	public get frameRate (): number {
+		return (<AVMStage> this.adaptee).frameRate;
 	}
 
-	public set frameRate (value:number) {
-		(<AVMStage>this.adaptee).frameRate=value;
+	public set frameRate (value: number) {
+		(<AVMStage> this.adaptee).frameRate = value;
 	}
 
 	/**
@@ -539,9 +518,9 @@ export class Stage extends DisplayObjectContainer{
 	 * stage height would be if Stage.align is set to StageAlign.TOP_LEFT
 	 * and Stage.scaleMode is set to StageScaleMode.NO_SCALE.
 	 */
-	public get fullScreenHeight () : number{
+	public get fullScreenHeight (): number {
 		//todo
-		console.log("fullScreenHeight not implemented yet in flash/Stage");
+		console.log('fullScreenHeight not implemented yet in flash/Stage');
 		return 0;
 	}
 
@@ -570,16 +549,15 @@ export class Stage extends DisplayObjectContainer{
 	 * The end user also can select within Flash Player Display Settings to turn off hardware scaling, which is enabled by default.
 	 * For more information, see www.adobe.com/go/display_settings.
 	 */
-	public get fullScreenSourceRect () : Rectangle
-	{
+	public get fullScreenSourceRect (): Rectangle {
 		//todo
-		console.log("fullScreenSourceRect not implemented yet in flash/Stage");
+		console.log('fullScreenSourceRect not implemented yet in flash/Stage');
 		return null;
 	}
-	public set fullScreenSourceRect (value: Rectangle)
-	{
+
+	public set fullScreenSourceRect (value: Rectangle) {
 		//todo
-		console.log("fullScreenSourceRect not implemented yet in flash/Stage");
+		console.log('fullScreenSourceRect not implemented yet in flash/Stage');
 	}
 
 	/**
@@ -595,27 +573,22 @@ export class Stage extends DisplayObjectContainer{
 	 * Stage.align is set to StageAlign.TOP_LEFT and
 	 * Stage.scaleMode is set to StageScaleMode.NO_SCALE.
 	 */
-	public get fullScreenWidth () : number{
+	public get fullScreenWidth (): number {
 		//todo
-		console.log("fullScreenWidth not implemented yet in flash/Stage");
+		console.log('fullScreenWidth not implemented yet in flash/Stage');
 		return 0;
 	}
 
-
-
-
-	public get mouseLock () : boolean{
+	public get mouseLock (): boolean {
 		//todo
-		console.log("mouseLock not implemented yet in flash/Stage");
+		console.log('mouseLock not implemented yet in flash/Stage');
 		return false;
 	}
-	public set mouseLock (value:boolean){
+
+	public set mouseLock (value: boolean) {
 		//todo
-		console.log("mouseLock not implemented yet in flash/Stage");
+		console.log('mouseLock not implemented yet in flash/Stage');
 	}
-
-
-
 
 	/**
 	 * A value from the StageQuality class that specifies which rendering quality is used.
@@ -646,17 +619,17 @@ export class Stage extends DisplayObjectContainer{
 	 *   the Security.allowDomain() method or the Security.allowInsecureDomain() method.
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
-	public get quality () : string{
+	public get quality (): string {
 		//todo
 		//console.log("quality not implemented yet in flash/Stage");
-		return "";
+		return '';
 
 	}
-	public set quality (value:string){
+
+	public set quality (value: string) {
 		//todo
 		//console.log("quality not implemented yet in flash/Stage");
 	}
-
 
 	/**
 	 * A value from the StageScaleMode class that specifies which scale mode to use.
@@ -679,13 +652,12 @@ export class Stage extends DisplayObjectContainer{
 	 *   the Security.allowDomain() method or the Security.allowInsecureDomain() method.
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
-	public get scaleMode():StageScaleMode
-	{
-		return (<AVMStage>this.adaptee).scaleMode;
+	public get scaleMode(): StageScaleMode {
+		return (<AVMStage> this.adaptee).scaleMode;
 	}
-	public set scaleMode(value:StageScaleMode)
-	{
-		(<AVMStage>this.adaptee).scaleMode=value;
+
+	public set scaleMode(value: StageScaleMode) {
+		(<AVMStage> this.adaptee).scaleMode = value;
 	}
 
 	/**
@@ -701,16 +673,16 @@ export class Stage extends DisplayObjectContainer{
 	 *   the Security.allowDomain() method or the Security.allowInsecureDomain() method.
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
-	public get showDefaultContextMenu () : boolean{
+	public get showDefaultContextMenu (): boolean {
 		//todo
-		release || console.log("showDefaultContextMenu not implemented yet in flash/Stage");
+		release || console.log('showDefaultContextMenu not implemented yet in flash/Stage');
 		return false;
 
-
 	}
-	public set showDefaultContextMenu (value:boolean){
+
+	public set showDefaultContextMenu (value: boolean) {
 		//todo
-		release || console.log("showDefaultContextMenu not implemented yet in flash/Stage");
+		release || console.log('showDefaultContextMenu not implemented yet in flash/Stage');
 
 	}
 
@@ -725,17 +697,16 @@ export class Stage extends DisplayObjectContainer{
 	 * area. This problem occurs in fullscreen mode and also when the keyboard opens in response to
 	 * an InteractiveObject receiving focus or invoking the requestSoftKeyboard() method.
 	 */
-	public get softKeyboardRect () : Rectangle
-	{
+	public get softKeyboardRect (): Rectangle {
 		//todo
-		console.log("softKeyboardRect not implemented yet in flash/Stage");
+		console.log('softKeyboardRect not implemented yet in flash/Stage');
 		return null;
 
 	}
 
-	public get stage3Ds () : AwayStage[]{
+	public get stage3Ds (): AwayStage[] {
 		// todo: any is stage3d
-		console.log("stage3Ds not implemented yet in flash/Stage");
+		console.log('stage3Ds not implemented yet in flash/Stage');
 		return this._stage3Ds;
 	}
 
@@ -747,15 +718,16 @@ export class Stage extends DisplayObjectContainer{
 	 *   the Security.allowDomain() method or the Security.allowInsecureDomain() method.
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
-	public get stageFocusRect () : boolean{
+	public get stageFocusRect (): boolean {
 		//todo
-		console.log("stageFocusRect not implemented yet in flash/Stage");
+		console.log('stageFocusRect not implemented yet in flash/Stage');
 		return false;
 
 	}
-	public set stageFocusRect (on:boolean){
+
+	public set stageFocusRect (on: boolean) {
 		//todo
-		console.log("stageFocusRect not implemented yet in flash/Stage");
+		console.log('stageFocusRect not implemented yet in flash/Stage');
 	}
 
 	/**
@@ -783,11 +755,12 @@ export class Stage extends DisplayObjectContainer{
 	 *   the Security.allowDomain() method or the Security.allowInsecureDomain() method.
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
-	public get stageHeight () : number{
-		return (<AVMStage>this.adaptee).stageHeight;
+	public get stageHeight (): number {
+		return (<AVMStage> this.adaptee).stageHeight;
 	}
-	public set stageHeight (value:number){
-		(<AVMStage>this.adaptee).stageHeight=value;
+
+	public set stageHeight (value: number) {
+		(<AVMStage> this.adaptee).stageHeight = value;
 	}
 
 	/**
@@ -805,9 +778,9 @@ export class Stage extends DisplayObjectContainer{
 	 * of the StageVideo object at index 0.The StageVideo object at index 2 is displayed in front
 	 * of the StageVideo object at index 1.Use the StageVideo.depth property to change this ordering.Note: AIR for TV devices support only one StageVideo object.
 	 */
-	public get stageVideos () : any[]{
+	public get stageVideos (): any[] {
 		//todo: any is StageVideo
-		console.log("stageVideos not implemented yet in flash/Stage");
+		console.log('stageVideos not implemented yet in flash/Stage');
 		return [];
 	}
 
@@ -835,11 +808,12 @@ export class Stage extends DisplayObjectContainer{
 	 *   the Security.allowDomain() method or the Security.allowInsecureDomain() method.
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
-	public get stageWidth () : number{
-		return (<AVMStage>this.adaptee).stageWidth;
+	public get stageWidth (): number {
+		return (<AVMStage> this.adaptee).stageWidth;
 	}
-	public set stageWidth (value:number){
-		(<AVMStage>this.adaptee).stageWidth=value;
+
+	public set stageWidth (value: number) {
+		(<AVMStage> this.adaptee).stageWidth = value;
 	}
 
 	/**
@@ -853,9 +827,9 @@ export class Stage extends DisplayObjectContainer{
 	 *   the Security.allowDomain() method or the Security.allowInsecureDomain() method.
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
-	public get tabChildren () : boolean{
+	public get tabChildren (): boolean {
 		//todo
-		console.log("tabChildren not implemented yet in flash/Stage");
+		console.log('tabChildren not implemented yet in flash/Stage');
 		return false;
 	}
 
@@ -865,9 +839,9 @@ export class Stage extends DisplayObjectContainer{
 	 *   exception because the Stage class does not implement this property. To avoid this, call the
 	 *   textSnapshot property of a display object container other than the Stage object.
 	 */
-	public get textSnapshot () : any{
+	public get textSnapshot (): any {
 		//todo
-		console.log("textSnapshot not implemented yet in flash/Stage");
+		console.log('textSnapshot not implemented yet in flash/Stage');
 		//todo: any is flash.text.TextSnapshot
 		return null;
 	}
@@ -895,90 +869,95 @@ export class Stage extends DisplayObjectContainer{
 	 * exitFrame event of any DisplayObject, the wmodeGPU value at
 	 * is the correct value.
 	 */
-	public get wmodeGPU () : boolean{
+	public get wmodeGPU (): boolean {
 		//todo
-		console.log("wmodeGPU not implemented yet in flash/Stage");
+		console.log('wmodeGPU not implemented yet in flash/Stage');
 		return false;
 	}
 
 	//empty functions to prevent inherited actions
 
-	public set accessibilityProperties (value:any){};//todo: any is AccessibilityImplementation
-	public set alpha (value:number){};
-	public set blendMode (value:string){};
-	public set cacheAsBitmap (value:boolean){};
-	public set contextMenu (value:any){};// todo: any is ContextMenu
-	public set filters (value:Array<any>) {};
-	public set focusRect (value:any) {};
-	public set mask (value:DisplayObject){};
-	public set mouseChildren (value:boolean){};
-	public get mouseChildren():boolean{return false;};
-	public set mouseEnabled (value:boolean){};
-	public get mouseEnabled():boolean{return false;};
-	public set numChildren (value:number){};
-	public get numChildren():number{return 0;};
-	public set width (value:number){};
-	public get width():number{return 0;};
-	public set height (value:number){};
-	public get height():number{return 0;};
-	public set opaqueBackground (value:number){};
-	public set name (value:string){};
-	public set rotation (value:number){};
-	public set rotationX (value:number){};
-	public set rotationY (value:number){};
-	public set rotationZ (value:number){};
-	public set scale9Grid (value:Rectangle){};
-	public set scaleX (value:number){};
-	public set scaleY (value:number){};
-	public set scaleZ (value:number){};
-	public set scrollRect (value:Rectangle){};
-	public set tabEnabled (value:boolean){};
-	public set tabIndex (value:number){};
-	public set transform (value:Transform){};
-	public set visible (value:boolean){};
-	public set x (value:number){};
-	public set y (value:number){};
-	public set z (value:number){};
+	public set accessibilityProperties (value: any) {}//todo: any is AccessibilityImplementation
+	public set alpha (value: number) {}
+	public set blendMode (value: string) {}
+	public set cacheAsBitmap (value: boolean) {}
+	public set contextMenu (value: any) {}// todo: any is ContextMenu
+	public set filters (value: Array<any>) {}
+	public set focusRect (value: any) {}
+	public set mask (value: DisplayObject) {}
+	public set mouseChildren (value: boolean) {}
+	public get mouseChildren(): boolean {return false;}
+	public set mouseEnabled (value: boolean) {}
+	public get mouseEnabled(): boolean {return false;}
+	public set numChildren (value: number) {}
+	public get numChildren(): number {return 0;}
+	public set width (value: number) {}
+	public get width(): number {return 0;}
+	public set height (value: number) {}
+	public get height(): number {return 0;}
+	public set opaqueBackground (value: number) {}
+	public set name (value: string) {}
+	public set rotation (value: number) {}
+	public set rotationX (value: number) {}
+	public set rotationY (value: number) {}
+	public set rotationZ (value: number) {}
+	public set scale9Grid (value: Rectangle) {}
+	public set scaleX (value: number) {}
+	public set scaleY (value: number) {}
+	public set scaleZ (value: number) {}
+	public set scrollRect (value: Rectangle) {}
+	public set tabEnabled (value: boolean) {}
+	public set tabIndex (value: number) {}
+	public set transform (value: Transform) {}
+	public set visible (value: boolean) {}
+	public set x (value: number) {}
+	public set y (value: number) {}
+	public set z (value: number) {}
 
-	public set tabChildren (value:boolean){}
-	
+	public set tabChildren (value: boolean) {}
 
 	// 80pro: todo: this was added because otherwise avm2 cant find these on Stage
 	//	but it should find them anyway, because its inheriting from Sprite...
 	//____________________________________
-	public addChild (child:DisplayObject) : DisplayObject {
+	public addChild (child: DisplayObject): DisplayObject {
 		child.dispatch_ADDED_TO_STAGE();
-		let returnChild=super.addChild(child);
-		child.adaptee.hasDispatchedAddedToStage=true;
+		const returnChild = super.addChild(child);
+		child.adaptee.hasDispatchedAddedToStage = true;
 		child.dispatchStaticEvent(Event.ADDED_TO_STAGE, child);
 		return returnChild;
 	}
-	public addChildAt (child:DisplayObject, index:number) : DisplayObject {
+
+	public addChildAt (child: DisplayObject, index: number): DisplayObject {
 		child.dispatch_ADDED_TO_STAGE();
-		let returnChild=super.addChildAt(child, index);
-		child.adaptee.hasDispatchedAddedToStage=true;
+		const returnChild = super.addChildAt(child, index);
+		child.adaptee.hasDispatchedAddedToStage = true;
 		child.dispatchStaticEvent(Event.ADDED_TO_STAGE, child);
 		return returnChild;
 	}
-	public removeChildAt (index:number) : DisplayObject {
+
+	public removeChildAt (index: number): DisplayObject {
 		return super.removeChildAt(index);
 	}
-	public swapChildrenAt (index:number,index2:number) : void {return super.swapChildrenAt(index, index2);}
-	
-	public setChildIndex (child:DisplayObject, index:number) : DisplayObject {return null;}
+
+	public swapChildrenAt (index: number,index2: number): void {return super.swapChildrenAt(index, index2);}
+
+	public setChildIndex (child: DisplayObject, index: number): DisplayObject {return null;}
 	public addEventListener(type: string, listener: any, useCapture: boolean = false,
 		priority: number = 0, useWeakReference: boolean = false): void{
-			super.addEventListener(type, listener, useCapture = false, priority, useWeakReference);
-		}
+		super.addEventListener(type, listener, useCapture = false, priority, useWeakReference);
+	}
+
 	public hasEventListener(type: string): boolean {
-		return super.hasEventListener(type);}
-	public willTrigger(){return super.willTrigger();}
+		return super.hasEventListener(type);
+	}
+
+	public willTrigger() {return super.willTrigger();}
 	public dispatchEvent(event: Event): boolean {
-		return super.dispatchEvent(event);}
+		return super.dispatchEvent(event);
+	}
 	//____________________________________
 
-	public get loaderInfo():LoaderInfo
-	{
+	public get loaderInfo(): LoaderInfo {
 		return this.getChildAt(0).loaderInfo;
 	}
 
@@ -997,8 +976,8 @@ export class Stage extends DisplayObjectContainer{
 	 * or to display objects from a security domain that has been granted permission via the
 	 * Security.allowDomain() method.
 	 */
-	public invalidate (){
-		this._sendEventRender=true;
+	public invalidate () {
+		this._sendEventRender = true;
 	}
 
 	/**
@@ -1009,11 +988,10 @@ export class Stage extends DisplayObjectContainer{
 	 * @return	true if the object that has focus belongs to a security sandbox to which
 	 *   the SWF file does not have access.
 	 */
-	public isFocusInaccessible () : boolean{
+	public isFocusInaccessible (): boolean {
 		//todo
-		console.log("isFocusInaccessible not implemented yet in flash/Stage");
+		console.log('isFocusInaccessible not implemented yet in flash/Stage');
 		return false;
 	}
-
 
 }

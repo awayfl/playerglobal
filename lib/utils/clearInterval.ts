@@ -6,4 +6,3 @@
  * @playerversion	Flash 9
  */
 export const clearInterval = window.clearInterval;
-

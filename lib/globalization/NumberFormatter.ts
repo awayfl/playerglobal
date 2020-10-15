@@ -18,8 +18,7 @@
  * different users can see different formatting results, even when using the same locale ID.
  * </p>
  */
-export class NumberFormatter
-{
+export class NumberFormatter {
 	/**
 	 * The name of the actual locale ID used by this NumberFormatter object.
 	 *
@@ -36,9 +35,9 @@ export class NumberFormatter
 	 * explicit locale ID name rather than using LocaleID.DEFAULT your application would not
 	 * retrieve those customized settings.
 	 */
-	public get actualLocaleIDName () : string{
-		console.log("actualLocaleIDName not implemented yet in flash/NumberFormatter");
-		return "";
+	public get actualLocaleIDName (): string {
+		console.log('actualLocaleIDName not implemented yet in flash/NumberFormatter');
+		return '';
 
 	}
 
@@ -51,13 +50,14 @@ export class NumberFormatter
 	 * LastOperationStatus class.
 	 * @throws	TypeError if this property is assigned a null value.
 	 */
-	public get decimalSeparator () : string{
-		console.log("decimalSeparator not implemented yet in flash/NumberFormatter");
-		return "";
+	public get decimalSeparator (): string {
+		console.log('decimalSeparator not implemented yet in flash/NumberFormatter');
+		return '';
 
 	}
-	public set decimalSeparator (value:string){
-		console.log("decimalSeparator not implemented yet in flash/NumberFormatter");
+
+	public set decimalSeparator (value: string) {
+		console.log('decimalSeparator not implemented yet in flash/NumberFormatter');
 
 	}
 
@@ -71,13 +71,14 @@ export class NumberFormatter
 	 * LastOperationStatus class.
 	 * @throws	TypeError if this property is assigned a null value.
 	 */
-	public get digitsType () : number{
-		console.log("digitsType not implemented yet in flash/NumberFormatter");
+	public get digitsType (): number {
+		console.log('digitsType not implemented yet in flash/NumberFormatter');
 		return 0;
 
 	}
-	public set digitsType (value:number){
-		console.log("digitsType not implemented yet in flash/NumberFormatter");
+
+	public set digitsType (value: number) {
+		console.log('digitsType not implemented yet in flash/NumberFormatter');
 
 	}
 
@@ -91,13 +92,14 @@ export class NumberFormatter
 	 * is set to:LastOperationStatus.NO_ERROROtherwise the lastOperationStatus property is set to one of the constants defined in the
 	 * LastOperationStatus class.
 	 */
-	public get fractionalDigits () : number{
-		console.log("fractionalDigits not implemented yet in flash/NumberFormatter");
+	public get fractionalDigits (): number {
+		console.log('fractionalDigits not implemented yet in flash/NumberFormatter');
 		return 0;
 
 	}
-	public set fractionalDigits (value:number){
-		console.log("fractionalDigits not implemented yet in flash/NumberFormatter");
+
+	public set fractionalDigits (value: number) {
+		console.log('fractionalDigits not implemented yet in flash/NumberFormatter');
 
 	}
 
@@ -124,13 +126,14 @@ export class NumberFormatter
 	 * LastOperationStatus class.
 	 * @throws	TypeError if this property is assigned a null value.
 	 */
-	public get groupingPattern () : string{
-		console.log("groupingPattern not implemented yet in flash/NumberFormatter");
-		return "";
+	public get groupingPattern (): string {
+		console.log('groupingPattern not implemented yet in flash/NumberFormatter');
+		return '';
 
 	}
-	public set groupingPattern (value:string){
-		console.log("groupingPattern not implemented yet in flash/NumberFormatter");
+
+	public set groupingPattern (value: string) {
+		console.log('groupingPattern not implemented yet in flash/NumberFormatter');
 
 	}
 
@@ -145,13 +148,14 @@ export class NumberFormatter
 	 * LastOperationStatus class.
 	 * @throws	TypeError if this property is assigned a null value.
 	 */
-	public get groupingSeparator () : string{
-		console.log("groupingSeparator not implemented yet in flash/NumberFormatter");
-		return "";
+	public get groupingSeparator (): string {
+		console.log('groupingSeparator not implemented yet in flash/NumberFormatter');
+		return '';
 
 	}
-	public set groupingSeparator (value:string){
-		console.log("groupingSeparator not implemented yet in flash/NumberFormatter");
+
+	public set groupingSeparator (value: string) {
+		console.log('groupingSeparator not implemented yet in flash/NumberFormatter');
 
 	}
 
@@ -160,9 +164,9 @@ export class NumberFormatter
 	 * The lastOperationStatus property is set whenever the constructor or a method of
 	 * this class is called, or another property is set. For the possible values see the description for each method.
 	 */
-	public get lastOperationStatus () : string{
-		console.log("lastOperationStatus not implemented yet in flash/NumberFormatter");
-		return "";
+	public get lastOperationStatus (): string {
+		console.log('lastOperationStatus not implemented yet in flash/NumberFormatter');
+		return '';
 
 	}
 
@@ -182,13 +186,14 @@ export class NumberFormatter
 	 * LastOperationStatus class.
 	 * @throws	TypeError if this property is assigned a null value.
 	 */
-	public get leadingZero () : boolean{
-		console.log("leadingZero not implemented yet in flash/NumberFormatter");
+	public get leadingZero (): boolean {
+		console.log('leadingZero not implemented yet in flash/NumberFormatter');
 		return false;
 
 	}
-	public set leadingZero (value:boolean){
-		console.log("leadingZero not implemented yet in flash/NumberFormatter");
+
+	public set leadingZero (value: boolean) {
+		console.log('leadingZero not implemented yet in flash/NumberFormatter');
 
 	}
 
@@ -204,13 +209,14 @@ export class NumberFormatter
 	 * LastOperationStatus class.
 	 * @throws	ArgumentError if the assigned value is not a number between 0 and 4.
 	 */
-	public get negativeNumberFormat () : number{
-		console.log("negativeNumberFormat not implemented yet in flash/NumberFormatter");
+	public get negativeNumberFormat (): number {
+		console.log('negativeNumberFormat not implemented yet in flash/NumberFormatter');
 		return 0;
 
 	}
-	public set negativeNumberFormat (value:number){
-		console.log("negativeNumberFormat not implemented yet in flash/NumberFormatter");
+
+	public set negativeNumberFormat (value: number) {
+		console.log('negativeNumberFormat not implemented yet in flash/NumberFormatter');
 
 	}
 
@@ -225,13 +231,14 @@ export class NumberFormatter
 	 * LastOperationStatus class.
 	 * @throws	MemoryError if the system cannot allocate enough internal memory.
 	 */
-	public get negativeSymbol () : string{
-		console.log("negativeSymbol not implemented yet in flash/NumberFormatter");
-		return "";
+	public get negativeSymbol (): string {
+		console.log('negativeSymbol not implemented yet in flash/NumberFormatter');
+		return '';
 
 	}
-	public set negativeSymbol (value:string){
-		console.log("negativeSymbol not implemented yet in flash/NumberFormatter");
+
+	public set negativeSymbol (value: string) {
+		console.log('negativeSymbol not implemented yet in flash/NumberFormatter');
 
 	}
 
@@ -242,9 +249,9 @@ export class NumberFormatter
 	 * The actual locale used can differ from the requested locale when a fallback locale is applied.
 	 * The name of the actual locale can be retrieved using the actualLocaleIDName property.
 	 */
-	public get requestedLocaleIDName () : string{
-		console.log("requestedLocaleIDName not implemented yet in flash/NumberFormatter");
-		return "";
+	public get requestedLocaleIDName (): string {
+		console.log('requestedLocaleIDName not implemented yet in flash/NumberFormatter');
+		return '';
 
 	}
 
@@ -263,13 +270,14 @@ export class NumberFormatter
 	 * LastOperationStatus class.
 	 * @throws	TypeError if this property is assigned a null value.
 	 */
-	public get trailingZeros () : boolean{
-		console.log("trailingZeros not implemented yet in flash/NumberFormatter");
+	public get trailingZeros (): boolean {
+		console.log('trailingZeros not implemented yet in flash/NumberFormatter');
 		return false;
 
 	}
-	public set trailingZeros (value:boolean){
-		console.log("trailingZeros not implemented yet in flash/NumberFormatter");
+
+	public set trailingZeros (value: boolean) {
+		console.log('trailingZeros not implemented yet in flash/NumberFormatter');
 
 	}
 
@@ -284,13 +292,14 @@ export class NumberFormatter
 	 * is set to:LastOperationStatus.NO_ERROROtherwise the lastOperationStatus property is set to one of the constants defined in the
 	 * LastOperationStatus class.
 	 */
-	public get useGrouping () : boolean{
-		console.log("useGrouping not implemented yet in flash/NumberFormatter");
+	public get useGrouping (): boolean {
+		console.log('useGrouping not implemented yet in flash/NumberFormatter');
 		return false;
 
 	}
-	public set useGrouping (value:boolean){
-		console.log("useGrouping not implemented yet in flash/NumberFormatter");
+
+	public set useGrouping (value: boolean) {
+		console.log('useGrouping not implemented yet in flash/NumberFormatter');
 
 	}
 
@@ -306,9 +315,9 @@ export class NumberFormatter
 	 * @return	A formatted number string.
 	 * @throws	MemoryError for any internal memory allocation problems.
 	 */
-	public formatInt (value:number) : string{
-		console.log("formatInt not implemented yet in flash/NumberFormatter");
-		return "";
+	public formatInt (value: number): string {
+		console.log('formatInt not implemented yet in flash/NumberFormatter');
+		return '';
 
 	}
 
@@ -329,9 +338,9 @@ export class NumberFormatter
 	 * @return	A formatted number string.
 	 * @throws	MemoryError if there are any internal memory allocation problems.
 	 */
-	public formatNumber (value:number) : string{
-		console.log("formatNumber not implemented yet in flash/NumberFormatter");
-		return "";
+	public formatNumber (value: number): string {
+		console.log('formatNumber not implemented yet in flash/NumberFormatter');
+		return '';
 
 	}
 
@@ -347,9 +356,9 @@ export class NumberFormatter
 	 * @return	A formatted number string.
 	 * @throws	MemoryError if there are any internal memory allocation problems.
 	 */
-	public formatUint (value:number) : string{
-		console.log("formatUint not implemented yet in flash/NumberFormatter");
-		return "";
+	public formatUint (value: number): string {
+		console.log('formatUint not implemented yet in flash/NumberFormatter');
+		return '';
 
 	}
 
@@ -360,8 +369,8 @@ export class NumberFormatter
 	 * LastOperationStatus class.
 	 * @return	A vector of strings containing all of the locale ID names supported by this class.
 	 */
-	public static getAvailableLocaleIDNames () : string[]{
-		console.log("getAvailableLocaleIDNames not implemented yet in flash/NumberFormatter");
+	public static getAvailableLocaleIDNames (): string[] {
+		console.log('getAvailableLocaleIDNames not implemented yet in flash/NumberFormatter');
 		return [];
 
 	}
@@ -383,7 +392,7 @@ export class NumberFormatter
 	 * @param	requestedLocaleIDName	The preferred locale ID name to use when determining number formats.
 	 * @throws	TypeError if the requestedLocaleIDName is null
 	 */
-	constructor (requestedLocaleIDName:string){
+	constructor (requestedLocaleIDName: string) {
 
 	}
 
@@ -407,9 +416,9 @@ export class NumberFormatter
 	 * LastOperationStatus class.
 	 * @throws	TypeError if the parseString is null
 	 */
-	public parse (parseString:string) : any{
+	public parse (parseString: string): any {
 		// todo: any is NumberParseResult
-		console.log("parse not implemented yet in flash/NumberFormatter");
+		console.log('parse not implemented yet in flash/NumberFormatter');
 		return null;
 
 	}
@@ -429,9 +438,8 @@ export class NumberFormatter
 	 * LastOperationStatus class.
 	 * @throws	TypeError if the parseString is null
 	 */
-	public parseNumber (parseString:string) : number{
-		console.log("parseNumber not implemented yet in flash/NumberFormatter");
+	public parseNumber (parseString: string): number {
+		console.log('parseNumber not implemented yet in flash/NumberFormatter');
 		return 0;
 	}
 }
-

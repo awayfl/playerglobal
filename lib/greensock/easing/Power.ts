@@ -1,3 +1,3 @@
 export class Power {
-	public static easeOut:string="easeout"
+	public static easeOut: string='easeout'
 }

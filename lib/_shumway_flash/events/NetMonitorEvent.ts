@@ -1,4 +1,4 @@
-import { Event } from "./Event";
+import { Event } from './Event';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -18,20 +18,20 @@ import { Event } from "./Event";
 // Class: NetMonitorEvent
 export class NetMonitorEvent extends Event {
 
-  static classInitializer: any = null;
+	static classInitializer: any = null;
 
-  static classSymbols: string [] = null;
-  static instanceSymbols: string [] = null;
+	static classSymbols: string [] = null;
+	static instanceSymbols: string [] = null;
 
-  netStream: NetStream;
+	netStream: NetStream;
 
-  constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-              netStream: NetStream = null) {
-    super(type, bubbles, cancelable);
-    // TODO: coerce
-    this.netStream = netStream;
-  }
+	constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		netStream: NetStream = null) {
+		super(type, bubbles, cancelable);
+		// TODO: coerce
+		this.netStream = netStream;
+	}
 
-  // JS -> AS Bindings
-  static NET_STREAM_CREATE: string = "netStreamCreate";
+	// JS -> AS Bindings
+	static NET_STREAM_CREATE: string = 'netStreamCreate';
 }

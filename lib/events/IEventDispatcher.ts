@@ -1,1 +1,1 @@
-export {IEventDispatcher} from "@awayjs/core";
+export { IEventDispatcher } from '@awayjs/core';

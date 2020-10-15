@@ -1,4 +1,4 @@
-import { ByteArray } from "./ByteArray";
+import { ByteArray } from './ByteArray';
 
 /**
  * The IDataOutput interface provides a set of methods for writing binary data.
@@ -19,14 +19,14 @@ export interface IDataOutput
 	 * The byte order for the data, either the BIG_ENDIAN or LITTLE_ENDIAN
 	 * constant from the Endian class.
 	 */
-	endian : string;
+	endian: string;
 	/*function set endian (type:String)*/
 
 	/**
 	 * Used to determine whether the AMF3 or AMF0 format is used when writing or reading binary data using the
 	 * writeObject() method. The value is a constant from the ObjectEncoding class.
 	 */
-	objectEncoding : number;
+	objectEncoding: number;
 	/*function set objectEncoding (version:uint)*/
 
 	/**
@@ -36,7 +36,7 @@ export interface IDataOutput
 	 *   1 is written; if false, 0 is written.
 	 * @internal	throws IOError An I/O error occurred?
 	 */
-	writeBoolean (value:boolean)
+	writeBoolean (value: boolean)
 
 	/**
 	 * Writes a byte.
@@ -45,7 +45,7 @@ export interface IDataOutput
 	 * @param	value	A byte value as an integer.
 	 * @internal	throws IOError An I/O error occurred?
 	 */
-	writeByte (value:number)
+	writeByte (value: number)
 
 	/**
 	 * Writes a sequence of bytes from the
@@ -64,28 +64,28 @@ export interface IDataOutput
 	 * of the bytes array.
 	 * @internal	throws IOError An I/O error occurred?
 	 */
-	writeBytes (bytes:ByteArray, offset:number, length:number)
+	writeBytes (bytes: ByteArray, offset: number, length: number)
 
 	/**
 	 * Writes an IEEE 754 double-precision (64-bit) floating point number.
 	 * @param	value	A double-precision (64-bit) floating point number.
 	 * @internal	throws IOError An I/O error occurred?
 	 */
-	writeDouble (value:number)
+	writeDouble (value: number)
 
 	/**
 	 * Writes an IEEE 754 single-precision (32-bit) floating point number.
 	 * @param	value	A single-precision (32-bit) floating point number.
 	 * @internal	throws IOError An I/O error occurred?
 	 */
-	writeFloat (value:number)
+	writeFloat (value: number)
 
 	/**
 	 * Writes a 32-bit signed integer.
 	 * @param	value	A byte value as a signed integer.
 	 * @internal	throws IOError An I/O error occurred?
 	 */
-	writeInt (value:number)
+	writeInt (value: number)
 
 	/**
 	 * Writes a multibyte string to the file stream, byte stream, or byte array, using the specified character set.
@@ -94,7 +94,7 @@ export interface IDataOutput
 	 *   include "shift-jis", "cn-gb", "iso-8859-1", and others.
 	 *   For a complete list, see Supported Character Sets.
 	 */
-	writeMultiByte (value:string, charSet:string)
+	writeMultiByte (value: string, charSet: string)
 
 	/**
 	 * Writes an object to the file stream, byte stream, or byte array, in AMF serialized
@@ -102,7 +102,7 @@ export interface IDataOutput
 	 * @param	object	The object to be serialized.
 	 * @internal	throws IOError An I/O error occurred?
 	 */
-	writeObject (object:any)
+	writeObject (object: any)
 
 	/**
 	 * Writes a 16-bit integer. The low 16 bits of the parameter are used;
@@ -110,14 +110,14 @@ export interface IDataOutput
 	 * @param	value	A byte value as an integer.
 	 * @internal	throws IOError An I/O error occurred?
 	 */
-	writeShort (value:number)
+	writeShort (value: number)
 
 	/**
 	 * Writes a 32-bit unsigned integer.
 	 * @param	value	A byte value as an unsigned integer.
 	 * @internal	throws IOError An I/O error occurred?
 	 */
-	writeUnsignedInt (value:number)
+	writeUnsignedInt (value: number)
 
 	/**
 	 * Writes a UTF-8 string to the file stream, byte stream, or byte array. The length of the UTF-8 string in bytes
@@ -128,7 +128,7 @@ export interface IDataOutput
 	 * @throws	RangeError If the length is larger than
 	 *   65535.
 	 */
-	writeUTF (value:string)
+	writeUTF (value: string)
 
 	/**
 	 * Writes a UTF-8 string. Similar to writeUTF(),
@@ -136,6 +136,5 @@ export interface IDataOutput
 	 * @param	value	The string value to be written.
 	 * @internal	throws IOError An I/O error occurred?
 	 */
-	writeUTFBytes (value:string)
+	writeUTFBytes (value: string)
 }
-

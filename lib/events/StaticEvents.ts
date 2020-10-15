@@ -1,5 +1,5 @@
 
-export class StaticEvents{
-	
-	public static events:any={};
+export class StaticEvents {
+
+	public static events: any={};
 }

@@ -1,4 +1,4 @@
-import { Event } from "./Event";
+import { Event } from './Event';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -18,19 +18,19 @@ import { Event } from "./Event";
 // Class: SyncEvent
 export class SyncEvent extends Event {
 
-  static classInitializer: any = null;
+	static classInitializer: any = null;
 
-  static classSymbols: string [] = null;
-  static instanceSymbols: string [] = null;
-  changeList: any[];
+	static classSymbols: string [] = null;
+	static instanceSymbols: string [] = null;
+	changeList: any[];
 
-  constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-              changeList: any [] = null) {
-    super(type, bubbles, cancelable);
-    // TODO: coerce
-    this.changeList = changeList;
-  }
+	constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		changeList: any [] = null) {
+		super(type, bubbles, cancelable);
+		// TODO: coerce
+		this.changeList = changeList;
+	}
 
-  // JS -> AS Bindings
-  static SYNC: string = "sync";
+	// JS -> AS Bindings
+	static SYNC: string = 'sync';
 }

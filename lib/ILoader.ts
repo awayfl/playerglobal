@@ -3,7 +3,7 @@ import { DisplayObject } from './display/DisplayObject';
 
 export interface ILoader
 {
-    stage:Stage;
+	stage: Stage;
 
-    content:DisplayObject;
+	content: DisplayObject;
 }

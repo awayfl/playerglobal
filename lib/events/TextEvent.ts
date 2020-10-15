@@ -1,6 +1,6 @@
-import { release, notImplemented } from "@awayfl/swf-loader";
+import { release, notImplemented } from '@awayfl/swf-loader';
 
-import { Event } from "./Event";
+import { Event } from './Event';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -20,40 +20,41 @@ import { Event } from "./Event";
 // Class: TextEvent
 export class TextEvent extends Event {
 
-  static classInitializer: any = null;
+	static classInitializer: any = null;
 
-  static classSymbols: string [] = null;
-  static instanceSymbols: string [] = null;
+	static classSymbols: string [] = null;
+	static instanceSymbols: string [] = null;
 
-  constructor(type: string, bubbles: boolean, cancelable: boolean, text: string) {
-    super(type, bubbles, cancelable);
-    this._text = text;
-  }
+	constructor(type: string, bubbles: boolean, cancelable: boolean, text: string) {
+		super(type, bubbles, cancelable);
+		this._text = text;
+	}
 
-  static LINK: string = "link";
-  static TEXT_INPUT: string = "textInput";
+	static LINK: string = 'link';
+	static TEXT_INPUT: string = 'textInput';
 
-  _text: string;
+	_text: string;
 
-  get text(): string {
-    return this._text;
-  }
-    set text(value: string) {
-    this._text = value;
-  }
+	get text(): string {
+		return this._text;
+	}
 
-  clone(): Event {
-    var textEvent = new TextEvent(this.type, this.bubbles,
-                                                                    this.cancelable, this.text);
-    //this.copyNativeData(textEvent);
-    return textEvent;
-  }
+	set text(value: string) {
+		this._text = value;
+	}
 
-  toString(): string {
-    return this.formatToString('TextEvent', 'type', 'bubbles', 'cancelable', 'text');
-  }
+	clone(): Event {
+		const textEvent = new TextEvent(this.type, this.bubbles,
+			this.cancelable, this.text);
+		//this.copyNativeData(textEvent);
+		return textEvent;
+	}
 
-  copyNativeData(event: TextEvent): void {
-    release || notImplemented("public flash.events.TextEvent::copyNativeData");
-  }
+	toString(): string {
+		return this.formatToString('TextEvent', 'type', 'bubbles', 'cancelable', 'text');
+	}
+
+	copyNativeData(event: TextEvent): void {
+		release || notImplemented('public flash.events.TextEvent::copyNativeData');
+	}
 }

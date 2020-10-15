@@ -1,15 +1,15 @@
-import { ASObject } from "../../avm2/nat";
-import { IDynamicPropertyOutput } from "./IDynamicPropertyOutput";
+import { ASObject } from '../../avm2/nat';
+import { IDynamicPropertyOutput } from './IDynamicPropertyOutput';
 
 /**
  * Copyright 2014 Mozilla Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,11 +18,11 @@ import { IDynamicPropertyOutput } from "./IDynamicPropertyOutput";
  */
 // Class: IDynamicPropertyWriter
 export interface IDynamicPropertyWriter {
-  
-  // JS -> AS Bindings
-  
-  writeDynamicProperties: (obj: ASObject, output: IDynamicPropertyOutput) => void;
-  
-  // AS -> JS Bindings
-  
+
+	// JS -> AS Bindings
+
+	writeDynamicProperties: (obj: ASObject, output: IDynamicPropertyOutput) => void;
+
+	// AS -> JS Bindings
+
 }

@@ -1,4 +1,4 @@
-import { ASObject } from "../../avm2/nat";
+import { ASObject } from '../../avm2/nat';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -18,16 +18,16 @@ import { ASObject } from "../../avm2/nat";
 // Class: TextDisplayMode
 export class TextDisplayMode extends ASObject {
 
-  static classInitializer: any = null;
-  static classSymbols: string [] = null;
-  static instanceSymbols: string [] = null;
+	static classInitializer: any = null;
+	static classSymbols: string [] = null;
+	static instanceSymbols: string [] = null;
 
-  constructor() {
-    super();
-  }
+	constructor() {
+		super();
+	}
 
-  // JS -> AS Bindings
-  static LCD: string = "lcd";
-  static CRT: string = "crt";
-  static DEFAULT: string = "default";
+	// JS -> AS Bindings
+	static LCD: string = 'lcd';
+	static CRT: string = 'crt';
+	static DEFAULT: string = 'default';
 }

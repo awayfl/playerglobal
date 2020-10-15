@@ -6,8 +6,7 @@
  * which support E4X (ECMAScript for XML).
  * The XMLNode class is present for backward compatibility.
  */
-export class XMLNode
-{
+export class XMLNode {
 	/**
 	 * Creates a new XMLNode object. You must use the constructor to create an XMLNode object before you
 	 * call any of the methods of the XMLNode class.
@@ -16,20 +15,21 @@ export class XMLNode
 	 * @param	type	The node type: either 1 for an XML element or 3 for a text node.
 	 * @param	value	The XML text parsed to create the new XMLNode object.
 	 */
-	constructor (type:number, value:string){
+	constructor (type: number, value: string) {
 	}
 
 	// for AVM1:
-	public axCallPublicProperty(value1:any, value2:any):any{
-		return null;
-	}
-	public axGetPublicProperty(value:any):any{
-		return null;
-	}
-	public axSetPublicProperty(value:any, value2:any):any{
+	public axCallPublicProperty(value1: any, value2: any): any {
 		return null;
 	}
 
+	public axGetPublicProperty(value: any): any {
+		return null;
+	}
+
+	public axSetPublicProperty(value: any, value2: any): any {
+		return null;
+	}
 
 	/**
 	 * Evaluates the specified XMLDocument object and references the first child in the parent node's child list.
@@ -38,18 +38,19 @@ export class XMLNode
 	 * to manipulate child nodes; use the appendChild(), insertBefore(), and
 	 * removeNode() methods to manipulate child nodes.
 	 */
-	public firstChild : XMLNode;
+	public firstChild: XMLNode;
 
-	public removeChild(child:any){
+	public removeChild(child: any) {
 
 	}
+
 	/**
 	 * An XMLNode value that references the last child in the node's child list. The
 	 * XMLNode.lastChild property is null if the node does not have children.
 	 * This property cannot be used to manipulate child nodes; use the appendChild(),
 	 * insertBefore(), and removeNode() methods to manipulate child nodes.
 	 */
-	public lastChild : XMLNode;
+	public lastChild: XMLNode;
 
 	/**
 	 * An XMLNode value that references the next sibling in the parent node's child list. This property is
@@ -57,7 +58,7 @@ export class XMLNode
 	 * manipulate child nodes; use the appendChild(), insertBefore(), and
 	 * removeNode() methods to manipulate child nodes.
 	 */
-	public nextSibling : XMLNode;
+	public nextSibling: XMLNode;
 
 	/**
 	 * A string representing the node name of the XMLNode object. If the XMLNode object is an XML
@@ -66,7 +67,7 @@ export class XMLNode
 	 * of an HTML TITLE tag. If the XMLNode object is a text node
 	 * (nodeType == 3), nodeName is null.
 	 */
-	public nodeName : string;
+	public nodeName: string;
 
 	/**
 	 * A nodeType constant value, either XMLNodeType.ELEMENT_NODE for an XML element or
@@ -78,14 +79,14 @@ export class XMLNode
 	 * constant1ELEMENT_NODE3TEXT_NODE5ENTITY_REFERENCE_NODE7PROCESSING_INSTRUCTION_NODE9DOCUMENT_NODE11DOCUMENT_FRAGMENT_NODEIn Flash Player, the built-in XMLNode class only supports XMLNodeType.ELEMENT_NODE and
 	 * XMLNodeType.TEXT_NODE.
 	 */
-	public nodeType : number;
+	public nodeType: number;
 
 	/**
 	 * The node value of the XMLDocument object. If the XMLDocument object is a text node, the nodeType
 	 * is 3, and the nodeValue is the text of the node. If the XMLDocument object is an XML element
 	 * (nodeType is 1), nodeValue is null and read-only.
 	 */
-	public nodeValue : string;
+	public nodeValue: string;
 
 	/**
 	 * An XMLNode value that references the parent node of the specified XML object, or returns
@@ -93,7 +94,7 @@ export class XMLNode
 	 * manipulate child nodes; use the appendChild(), insertBefore(), and
 	 * removeNode() methods to manipulate child nodes.
 	 */
-	public parentNode : XMLNode;
+	public parentNode: XMLNode;
 
 	/**
 	 * An XMLNode value that references the previous sibling in the parent node's child list.
@@ -101,7 +102,7 @@ export class XMLNode
 	 * cannot be used to manipulate child nodes; use the appendChild(),
 	 * insertBefore(), and removeNode() methods to manipulate child nodes.
 	 */
-	public previousSibling : XMLNode;
+	public previousSibling: XMLNode;
 
 	/**
 	 * An object containing all of the attributes of the specified XMLNode instance. The
@@ -114,13 +115,13 @@ export class XMLNode
 	 *
 	 *   var myColor:String = doc.firstChild.attributes.color
 	 */
-	public get attributes () : any{
-		console.log("attributes not implemented yet in flash/XMLNode");
+	public get attributes (): any {
+		console.log('attributes not implemented yet in flash/XMLNode');
 		return null;
 	}
 
-	public set attributes (value:any){
-		console.log("attributes not implemented yet in flash/XMLNode");
+	public set attributes (value: any) {
+		console.log('attributes not implemented yet in flash/XMLNode');
 	}
 
 	/**
@@ -131,8 +132,8 @@ export class XMLNode
 	 *
 	 *   This property is undefined for text nodes (nodeType == 3).
 	 */
-	public get childNodes () : any[]{
-		console.log("childNodes not implemented yet in flash/XMLNode");
+	public get childNodes (): any[] {
+		console.log('childNodes not implemented yet in flash/XMLNode');
 		return [];
 	}
 
@@ -147,9 +148,9 @@ export class XMLNode
 	 *   the XML node object. The nodeName property returns the full name
 	 *   (including the prefix and the local name).
 	 */
-	public get localName () : string{
-		console.log("localName not implemented yet in flash/XMLNode");
-		return "";
+	public get localName (): string {
+		console.log('localName not implemented yet in flash/XMLNode');
+		return '';
 	}
 
 	/**
@@ -166,9 +167,9 @@ export class XMLNode
 	 * that node is an empty string ("").You can use the getNamespaceForPrefix() method to identify the namespace associated with a
 	 * specific prefix. The namespaceURI property returns the prefix associated with the node name.
 	 */
-	public get namespaceURI () : string{
-		console.log("namespaceURI not implemented yet in flash/XMLNode");
-		return "";
+	public get namespaceURI (): string {
+		console.log('namespaceURI not implemented yet in flash/XMLNode');
+		return '';
 	}
 
 	/**
@@ -180,9 +181,9 @@ export class XMLNode
 	 *   (including the prefix and the  local name). You can access the local name portion of the
 	 *   element's name via the localName property.
 	 */
-	public get prefix () : string{
-		console.log("prefix not implemented yet in flash/XMLNode");
-		return "";
+	public get prefix (): string {
+		console.log('prefix not implemented yet in flash/XMLNode');
+		return '';
 	}
 
 	/**
@@ -195,8 +196,8 @@ export class XMLNode
 	 * @param	node	An XMLNode that represents the node to be moved from its current location to the child
 	 *   list of the my_xml object.
 	 */
-	public appendChild (node:XMLNode){
-		console.log("appendChild not implemented yet in flash/XMLNode");
+	public appendChild (node: XMLNode) {
+		console.log('appendChild not implemented yet in flash/XMLNode');
 	}
 
 	/**
@@ -211,8 +212,8 @@ export class XMLNode
 	 * @param	deep	A Boolean value; if set to true, the children of the specified XML object will be recursively cloned.
 	 * @return	An XMLNode Object.
 	 */
-	public cloneNode (deep:boolean) : XMLNode{
-		console.log("cloneNode not implemented yet in flash/XMLNode");
+	public cloneNode (deep: boolean): XMLNode {
+		console.log('cloneNode not implemented yet in flash/XMLNode');
 		return null;
 	}
 
@@ -229,9 +230,9 @@ export class XMLNode
 	 * @return	The namespace that is associated with the specified prefix.
 	 * @refpath
 	 */
-	public getNamespaceForPrefix (prefix:string) : string{
-		console.log("getNamespaceForPrefix not implemented yet in flash/XMLNode");
-		return "";
+	public getNamespaceForPrefix (prefix: string): string {
+		console.log('getNamespaceForPrefix not implemented yet in flash/XMLNode');
+		return '';
 	}
 
 	/**
@@ -248,9 +249,9 @@ export class XMLNode
 	 * @param	ns	The namespace URI for which the method returns the associated prefix.
 	 * @return	The prefix associated with the specified namespace.
 	 */
-	public getPrefixForNamespace (ns:string) : string{
-		console.log("getPrefixForNamespace not implemented yet in flash/XMLNode");
-		return "";
+	public getPrefixForNamespace (ns: string): string {
+		console.log('getPrefixForNamespace not implemented yet in flash/XMLNode');
+		return '';
 	}
 
 	/**
@@ -259,8 +260,8 @@ export class XMLNode
 	 * @return	Returns true if the
 	 *   specified XMLNode object has child nodes; otherwise, false.
 	 */
-	public hasChildNodes () : boolean{
-		console.log("hasChildNodes not implemented yet in flash/XMLNode");
+	public hasChildNodes (): boolean {
+		console.log('hasChildNodes not implemented yet in flash/XMLNode');
 		return false;
 	}
 
@@ -272,15 +273,15 @@ export class XMLNode
 	 * @param	node	The XMLNode object to be inserted.
 	 * @param	before	The XMLNode object before the insertion point for the childNode.
 	 */
-	public insertBefore (node:XMLNode, before:XMLNode){
-		console.log("insertBefore not implemented yet in flash/XMLNode");
+	public insertBefore (node: XMLNode, before: XMLNode) {
+		console.log('insertBefore not implemented yet in flash/XMLNode');
 	}
 
 	/**
 	 * Removes the specified XML object from its parent. Also deletes all descendants of the node.
 	 */
 	public removeNode () {
-		console.log("removeNode not implemented yet in flash/XMLNode");
+		console.log('removeNode not implemented yet in flash/XMLNode');
 	}
 
 	/**
@@ -297,10 +298,9 @@ export class XMLNode
 	 * XMLDocument.docTypeDecl property is null.
 	 * @return	The string representing the XMLNode object.
 	 */
-	public toString () : string{
-		console.log("toString not implemented yet in flash/XMLNode");
-		return "";
+	public toString (): string {
+		console.log('toString not implemented yet in flash/XMLNode');
+		return '';
 	}
 
 }
-

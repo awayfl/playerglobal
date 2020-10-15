@@ -1,1 +1,1 @@
-export {GradientType} from "@awayjs/graphics";
+export { GradientType } from '@awayjs/graphics';

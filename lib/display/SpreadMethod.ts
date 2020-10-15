@@ -1,1 +1,1 @@
-export {SpreadMethod} from "@awayjs/graphics";
+export { SpreadMethod } from '@awayjs/graphics';

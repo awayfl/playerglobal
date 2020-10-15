@@ -1,5 +1,5 @@
-import { TextFormat } from "./TextFormat";
-import { ASObject } from "../../avm2/nat/ASObject";
+import { TextFormat } from './TextFormat';
+import { ASObject } from '../../avm2/nat/ASObject';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -19,54 +19,54 @@ import { ASObject } from "../../avm2/nat/ASObject";
 // Class: TextRun
 export class TextRun extends ASObject {
 
-  static classInitializer: any = null;
+	static classInitializer: any = null;
 
-  constructor(beginIndex: number /*int*/, endIndex: number /*int*/,
-              textFormat: TextFormat) {
-    super();
-    this._beginIndex = beginIndex | 0;
-    this._endIndex = endIndex | 0;
-    this._textFormat = textFormat;
-  }
+	constructor(beginIndex: number /*int*/, endIndex: number /*int*/,
+		textFormat: TextFormat) {
+		super();
+		this._beginIndex = beginIndex | 0;
+		this._endIndex = endIndex | 0;
+		this._textFormat = textFormat;
+	}
 
-  _beginIndex: number /*int*/;
-  _endIndex: number /*int*/;
-  _textFormat: TextFormat;
+	_beginIndex: number /*int*/;
+	_endIndex: number /*int*/;
+	_textFormat: TextFormat;
 
-  get beginIndex(): number {
-    return this._beginIndex;
-  }
+	get beginIndex(): number {
+		return this._beginIndex;
+	}
 
-  set beginIndex(value: number) {
-    this._beginIndex = value | 0;
-  }
+	set beginIndex(value: number) {
+		this._beginIndex = value | 0;
+	}
 
-  get endIndex(): number {
-    return this._endIndex;
-  }
+	get endIndex(): number {
+		return this._endIndex;
+	}
 
-  set endIndex(value: number) {
-    this._endIndex = value | 0;
-  }
+	set endIndex(value: number) {
+		this._endIndex = value | 0;
+	}
 
-  get textFormat(): TextFormat {
-    return this._textFormat;
-  }
+	get textFormat(): TextFormat {
+		return this._textFormat;
+	}
 
-  set textFormat(value: TextFormat) {
-    this._textFormat = value;
-  }
+	set textFormat(value: TextFormat) {
+		this._textFormat = value;
+	}
 
-  clone(): TextRun {
-    return new TextRun(this.beginIndex, this.endIndex,
-                                            this.textFormat.clone());
-  }
+	clone(): TextRun {
+		return new TextRun(this.beginIndex, this.endIndex,
+			this.textFormat.clone());
+	}
 
-  containsIndex(index: number): boolean {
-    return index >= this._beginIndex && index < this._endIndex;
-  }
+	containsIndex(index: number): boolean {
+		return index >= this._beginIndex && index < this._endIndex;
+	}
 
-  intersects(beginIndex: number, endIndex: number): boolean {
-    return Math.max(this._beginIndex, beginIndex) < Math.min(this._endIndex, endIndex);
-  }
+	intersects(beginIndex: number, endIndex: number): boolean {
+		return Math.max(this._beginIndex, beginIndex) < Math.min(this._endIndex, endIndex);
+	}
 }

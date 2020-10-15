@@ -1,9 +1,9 @@
-import { release, warning } from "@awayfl/swf-loader";
-import { ContextMenuClipboardItems } from "./ContextMenuClipboardItems";
-import { ASArray } from "@awayfl/avm2";
-import { URLRequest } from "../net/URLRequest";
-import { ContextMenuBuiltInItems } from "./ContextMenuBuiltInItems";
-import { NativeMenu } from "../display/NativeMenu";
+import { release, warning } from '@awayfl/swf-loader';
+import { ContextMenuClipboardItems } from './ContextMenuClipboardItems';
+import { ASArray } from '@awayfl/avm2';
+import { URLRequest } from '../net/URLRequest';
+import { ContextMenuBuiltInItems } from './ContextMenuBuiltInItems';
+import { NativeMenu } from '../display/NativeMenu';
 import { SecurityDomain } from '../SecurityDomain';
 
 /**
@@ -48,56 +48,65 @@ export class ContextMenu extends NativeMenu {
 
 	get builtInItems(): ContextMenuBuiltInItems {
 		// TODO: Should clone here probably.
-		release || partialImp(this, "get builtInItems");
+		release || partialImp(this, 'get builtInItems');
 		return this._builtInItems;
 	}
+
 	set builtInItems(value: ContextMenuBuiltInItems) {
 		// TODO: Should clone here probably.
 		value = value;
-		release || partialImp(this, "set builtInItems");
+		release || partialImp(this, 'set builtInItems');
 		this._builtInItems = value;
 	}
+
 	get customItems(): ASArray {
 		// TODO: Should clone here probably.
-		release || partialImp(this, "get customItems");
+		release || partialImp(this, 'get customItems');
 		return this.sec.createArrayUnsafe(this._customItems);
 	}
+
 	set customItems(value: ASArray) {
 		// TODO: Should clone here probably.
 		value = value;
-		release || partialImp(this, "set customItems");
+		release || partialImp(this, 'set customItems');
 		this._customItems = value.value;
 	}
+
 	get link(): URLRequest {
-		release || partialImp(this, "get link");
+		release || partialImp(this, 'get link');
 		return this._link;
 	}
+
 	set link(value: URLRequest) {
 		value = value;
-		release || partialImp(this, "set link");
+		release || partialImp(this, 'set link');
 		this._link = value;
 	}
+
 	get clipboardMenu(): boolean {
-		release || partialImp(this, "get clipboardMenu");
+		release || partialImp(this, 'get clipboardMenu');
 		return this._clipboardMenu;
 	}
+
 	set clipboardMenu(value: boolean) {
 		value = !!value;
-		release || partialImp(this, "set clipboardMenu");
+		release || partialImp(this, 'set clipboardMenu');
 		this._clipboardMenu = value;
 	}
+
 	get clipboardItems(): ContextMenuClipboardItems {
-		release || partialImp(this, "get clipboardItems");
+		release || partialImp(this, 'get clipboardItems');
 		return this._clipboardItems;
 	}
+
 	set clipboardItems(value: ContextMenuClipboardItems) {
 		value = value;
-		release || partialImp(this, "set clipboardItems");
+		release || partialImp(this, 'set clipboardItems');
 		this._clipboardItems = value;
 	}
 
 	hideBuiltInItems(): void {
-		var items = this.builtInItems;
+		const items = this.builtInItems;
 		if (!items) {
 			return;
 		}
@@ -112,12 +121,12 @@ export class ContextMenu extends NativeMenu {
 	}
 
 	clone(): ContextMenu {
-		var result: ContextMenu = new (<SecurityDomain> this.sec).flash.ui.ContextMenu();
+		const result: ContextMenu = new (<SecurityDomain> this.sec).flash.ui.ContextMenu();
 		result._builtInItems = this._builtInItems.clone();
 
 		this.cloneLinkAndClipboardProperties(result);
-		var customItems = this._customItems;
-		for (var i = 0; i < customItems.length; i++) {
+		const customItems = this._customItems;
+		for (let i = 0; i < customItems.length; i++) {
 			result._customItems.push(customItems[i].clone());
 		}
 		return result;
@@ -125,6 +134,6 @@ export class ContextMenu extends NativeMenu {
 
 	cloneLinkAndClipboardProperties(c: ContextMenu): void {
 		c = c;
-		release || partialImp(this, "cloneLinkAndClipboardProperties"); return;
+		release || partialImp(this, 'cloneLinkAndClipboardProperties'); return;
 	}
 }

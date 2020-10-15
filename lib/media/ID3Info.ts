@@ -5,18 +5,18 @@
  * For more information, see the entry for <codeph class="+ topic/ph pr-d/codeph ">Sound.id3</codeph> and
  * the ID3 tag definitions at <xref href="http://www.id3.org" class="- topic/xref ">http://www.id3.org</xref>.
  */
-export class ID3Info
-{
-	constructor (){
+export class ID3Info {
+	constructor () {
 
 	}
+
 	/**
 	 * The name of the album; corresponds to the ID3 2.0 tag TALB.
 	 * @langversion	AS3
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public album : string;
+	public album: string;
 
 	/**
 	 * The name of the artist; corresponds to the ID3 2.0 tag TPE1.
@@ -24,7 +24,7 @@ export class ID3Info
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public artist : string;
+	public artist: string;
 
 	/**
 	 * A comment about the recording; corresponds to the ID3 2.0 tag COMM.
@@ -32,7 +32,7 @@ export class ID3Info
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public comment : string;
+	public comment: string;
 
 	/**
 	 * The genre of the song; corresponds to the ID3 2.0 tag TCON.
@@ -40,7 +40,7 @@ export class ID3Info
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public genre : string;
+	public genre: string;
 
 	/**
 	 * The name of the song; corresponds to the ID3 2.0 tag TIT2.
@@ -48,7 +48,7 @@ export class ID3Info
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public songName : string;
+	public songName: string;
 
 	/**
 	 * The track number; corresponds to the ID3 2.0 tag TRCK.
@@ -56,7 +56,7 @@ export class ID3Info
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public track : string;
+	public track: string;
 
 	/**
 	 * The year of the recording; corresponds to the ID3 2.0 tag TYER.
@@ -64,7 +64,6 @@ export class ID3Info
 	 * @playerversion	Flash 9
 	 * @playerversion	Lite 4
 	 */
-	public year : string;
+	public year: string;
 
 }
-

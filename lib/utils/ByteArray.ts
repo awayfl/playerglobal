@@ -1,1 +1,1 @@
-export {ByteArray} from "@awayjs/core";
+export { ByteArray } from '@awayjs/core';

@@ -1,1 +1,1 @@
-export {TextFieldType} from "@awayjs/scene";
+export { TextFieldType } from '@awayjs/scene';

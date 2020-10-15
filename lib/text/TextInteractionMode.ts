@@ -1,1 +1,1 @@
-export {TextInteractionMode} from "@awayjs/scene";
+export { TextInteractionMode } from '@awayjs/scene';

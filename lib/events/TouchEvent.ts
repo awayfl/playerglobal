@@ -1,6 +1,6 @@
 
-import {InteractiveObject} from "../display/InteractiveObject";
-import { Event } from "./Event";
+import { InteractiveObject } from '../display/InteractiveObject';
+import { Event } from './Event';
 
 /**
 /// @eventType	flash.events.TouchEvent.TOUCH_BEGIN
@@ -42,15 +42,14 @@ import { Event } from "./Event";
  * <codeph class="+ topic/ph pr-d/codeph ">EventDispatcher.addEventListener()</codeph> on the ancestor node with the type parameter set to the specific
  * touch event you want to detect.</p>
  */
-export class TouchEvent extends Event
-{
-	public static PROXIMITY_BEGIN : string;
-	public static PROXIMITY_END : string;
-	public static PROXIMITY_MOVE : string;
-	public static PROXIMITY_OUT : string;
-	public static PROXIMITY_OVER : string;
-	public static PROXIMITY_ROLL_OUT : string;
-	public static PROXIMITY_ROLL_OVER : string;
+export class TouchEvent extends Event {
+	public static PROXIMITY_BEGIN: string;
+	public static PROXIMITY_END: string;
+	public static PROXIMITY_MOVE: string;
+	public static PROXIMITY_OUT: string;
+	public static PROXIMITY_OVER: string;
+	public static PROXIMITY_ROLL_OUT: string;
+	public static PROXIMITY_ROLL_OVER: string;
 
 	/**
 	 * Defines the value of the type property of a TOUCH_BEGIN touch event object.
@@ -61,7 +60,7 @@ export class TouchEvent extends Event
 	 * that registered the event listener. Use the currentTarget
 	 * property to access the object in the display list that is currently processing the event.touchPointIDA unique identification number (as an int) assigned to the touch point.
 	 */
-	public static TOUCH_BEGIN : string = "touchBegin";
+	public static TOUCH_BEGIN: string = 'touchBegin';
 
 	/**
 	 * Defines the value of the type property of a TOUCH_END touch event object.
@@ -72,7 +71,7 @@ export class TouchEvent extends Event
 	 * that registered the event listener. Use the currentTarget
 	 * property to access the object in the display list that is currently processing the event.touchPointIDA unique identification number (as an int) assigned to the touch point.
 	 */
-	public static TOUCH_END : string = "touchEnd";
+	public static TOUCH_END: string = 'touchEnd';
 
 	/**
 	 * Defines the value of the type property of a TOUCH_MOVE touch event object.
@@ -83,7 +82,7 @@ export class TouchEvent extends Event
 	 * that registered the event listener. Use the currentTarget
 	 * property to access the object in the display list that is currently processing the event.touchPointIDA unique identification number (as an int) assigned to the touch point.
 	 */
-	public static TOUCH_MOVE : string = "touchMove";
+	public static TOUCH_MOVE: string = 'touchMove';
 
 	/**
 	 * Defines the value of the type property of a TOUCH_OUT touch event object.
@@ -94,7 +93,7 @@ export class TouchEvent extends Event
 	 * that registered the event listener. Use the currentTarget
 	 * property to access the object in the display list that is currently processing the event.touchPointIDA unique identification number (as an int) assigned to the touch point.
 	 */
-	public static TOUCH_OUT : string = "touchOut";
+	public static TOUCH_OUT: string = 'touchOut';
 
 	/**
 	 * Defines the value of the type property of a TOUCH_OVER touch event object.
@@ -105,7 +104,7 @@ export class TouchEvent extends Event
 	 * that registered the event listener. Use the currentTarget
 	 * property to access the object in the display list that is currently processing the event.touchPointIDA unique identification number (as an int) assigned to the touch point.
 	 */
-	public static TOUCH_OVER : string = "touchOver";
+	public static TOUCH_OVER: string = 'touchOver';
 
 	/**
 	 * Defines the value of the type property of a TOUCH_ROLL_OUT touch event object.
@@ -116,7 +115,7 @@ export class TouchEvent extends Event
 	 * that registered the event listener. Use the currentTarget
 	 * property to access the object in the display list that is currently processing the event.touchPointIDA unique identification number (as an int) assigned to the touch point.
 	 */
-	public static TOUCH_ROLL_OUT : string = "touchRollOut";
+	public static TOUCH_ROLL_OUT: string = 'touchRollOut';
 
 	/**
 	 * Defines the value of the type property of a TOUCH_ROLL_OVER touch event object.
@@ -127,7 +126,7 @@ export class TouchEvent extends Event
 	 * that registered the event listener. Use the currentTarget
 	 * property to access the object in the display list that is currently processing the event.touchPointIDA unique identification number (as an int) assigned to the touch point.
 	 */
-	public static TOUCH_ROLL_OVER : string = "touchRollOver";
+	public static TOUCH_ROLL_OVER: string = 'touchRollOver';
 
 	/**
 	 * Defines the value of the type property of a TOUCH_TAP touch event object.
@@ -138,7 +137,7 @@ export class TouchEvent extends Event
 	 * that registered the event listener. Use the currentTarget
 	 * property to access the object in the display list that is currently processing the event.touchPointIDA unique identification number (as an int) assigned to the touch point.
 	 */
-	public static TOUCH_TAP : string = "touchTap";
+	public static TOUCH_TAP: string = 'touchTap';
 
 	/**
 	 * Indicates whether the Alt key is active (true) or inactive (false).
@@ -147,21 +146,21 @@ export class TouchEvent extends Event
 	 *   The Option key modifier on Macintosh system must be represented using this key modifier. So far, it seems
 	 *   only the Windows version is hooked up.
 	 */
-	public get altKey () : boolean{return false;}
-	public set altKey (value: boolean){}
+	public get altKey (): boolean {return false;}
+	public set altKey (value: boolean) {}
 
 	/**
 	 * On Windows or Linux, indicates whether the Ctrl key is active (true) or inactive (false).
 	 * On Macintosh, indicates whether either the Control key or the Command key is activated.
 	 */
-	public get ctrlKey () : boolean{return false;}
-	public set ctrlKey (value: boolean){}
+	public get ctrlKey (): boolean {return false;}
+	public set ctrlKey (value: boolean) {}
 
 	/**
 	 * Indicates whether the first point of contact is mapped to mouse events.
 	 */
-	public get isPrimaryTouchPoint () : boolean{return false;}
-	public set isPrimaryTouchPoint (value: boolean){}
+	public get isPrimaryTouchPoint (): boolean {return false;}
+	public set isPrimaryTouchPoint (value: boolean) {}
 
 	/**
 	 * If true, the relatedObject property is set to null for
@@ -172,27 +171,27 @@ export class TouchEvent extends Event
 	 * a policy file from the server of an image file, and setting the LoaderContext.checkPolicyFile
 	 * property when loading the image.
 	 */
-	public get isRelatedObjectInaccessible () : boolean{return false;}
-	public set isRelatedObjectInaccessible (value: boolean){}
+	public get isRelatedObjectInaccessible (): boolean {return false;}
+	public set isRelatedObjectInaccessible (value: boolean) {}
 
 	/**
 	 * The horizontal coordinate at which the event occurred relative to the containing sprite.
 	 */
-	public get localX () : number{ return 0;}
-	public set localX (value:number){}
+	public get localX (): number { return 0;}
+	public set localX (value: number) {}
 
 	/**
 	 * The vertical coordinate at which the event occurred relative to the containing sprite.
 	 */
-	public get localY () : number{ return 0;}
-	public set localY (value:number){}
+	public get localY (): number { return 0;}
+	public set localY (value: number) {}
 
 	/**
 	 * A value between 0.0 and 1.0 indicating force of the contact with the device.
 	 * If the device does not support detecting the pressure, the value is 1.0.
 	 */
-	public get pressure () : number{ return 0;}
-	public set pressure (value:number){}
+	public get pressure (): number { return 0;}
+	public set pressure (value: number) {}
 
 	/**
 	 * A reference to a display list object that is related to the event. For example, when a touchOut event occurs,
@@ -202,10 +201,11 @@ export class TouchEvent extends Event
 	 * or there is a related object, but it is in a security sandbox to which you don't have access.
 	 * Use the isRelatedObjectInaccessible() property to determine which of these reasons applies.
 	 */
-	public get relatedObject () : InteractiveObject{
+	public get relatedObject (): InteractiveObject {
 		return null;
 	}
-	public set relatedObject (value:InteractiveObject){
+
+	public set relatedObject (value: InteractiveObject) {
 
 	}
 
@@ -213,45 +213,45 @@ export class TouchEvent extends Event
 	 * Indicates whether the Shift key is active (true) or inactive
 	 * (false).
 	 */
-	public get shiftKey () : boolean{return false;}
-	public set shiftKey (value: boolean){}
+	public get shiftKey (): boolean {return false;}
+	public set shiftKey (value: boolean) {}
 
 	/**
 	 * Width of the contact area.
 	 * @langversion	3.0
 	 */
-	public get sizeX () : number{ return 0;}
-	public set sizeX (value:number){}
+	public get sizeX (): number { return 0;}
+	public set sizeX (value: number) {}
 
 	/**
 	 * Height of the contact area.
 	 */
-	public get sizeY () : number{ return 0;}
-	public set sizeY (value:number){}
+	public get sizeY (): number { return 0;}
+	public set sizeY (value: number) {}
 
 	/**
 	 * The horizontal coordinate at which the event occurred in global Stage coordinates.
 	 * This property is calculated when the localX property is set.
 	 */
-	public get stageX () : number{ return 0;}
+	public get stageX (): number { return 0;}
 
 	/**
 	 * The vertical coordinate at which the event occurred in global Stage coordinates.
 	 * This property is calculated when the localY property is set.
 	 */
-	public get stageY () : number{ return 0;}
+	public get stageY (): number { return 0;}
 
 	/**
 	 * A unique identification number (as an int) assigned to the touch point.
 	 */
-	public get touchPointID () : number{ return 0;}
-	public set touchPointID (value:number){}
+	public get touchPointID (): number { return 0;}
+	public set touchPointID (value: number) {}
 
 	/**
 	 * Creates a copy of the TouchEvent object and sets the value of each property to match that of the original.
 	 * @return	A new TouchEvent object with property values that match those of the original.
 	 */
-	public clone () : Event{
+	public clone (): Event {
 		return null;
 	}
 
@@ -260,7 +260,7 @@ export class TouchEvent extends Event
 	 * [TouchEvent type=value bubbles=value cancelable=value ... ]
 	 * @return	A string that contains all the properties of the TouchEvent object.
 	 */
-	public toString () : string{return "";}
+	public toString (): string {return '';}
 
 	/**
 	 * Creates an Event object that contains information about touch events.
@@ -289,7 +289,7 @@ export class TouchEvent extends Event
 	 * @param	controlKey	(AIR only) Indicates whether the Control or Ctrl key is activated. This parameter is for Adobe AIR only; do not set it for Flash Player content.
 
 	 */
-	constructor (type:string, bubbles:boolean=true, cancelable:boolean=false, touchPointID:number=0, isPrimaryTouchPoint:boolean=false, localX:number=NaN, localY:number=NaN, sizeX:number=NaN, sizeY:number=NaN, pressure:number=NaN, relatedObject:InteractiveObject=null, ctrlKey:boolean=false, altKey:boolean=false, shiftKey:boolean=false){
+	constructor (type: string, bubbles: boolean = true, cancelable: boolean = false, touchPointID: number = 0, isPrimaryTouchPoint: boolean = false, localX: number = NaN, localY: number = NaN, sizeX: number = NaN, sizeY: number = NaN, pressure: number = NaN, relatedObject: InteractiveObject = null, ctrlKey: boolean = false, altKey: boolean = false, shiftKey: boolean = false) {
 		super(type, bubbles, cancelable);
 	}
 
@@ -297,7 +297,6 @@ export class TouchEvent extends Event
 	 * Instructs Flash Player or Adobe AIR to render after processing of this event completes, if the display list has been modified.
 	 */
 	public updateAfterEvent () {
-		
+
 	}
 }
-

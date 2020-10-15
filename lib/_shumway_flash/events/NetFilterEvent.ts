@@ -1,4 +1,4 @@
-import { Event } from "./Event";
+import { Event } from './Event';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -18,19 +18,19 @@ import { Event } from "./Event";
 // Class: NetFilterEvent
 export class NetFilterEvent extends Event {
 
-  static classInitializer: any = null;
+	static classInitializer: any = null;
 
-  static classSymbols: string [] = null;
-  static instanceSymbols: string [] = null;
+	static classSymbols: string [] = null;
+	static instanceSymbols: string [] = null;
 
-  header: ByteArray;
-  data: ByteArray;
+	header: ByteArray;
+	data: ByteArray;
 
-  constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-              header: ByteArray = null, data: ByteArray = null) {
-    super(type, bubbles, cancelable);
-    // TODO: coerce
-    this.header = header;
-    this.data = data;
-  }
+	constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		header: ByteArray = null, data: ByteArray = null) {
+		super(type, bubbles, cancelable);
+		// TODO: coerce
+		this.header = header;
+		this.data = data;
+	}
 }

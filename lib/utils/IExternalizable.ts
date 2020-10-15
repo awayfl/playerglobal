@@ -2,8 +2,8 @@
 // C:\Users\80prozent\AppData\Local\FlashDevelop\Apps\flexairsdk\4.6.0+25.0.0\frameworks\libs\player\18.0\playerglobal.swc\flash\utils\IExternalizable
 //
 
-import { IDataOutput } from "./IDataOutput";
-import { IDataInput } from "./IDataInput";
+import { IDataOutput } from './IDataOutput';
+import { IDataInput } from './IDataInput';
 
 /**
  * The IExternalizable interface provides control over serialization of a class as it is encoded
@@ -24,13 +24,12 @@ export interface IExternalizable
 	 * were written by the writeExternal() method.
 	 * @param	input	The name of the class that implements the IDataInput interface.
 	 */
-	readExternal (input:IDataInput);
+	readExternal (input: IDataInput);
 
 	/**
 	 * A class implements this method to encode itself for a data stream by calling the methods of the IDataOutput
 	 * interface.
 	 * @param	output	The name of the class that implements the IDataOutput interface.
 	 */
-	writeExternal (output:IDataOutput);
+	writeExternal (output: IDataOutput);
 }
-

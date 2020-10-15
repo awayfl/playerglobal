@@ -1,6 +1,6 @@
-import { ASError } from "../../avm2/nat/ASError";
-import { ErrorEvent } from "./ErrorEvent";
-import { Event } from "./Event";
+import { ASError } from '../../avm2/nat/ASError';
+import { ErrorEvent } from './ErrorEvent';
+import { Event } from './Event';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -20,30 +20,29 @@ import { Event } from "./Event";
 // Class: AsyncErrorEven
 export class AsyncErrorEvent extends ErrorEvent {
 
-  static ASYNC_ERROR: string = "asyncError";
+	static ASYNC_ERROR: string = 'asyncError';
 
-  static classInitializer: any = null;
+	static classInitializer: any = null;
 
-  $Bgerror: ASError;
+	$Bgerror: ASError;
 
+	constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		text: string = '', error: ASError = null) {
+		super(type, bubbles, cancelable, text);
+		this.$Bgerror = error;
+	}
 
-  constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-              text: string = "", error: ASError = null) {
-    super(type, bubbles, cancelable, text);
-    this.$Bgerror = error;
-  }
+	public get error() {
+		return this.$Bgerror;
+	}
 
-  public get error() {
-    return this.$Bgerror;
-  }
+	clone(): Event {
+		return new AsyncErrorEvent(this._type, this._bubbles, this._cancelable,
+			this._text, this.$Bgerror);
+	}
 
-  clone(): Event {
-    return new AsyncErrorEvent(this._type, this._bubbles, this._cancelable,
-                                                      this._text, this.$Bgerror);
-  }
-
-  toString(): string {
-    return this.formatToString('AsyncErrorEvent', 'type', 'bubbles', 'cancelable', 'eventPhase',
-                                'text', 'error');
-  }
+	toString(): string {
+		return this.formatToString('AsyncErrorEvent', 'type', 'bubbles', 'cancelable', 'eventPhase',
+			'text', 'error');
+	}
 }

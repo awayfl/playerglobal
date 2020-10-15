@@ -18,8 +18,7 @@
  * different users can see different case conversion results even when using the same locale ID.
  * </p>
  */
-export class StringTools
-{
+export class StringTools {
 	/**
 	 * The name of the actual locale ID used by this StringTools object.
 	 *
@@ -36,9 +35,9 @@ export class StringTools
 	 * explicit locale ID name rather than using LocaleID.DEFAULT your application would not
 	 * retrieve those customized settings.
 	 */
-	public get actualLocaleIDName () : string{
-		console.log("actualLocaleIDName not implemented yet in flash/StringTools");
-		return "";
+	public get actualLocaleIDName (): string {
+		console.log('actualLocaleIDName not implemented yet in flash/StringTools');
+		return '';
 
 	}
 
@@ -47,9 +46,9 @@ export class StringTools
 	 * The lastOperationStatus property is set whenever the constructor or a method of
 	 * this class is called or another property is set. For the possible values see the description for each method.
 	 */
-	public get lastOperationStatus () : string{
-		console.log("lastOperationStatus not implemented yet in flash/StringTools");
-		return "";
+	public get lastOperationStatus (): string {
+		console.log('lastOperationStatus not implemented yet in flash/StringTools');
+		return '';
 
 	}
 
@@ -60,9 +59,9 @@ export class StringTools
 	 * The actual locale used can differ from the requested locale when a fallback locale is applied.
 	 * The name of the actual locale can be retrieved using the actualLocaleIDName property.
 	 */
-	public get requestedLocaleIDName () : string{
-		console.log("requestedLocaleIDName not implemented yet in flash/StringTools");
-		return "";
+	public get requestedLocaleIDName (): string {
+		console.log('requestedLocaleIDName not implemented yet in flash/StringTools');
+		return '';
 
 	}
 
@@ -73,9 +72,9 @@ export class StringTools
 	 * LastOperationStatus class.
 	 * @return	A vector of strings containing all of the locale ID names supported by this class.
 	 */
-	public static getAvailableLocaleIDNames () : string[]{
-		console.log("getAvailableLocaleIDNames not implemented yet in flash/StringTools");
-		return []
+	public static getAvailableLocaleIDNames (): string[] {
+		console.log('getAvailableLocaleIDNames not implemented yet in flash/StringTools');
+		return [];
 
 	}
 
@@ -93,7 +92,7 @@ export class StringTools
 	 * @param	requestedLocaleIDName	The preferred locale ID name to use when determining date or time formats.
 	 * @throws	ArgumentError when the requestedLocaleIDName parameter is null
 	 */
-	constructor (requestedLocaleIDName:string){
+	constructor (requestedLocaleIDName: string) {
 	}
 
 	/**
@@ -106,9 +105,9 @@ export class StringTools
 	 * @return	The converted lowercase string.
 	 * @throws	ArgumentError when  the s parameter is null.
 	 */
-	public toLowerCase (s:string) : string{
-		console.log("toLowerCase not implemented yet in flash/StringTools");
-		return "";
+	public toLowerCase (s: string): string {
+		console.log('toLowerCase not implemented yet in flash/StringTools');
+		return '';
 
 	}
 
@@ -122,10 +121,9 @@ export class StringTools
 	 * @return	The converted uppercase string.
 	 * @throws	ArgumentError when the s parameter is null.
 	 */
-	public toUpperCase (s:string) : string{
-		console.log("toUpperCase not implemented yet in flash/StringTools");
-		return "";
+	public toUpperCase (s: string): string {
+		console.log('toUpperCase not implemented yet in flash/StringTools');
+		return '';
 
 	}
 }
-

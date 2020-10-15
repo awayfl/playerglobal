@@ -1,4 +1,4 @@
-import { Event } from "./Event";
+import { Event } from './Event';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -35,7 +35,7 @@ export class HTTPStatusEvent extends Event {
 	/**
 	 * @description Undocumented method!
 	 */
-	protected _setStatus(v:number) {
+	protected _setStatus(v: number) {
 		this._status = v;
 	}
 
@@ -63,19 +63,19 @@ export class HTTPStatusEvent extends Event {
 		return this._responseHeaders;
 	}
 
-    public set responseHeaders(value:Array<any>) {
+	public set responseHeaders(value: Array<any>) {
 		this._responseHeaders = value;
 	}
 
 	// JS -> AS Bindings
-	static HTTP_RESPONSE_STATUS: string = "httpResponseStatus";
-	static HTTP_STATUS: string = "httpStatus";
+	static HTTP_RESPONSE_STATUS: string = 'httpResponseStatus';
+	static HTTP_STATUS: string = 'httpStatus';
 
 	clone(): HTTPStatusEvent {
 		return new HTTPStatusEvent(this.type, this.bubbles, this.cancelable, this._status, this._redirected);
 	}
 
 	toString(): string {
-		return this.formatToString("IOErrorEvent", "type", "bubbles", "cancelable", "text", "errorID");
+		return this.formatToString('IOErrorEvent', 'type', 'bubbles', 'cancelable', 'text', 'errorID');
 	}
 }

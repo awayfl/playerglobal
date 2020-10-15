@@ -21,26 +21,28 @@ export class Multitouch {
 	 * for different gestures (such as rotation and pan), or only a single point of contact (such as tap), or
 	 * none at all (contact is handled as a mouse event). To set this property, use values from the flash.ui.MultitouchInputMode class.
 	 */
-	public static get inputMode () : string{
+	public static get inputMode (): string {
 		//console.log("inputMode not implemented yet in flash/Multitouch");
-		return "";
+		return '';
 	}
-	public static set inputMode (value:string){
+
+	public static set inputMode (value: string) {
 		//console.log("inputMode not implemented yet in flash/Multitouch");
 	}
 
-	public static get mapTouchToMouse () : boolean{
+	public static get mapTouchToMouse (): boolean {
 		//console.log("mapTouchToMouse not implemented yet in flash/Multitouch");
 		return false;
 	}
-	public static set mapTouchToMouse (value:boolean){
+
+	public static set mapTouchToMouse (value: boolean) {
 		//console.log("mapTouchToMouse not implemented yet in flash/Multitouch");
 	}
 
 	/**
 	 * The maximum number of concurrent touch points supported by the current environment.
 	 */
-	public static get maxTouchPoints () : number{
+	public static get maxTouchPoints (): number {
 		//console.log("maxTouchPoints not implemented yet in flash/Multitouch");
 		return 0;
 	}
@@ -54,7 +56,7 @@ export class Multitouch {
 	 * gestures. For those gestures that are not supported in the current evironment, you'll need to create alternative
 	 * event handling.
 	 */
-	public static get supportedGestures () : string[]{
+	public static get supportedGestures (): string[] {
 		//console.log("supportedGestures not implemented yet in flash/Multitouch");
 		return [];
 	}
@@ -65,7 +67,7 @@ export class Multitouch {
 	 * Note:  For Mac OS 10.5.3 and later, this value is always true. Multitouch.supportsGestureEvent returns
 	 * true even if the hardware does not support gesture events.
 	 */
-	public static get supportsGestureEvents () : boolean{
+	public static get supportsGestureEvents (): boolean {
 		//console.log("supportsGestureEvents not implemented yet in flash/Multitouch");
 		return false;
 	}
@@ -74,11 +76,10 @@ export class Multitouch {
 	 * Indicates whether the current environment supports basic touch input, such as a single finger tap.
 	 * Touch events are listed in the TouchEvent class.
 	 */
-	public static get supportsTouchEvents () : boolean{
+	public static get supportsTouchEvents (): boolean {
 		//console.log("supportsTouchEvents not implemented yet in flash/Multitouch");
 		return false;
 	}
 
-	constructor (){}
+	constructor () {}
 }
-

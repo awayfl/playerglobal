@@ -1,4 +1,4 @@
 export class Stage {
-	public stageWidth:number;
-	public stageHeight:number;
+	public stageWidth: number;
+	public stageHeight: number;
 }

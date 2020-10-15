@@ -1,4 +1,4 @@
-import { ASObject } from "@awayfl/avm2";
+import { ASObject } from '@awayfl/avm2';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -19,25 +19,25 @@ import { ASObject } from "@awayfl/avm2";
 
 export class BitmapFilterType extends ASObject {
 
-  // Called whenever the class is initialized.
-  static classInitializer: any = null;
+	// Called whenever the class is initialized.
+	static classInitializer: any = null;
 
-  // List of static symbols to link.
-  static classSymbols: string [] = null; // [];
+	// List of static symbols to link.
+	static classSymbols: string [] = null; // [];
 
-  // List of instance symbols to link.
-  static instanceSymbols: string [] = null; // [];
+	// List of instance symbols to link.
+	static instanceSymbols: string [] = null; // [];
 
-  constructor () {
-    super();
-  }
+	constructor () {
+		super();
+	}
 
-  // JS -> AS Bindings
+	// JS -> AS Bindings
 
-  static INNER: string = "inner";
-  static OUTER: string = "outer";
-  static FULL: string = "full";
+	static INNER: string = 'inner';
+	static OUTER: string = 'outer';
+	static FULL: string = 'full';
 
-  // AS -> JS Bindings
+	// AS -> JS Bindings
 
 }

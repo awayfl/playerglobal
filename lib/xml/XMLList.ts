@@ -1,4 +1,4 @@
-import {XML} from "./XML"
+import { XML } from './XML';
 /**
  * The XMLList class contains methods for working with one or more XML elements. An XMLList object
  * can represent one or more XML objects or elements (including multiple nodes or attributes), so
@@ -11,9 +11,8 @@ import {XML} from "./XML"
  * <codeph class="+ topic/ph pr-d/codeph ">for each..in</codeph> statement, for example) and apply the methods to each XML object in
  * the collection.</p>
  */
-export class XMLList
-{
-	public static length : any;
+export class XMLList {
+	public static length: any;
 
 	/**
 	 * Creates a new XMLList object.
@@ -21,16 +20,16 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	constructor (value:any=null){
+	constructor (value: any = null) {
 	}
 
-	public addNamespace (ns:any) : XML{
-		console.log("addNamespace not implemented yet in flash/XMLList");
+	public addNamespace (ns: any): XML {
+		console.log('addNamespace not implemented yet in flash/XMLList');
 		return null;
 	}
 
-	public appendChild (child:any) : XML{
-		console.log("appendChild not implemented yet in flash/XMLList");
+	public appendChild (child: any): XML {
+		console.log('appendChild not implemented yet in flash/XMLList');
 		return null;
 	}
 
@@ -43,8 +42,8 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public attribute (arg:any) : XMLList{
-		console.log("attribute not implemented yet in flash/XMLList");
+	public attribute (arg: any): XMLList {
+		console.log('attribute not implemented yet in flash/XMLList');
 		return null;
 	}
 
@@ -55,8 +54,8 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public attributes () : XMLList{
-		console.log("attributes not implemented yet in flash/XMLList");
+	public attributes (): XMLList {
+		console.log('attributes not implemented yet in flash/XMLList');
 		return null;
 	}
 
@@ -68,13 +67,13 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public child (propertyName:any) : XMLList{
-		console.log("child not implemented yet in flash/XMLList");
+	public child (propertyName: any): XMLList {
+		console.log('child not implemented yet in flash/XMLList');
 		return null;
 	}
 
-	public childIndex () : number{
-		console.log("childIndex not implemented yet in flash/XMLList");
+	public childIndex (): number {
+		console.log('childIndex not implemented yet in flash/XMLList');
 		return 0;
 	}
 
@@ -85,8 +84,8 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public children () : XMLList{
-		console.log("children not implemented yet in flash/XMLList");
+	public children (): XMLList {
+		console.log('children not implemented yet in flash/XMLList');
 		return null;
 	}
 
@@ -97,8 +96,8 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public comments () : XMLList{
-		console.log("comments not implemented yet in flash/XMLList");
+	public comments (): XMLList {
+		console.log('comments not implemented yet in flash/XMLList');
 		return null;
 	}
 
@@ -111,8 +110,8 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public contains (value:any) : boolean{
-		console.log("contains not implemented yet in flash/XMLList");
+	public contains (value: any): boolean {
+		console.log('contains not implemented yet in flash/XMLList');
 		return false;
 	}
 
@@ -123,8 +122,8 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public copy () : XMLList{
-		console.log("copy not implemented yet in flash/XMLList");
+	public copy (): XMLList {
+		console.log('copy not implemented yet in flash/XMLList');
 		return null;
 	}
 
@@ -143,8 +142,8 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public descendants (name:any="*") : XMLList{
-		console.log("descendants not implemented yet in flash/XMLList");
+	public descendants (name: any = '*'): XMLList {
+		console.log('descendants not implemented yet in flash/XMLList');
 		return null;
 	}
 
@@ -157,8 +156,8 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public elements (name:any="*") : XMLList{
-		console.log("elements not implemented yet in flash/XMLList");
+	public elements (name: any = '*'): XMLList {
+		console.log('elements not implemented yet in flash/XMLList');
 		return null;
 	}
 
@@ -171,8 +170,8 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public hasComplexContent () : boolean{
-		console.log("hasComplexContent not implemented yet in flash/XMLList");
+	public hasComplexContent (): boolean {
+		console.log('hasComplexContent not implemented yet in flash/XMLList');
 		return false;
 	}
 
@@ -183,8 +182,8 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public hasOwnProperty (P:any=null) : boolean{
-		console.log("hasOwnProperty not implemented yet in flash/XMLList");
+	public hasOwnProperty (P: any = null): boolean {
+		console.log('hasOwnProperty not implemented yet in flash/XMLList');
 		return false;
 	}
 
@@ -197,23 +196,23 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public hasSimpleContent () : boolean{
-		console.log("hasSimpleContent not implemented yet in flash/XMLList");
+	public hasSimpleContent (): boolean {
+		console.log('hasSimpleContent not implemented yet in flash/XMLList');
 		return false;
 	}
 
-	public inScopeNamespaces () : any[]{
-		console.log("inScopeNamespaces not implemented yet in flash/XMLList");
+	public inScopeNamespaces (): any[] {
+		console.log('inScopeNamespaces not implemented yet in flash/XMLList');
 		return [];
 	}
 
-	public insertChildAfter (child1:any, child2:any) : any{
-		console.log("insertChildAfter not implemented yet in flash/XMLList");
+	public insertChildAfter (child1: any, child2: any): any {
+		console.log('insertChildAfter not implemented yet in flash/XMLList');
 		return null;
 	}
 
-	public insertChildBefore (child1:any, child2:any) : any{
-		console.log("insertChildBefore not implemented yet in flash/XMLList");
+	public insertChildBefore (child1: any, child2: any): any {
+		console.log('insertChildBefore not implemented yet in flash/XMLList');
 		return null;
 	}
 
@@ -223,34 +222,34 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public length () : number{
-		console.log("length not implemented yet in flash/XMLList");
+	public length (): number {
+		console.log('length not implemented yet in flash/XMLList');
 		return 0;
 	}
 
-	public localName () : any{
-		console.log("localName not implemented yet in flash/XMLList");
+	public localName (): any {
+		console.log('localName not implemented yet in flash/XMLList');
 		return null;
 	}
 
-	public name () : any{
-		console.log("name not implemented yet in flash/XMLList");
+	public name (): any {
+		console.log('name not implemented yet in flash/XMLList');
 		return null;
 	}
 
-	public namespace (prefix:any=null) : any{
-		console.log("namespace not implemented yet in flash/XMLList");
+	public namespace (prefix: any = null): any {
+		console.log('namespace not implemented yet in flash/XMLList');
 		return null;
 	}
 
-	public namespaceDeclarations () : any[]{
-		console.log("namespaceDeclarations not implemented yet in flash/XMLList");
+	public namespaceDeclarations (): any[] {
+		console.log('namespaceDeclarations not implemented yet in flash/XMLList');
 		return [];
 	}
 
-	public nodeKind () : string{
-		console.log("nodeKind not implemented yet in flash/XMLList");
-		return "";
+	public nodeKind (): string {
+		console.log('nodeKind not implemented yet in flash/XMLList');
+		return '';
 	}
 
 	/**
@@ -262,8 +261,8 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public normalize () : XMLList{
-		console.log("normalize not implemented yet in flash/XMLList");
+	public normalize (): XMLList {
+		console.log('normalize not implemented yet in flash/XMLList');
 		return null;
 	}
 
@@ -274,13 +273,13 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public parent () : any{
-		console.log("parent not implemented yet in flash/XMLList");
+	public parent (): any {
+		console.log('parent not implemented yet in flash/XMLList');
 		return null;
 	}
 
-	public prependChild (value:any) : XML{
-		console.log("prependChild not implemented yet in flash/XMLList");
+	public prependChild (value: any): XML {
+		console.log('prependChild not implemented yet in flash/XMLList');
 		return null;
 	}
 
@@ -293,8 +292,8 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public processingInstructions (name:any="*") : XMLList{
-		console.log("processingInstructions not implemented yet in flash/XMLList");
+	public processingInstructions (name: any = '*'): XMLList {
+		console.log('processingInstructions not implemented yet in flash/XMLList');
 		return null;
 	}
 
@@ -307,36 +306,36 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public propertyIsEnumerable (P:any=null) : boolean{
-		console.log("propertyIsEnumerable not implemented yet in flash/XMLList");
+	public propertyIsEnumerable (P: any = null): boolean {
+		console.log('propertyIsEnumerable not implemented yet in flash/XMLList');
 		return false;
 	}
 
-	public removeNamespace (ns:any) : XML{
-		console.log("removeNamespace not implemented yet in flash/XMLList");
+	public removeNamespace (ns: any): XML {
+		console.log('removeNamespace not implemented yet in flash/XMLList');
 		return null;
 	}
 
-	public replace (propertyName:any, value:any) : XML{
-		console.log("replace not implemented yet in flash/XMLList");
+	public replace (propertyName: any, value: any): XML {
+		console.log('replace not implemented yet in flash/XMLList');
 		return null;
 	}
 
-	public setChildren (value:any) : XML{
-		console.log("setChildren not implemented yet in flash/XMLList");
+	public setChildren (value: any): XML {
+		console.log('setChildren not implemented yet in flash/XMLList');
 		return null;
 	}
 
-	public setLocalName (name:any){
-		console.log("setLocalName not implemented yet in flash/XMLList");
+	public setLocalName (name: any) {
+		console.log('setLocalName not implemented yet in flash/XMLList');
 	}
 
-	public setName (name:any){
-		console.log("setName not implemented yet in flash/XMLList");
+	public setName (name: any) {
+		console.log('setName not implemented yet in flash/XMLList');
 	}
 
-	public setNamespace (ns:any) {
-		console.log("setNamespace not implemented yet in flash/XMLList");
+	public setNamespace (ns: any) {
+		console.log('setNamespace not implemented yet in flash/XMLList');
 	}
 
 	/**
@@ -346,13 +345,13 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public text () : XMLList{
-		console.log("text not implemented yet in flash/XMLList");
+	public text (): XMLList {
+		console.log('text not implemented yet in flash/XMLList');
 		return null;
 	}
 
-	public toJSON (k:string) : any{
-		console.log("toJSON not implemented yet in flash/XMLList");
+	public toJSON (k: string): any {
+		console.log('toJSON not implemented yet in flash/XMLList');
 		return null;
 	}
 
@@ -369,9 +368,9 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public toString () : string{
-		console.log("toString not implemented yet in flash/XMLList");
-		return "";
+	public toString (): string {
+		console.log('toString not implemented yet in flash/XMLList');
+		return '';
 	}
 
 	/**
@@ -385,9 +384,9 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public toXMLString () : string{
-		console.log("toXMLString not implemented yet in flash/XMLList");
-		return "";
+	public toXMLString (): string {
+		console.log('toXMLString not implemented yet in flash/XMLList');
+		return '';
 	}
 
 	/**
@@ -396,10 +395,9 @@ export class XMLList
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
-	public valueOf () : XMLList{
-		console.log("valueOf not implemented yet in flash/XMLList");
+	public valueOf (): XMLList {
+		console.log('valueOf not implemented yet in flash/XMLList');
 		return null;
 	}
 
 }
-

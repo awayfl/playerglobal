@@ -1,1 +1,1 @@
-export {TriangleCulling} from "@awayjs/graphics";
+export { TriangleCulling } from '@awayjs/graphics';

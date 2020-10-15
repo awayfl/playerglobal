@@ -5,7 +5,7 @@
  * @throws	ReferenceError No public definition exists with the
  *   specified name.
  */
-export const getDefinitionByName=function(name:string){
+export const getDefinitionByName = function(name: string) {
 	//todo
-	throw("getDefinitionByName is not implemented yet in flash/utils");
+	throw ('getDefinitionByName is not implemented yet in flash/utils');
 };

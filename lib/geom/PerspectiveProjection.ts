@@ -1,1 +1,1 @@
-export {PerspectiveProjection} from "@awayjs/core";
+export { PerspectiveProjection } from '@awayjs/core';

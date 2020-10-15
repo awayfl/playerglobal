@@ -2,8 +2,8 @@
 // C:\Users\80prozent\AppData\Local\FlashDevelop\Apps\flexairsdk\4.6.0+25.0.0\frameworks\libs\player\18.0\playerglobal.swc\flash\text\StyleSheet
 //
 
-import {EventDispatcher} from "../events/EventDispatcher";
-import { TextFormat } from "./TextFormat";
+import { EventDispatcher } from '../events/EventDispatcher';
+import { TextFormat } from './TextFormat';
 
 /**
  * The StyleSheet class lets you create a StyleSheet object that contains text
@@ -43,20 +43,20 @@ import { TextFormat } from "./TextFormat";
  * However, in Flex, you typically use the Label, Text, TextArea, and TextInput controls to process text.</ph></p>
  *
  */
-export class StyleSheet extends EventDispatcher
-{
+export class StyleSheet extends EventDispatcher {
 	/**
 	 * Creates a new StyleSheet object.
 	 */
-	constructor (){
+	constructor () {
 		super();
 	}
+
 	/**
 	 * An array that contains the names (as strings) of all of the styles registered
 	 * in this style sheet.
 	 */
-	public get styleNames () : any[]{
-		console.log("styleNames not implemented yet in flash/Stylesheet");
+	public get styleNames (): any[] {
+		console.log('styleNames not implemented yet in flash/Stylesheet');
 		return [];
 	}
 
@@ -64,7 +64,7 @@ export class StyleSheet extends EventDispatcher
 	 * Removes all styles from the style sheet object.
 	 */
 	public clear () {
-		console.log("clear not implemented yet in flash/Stylesheet");
+		console.log('clear not implemented yet in flash/Stylesheet');
 
 	}
 
@@ -75,8 +75,8 @@ export class StyleSheet extends EventDispatcher
 	 * @param	styleName	A string that specifies the name of the style to retrieve.
 	 * @return	An object.
 	 */
-	public getStyle (styleName:string) : any{
-		console.log("getStyle not implemented yet in flash/Stylesheet");
+	public getStyle (styleName: string): any {
+		console.log('getStyle not implemented yet in flash/Stylesheet');
 		return null;
 
 	}
@@ -91,8 +91,8 @@ export class StyleSheet extends EventDispatcher
 	 * of the StyleSheet class.
 	 * @param	CSSText	The CSS text to parse (a string).
 	 */
-	public parseCSS (CSSText:string) {
-		console.log("parseCSS not implemented yet in flash/Stylesheet");
+	public parseCSS (CSSText: string) {
+		console.log('parseCSS not implemented yet in flash/Stylesheet');
 
 	}
 
@@ -106,11 +106,10 @@ export class StyleSheet extends EventDispatcher
 	 * @param	styleName	A string that specifies the name of the style to add to the style sheet.
 	 * @param	styleObject	An object that describes the style, or null.
 	 */
-	public setStyle (styleName:string, styleObject:any) {
-		console.log("setStyle not implemented yet in flash/Stylesheet");
+	public setStyle (styleName: string, styleObject: any) {
+		console.log('setStyle not implemented yet in flash/Stylesheet');
 
 	}
-
 
 	/**
 	 * Extends the CSS parsing capability. Advanced developers can override this method by extending the
@@ -120,10 +119,9 @@ export class StyleSheet extends EventDispatcher
 	 * @return	A TextFormat object containing the result of the mapping of CSS rules
 	 *   to text format properties.
 	 */
-	public transform (formatObject:any) : TextFormat{
-		console.log("transform not implemented yet in flash/Stylesheet");
+	public transform (formatObject: any): TextFormat {
+		console.log('transform not implemented yet in flash/Stylesheet');
 		return null;
 
 	}
 }
-

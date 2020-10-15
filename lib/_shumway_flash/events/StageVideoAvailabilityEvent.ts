@@ -1,5 +1,5 @@
-import { Event } from "./Event";
-import { axCoerceString } from "@awayjs/graphics";
+import { Event } from './Event';
+import { axCoerceString } from '@awayjs/graphics';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -19,18 +19,18 @@ import { axCoerceString } from "@awayjs/graphics";
 // Class: StageVideoAvailabilityEvent
 export class StageVideoAvailabilityEvent extends Event {
 
-  static classInitializer: any = null;
+	static classInitializer: any = null;
 
-  static classSymbols: string [] = null;
-  static instanceSymbols: string [] = null;
-  availability: string;
+	static classSymbols: string [] = null;
+	static instanceSymbols: string [] = null;
+	availability: string;
 
-  constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-              availability: string = null) {
-    super(type, bubbles, cancelable);
-    this.availability = axCoerceString(availability);
-  }
+	constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
+		availability: string = null) {
+		super(type, bubbles, cancelable);
+		this.availability = axCoerceString(availability);
+	}
 
-  // JS -> AS Bindings
-  static STAGE_VIDEO_AVAILABILITY: string = "stageVideoAvailability";
+	// JS -> AS Bindings
+	static STAGE_VIDEO_AVAILABILITY: string = 'stageVideoAvailability';
 }

@@ -1,2 +1,2 @@
-import {Power} from "./Power"
-export class Power3 extends Power{}
+import { Power } from './Power';
+export class Power3 extends Power {}
