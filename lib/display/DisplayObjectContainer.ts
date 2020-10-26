@@ -1,5 +1,5 @@
 import { Box } from '@awayjs/core';
-import { Billboard, TextField as AwayTextField, DisplayObjectContainer as AwayDisplayObjectContainer, Sprite as AwaySprite, MovieClip as AwayMovieClip, DisplayObject as AwayDisplayObject, FrameScriptManager, IDisplayObjectAdapter } from '@awayjs/scene';
+import { Billboard, TextField as AwayTextField, DisplayObjectContainer as AwayDisplayObjectContainer, Sprite as AwaySprite, MovieClip as AwayMovieClip, DisplayObject as AwayDisplayObject, FrameScriptManager, IDisplayObjectAdapter, IMovieClipAdapter } from '@awayjs/scene';
 import { DisplayObject } from './DisplayObject';
 import { InteractiveObject } from './InteractiveObject';
 import { Event } from '../events/Event';
@@ -19,14 +19,6 @@ export class DisplayObjectContainer extends InteractiveObject {
 
 	public getTimelineObjectAtDepth(depth: number): any {
 		return null;
-	}
-
-	public _lookupChildByName(name: string, lookupOptions: any = null): any {
-
-	}
-
-	public _lookupChildByIndex(idx: number, lookupOptions: any = null): any {
-
 	}
 
 	/**
@@ -68,8 +60,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 					constructorFunc();
 					//(<any>mcadapter).constructorHasRun=true;
 				}
-				// if mc was created by timeline, instanceID!=""
-				if ((<any>mc).just_added_to_timeline && mc.instanceID != '' && mcadapter && (<any>mcadapter).dispatchStaticEvent) {
+				if ((<any>mc).just_added_to_timeline && mc._sessionID != -1 && mcadapter && (<any>mcadapter).dispatchStaticEvent) {
 
 					(<any>mcadapter).dispatchStaticEvent('added', mcadapter);
 					(<any>mc).just_added_to_timeline = false;
@@ -219,6 +210,25 @@ export class DisplayObjectContainer extends InteractiveObject {
 		}
 	}
 
+	private _tempSessionID: number=0;
+	private _tempDepthID: number=0;
+	private _tempAS3Depth: number=0;
+
+	public getChildForDraw(child: AwayDisplayObject): AwayDisplayObject {
+		this._tempSessionID = child._sessionID;
+		this._tempDepthID = child._depthID;
+		this._tempAS3Depth = child._as3DepthID;
+		child._setParent(null);
+		return child;
+	}
+
+	public returnChildAfterDraw(child: AwayDisplayObject) {
+		child._sessionID = this._tempSessionID;
+		child._depthID = this._tempDepthID;
+		child._as3DepthID = this._tempAS3Depth;
+		child._setParent(<AwayDisplayObjectContainer> this.adaptee);
+	}
+
 	//---------------------------original as3 properties / methods:
 
 	/**
@@ -349,24 +359,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 	public addChildAt (child: DisplayObject, index: number): DisplayObject {
 		const dispatchAdded = !(child.adaptee.parent == this.adaptee);
 		// todo: this should be done much more efficient (in awayjs)
-		const allChildren = [];
-		for (var i: number /*uint*/ = 0; i < (<AwayDisplayObjectContainer> this._adaptee).numChildren; i++) {
-			if (child.adaptee.id != (<AwayDisplayObjectContainer> this._adaptee)._children[i].id) {
-				allChildren[allChildren.length] = (<AwayDisplayObjectContainer> this._adaptee)._children[i];
-			}
-		}
-		for (i = 0; i < allChildren.length; i++) {
-
-			(<AwayDisplayObjectContainer> this._adaptee).removeChild(allChildren[i]);
-		}
-		let newChildCnt = 0;
-		for (i = 0; i < allChildren.length + 1; i++) {
-			if (i == index) {
-				(<AwayDisplayObjectContainer> this._adaptee).addChild(child.adaptee);
-			} else {
-				(<AwayDisplayObjectContainer> this._adaptee).addChild(allChildren[newChildCnt++]);
-			}
-		}
+		(<AwayDisplayObjectContainer> this.adaptee).addChildAt(child.adaptee, index);
 		if (dispatchAdded) {
 			child.dispatchStaticEvent(Event.ADDED);
 			if (this.adaptee.isOnDisplayList()) {
@@ -416,7 +409,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 * @playerversion	Lite 4
 	 */
 	public contains(child: DisplayObject): boolean {
-		return (<AwayDisplayObjectContainer>(<AwayDisplayObjectContainer> this._adaptee)).contains(child.adaptee);
+		return (<AwayDisplayObjectContainer> this._adaptee).contains(child.adaptee);
 	}
 
 	/**
@@ -435,6 +428,8 @@ export class DisplayObjectContainer extends InteractiveObject {
 
 		const child = (<AwayDisplayObjectContainer> this._adaptee).getChildAt(index);
 		if (!child.adapter || child.adapter == child) {
+			// todo: this looks like it might cause trouble:
+			// it adds a Sprite-adapter to the child, regardsless what type the child really is
 			const sprite = child.adapter = new (<SecurityDomain> this.sec).flash.display.Sprite();
 			sprite.adaptee = child;
 		}
@@ -461,7 +456,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 *   the child movie call the Security.allowDomain() method.
 	 */
 	public getChildByName (name: string): DisplayObject {
-		return (<AwayDisplayObjectContainer>(<AwayDisplayObjectContainer> this._adaptee)).getChildByName(name) ? (<DisplayObject>(<AwayDisplayObjectContainer>(<AwayDisplayObjectContainer> this._adaptee)).getChildByName(name).adapter) : null;
+		return (<AwayDisplayObjectContainer> this._adaptee).getChildByName(name) ? (<DisplayObject>(<AwayDisplayObjectContainer> this._adaptee).getChildByName(name).adapter) : null;
 	}
 
 	/**
@@ -474,7 +469,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 * @throws	ArgumentError Throws if the child parameter is not a child of this object.
 	 */
 	public getChildIndex (child: DisplayObject): number {
-		return (<AwayDisplayObjectContainer>(<AwayDisplayObjectContainer> this._adaptee)).getChildIndex(child.adaptee);
+		return (<AwayDisplayObjectContainer> this._adaptee).getChildIndex(child.adaptee);
 	}
 
 	/**
@@ -544,7 +539,6 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 */
 	public removeChild (child: DisplayObject): DisplayObject {
 		(<AwayDisplayObjectContainer> this._adaptee).removeChild(child.adaptee);
-		//console.log("removeChild not implemented yet in flash/DisplayObjectContainer");
 		return child;
 	}
 
@@ -568,9 +562,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 * @throws	RangeError Throws if the index does not exist in the child list.
 	 */
 	public removeChildAt (index: number): DisplayObject {
-		const awayChild: AwayDisplayObject = (<AwayDisplayObjectContainer> this._adaptee).removeChildAt(index);
-		const childadapter: DisplayObject = (<DisplayObject>awayChild.adapter);
-		return childadapter;
+		return (<DisplayObject>(<AwayDisplayObjectContainer> this._adaptee).removeChildAt(index).adapter);
 	}
 
 	public removeChildren (beginIndex: number = 0, endIndex: number = 2147483647)  {
@@ -609,31 +601,15 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 * @throws	ArgumentError Throws if the child parameter is not a child of this object.
 	 */
 	public setChildIndex (child: DisplayObject, index: number)  {
+		const idx = (<AwayDisplayObjectContainer> this.adaptee)._children.indexOf(child.adaptee);
+		if (idx < 0)
+			throw ('[DisplayObjectContainer.setChildindex] - todo: throw as3 error when child is not child of this obj');
+		if (idx == index)
+			return;
+		if (index > (<AwayDisplayObjectContainer> this.adaptee)._children.length)
+			throw ('[DisplayObjectContainer.setChildindex] - todo: throw as3 error when index is out of bounds');
 
-		// todo: this should be done much more efficient (in awayjs)
-		const allChildren = [];
-		for (var i: number /*uint*/ = 0; i < (<AwayDisplayObjectContainer> this._adaptee).numChildren; i++) {
-			allChildren[allChildren.length] = (<AwayDisplayObjectContainer> this._adaptee)._children[i];
-		}
-		for (i = 0; i < allChildren.length; i++) {
-
-			(<AwayDisplayObjectContainer> this._adaptee).removeChild(allChildren[i]);
-		}
-		let newChildCnt = 0;
-		let oldChild;
-		for (i = 0; i < allChildren.length; i++) {
-			if (i == index) {
-				(<AwayDisplayObjectContainer> this._adaptee).addChild(child.adaptee);
-			} else {
-				oldChild = allChildren[newChildCnt++];
-				if (oldChild.id != child.adaptee.id) {
-					(<AwayDisplayObjectContainer> this._adaptee).addChild(oldChild);
-				} else {
-					oldChild = allChildren[newChildCnt++];
-					(<AwayDisplayObjectContainer> this._adaptee).addChild(oldChild);
-				}
-			}
-		}
+		(<AwayDisplayObjectContainer> this.adaptee).setChildIndex(child.adaptee, index);
 	}
 
 	public stopAllMovieClips ()  {
@@ -653,7 +629,6 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 */
 	public swapChildren (child1: DisplayObject, child2: DisplayObject) {
 		(<AwayDisplayObjectContainer> this._adaptee).swapChildren(child1.adaptee, child2.adaptee);
-
 	}
 
 	/**
@@ -667,7 +642,6 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 * @throws	RangeError If either index does not exist in the child list.
 	 */
 	public swapChildrenAt (index1: number, index2: number)  {
-		//todo
-		throw ('swapChildrenAt not implemented yet in flash/DisplayObjectContainer');
+		(<AwayDisplayObjectContainer> this._adaptee).swapChildrenAt(index1, index2);
 	}
 }

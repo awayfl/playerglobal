@@ -1,6 +1,8 @@
-import { IDisplayObjectAdapter, MovieClip as AwayMovieClip, Sprite as AwaySprite, DisplayObject as AwayDisplayObject, IMovieClipAdapter, SceneGraphPartition, Timeline, FrameScriptManager } from '@awayjs/scene';
+import { MovieClip as AwayMovieClip,
+	DisplayObject as AwayDisplayObject,
+	IMovieClipAdapter,  FrameScriptManager } from '@awayjs/scene';
 import { Sprite } from './Sprite';
-import { Matrix3D, AssetBase } from '@awayjs/core';
+import { AssetBase } from '@awayjs/core';
 import { constructClassFromSymbol } from '@awayfl/avm2';
 import { Event } from '../events/Event';
 import { FrameLabel } from './FrameLabel';
@@ -13,19 +15,38 @@ declare let __framescript__;
  * The MovieClip class inherits from the following classes: Sprite, DisplayObjectContainer,
  * InteractiveObject, DisplayObject, and EventDispatcher.
  *
- *   <p class="- topic/p ">Unlike the Sprite object, a MovieClip object has a timeline.</p><p class="- topic/p ">&gt;In Flash Professional, the methods for the MovieClip class provide the same functionality
+ *   <p class="- topic/p ">Unlike the Sprite object, a MovieClip object has a timeline.</p><p class="- topic/p ">&gt;
+ * In Flash Professional, the methods for the MovieClip class provide the same functionality
  * as actions that target movie clips. Some additional methods do not have equivalent
- * actions in the Actions toolbox in the Actions panel in the Flash authoring tool. </p><p class="- topic/p ">Children instances placed on the Stage in Flash Professional cannot be accessed by code from within the
- * constructor of a parent instance since they have not been created at that ponumber in code execution.
+ * actions in the Actions toolbox in the Actions panel in the Flash authoring tool. </p>
+ * <p class="- topic/p ">
+ * Children instances placed on the Stage in Flash Professional
+ * cannot be accessed by code from within the constructor of a parent instance
+ * since they have not been created at that ponumber in code execution.
  * Before accessing the child, the parent must instead either create the child instance
  * by code or delay access to a callback that listens for the child to dispatch
- * its <codeph class="+ topic/ph pr-d/codeph ">Event.ADDED_TO_STAGE</codeph> event.</p><p class="- topic/p ">If you modify any of the following properties of a MovieClip object that contains a motion tween,
- * the playhead is stopped in that MovieClip object: <codeph class="+ topic/ph pr-d/codeph ">alpha</codeph>, <codeph class="+ topic/ph pr-d/codeph ">blendMode</codeph>,
- * <codeph class="+ topic/ph pr-d/codeph ">filters</codeph>, <codeph class="+ topic/ph pr-d/codeph ">height</codeph>, <codeph class="+ topic/ph pr-d/codeph ">opaqueBackground</codeph>, <codeph class="+ topic/ph pr-d/codeph ">rotation</codeph>,
- * <codeph class="+ topic/ph pr-d/codeph ">scaleX</codeph>, <codeph class="+ topic/ph pr-d/codeph ">scaleY</codeph>, <codeph class="+ topic/ph pr-d/codeph ">scale9Grid</codeph>, <codeph class="+ topic/ph pr-d/codeph ">scrollRect</codeph>,
- * <codeph class="+ topic/ph pr-d/codeph ">transform</codeph>, <codeph class="+ topic/ph pr-d/codeph ">visible</codeph>, <codeph class="+ topic/ph pr-d/codeph ">width</codeph>, <codeph class="+ topic/ph pr-d/codeph ">x</codeph>,
- * or <codeph class="+ topic/ph pr-d/codeph ">y</codeph>. However, it does not stop the playhead in any child MovieClip objects of that
- * MovieClip object.</p><p class="- topic/p "><b class="+ topic/ph hi-d/b ">Note:</b>Flash Lite 4 supports the MovieClip.opaqueBackground property only if
+ * its <codeph class="+ topic/ph pr-d/codeph ">Event.ADDED_TO_STAGE</codeph> event.
+ * </p><p class="- topic/p ">
+ * If you modify any of the following properties of a MovieClip object that contains a motion tween,
+ * the playhead is stopped in that MovieClip object:
+ * <codeph class="+ topic/ph pr-d/codeph ">alpha</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">blendMode</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">filters</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">height</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">opaqueBackground</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">rotation</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">scaleX</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">scaleY</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">scale9Grid</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">scrollRect</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">transform</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">visible</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">width</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">x</codeph>,
+ * or <codeph class="+ topic/ph pr-d/codeph ">y</codeph>.
+ * However, it does not stop the playhead in any child MovieClip objects of that
+ * MovieClip object.</p><p class="- topic/p ">
+ * <b class="+ topic/ph hi-d/b ">Note:</b>Flash Lite 4 supports the MovieClip.opaqueBackground property only if
  * FEATURE_BITMAPCACHE is defined. The default configuration of Flash Lite 4 does not define
  * FEATURE_BITMAPCACHE. To enable the MovieClip.opaqueBackground property for a suitable device,
  * define FEATURE_BITMAPCACHE in your project.</p>*/
@@ -70,10 +91,12 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		if (!this.allowScript && (<any> this.sec).swfVersion > 9) {
 			return;
 		}
-		scripts = (<AwayMovieClip> this.adaptee).timeline.get_script_for_frame(<AwayMovieClip> this.adaptee, (<AwayMovieClip> this.adaptee).currentFrameIndex);
+		scripts = (<AwayMovieClip> this.adaptee).timeline.get_script_for_frame(
+			<AwayMovieClip> this.adaptee, (<AwayMovieClip> this.adaptee).currentFrameIndex, false);
 		if (!scripts) {
 			return;
 		}
+
 		this.allowScript = false;
 		const prev_script_scope = MovieClip.current_script_scope;
 		MovieClip.current_script_scope = this;
@@ -143,7 +166,6 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			throw ('_symbol not defined when cloning movieclip');
 		}
 
-		//var clone: MovieClip = MovieClip.getNewMovieClip(AwayMovieClip.getNewMovieClip((<AwayMovieClip>this.adaptee).timeline));
 		const newMC: MovieClip = constructClassFromSymbol(anyThis._symbol, anyThis._symbol.symbolClass);
 
 		// console.log("Base", anyThis._symbol, anyThis._symbol.symbolClass);
@@ -163,14 +185,6 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			(<any>newMC).constructorHasRun = true;
 
 		};
-
-		// if this is a custom class (not a plain MC or Sprite)
-		// make sure that the clone will not be reused on the timeline.
-		// it must reclone for every new instance thats added to scene, so that the as3 constructor (axInitializer) will run again...
-		// (if cloneForEveryInstance is true, the awayjs-mc will not cache the instance on the potentialinstance-list)
-		if (anyThis._symbol.className) {
-			(<any>newMC.adaptee).cloneForEveryInstance = true;
-		}
 
 		if (adaptee.timeline) {
 
@@ -274,7 +288,8 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		const keyframe_firstframes = (<AwayMovieClip> this.adaptee).timeline.keyframe_firstframes;
 		this._currentLabels = [];
 		for (const key in labels) {
-			this._currentLabels.push(new (<SecurityDomain> this.sec).flash.display.FrameLabel(labels[key].name, keyframe_firstframes[labels[key].keyFrameIndex] + 1));
+			this._currentLabels.push(new (<SecurityDomain> this.sec).flash.display.FrameLabel(
+				labels[key].name, keyframe_firstframes[labels[key].keyFrameIndex] + 1));
 		}
 		return this._currentLabels;
 	}
@@ -382,8 +397,8 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 				numArgs + 1);
 		}
 		for (let i = 0; i < numArgs; i += 2) {
-			const frameNum = (arguments[i] | 0);
-			const fn = arguments[i + 1];
+			const frameNum = (args[i] | 0);
+			const fn = args[i + 1];
 			(<AwayMovieClip> this.adaptee).timeline.add_framescript(fn, frameNum, <any> this.adaptee);
 
 			// newly registered scripts get queued in FrameScriptManager.execute-as3constructor
@@ -405,7 +420,8 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * as well as a frame, specify a value for the scene parameter.
 	 * @param	frame	A number representing the frame number, or a string representing the label of the
 	 *   frame, to which the playhead is sent. If you specify a number, it is relative to the
-	 *   scene you specify. If you do not specify a scene, the current scene determines the global frame number to play. If you do specify a scene, the playhead
+	 *   scene you specify. If you do not specify a scene,
+	 *   the current scene determines the global frame number to play. If you do specify a scene, the playhead
 	 *   jumps to the frame number in the specified scene.
 	 * @param	scene	The name of the scene to play. This parameter is optional.
 	 */
@@ -442,7 +458,8 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * specify a scene parameter.
 	 * @param	frame	A number representing the frame number, or a string representing the label of the
 	 *   frame, to which the playhead is sent. If you specify a number, it is relative to the
-	 *   scene you specify. If you do not specify a scene, the current scene determines the global frame number at which to go to and stop. If you do specify a scene,
+	 *   scene you specify. If you do not specify a scene, the current scene determines
+	 *   the global frame number at which to go to and stop. If you do specify a scene,
 	 *   the playhead goes to the frame number in the specified scene and stops.
 	 * @param	scene	The name of the scene. This parameter is optional.
 	 * @throws	ArgumentError If the scene or frame specified are
@@ -489,7 +506,9 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 
 		if (typeof frame === 'string') {
 			(<AwayMovieClip> this._adaptee).jumpToLabel(<string>frame);
-		} else if (typeof frame === 'number' && frame <= 0) {} else {
+		} else if (typeof frame === 'number' && frame <= 0) {
+			console.warn('[playerglobal/MovieClip] - gotoFrame called with invalid frame-index');
+		} else {
 			(<AwayMovieClip> this._adaptee).currentFrameIndex = (<number>frame) - 1;
 		}
 		if (this.currentFrame == oldFrame) {

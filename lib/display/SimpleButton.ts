@@ -1,10 +1,10 @@
-import { InteractiveObject } from './InteractiveObject';
-
 import { DisplayObject } from './DisplayObject';
 import { SoundTransform } from '../media/SoundTransform';
 import { MovieClip } from './MovieClip';
-import { FrameScriptManager } from '@awayjs/scene';
+import { Timeline, DisplayObjectContainer as AwayDisplayObjectContainer,
+	DisplayObject as AwayDisplayObject, IDisplayObjectAdapter, FrameScriptManager } from '@awayjs/scene';
 import { MovieClip as AwayMovieClip } from '@awayjs/scene';
+import { IVirtualSceneGraphItem } from './IVirtualSceneGraphItem';
 
 /**
  * The SimpleButton class lets you control all instances of button symbols in a SWF
@@ -15,7 +15,8 @@ import { MovieClip as AwayMovieClip } from '@awayjs/scene';
  * Explorer and in the Insert Target Path dialog box in the Actions
  * panel. After you create an instance of a button in Flash Professional, you can
  * use the methods and properties of the SimpleButton class to manipulate buttons
- * with ActionScript.</p><p class="- topic/p ">In ActionScript 3.0, you use the <codeph class="+ topic/ph pr-d/codeph ">new SimpleButton()</codeph> constructor to create a
+ * with ActionScript.</p><p class="- topic/p ">In ActionScript 3.0,
+ * you use the <codeph class="+ topic/ph pr-d/codeph ">new SimpleButton()</codeph> constructor to create a
  * SimpleButton instance.</p><p class="- topic/p ">The SimpleButton class inherits from the InteractiveObject class.</p>
  *
  *   EXAMPLE:
@@ -25,19 +26,35 @@ import { MovieClip as AwayMovieClip } from '@awayjs/scene';
  * ButtonDisplayState objects.  The result is a button that is created in the shape of
  * a square, whose background color changes based on the mouse state by overriding instance properties of
  * the SimpleButton class.  This is accomplished by performing the following steps:
- * <ol class="- topic/ol "><li class="- topic/li ">In the <codeph class="+ topic/ph pr-d/codeph ">SimpleButtonExample()</codeph> constructor, a new CustomSimpleButton object of type
- * SimpleButton, called <codeph class="+ topic/ph pr-d/codeph ">button</codeph>, is created, which calls the <codeph class="+ topic/ph pr-d/codeph ">CustomSimpleButton</codeph> constructor
- * method.  The <codeph class="+ topic/ph pr-d/codeph ">button</codeph> object is the added to the display list.  The button's color and size are
- * determined in the steps that follow.</li><li class="- topic/li ">In the CustomSimpleButton class, instance properties are declared that are later used
- * to control the size and background color of <codeph class="+ topic/ph pr-d/codeph ">button</codeph>, based on the state it is in (orange
+ * <ol class="- topic/ol ">
+ * <li class="- topic/li ">In the <codeph class="+ topic/ph pr-d/codeph ">SimpleButtonExample()</codeph>
+ * constructor, a new CustomSimpleButton object of type
+ * SimpleButton, called <codeph class="+ topic/ph pr-d/codeph ">button</codeph>,
+ * is created, which calls the <codeph class="+ topic/ph pr-d/codeph ">CustomSimpleButton</codeph> constructor
+ * method.  The <codeph class="+ topic/ph pr-d/codeph ">button</codeph> object is the added to the display list.
+ * The button's color and size are
+ * determined in the steps that follow.</li><li class="- topic/li ">
+ * In the CustomSimpleButton class, instance properties are declared that are later used
+ * to control the size and background color of <codeph class="+ topic/ph pr-d/codeph ">button</codeph>,
+ * based on the state it is in (orange
  * in the normal state, dark yellow in the mouse over state, an light blue in the mouse down state).
- * In all of the <codeph class="+ topic/ph pr-d/codeph ">button</codeph>'s states, the size of the square is set to 80 pixels by using the
- * <codeph class="+ topic/ph pr-d/codeph ">size</codeph> property.</li><li class="- topic/li ">The constructor function for the CustomSimpleButton class sets the
- * <codeph class="+ topic/ph pr-d/codeph ">downState</codeph>, <codeph class="+ topic/ph pr-d/codeph ">overState</codeph>, <codeph class="+ topic/ph pr-d/codeph ">upState</codeph>,
- * <codeph class="+ topic/ph pr-d/codeph ">hitTestState</codeph>, and <codeph class="+ topic/ph pr-d/codeph ">useHandCursor</codeph> properties with
- * four instances of the ButtonDisplayState class.</li><li class="- topic/li ">In the ButtonDisplayState class, the constructor sets the value of the
- * square's size and background color and calls the <codeph class="+ topic/ph pr-d/codeph ">draw()</codeph> method.</li><li class="- topic/li ">The <codeph class="+ topic/ph pr-d/codeph ">draw()</codeph> method redraws the square with the size and background color set in
- * the constructor based on the button's state.</li></ol><codeblock xml:space="preserve" class="+ topic/pre pr-d/codeblock ">
+ * In all of the <codeph class="+ topic/ph pr-d/codeph ">button</codeph>'s states,
+ * the size of the square is set to 80 pixels by using the
+ * <codeph class="+ topic/ph pr-d/codeph ">size</codeph> property.</li>
+ * <li class="- topic/li ">The constructor function for the CustomSimpleButton class sets the
+ * <codeph class="+ topic/ph pr-d/codeph ">downState</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">overState</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">upState</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">hitTestState</codeph>,
+ * and <codeph class="+ topic/ph pr-d/codeph ">useHandCursor</codeph> properties with
+ * four instances of the ButtonDisplayState class.</li>
+ * <li class="- topic/li ">In the ButtonDisplayState class, the constructor sets the value of the
+ * square's size and background color and calls the
+ * <codeph class="+ topic/ph pr-d/codeph ">draw()</codeph> method.</li>
+ * <li class="- topic/li ">The <codeph class="+ topic/ph pr-d/codeph ">draw()</codeph>
+ * method redraws the square with the size and background color set in
+ * the constructor based on the button's state.</li>
+ * </ol><codeblock xml:space="preserve" class="+ topic/pre pr-d/codeblock ">
 
  */
 export class SimpleButton extends MovieClip {
@@ -49,13 +66,283 @@ export class SimpleButton extends MovieClip {
 	 * @param	downState	The initial value for the SimpleButton down state.
 	 * @param	hitTestState	The initial value for the SimpleButton hitTest state.
 	 */
-	constructor (upState: DisplayObject = null, overState: DisplayObject = null, downState: DisplayObject = null, hitTestState: DisplayObject = null) {
+	constructor (upState: DisplayObject = null,
+		overState: DisplayObject = null,
+		downState: DisplayObject = null,
+		hitTestState: DisplayObject = null) {
 		super();
 		(<AwayMovieClip> this._adaptee).addButtonListeners();
 	}
 
-	// for AVM1:
-	public buttonMode: any;
+	// todo: this methods are also defined on Sprite
+	// in avm2 SimpleButton extends from InteractiveObject, not from MovieClip/Sprite
+
+	public addTimelineChildAtDepth(child: AwayDisplayObject, depth: number): AwayDisplayObject {
+
+		child.reset();
+
+		const children = (<AwayDisplayObjectContainer> this.adaptee)._children;
+		const maxIndex = children.length - 1;
+		let index = maxIndex + 1;
+		let scriptChildsOffset = 0;
+		for (let i = maxIndex; i >= 0; i--) {
+			const current = children[i];
+			if (current._as3DepthID == -1) {
+				scriptChildsOffset++;
+			}
+			if (current._as3DepthID > -1) {
+				if (current._as3DepthID < depth) {
+					index = i + 1 + scriptChildsOffset;
+					break;
+				}
+				scriptChildsOffset = 0;
+				index = i;
+			}
+		}
+		child._as3DepthID = depth;
+
+		(<any>child).just_added_to_timeline = true;
+		(<AwayMovieClip> this.adaptee)._sessionID_childs[child._sessionID] = child;
+		return (<AwayMovieClip> this.adaptee).addChildAt(child, index);
+	}
+
+	public removeTimelineChildAt(value: number): void {
+		// in as3 we remove by sessionID
+		const child = (<AwayMovieClip> this.adaptee)._sessionID_childs[value];
+		if (child) {
+			delete (<AwayMovieClip> this.adaptee)._sessionID_childs[value];
+			(<AwayMovieClip> this.adaptee).removeChild(child);
+		}
+	}
+
+	/**
+	 * queue the mc for executing framescripts
+	 * this only queues the frame-index as a number,
+	 * the actual framescripts will be retrieved in MovieClip.executeScripts
+	 * @param timeline
+	 * @param frame_idx
+	 * @param scriptPass1
+	 */
+	public queueFrameScripts(timeline: Timeline, frame_idx: number, scriptPass1: boolean) {
+		//console.log("add framescript", target_mc, target_mc.name, keyframe_idx, scriptPass1 );
+		if (scriptPass1)
+			FrameScriptManager.add_script_to_queue(<AwayMovieClip> this.adaptee, frame_idx);
+		else
+			FrameScriptManager.add_script_to_queue_pass2(<AwayMovieClip> this.adaptee, frame_idx);
+	}
+
+	public constructFrame(timeline: Timeline, start_construct_idx: number,
+		target_keyframe_idx: number, jump_forward: boolean,
+		frame_idx: number, queue_pass2: boolean, queue_script: boolean) {
+
+		const adaptee: AwayMovieClip = <AwayMovieClip> this.adaptee;
+		let len = adaptee._children.length;
+
+		let virtualSceneGraph = [];
+		const existingSessionIDs = {};
+
+		for (let i = 0; i < len; i++) {
+			// collect the existing children into a virtual-scenegraph
+			// also collect existing session ids into a map
+			const child = adaptee._children[i];
+			// if jumping forward, we continue from current frame, so we collect all objects
+			// if jumping back, we want to only collect script-children. timeline childs are ignored
+			if (jump_forward || child._sessionID == -1) {
+				virtualSceneGraph[virtualSceneGraph.length] = {
+					sessionID:child._sessionID,
+					as3DepthID:child._as3DepthID,
+					addedOnTargetFrame:false,
+					child:child
+				};
+			}
+			if (child._sessionID != -1)
+				existingSessionIDs[child._sessionID] = child;
+		}
+		//for(var key in virtualSceneGraphAS2){
+		//console.log("existing childs=", key, virtualSceneGraphAS2[key]);
+		//}
+
+		let i: number;
+		let k: number;
+
+		if (this['$Bg__setPropDict']) {
+			this.clearPropsDic();
+		}
+
+		// step1: apply remove / add commands to virtual scenegraph. collect update commands aswell
+
+		timeline._update_indices.length = 0;
+		timeline._update_frames.length = 0;
+		let update_cnt = 0;
+		let start_index: number;
+		let end_index: number;
+		for (k = start_construct_idx; k <= target_keyframe_idx; k++) {
+			let frame_command_idx: number = timeline.frame_command_indices[k];
+			const frame_recipe: number = timeline.frame_recipe[k];
+
+			if (frame_recipe & 2) {
+				start_index = timeline.command_index_stream[frame_command_idx];
+				end_index = start_index + timeline.command_length_stream[frame_command_idx++];
+				const removeSessionIDs = {};
+				for (i = start_index; i < end_index; i++) {
+					removeSessionIDs[timeline.remove_child_stream[i]] = true;
+				}
+				const newVirtualSceneGraph = [];
+				len = virtualSceneGraph.length;
+				for (let i = 0; i < len; i++) {
+					if (!removeSessionIDs[virtualSceneGraph[i].sessionID])
+						newVirtualSceneGraph[newVirtualSceneGraph.length] = virtualSceneGraph[i];
+				}
+				virtualSceneGraph = newVirtualSceneGraph;
+			}
+			if (frame_recipe & 4) {
+				start_index = timeline.command_index_stream[frame_command_idx];
+				end_index = start_index + timeline.command_length_stream[frame_command_idx++];
+				for (i = start_index; i < end_index; i++) {
+					const maxIndex = virtualSceneGraph.length - 1;
+					const depth = timeline.add_child_stream[i * 3 + 1];
+					let index = maxIndex + 1;
+					let scriptChildsOffset = 0;
+					for (let i = maxIndex; i >= 0; i--) {
+						const current = virtualSceneGraph[i];
+						if (current._as3DepthID == -1) {
+							scriptChildsOffset++;
+						}
+						if (current.as3DepthID > -1) {
+							if (current.as3DepthID < depth) {
+								index = i + 1 + scriptChildsOffset;
+								break;
+							}
+							scriptChildsOffset = 0;
+							index = i;
+						}
+					}
+					if (index >= virtualSceneGraph.length) {
+						virtualSceneGraph[virtualSceneGraph.length] = {
+							sessionID:timeline.add_child_stream[i * 3],
+							addedOnTargetFrame:k == target_keyframe_idx,
+							symbolID:timeline.add_child_stream[i * 3 + 2],
+							as3DepthID:timeline.add_child_stream[i * 3 + 1],
+						};
+					} else {
+						virtualSceneGraph.splice(index, 0, {
+							sessionID:timeline.add_child_stream[i * 3],
+							addedOnTargetFrame:k == target_keyframe_idx,
+							symbolID:timeline.add_child_stream[i * 3 + 2],
+							as3DepthID:timeline.add_child_stream[i * 3 + 1],
+						});
+					}
+				}
+			}
+			if (frame_recipe & 8) {
+				timeline._update_frames[update_cnt] = timeline.keyframe_firstframes[k];
+				timeline._update_indices[update_cnt++] = frame_command_idx++;// execute update command later
+			}
+
+			if (frame_recipe & 16 && k == target_keyframe_idx) {
+				timeline.start_sounds(adaptee, frame_command_idx);
+			}
+		}
+
+		const newChildren: AwayDisplayObject[] = [];
+		let vsItem: IVirtualSceneGraphItem;
+		const newChilds: AwayDisplayObject[] = [];
+		const newChildsOnTargetFrame: AwayDisplayObject[] = [];
+
+		// step2: build new list of children from virtual-scenegraph
+
+		adaptee._sessionID_childs = {};
+		len = newChildren.length = virtualSceneGraph.length;
+		for (let i = 0; i < len; i++) {
+			vsItem = virtualSceneGraph[i];
+			if (vsItem.sessionID == -1 && vsItem.child) {
+				// this must be a script child
+				newChildren[i] = vsItem.child.adaptee;
+			} else if (existingSessionIDs[vsItem.sessionID]) {
+				//	the same sessionID already is child of the mc
+				const existingChild = existingSessionIDs[vsItem.sessionID];
+				adaptee._sessionID_childs[vsItem.sessionID] = existingChild;
+				newChildren[i] = existingChild;
+				//console.log("vsItem.exists", vsItem);
+				if (!jump_forward) {
+					if (newChildren[i]._adapter) {
+						if (!(<IDisplayObjectAdapter> newChildren[i].adapter).isColorTransformByScript()) {
+							newChildren[i].transform.clearColorTransform();
+						}
+						if (!(<IDisplayObjectAdapter> newChildren[i].adapter).isBlockedByScript()
+							&& !(<any>newChildren[i]).noTimelineUpdate) {
+							newChildren[i].transform.clearMatrix3D();
+							newChildren[i].masks = null;
+							newChildren[i].maskMode = false;
+						}
+						if (!(<IDisplayObjectAdapter> newChildren[i].adapter).isVisibilityByScript()) {
+							newChildren[i].visible = true;
+						}
+					} else {
+						newChildren[i].transform.clearColorTransform();
+						newChildren[i].transform.clearMatrix3D();
+						newChildren[i].visible = true;
+						newChildren[i].masks = null;
+						newChildren[i].maskMode = false;
+					}
+				}
+			} else {
+				const newChild = <AwayDisplayObject>timeline.getChildInstance(vsItem.symbolID, vsItem.sessionID);
+				if (this.adaptee.isSlice9ScaledMC && newChild.assetType == '[asset Sprite]') {
+					newChild.isSlice9ScaledSprite = true;
+				}
+				newChild._sessionID = vsItem.sessionID;
+				newChild._as3DepthID = vsItem.as3DepthID;
+				adaptee._sessionID_childs[vsItem.sessionID] = newChild;
+				newChildren[i] = newChild;
+				if (vsItem.addedOnTargetFrame) {
+					newChildsOnTargetFrame[newChildsOnTargetFrame.length] = newChild;
+				} else {
+					newChilds[newChilds.length] = newChild;
+				}
+			}
+		}
+
+		// step3: remove children that no longer exists
+
+		len = adaptee._children.length;
+		for (let i = 0; i < len; i++) {
+			if (newChildren.indexOf(adaptee._children[i]) < 0) {
+				adaptee._children[i]._setParent(null);
+				// todo call dispatch remove events
+			}
+		}
+		adaptee._children = newChildren;
+
+		// step4: setup children that have been added between old frame and new frame (do not allow frame-scripts)
+
+		adaptee.preventScript = true;
+		this.finalizeChildren(newChilds);
+		adaptee.preventScript = false;
+
+		// step5: queue frame-script for new frame
+
+		// if there is a framescript on this frame, we queue it now, so it sits after the initAdapter of the children
+		if (queue_script)
+			this.queueFrameScripts(timeline, frame_idx, !queue_pass2);
+
+		// step6: setup children that have been added on new frame (allow frame-scripts)
+		this.finalizeChildren(newChildsOnTargetFrame);
+		adaptee.setChildrenDepthsFromIndex(0);
+	}
+
+	public finalizeChildren(children: AwayDisplayObject[]) {
+		const len = children.length;
+		for (let i = 0; i < len; i++) {
+			const newChild = children[i];
+			if (newChild.adapter != newChild && (<any>newChild.adapter).deleteOwnProperties) {
+				(<any>newChild.adapter).deleteOwnProperties();
+			}
+			(<any>newChild).just_added_to_timeline = true;
+			newChild._setParent(<AwayDisplayObjectContainer> this.adaptee);
+			newChild.reset();
+		}
+	}
 
 	public initAdapter(): void {}
 	public registerScriptObject(child: any): void {
