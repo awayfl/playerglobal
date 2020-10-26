@@ -943,7 +943,7 @@ export class Stage extends DisplayObjectContainer {
 
 	public setChildIndex (child: DisplayObject, index: number): DisplayObject {return null;}
 	public addEventListener(type: string, listener: any, useCapture: boolean = false,
-		priority: number = 0, useWeakReference: boolean = false): void{
+		priority: number = 0, useWeakReference: boolean = false): void {
 		super.addEventListener(type, listener, useCapture = false, priority, useWeakReference);
 	}
 

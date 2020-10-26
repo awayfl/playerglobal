@@ -399,7 +399,7 @@ export class Sound extends EventDispatcher {
 		return newSoundChannel;
 	}
 
-	public stop (): void{
+	public stop (): void {
 		this._adaptee.stop();
 	}
 

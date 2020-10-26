@@ -160,13 +160,19 @@ export class Graphics extends ASObject implements IAssetAdapter {
 
 	public drawTriangles(vertices: GenericVector, indices: GenericVector = null,
 		uvtData: GenericVector = null, culling: string = 'none'): void {
-		notImplemented('Graphics.drawTriangles');
+		console.warn('Graphics.drawTriangles');
 		//this.adaptee.drawPath(commands, data, winding);
 	}
 
 	public drawGraphicsData(graphicsData: GenericVector): void {
-		notImplemented('Graphics.drawTriangles');
+		console.warn('Graphics.drawGraphicsData');
 		//this.adaptee.drawPath(commands, data, winding);
+	}
+
+	public readGraphicsData(graphicsData: GenericVector): any[] {
+		console.warn('Graphics.readGraphicsData');
+		//this.adaptee.drawPath(commands, data, winding);
+		return [];
 	}
 
 }
