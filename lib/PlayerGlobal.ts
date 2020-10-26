@@ -1,8 +1,27 @@
-import { ABCFile, ABCCatalog, ActiveLoaderContext, AVM2LoadLibrariesFlags, IPlayerGlobal, AXSecurityDomain, Natives } from '@awayfl/avm2';
+import {
+	ABCFile,
+	ABCCatalog,
+	ActiveLoaderContext,
+	AVM2LoadLibrariesFlags,
+	IPlayerGlobal,
+	AXSecurityDomain,
+	Natives,
+} from '@awayfl/avm2';
 import { release, assert, PromiseWrapper, AVMStage, SWFFile } from '@awayfl/swf-loader';
 import { SecurityDomain } from './SecurityDomain';
 import { initLink } from './link';
-import { ISceneGraphFactory, TextField, SceneImage2D, Font, Sprite, MovieClip, MorphSprite, IDisplayObjectAdapter, FrameScriptManager, DisplayObjectContainer } from '@awayjs/scene';
+import {
+	ISceneGraphFactory,
+	TextField,
+	SceneImage2D,
+	Font,
+	Sprite,
+	MovieClip,
+	MorphSprite,
+	IDisplayObjectAdapter,
+	FrameScriptManager,
+} from '@awayjs/scene';
+
 import { LoaderContext } from './system/LoaderContext';
 import { FlashSceneGraphFactory } from './factories/FlashSceneGraphFactory';
 import { AssetBase, IAsset, WaveAudio } from '@awayjs/core';
@@ -15,7 +34,6 @@ import { LoaderInfo } from './display/LoaderInfo';
 import { ILoader } from './ILoader';
 
 export class PlayerGlobal implements IPlayerGlobal, ILoader {
-
 	private _contentLoaderInfo: LoaderInfo;
 	private _content: DisplayObject;
 	private _avmStage: AVMStage;
@@ -35,22 +53,21 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 		swfFile: SWFFile,
 		libraries: AVM2LoadLibrariesFlags
 	): Promise<ISceneGraphFactory> {
-
 		this._avmStage = avmStage;
 
 		if (this._avmStage.avmTestHandler) {
-			Natives.print = function(sec: AXSecurityDomain, expression: any, arg1?: any, arg2?: any, arg3?: any, arg4?: any) {
-				let message;
+			Natives.print = function (sec: AXSecurityDomain, expression: any) {
+				let message = '';
+
 				if (arguments.length == 2) {
-					message = arguments[1] ? arguments[1].toString() : arguments[1];
+					message = expression[1]?.toString();
 				} else {
-					message = '';
-					for (let i = 1; i < arguments.length;i++) {
-						message += arguments[i] ? arguments[i].toString() : arguments[i];
-						if (i != arguments.length - 1) {
+					for (let i = 1; i < arguments.length; i++) {
+						// eslint-disable-next-line prefer-rest-params
+						message += arguments[i]?.toString();
+						if (i !== arguments.length - 1) {
 							message += ' ';
 						}
-
 					}
 				}
 
@@ -98,18 +115,16 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 				if (libraries & AVM2LoadLibrariesFlags.Playerglobal) {
 					return Promise.all([
 						BrowserSystemResourcesLoadingService.getInstance().load(
-							'./assets/builtins/playerglobal.abcs', 'arraybuffer'
+							'./assets/builtins/playerglobal.abcs',
+							'arraybuffer'
 						),
 						BrowserSystemResourcesLoadingService.getInstance().load(
-							'./assets/builtins/playerglobal.json', 'json'
-						)
+							'./assets/builtins/playerglobal.json',
+							'json'
+						),
 					]).then((results) => {
 						release || console.log('Load playerglobal.abcs & playerglobal.json');
-						const catalog = new ABCCatalog(
-							sec.system,
-							new Uint8Array(results[0]),
-							results[1]
-						);
+						const catalog = new ABCCatalog(sec.system, new Uint8Array(results[0]), results[1]);
 						release || console.log('add playerglobals as ABCCatalog');
 						sec.addCatalog(catalog);
 
@@ -123,19 +138,21 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 								//sec.initialize();
 								sec.system.executeABC(avmPlusABC);
 							}, result.reject)
-							.then(
-								() => {
-									this._contentLoaderInfo = new sec.flash.display.LoaderInfo(this, this._avmStage);
-									this._contentLoaderInfo.url = swfFile.url;
-									this._applicationDomain = new sec.flash.system.ApplicationDomain();
-									const loaderContext: LoaderContext = new sec.flash.system.LoaderContext(false, this._applicationDomain);
-									ActiveLoaderContext.loaderContext = loaderContext;
-									this._stage = new sec.flash.display.Stage();
-									sec.flash.display.DisplayObject.axClass._activeStage = this._stage;
-									this._avmStage.adapter = this._stage;
-									this._stage.adaptee = this._avmStage;
-									result.resolve(new FlashSceneGraphFactory(sec));
-								}, result.reject);
+							.then(() => {
+								this._contentLoaderInfo = new sec.flash.display.LoaderInfo(this, this._avmStage);
+								this._contentLoaderInfo.url = swfFile.url;
+								this._applicationDomain = new sec.flash.system.ApplicationDomain();
+								const loaderContext: LoaderContext = new sec.flash.system.LoaderContext(
+									false,
+									this._applicationDomain
+								);
+								ActiveLoaderContext.loaderContext = loaderContext;
+								this._stage = new sec.flash.display.Stage();
+								sec.flash.display.DisplayObject.axClass._activeStage = this._stage;
+								this._avmStage.adapter = this._stage;
+								this._stage.adaptee = this._avmStage;
+								result.resolve(new FlashSceneGraphFactory(sec));
+							}, result.reject);
 					}, result.reject);
 				}
 				// todo: is this needed:
@@ -154,46 +171,40 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 	}
 
 	public addAsset(asset: IAsset, addScene: boolean) {
-
 		(<any>asset.adapter).loaderInfo = this._contentLoaderInfo;
 		switch (asset.assetType) {
-			case TextField.assetType:
-			{
+			case TextField.assetType: {
 				this._applicationDomain.addDefinition(asset.name, <TextField>asset);
 				break;
 			}
 			case SceneImage2D.assetType:
-			case BitmapImage2D.assetType:
-			{
-
+			case BitmapImage2D.assetType: {
 				this._applicationDomain.addDefinition(asset.name, <SceneImage2D>asset);
 				break;
 				// we should only do this for bitmaps loaded from jpg or png
 				// todo:
 				//if (this._isImage)
-				//	(<AwayDisplayObjectContainer> this._adaptee).addChild(new Bitmap(<BitmapData> (<SceneImage2D> asset).adapter).adaptee);
+				//	(<AwayDisplayObjectContainer> this._adaptee).addChild(
+				//	new Bitmap(<BitmapData> (<SceneImage2D> asset).adapter).adaptee);
 			}
-			case WaveAudio.assetType:
-			{
-				this._applicationDomain.addAudioDefinition(asset.name, (<WaveAudio>asset));
+			case WaveAudio.assetType: {
+				this._applicationDomain.addAudioDefinition(asset.name, <WaveAudio>asset);
 				break;
 			}
-			case Font.assetType:
-			{
-				this._applicationDomain.addFontDefinition(asset.name, (<Font>asset));
+			case Font.assetType: {
+				this._applicationDomain.addFontDefinition(asset.name, <Font>asset);
 				break;
 			}
-			case Sprite.assetType:
-			{
+			case Sprite.assetType: {
 				this._applicationDomain.addDefinition(asset.name, <Sprite>asset);
 				break;
 			}
-			case MovieClip.assetType:
-			{
+			case MovieClip.assetType: {
 				this._applicationDomain.addDefinition(asset.name, <MovieClip>asset);
 
 				// if this is the "Scene 1", we make it a child of the loader
-				if (addScene && (<any>asset).isAVMScene) {// "Scene 1" when AWDParser, isAVMScene when using SWFParser
+				if (addScene && (<any>asset).isAVMScene) {
+					// "Scene 1" when AWDParser, isAVMScene when using SWFParser
 
 					this._content = <DisplayObject>(<IDisplayObjectAdapter>asset.adapter).clone();
 					this._content.loaderInfo = this._contentLoaderInfo;
@@ -203,7 +214,6 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 					FrameScriptManager.execute_as3_constructors_recursiv(<any> this._content.adaptee);
 					this._content.dispatchStaticEvent('added', this._content);
 					this._content.dispatch_ADDED_TO_STAGE(true);
-
 				}
 				break;
 			}
@@ -212,8 +222,7 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 				break;
 			}
 			case Graphics.assetType:
-			case MorphSprite.assetType:
-			{
+			case MorphSprite.assetType: {
 				break;
 			}
 			default: {
@@ -221,20 +230,16 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 			}
 		}
 	}
-
 }
 
 class BrowserSystemResourcesLoadingService {
 	private static _instance: BrowserSystemResourcesLoadingService;
 	public static getInstance() {
-		if (BrowserSystemResourcesLoadingService._instance)
-			return BrowserSystemResourcesLoadingService._instance;
+		if (BrowserSystemResourcesLoadingService._instance) return BrowserSystemResourcesLoadingService._instance;
 		return (BrowserSystemResourcesLoadingService._instance = new BrowserSystemResourcesLoadingService());
 	}
 
-	public constructor() {
-
-	}
+	public constructor() {}
 
 	public load(url, type): Promise<any> {
 		return this._promiseFile(url, type);

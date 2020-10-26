@@ -9,7 +9,8 @@ import { release } from '@awayfl/swf-loader';
  *
  * The SoundChannel class controls a sound in an application. Every sound
  * is assigned to a sound channel, and the application can have multiple
- * sound channels that are mixed together. The SoundChannel class contains a <codeph class="+ topic/ph pr-d/codeph ">stop()</codeph> method,
+ * sound channels that are mixed together.
+ * The SoundChannel class contains a <codeph class="+ topic/ph pr-d/codeph ">stop()</codeph> method,
  * properties for monitoring the amplitude (volume) of the channel, and a property for assigning a
  * SoundTransform object to the channel.
  */

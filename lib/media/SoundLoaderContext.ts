@@ -46,15 +46,19 @@ export class SoundLoaderContext {
 	 * ID3Info object or calling the SoundMixer.computeSpectrum() method to get
 	 * sound samples from the loaded sound. If you try to access sound data without
 	 * setting the checkPolicyFile property to true at loading time,
-	 * you may get a SecurityError exception because the required policy file has not been downloaded.If you don't need low-level access to the sound data that you are loading, avoid setting
+	 * you may get a SecurityError exception because the required policy file has not been downloaded.
+	 * If you don't need low-level access to the sound data that you are loading, avoid setting
 	 * checkPolicyFile to true. Checking for a policy file consumes
 	 * network bandwidth
-	 * and might delay the start of your download, so it should only be done when necessary.When you call Sound.load() with SoundLoaderContext.checkPolicyFile set
+	 * and might delay the start of your download, so it should only be done when necessary.
+	 * When you call Sound.load() with SoundLoaderContext.checkPolicyFile set
 	 * to true, Flash Player or AIR  must
 	 * either successfully download a relevant URL policy file or determine that no such policy file
 	 * exists before it begins downloading the specified sound.
 	 * Flash Player or AIR performs the following
-	 * actions, in this order, to verify the existence of a policy file:Flash Player or AIR considers policy files that have already been downloaded.Flash Player or AIR tries to download any pending policy files specified in calls to
+	 * actions, in this order, to verify the existence of a policy file:Flash Player or AIR considers policy
+	 * files that have already been downloaded.Flash Player or AIR tries
+	 * to download any pending policy files specified in calls to
 	 * Security.loadPolicyFile().Flash Player or AIR tries to download a
 	 * policy file from the default location that corresponds to the sound's URL, which is
 	 * /crossdomain.xml on the same server as URLRequest.url.

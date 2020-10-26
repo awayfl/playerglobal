@@ -1,6 +1,3 @@
-//
-// C:\Users\80prozent\AppData\Local\FlashDevelop\Apps\flexairsdk\4.6.0+25.0.0\frameworks\libs\player\18.0\playerglobal.swc\flash\media\Sound
-//
 
 import { EventDispatcher } from '../events/EventDispatcher';
 import { URLRequest } from '../net/URLRequest';
@@ -47,20 +44,34 @@ import { SecurityDomain } from '../SecurityDomain';
  *
  *   <p class="- topic/p ">In Flash Player 10 and later and AIR 1.5 and later, you can also use this
  * class to work with sound that is generated dynamically.
- * In this case, the Sound object uses the function you assign to a <codeph class="+ topic/ph pr-d/codeph ">sampleData</codeph> event handler to
+ * In this case, the Sound object uses the function you assign to a
+ * <codeph class="+ topic/ph pr-d/codeph ">sampleData</codeph> event handler to
  * poll for sound data. The sound is played as it is retrieved from a ByteArray object that
- * you populate with sound data. You can use <codeph class="+ topic/ph pr-d/codeph ">Sound.extract()</codeph> to extract sound data from a
+ * you populate with sound data. You can use
+ * <codeph class="+ topic/ph pr-d/codeph ">Sound.extract()</codeph> to extract sound data from a
  * Sound object,
- * after which you can manipulate it before writing it back to the stream for playback.</p><p class="- topic/p ">To control sounds that are embedded in a SWF file, use the properties in the SoundMixer class.</p><p class="- topic/p "><b class="+ topic/ph hi-d/b ">Note</b>: The ActionScript 3.0 Sound API differs from ActionScript 2.0.
+ * after which you can manipulate it before writing it back to the stream for playback.
+ * </p><p class="- topic/p ">To control sounds that are embedded in a SWF file,
+ * use the properties in the SoundMixer class.</p><p class="- topic/p ">
+ * <b class="+ topic/ph hi-d/b ">Note</b>: The ActionScript 3.0 Sound API differs from ActionScript 2.0.
  * In ActionScript 3.0, you cannot take sound objects and arrange them in a hierarchy
- * to control their properties.</p><p class="- topic/p ">When you use this class, consider the following security model: </p><ul class="- topic/ul "><li class="- topic/li ">Loading and playing a sound is not allowed if the calling file is in a network sandbox
- * and the sound file to be loaded is local.</li><li class="- topic/li ">By default, loading and playing a sound is not allowed if the calling file is local and
- * tries to load and play a remote sound. A user must grant explicit permission to allow this type of access.</li><li class="- topic/li ">Certain operations dealing with sound are restricted. The data in a loaded sound cannot
+ * to control their properties.</p><p class="- topic/p ">
+ * When you use this class, consider the following security model:
+ * </p><ul class="- topic/ul "><li class="- topic/li ">
+ * Loading and playing a sound is not allowed if the calling file is in a network sandbox
+ * and the sound file to be loaded is local.</li><li class="- topic/li ">
+ * By default, loading and playing a sound is not allowed if the calling file is local and
+ * tries to load and play a remote sound. A user must grant explicit permission to allow this type of access.
+ * </li><li class="- topic/li ">Certain operations dealing with sound are restricted. The data in a loaded sound cannot
  * be accessed by a file in a different domain unless you implement a cross-domain policy file.
  * Sound-related APIs that fall under this restriction are <codeph class="+ topic/ph pr-d/codeph ">Sound.id3</codeph>,
- * <codeph class="+ topic/ph pr-d/codeph ">SoundMixer.computeSpectrum()</codeph>, <codeph class="+ topic/ph pr-d/codeph ">SoundMixer.bufferTime</codeph>,
- * and the <codeph class="+ topic/ph pr-d/codeph ">SoundTransform</codeph> class.</li></ul><p class="- topic/p ">However, in Adobe AIR, content in the <codeph class="+ topic/ph pr-d/codeph ">application</codeph> security sandbox (content
- * installed with the AIR application) are not restricted by these security limitations.</p><p class="- topic/p ">For more information related to security, see the Flash Player Developer Center Topic:
+ * <codeph class="+ topic/ph pr-d/codeph ">SoundMixer.computeSpectrum()</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">SoundMixer.bufferTime</codeph>,
+ * and the <codeph class="+ topic/ph pr-d/codeph ">SoundTransform</codeph> class.</li></ul>
+ * <p class="- topic/p ">However, in Adobe AIR, content in the
+ *  <codeph class="+ topic/ph pr-d/codeph ">application</codeph> security sandbox (content
+ * installed with the AIR application) are not restricted by these security limitations.</p>
+ * <p class="- topic/p ">For more information related to security, see the Flash Player Developer Center Topic:
  * <xref href="http://www.adobe.com/go/devnet_security_en" scope="external" class="- topic/xref ">Security</xref>.</p>
  */
 export class Sound extends EventDispatcher {
@@ -142,18 +153,21 @@ export class Sound extends EventDispatcher {
 	 * my_sound.id3.COMM, my_sound.id3.TIME, and so on. The first
 	 * table describes tags that can be accessed either through the ID3 2.0 property name or
 	 * the ActionScript property name. The second table describes ID3 tags that are supported but do not have
-	 * predefined properties in ActionScript. ID3 2.0 tagCorresponding Sound class propertyCOMMSound.id3.commentTALBSound.id3.album TCONSound.id3.genreTIT2Sound.id3.songName TPE1Sound.id3.artistTRCKSound.id3.track TYERSound.id3.year The following table describes ID3 tags that are supported but do not have
+	 * predefined properties in ActionScript. ID3 2.0 tagCorresponding
+	 * The following table describes ID3 tags that are supported but do not have
 	 * predefined properties in the Sound class. You access them by calling
 	 * mySound.id3.TFLT, mySound.id3.TIME, and so on. NOTE: None of
-	 * these tags are supported in Flash Lite 4.PropertyDescriptionTFLTFile typeTIMETimeTIT1Content group descriptionTIT2Title/song name/content descriptionTIT3Subtitle/description refinementTKEYInitial keyTLANLanguagesTLENLengthTMEDMedia typeTOALOriginal album/movie/show titleTOFNOriginal filenameTOLYOriginal lyricists/text writersTOPEOriginal artists/performersTORYOriginal release yearTOWNFile owner/licenseeTPE1Lead performers/soloistsTPE2Band/orchestra/accompanimentTPE3Conductor/performer refinementTPE4Interpreted, remixed, or otherwise modified byTPOSPart of a setTPUBPublisherTRCKTrack number/position in setTRDARecording datesTRSNInternet radio station nameTRSOInternet radio station ownerTSIZSizeTSRCISRC (international standard recording code)TSSESoftware/hardware and settings used for encodingTYERYearWXXXURL link frameWhen using this property, consider the Flash Player security model:The id3 property of a Sound object is always permitted for SWF files
+	 * these tags are supported in Flash Lite 4.
 	 * that are in the same security sandbox as the sound file. For files in other sandboxes, there
 	 * are security checks.When you load the sound, using the load() method of the Sound class, you can
 	 * specify a context parameter, which is a SoundLoaderContext object. If you set the
 	 * checkPolicyFile  property of the SoundLoaderContext object to true, Flash Player
 	 * checks for a URL policy file on the server from which the sound is loaded. If a
 	 * policy file exists and permits access from the domain of the loading SWF file, then the file is allowed
-	 * to access the id3 property of the Sound object; otherwise it is not.However, in Adobe AIR, content in the application security sandbox (content
-	 * installed with the AIR application) are not restricted by these security limitations.For more information related to security, see the Flash Player Developer Center Topic:
+	 * to access the id3 property of the Sound object; otherwise it is not.However,
+	 * in Adobe AIR, content in the application security sandbox (content
+	 * installed with the AIR application) are not restricted by these security limitations.
+	 * For more information related to security, see the Flash Player Developer Center Topic:
 	 * Security.
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
@@ -186,15 +200,19 @@ export class Sound extends EventDispatcher {
 	 * and the Sound.url property has the value http://www.adobe.com.
 	 * The isURLInaccessible value is true only when all of the following are also true:
 	 *
-	 *   An HTTP redirect occurred while loading the sound file.The SWF file calling Sound.load() is from a different domain than
+	 *   An HTTP redirect occurred while loading the sound file.
+	 * The SWF file calling Sound.load() is from a different domain than
 	 * the sound file's final URL.The SWF file calling Sound.load() does not have permission to access
 	 * the sound file.  Permission is granted to access the sound file the same way permission is granted
 	 * for the Sound.id3 property: establish a policy file and use the SoundLoaderContext.checkPolicyFile
 	 * property.Note: The isURLInaccessible property was added for Flash Player 10.1 and AIR 2.0.
 	 * However, this property is made available to SWF files of all versions when the
-	 * Flash runtime supports it. So, using some authoring tools in "strict mode" causes a compilation error. To work around the error
-	 * use the indirect syntax mySound["isURLInaccessible"], or disable strict mode. If you are using Flash Professional CS5
-	 * or Flex SDK 4.1, you can use and compile this API for runtimes released before Flash Player 10.1 and AIR 2.For application content in AIR, the value of this property is always false.
+	 * Flash runtime supports it. So, using some authoring tools in "strict mode" causes a compilation error.
+	 * To work around the error use the indirect syntax mySound["isURLInaccessible"],
+	 * or disable strict mode. If you are using Flash Professional CS5
+	 * or Flex SDK 4.1, you can use and compile this API for runtimes released
+	 * before Flash Player 10.1 and AIR 2.For application
+	 * content in AIR, the value of this property is always false.
 	 * @langversion	3.0
 	 * @playerversion	Flash 10.1
 	 * @playerversion	AIR 2
@@ -223,7 +241,8 @@ export class Sound extends EventDispatcher {
 	 *   When you first call Sound.load(), the url property
 	 * initially has a value of null, because the final URL is not yet known.
 	 * The url property will have a non-null value as soon as an
-	 * open event is dispatched from the Sound object.The url property contains the final, absolute URL from which a sound was
+	 * open event is dispatched from the Sound object.The url property contains the final,
+	 * absolute URL from which a sound was
 	 * loaded. The value of url is usually the same as the value passed to the
 	 * stream parameter of Sound.load().
 	 * However, if you passed a relative URL to Sound.load()
@@ -265,7 +284,8 @@ export class Sound extends EventDispatcher {
 	 * to the sampleData event for a different Sound object.
 	 * That is, you can use this method to extract sound data from a Sound object.
 	 * Then you can write the data to the byte array that another Sound object is using
-	 * to stream dynamic audio.The audio data is placed in the target byte array starting from the current position of the byte array.
+	 * to stream dynamic audio.The audio data is placed in the target byte
+	 * array starting from the current position of the byte array.
 	 * The audio data is always exposed as 44100 Hz Stereo. The sample type is a 32-bit floating-point value,
 	 * which can be converted to a Number using ByteArray.readFloat().
 	 * @param	target	A ByteArray object in which the extracted sound samples are placed.
@@ -296,19 +316,29 @@ export class Sound extends EventDispatcher {
 	 *
 	 *   Once load() is called on a Sound object, you can't later load
 	 * a different sound file into that Sound object. To load a different sound file,
-	 * create a new Sound object.When using this method, consider the following security model:Calling Sound.load() is not allowed if the calling file is in the
-	 * local-with-file-system sandbox and the sound is in a network sandbox.Access from the local-trusted or local-with-networking sandbox requires permission
+	 * create a new Sound object.When using this method, consider the following security model:Calling Sound.load()
+	 * is not allowed if the calling file is in the
+	 * local-with-file-system sandbox and the sound is in a network sandbox.
+	 * Access from the local-trusted or local-with-networking sandbox requires permission
 	 * from a website through a URL policy file.You cannot connect to commonly reserved ports.
 	 * For a complete list of blocked ports, see "Restricting Networking APIs" in the
 	 * ActionScript 3.0 Developer's Guide.You can prevent a SWF file from using this method by setting the
 	 * allowNetworking parameter of the object and embed
-	 * tags in the HTML page that contains the SWF content. In Flash Player 10 and later, if you use a multipart Content-Type (for example "multipart/form-data")
-	 * that contains an upload (indicated by a "filename" parameter in a "content-disposition" header within the POST body),
-	 * the POST operation is subject to the security rules applied to uploads:The POST operation must be performed in response to a user-initiated action, such as a mouse click or key press.If the POST operation is cross-domain (the POST target is not on the same server as the SWF file
+	 * tags in the HTML page that contains the SWF content. In Flash Player 10 and later,
+	 * if you use a multipart Content-Type (for example "multipart/form-data")
+	 * that contains an upload (indicated by a "filename" parameter
+	 * in a "content-disposition" header within the POST body),
+	 * the POST operation is subject to the security rules applied to uploads:
+	 * The POST operation must be performed in response to a user-initiated action
+	 * such as a mouse click or key press.If the POST operation is cross-domain
+	 * (the POST target is not on the same server as the SWF file
 	 * that is sending the POST request),
-	 * the target server must provide a URL policy file that permits cross-domain access.Also, for any multipart Content-Type, the syntax must be valid (according to the RFC2046 standards).
-	 * If the syntax appears to be invalid, the POST operation is subject to the security rules applied to uploads.In Adobe AIR, content in the application security sandbox (content
-	 * installed with the AIR application) are not restricted by these security limitations.For more information related to security, see the Flash Player Developer Center Topic:
+	 * the target server must provide a URL policy file that permits cross-domain access.
+	 * Also, for any multipart Content-Type, the syntax must be valid (according to the RFC2046 standards).
+	 * If the syntax appears to be invalid, the POST operation is subject to the security rules applied to uploads.
+	 * In Adobe AIR, content in the application security sandbox (content
+	 * installed with the AIR application) are not restricted by these security limitations.For more
+	 * information related to security, see the Flash Player Developer Center Topic:
 	 * Security.
 	 * @param	stream	A URL that points to an external MP3 file.
 	 * @param	context	An optional SoundLoader context object, which can define the buffer time
@@ -339,7 +369,9 @@ export class Sound extends EventDispatcher {
 		console.log('loadCompressedDataFromByteArray not implemented yet in flash/Sound');
 	}
 
-	public loadPCMFromByteArray (bytes: ByteArray, samples: number, format: string = 'float', stereo: boolean = true, sampleRate: number = 44100) {
+	public loadPCMFromByteArray (
+		bytes: ByteArray, samples: number,
+		format: string = 'float', stereo: boolean = true, sampleRate: number = 44100) {
 		console.log('loadPCMFromByteArray not implemented yet in flash/Sound');
 	}
 
@@ -378,23 +410,30 @@ export class Sound extends EventDispatcher {
 	 */
 	public play (startTime: number = 0, loops: number = 0, sndTransform: SoundTransform = null): SoundChannel {
 		if (!this.adaptee) {
-			console.log('Sound.play : no adaptee exists!');
-			return;
+			console.warn('[Sound#play]: no adaptee exists!');
+
+			// return empty SoundChannel to prevetn crash when adaptee is not exist
+			return new (<SecurityDomain> this.sec).flash.media.SoundChannel();
 		}
+
 		if (sndTransform) {
 			this.adaptee.volume = sndTransform.volume;
 			this.adaptee.pan = sndTransform.pan;
 		}
 
 		loops = isNaN(loops) || loops < 1 ? 1 : Math.floor(loops);
+
 		this.loopsToPlay = loops;
 		this._adaptee.onSoundComplete = ()=>this.soundCompleteInternal();
 		this._adaptee.play(startTime, false);
+
 		const newSoundChannel: SoundChannel = new (<SecurityDomain> this.sec).flash.media.SoundChannel();
 		newSoundChannel._sound = this;
+
 		if (!sndTransform) {
 			sndTransform = new (<SecurityDomain> this.sec).flash.media.SoundTransform();
 		}
+
 		newSoundChannel.soundTransform = sndTransform;
 		return newSoundChannel;
 	}

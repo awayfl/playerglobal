@@ -1,4 +1,4 @@
-import { URLLoader as URLLoaderAway, LoaderEvent, URLLoaderEvent, IAssetAdapter } from '@awayjs/core';
+import { URLLoader as URLLoaderAway, URLLoaderEvent } from '@awayjs/core';
 
 import { EventDispatcher } from '../events/EventDispatcher';
 import { IEventMapper } from '../events/IEventMapper';
@@ -72,7 +72,9 @@ export class URLLoader extends EventDispatcher {
 
 	private _progressCallbackDelegate: (event: URLLoaderEvent) => void;
 	private progressCallback(event: URLLoaderEvent = null): void {
-		const newEvent: ProgressEvent = new (<SecurityDomain> this.sec).flash.events.ProgressEvent(ProgressEvent.PROGRESS, null, null, event.urlLoader.bytesLoaded, event.urlLoader.bytesTotal);
+		const newEvent = new (<SecurityDomain> this.sec).flash.events.
+			ProgressEvent(ProgressEvent.PROGRESS, null, null, event.urlLoader.bytesLoaded, event.urlLoader.bytesTotal);
+
 		newEvent.currentTarget = this;
 		this.dispatchEvent(newEvent);
 	}
