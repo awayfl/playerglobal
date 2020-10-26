@@ -221,7 +221,6 @@ export class SharedObject extends ASObject {
 			console.log("no local storage available");
 
 		}*/
-		minDiskSpace = minDiskSpace | 0;
 
 		// Check if the object is empty. If it is, don't create a stored object if one doesn't exist.
 		let isEmpty = true;
@@ -231,6 +230,7 @@ export class SharedObject extends ASObject {
 				break;
 			}
 		}
+
 		if (isEmpty && !getSharedObjectStorage().getItem(this._path)) {
 			return;
 		}
@@ -292,14 +292,25 @@ export class SharedObject extends ASObject {
 		return;
 	}
 
+	/**
+	 * Closed and flushed SO
+	 * @see https://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/net/SharedObject.html#close()
+	 */
 	public close(): void {
-		notImplemented('public flash.net.SharedObject::close');
-		return;
+		// should run flush when close is requested
+		this.flush();
+		//notImplemented('public flash.net.SharedObject::close');
 	}
 
+	/**
+	 * Clear object
+	 * @see https://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/net/SharedObject.html#clear()
+	 */
 	public clear(): void {
-		notImplemented('public flash.net.SharedObject::clear');
-		return;
+		this._data = this.sec.createObject();
+		// should run flush to overwrite a data to empty, but we only remove key
+		// this is look like simmilar
+		getSharedObjectStorage().removeItem(this._path);
 	}
 
 	public get size(): number {
