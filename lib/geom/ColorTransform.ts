@@ -39,10 +39,44 @@ export class ColorTransform extends ASObject {
 		return this._adaptee;
 	}
 
-	constructor(redMultiplierAdaptee: number | AwayColorTransform = 1, greenMultiplier: number = 1, blueMultiplier: number = 1, alphaMultiplier: number = 1, redOffset: number = 0, greenOffset: number = 0, blueOffset: number = 0, alphaOffset: number = 0) {
+	constructor(
+		redMultiplierAdaptee: number | AwayColorTransform = 1,
+		greenMultiplier: number = 1,
+		blueMultiplier: number = 1,
+		alphaMultiplier: number = 1,
+		redOffset: number = 0,
+		greenOffset: number = 0,
+		blueOffset: number = 0,
+		alphaOffset: number = 0
+	) {
 		super();
 
-		this._adaptee = (redMultiplierAdaptee instanceof AwayColorTransform) ? redMultiplierAdaptee : new AwayColorTransform(+redMultiplierAdaptee, +greenMultiplier, +blueMultiplier, +alphaMultiplier, +redOffset, +greenOffset, +blueOffset, +alphaOffset);
+		if (redMultiplierAdaptee instanceof AwayColorTransform) {
+			this._adaptee = redMultiplierAdaptee;
+		} else {
+			// default args on constructor save ONLY when args not passed (undef)
+			// but AVM can pass and non valid args, like NaN
+
+			const
+				rm = +redMultiplierAdaptee,
+				gm = +greenMultiplier,
+				bm = +blueMultiplier,
+				am = +alphaMultiplier;
+
+			this._adaptee = new AwayColorTransform(
+				// because default value is 1, need check strict (except 0)
+				// NaN === NaN -> false, fast NaN isNaN check
+				(rm === rm) ? rm : 1,
+				(gm === gm) ? gm : 1,
+				(bm === bm) ? bm : 1,
+				(am === am) ? am : 1,
+				// because default value is 0 - this is valid
+				+redOffset || 0,
+				+greenOffset || 0,
+				+blueOffset || 0,
+				+alphaOffset || 0
+			);
+		}
 	}
 
 	public static FROZEN_IDENTITY_COLOR_TRANSFORM: ColorTransform;
@@ -176,15 +210,31 @@ export class ColorTransform extends ASObject {
 		this._adaptee.copyFrom(sourceColorTransform.adaptee);
 	}
 
-	public setTo(redMultiplier: number, greenMultiplier: number, blueMultiplier: number, alphaMultiplier: number, redOffset: number, greenOffset: number, blueOffset: number, alphaOffset: number): void {
-		this._adaptee._rawData[0] = redMultiplier;
-		this._adaptee._rawData[1] = greenMultiplier;
-		this._adaptee._rawData[2] = blueMultiplier;
-		this._adaptee._rawData[3] = alphaMultiplier;
-		this._adaptee._rawData[4] = redOffset;
-		this._adaptee._rawData[5] = greenOffset;
-		this._adaptee._rawData[6] = blueOffset;
-		this._adaptee._rawData[7] = alphaOffset;
+	public setTo(
+		redMultiplier: number,
+		greenMultiplier: number,
+		blueMultiplier: number,
+		alphaMultiplier: number,
+		redOffset: number,
+		greenOffset: number,
+		blueOffset: number,
+		alphaOffset: number
+	): void {
+
+		const
+			rm = +redMultiplier,
+			gm = +greenMultiplier,
+			bm = +blueMultiplier,
+			am = +alphaMultiplier;
+
+		this._adaptee._rawData[0] = (rm === rm) ? rm : 1;
+		this._adaptee._rawData[1] = (gm === gm) ? gm : 1;
+		this._adaptee._rawData[2] = (bm === bm) ? bm : 1;
+		this._adaptee._rawData[3] = (am === am) ? am : 1;
+		this._adaptee._rawData[4] = +redOffset || 0;
+		this._adaptee._rawData[5] = +greenOffset || 0;
+		this._adaptee._rawData[6] = +blueOffset || 0;
+		this._adaptee._rawData[7] = +alphaOffset || 0;
 	}
 
 	public clone(): ColorTransform {
