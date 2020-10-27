@@ -38,8 +38,8 @@ export class SoundTransform extends ASObject {
 		return [];
 	}
 
-	private _vol: number=1;
-	private _pan: number=0.5;
+	private _vol: number = 1;
+	private _pan: number = 0;
 	/**
 	 * Creates a SoundTransform object.
 	 * @param	vol	The volume, ranging from 0 (silent) to 1 (full volume).
@@ -52,6 +52,8 @@ export class SoundTransform extends ASObject {
 	 */
 	constructor (vol: number = 1, panning: number = 0) {
 		super();
+		this._vol = vol;
+		this._pan = panning;
 	}
 
 	/**
@@ -127,7 +129,9 @@ export class SoundTransform extends ASObject {
 	}
 
 	public set volume (value: number) {
-		this._vol = value;
+		this._vol = (value > 1)
+			? 1
+			: (value < 0 ? 0 : value);
 	}
 
 }
