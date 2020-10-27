@@ -184,10 +184,15 @@ export class Sprite extends DisplayObjectContainer {
 					let scriptChildsOffset = 0;
 					for (let i = maxIndex; i >= 0; i--) {
 						const current = virtualSceneGraph[i];
-						if (current._avmDepthID == -1) {
+						if (current.as3DepthID == -1) {
 							scriptChildsOffset++;
 						}
 						if (current.as3DepthID > -1) {
+							if (current.as3DepthID ==  depth &&
+								current.sessionID == timeline.add_child_stream[i * 3]) {
+								index = -1;
+								break;
+							}
 							if (current.as3DepthID < depth) {
 								index = i + 1 + scriptChildsOffset;
 								break;
@@ -203,7 +208,7 @@ export class Sprite extends DisplayObjectContainer {
 							symbolID:timeline.add_child_stream[i * 3 + 2],
 							as3DepthID:timeline.add_child_stream[i * 3 + 1],
 						};
-					} else {
+					} else if (index > -1) {
 						virtualSceneGraph.splice(index, 0, {
 							sessionID:timeline.add_child_stream[i * 3],
 							addedOnTargetFrame:k == target_keyframe_idx,
