@@ -119,15 +119,15 @@ export class ApplicationDomain extends ASObject {
 		return this._parentDomain;
 	}
 
-	public addDefinition (name: string, asset: AssetBase): void{
+	public addDefinition (name: string, asset: AssetBase): void {
 		this._definitions[name] = asset;
 	}
 
-	public addAudioDefinition (name: string, asset: WaveAudio): void{
+	public addAudioDefinition (name: string, asset: WaveAudio): void {
 		this._audio_definitions[name] = asset;
 	}
 
-	public addFontDefinition (name: string, asset: Font): void{
+	public addFontDefinition (name: string, asset: Font): void {
 		this._font_definitions[name] = asset;
 	}
 

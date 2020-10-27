@@ -88,7 +88,7 @@ export class URLLoader extends EventDispatcher {
 		this.dispatchEvent(newEvent);
 	}
 
-	public load(request: URLRequest): void{
+	public load(request: URLRequest): void {
 		const directUrl = request.url || '';
 		const redirect = matchRedirect(directUrl, URLLoader.redirectRules);
 

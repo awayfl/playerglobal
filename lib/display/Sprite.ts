@@ -1,11 +1,16 @@
-import { Sprite as AwaySprite, DisplayObjectContainer as AwayDisplayObjectContainer, DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip, FrameScriptManager, MovieClip, MouseManager } from '@awayjs/scene';
+import { Sprite as AwaySprite, DisplayObjectContainer as AwayDisplayObjectContainer,
+	DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip,
+	FrameScriptManager, MovieClip, MouseManager, Timeline,
+	IDisplayObjectAdapter } from '@awayjs/scene';
 import { DisplayObjectContainer } from './DisplayObjectContainer';
 import { DisplayObject } from './DisplayObject';
-import { Rectangle, Matrix3D, Point } from '@awayjs/core';
+import { Rectangle, Point } from '@awayjs/core';
 import { Graphics } from './Graphics';
+import { IVirtualSceneGraphItem } from './IVirtualSceneGraphItem';
 import { constructClassFromSymbol } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 import { release, AVMStage } from '@awayfl/swf-loader';
+
 export class Sprite extends DisplayObjectContainer {
 
 	private static _sprites: Array<Sprite> = new Array<Sprite>();
@@ -29,7 +34,9 @@ export class Sprite extends DisplayObjectContainer {
 	 *
 	 *   <p class="- topic/p ">A Sprite object is similar to a movie clip, but does not have a timeline. Sprite is an
 	 * appropriate base class for objects that do not require timelines. For example, Sprite would be a
-	 * logical base class for user numbererface (UI) components that typically do not use the timeline.</p><p class="- topic/p ">The Sprite class is new in ActionScript 3.0. It provides an alternative to the functionality of
+	 * logical base class for user numbererface (UI) components that typically do not use the timeline.</p>
+	 * <p class="- topic/p ">The Sprite class is new in ActionScript 3.0.
+	 * It provides an alternative to the functionality of
 	 * the MovieClip class, which retains all the functionality of previous ActionScript releases to
 	 * provide backward compatibility.</p>
 	 *
@@ -39,7 +46,6 @@ export class Sprite extends DisplayObjectContainer {
 	 */
 	constructor() {
 		super();
-
 		this.dragListenerDelegate = (event) => this.dragListener(event);
 		this.stopDragDelegate = (event) => this.stopDrag(event);
 		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics((<AwaySprite> this._adaptee).graphics);
@@ -53,6 +59,266 @@ export class Sprite extends DisplayObjectContainer {
 		//FrameScriptManager.execute_queue();
 		return newAdaptee;
 	}
+
+	public addTimelineChildAtDepth(child: AwayDisplayObject, depth: number): AwayDisplayObject {
+
+		child.reset();
+
+		const children = (<AwayDisplayObjectContainer> this.adaptee)._children;
+		const maxIndex = children.length - 1;
+		let index = maxIndex + 1;
+		let scriptChildsOffset = 0;
+		for (let i = maxIndex; i >= 0; i--) {
+			const current = children[i];
+			if (current._avmDepthID == -1) {
+				scriptChildsOffset++;
+			}
+			if (current._avmDepthID > -1) {
+				if (current._avmDepthID < depth) {
+					index = i + 1 + scriptChildsOffset;
+					break;
+				}
+				scriptChildsOffset = 0;
+				index = i;
+			}
+		}
+		child._avmDepthID = depth;
+
+		(<any>child).just_added_to_timeline = true;
+		(<AwayMovieClip> this.adaptee)._sessionID_childs[child._sessionID] = child;
+		return (<AwayMovieClip> this.adaptee).addChildAt(child, index);
+	}
+
+	public removeTimelineChildAt(value: number): void {
+		// in as3 we remove by sessionID
+		const child = (<AwayMovieClip> this.adaptee)._sessionID_childs[value];
+		if (child) {
+			delete (<AwayMovieClip> this.adaptee)._sessionID_childs[value];
+			(<AwayMovieClip> this.adaptee).removeChild(child);
+		}
+	}
+
+	/**
+	 * queue the mc for executing framescripts
+	 * this only queues the frame-index as a number,
+	 * the actual framescripts will be retrieved in MovieClip.executeScripts
+	 * @param timeline
+	 * @param frame_idx
+	 * @param scriptPass1
+	 */
+	public queueFrameScripts(timeline: Timeline, frame_idx: number, scriptPass1: boolean) {
+		//console.log("add framescript", target_mc, target_mc.name, keyframe_idx, scriptPass1 );
+		if (scriptPass1)
+			FrameScriptManager.add_script_to_queue(<AwayMovieClip> this.adaptee, frame_idx);
+		else
+			FrameScriptManager.add_script_to_queue_pass2(<AwayMovieClip> this.adaptee, frame_idx);
+	}
+
+	public constructFrame(timeline: Timeline, start_construct_idx: number,
+		target_keyframe_idx: number, jump_forward: boolean,
+		frame_idx: number, queue_pass2: boolean, queue_script: boolean) {
+
+		const adaptee: AwayMovieClip = <AwayMovieClip> this.adaptee;
+		let len = adaptee._children.length;
+
+		let virtualSceneGraph = [];
+		const existingSessionIDs = {};
+
+		for (let i = 0; i < len; i++) {
+			// collect the existing children into a virtual-scenegraph
+			const child = adaptee._children[i];
+			// if jumping forward, we continue from current frame, so we collect all objects
+			// if jumping back, we want to only collect script-children. timeline childs are ignored
+			if (jump_forward || child._sessionID == -1) {
+				virtualSceneGraph[virtualSceneGraph.length] = {
+					sessionID:child._sessionID,
+					as3DepthID:child._avmDepthID,
+					addedOnTargetFrame:false,
+					child:child
+				};
+			}
+			if (child._sessionID != -1)
+				existingSessionIDs[child._sessionID] = child;
+		}
+
+		let i: number;
+		let k: number;
+
+		if (this['$Bg__setPropDict']) {
+			this.clearPropsDic();
+		}
+
+		// step1: apply remove / add commands to virtual scenegraph. collect update commands aswell
+
+		timeline._update_indices.length = 0;
+		timeline._update_frames.length = 0;
+		let update_cnt = 0;
+		let start_index: number;
+		let end_index: number;
+		for (k = start_construct_idx; k <= target_keyframe_idx; k++) {
+			let frame_command_idx: number = timeline.frame_command_indices[k];
+			const frame_recipe: number = timeline.frame_recipe[k];
+
+			if (frame_recipe & 2) {
+				start_index = timeline.command_index_stream[frame_command_idx];
+				end_index = start_index + timeline.command_length_stream[frame_command_idx++];
+				const removeSessionIDs = {};
+				for (i = start_index; i < end_index; i++) {
+					removeSessionIDs[timeline.remove_child_stream[i]] = true;
+				}
+				const newVirtualSceneGraph = [];
+				len = virtualSceneGraph.length;
+				for (let i = 0; i < len; i++) {
+					if (!removeSessionIDs[virtualSceneGraph[i].sessionID])
+						newVirtualSceneGraph[newVirtualSceneGraph.length] = virtualSceneGraph[i];
+				}
+				virtualSceneGraph = newVirtualSceneGraph;
+			}
+			if (frame_recipe & 4) {
+				start_index = timeline.command_index_stream[frame_command_idx];
+				end_index = start_index + timeline.command_length_stream[frame_command_idx++];
+				for (i = start_index; i < end_index; i++) {
+					const maxIndex = virtualSceneGraph.length - 1;
+					const depth = timeline.add_child_stream[i * 3 + 1];
+					let index = maxIndex + 1;
+					let scriptChildsOffset = 0;
+					for (let i = maxIndex; i >= 0; i--) {
+						const current = virtualSceneGraph[i];
+						if (current._avmDepthID == -1) {
+							scriptChildsOffset++;
+						}
+						if (current.as3DepthID > -1) {
+							if (current.as3DepthID < depth) {
+								index = i + 1 + scriptChildsOffset;
+								break;
+							}
+							scriptChildsOffset = 0;
+							index = i;
+						}
+					}
+					if (index >= virtualSceneGraph.length) {
+						virtualSceneGraph[virtualSceneGraph.length] = {
+							sessionID:timeline.add_child_stream[i * 3],
+							addedOnTargetFrame:k == target_keyframe_idx,
+							symbolID:timeline.add_child_stream[i * 3 + 2],
+							as3DepthID:timeline.add_child_stream[i * 3 + 1],
+						};
+					} else {
+						virtualSceneGraph.splice(index, 0, {
+							sessionID:timeline.add_child_stream[i * 3],
+							addedOnTargetFrame:k == target_keyframe_idx,
+							symbolID:timeline.add_child_stream[i * 3 + 2],
+							as3DepthID:timeline.add_child_stream[i * 3 + 1],
+						});
+					}
+				}
+			}
+			if (frame_recipe & 8) {
+				timeline._update_frames[update_cnt] = timeline.keyframe_firstframes[k];
+				timeline._update_indices[update_cnt++] = frame_command_idx++;// execute update command later
+			}
+
+			if (frame_recipe & 16 && k == target_keyframe_idx) {
+				timeline.start_sounds(adaptee, frame_command_idx);
+			}
+		}
+
+		const newChildren: AwayDisplayObject[] = [];
+		let vsItem: IVirtualSceneGraphItem;
+		const newChilds: AwayDisplayObject[] = [];
+		const newChildsOnTargetFrame: AwayDisplayObject[] = [];
+
+		// step2: build new list of children from virtual-scenegraph
+
+		adaptee._sessionID_childs = {};
+		len = newChildren.length = virtualSceneGraph.length;
+		for (let i = 0; i < len; i++) {
+			vsItem = virtualSceneGraph[i];
+			if (vsItem.sessionID == -1 && vsItem.child) {
+				// this must be a script child
+				newChildren[i] = vsItem.child.adaptee;
+			} else if (existingSessionIDs[vsItem.sessionID]) {
+				//	the same sessionID already is child of the mc
+				const existingChild = existingSessionIDs[vsItem.sessionID];
+				adaptee._sessionID_childs[vsItem.sessionID] = existingChild;
+				newChildren[i] = existingChild;
+				//console.log("vsItem.exists", vsItem);
+				if (!jump_forward) {
+					if (newChildren[i]._adapter) {
+						if (!(<IDisplayObjectAdapter> newChildren[i].adapter).isColorTransformByScript()) {
+							newChildren[i].transform.clearColorTransform();
+						}
+						if (!(<IDisplayObjectAdapter> newChildren[i].adapter).isBlockedByScript()
+							&& !(<any>newChildren[i]).noTimelineUpdate) {
+							newChildren[i].transform.clearMatrix3D();
+							newChildren[i].masks = null;
+							newChildren[i].maskMode = false;
+						}
+						if (!(<IDisplayObjectAdapter> newChildren[i].adapter).isVisibilityByScript()) {
+							newChildren[i].visible = true;
+						}
+					} else {
+						newChildren[i].transform.clearColorTransform();
+						newChildren[i].transform.clearMatrix3D();
+						newChildren[i].visible = true;
+						newChildren[i].masks = null;
+						newChildren[i].maskMode = false;
+					}
+				}
+			} else {
+				const newChild = <AwayDisplayObject>timeline.getChildInstance(vsItem.symbolID, vsItem.sessionID);
+				if (this.adaptee.isSlice9ScaledMC && newChild.assetType == '[asset Sprite]') {
+					newChild.isSlice9ScaledSprite = true;
+				}
+				newChild._sessionID = vsItem.sessionID;
+				newChild._avmDepthID = vsItem.as3DepthID;
+				adaptee._sessionID_childs[vsItem.sessionID] = newChild;
+				newChildren[i] = newChild;
+				if (vsItem.addedOnTargetFrame) {
+					newChildsOnTargetFrame[newChildsOnTargetFrame.length] = newChild;
+				} else {
+					newChilds[newChilds.length] = newChild;
+				}
+			}
+		}
+
+		// step3: remove children that no longer exists
+
+		len = adaptee._children.length;
+		for (let i = 0; i < len; i++) {
+			if (newChildren.indexOf(adaptee._children[i]) < 0) {
+				adaptee._children[i]._setParent(null);
+				// todo dispatch remove events needed here ?
+			}
+		}
+		adaptee._children = newChildren;
+
+		// step4: setup new children that have not been added on new frame (prevent frame-scripts)
+		adaptee.preventScript = true;
+		this.finalizeChildren(newChilds);
+
+		// step5: queue frame-script for new frame
+		if (queue_script)
+			this.queueFrameScripts(timeline, frame_idx, !queue_pass2);
+
+		// step6: setup children that have been added on new frame (allow frame-scripts)
+		adaptee.preventScript = true;
+		this.finalizeChildren(newChildsOnTargetFrame);
+	}
+
+	public finalizeChildren(children: AwayDisplayObject[]) {
+		const len = children.length;
+		for (let i = 0; i < len; i++) {
+			const newChild = children[i];
+			if (newChild.adapter != newChild && (<any>newChild.adapter).deleteOwnProperties) {
+				(<any>newChild.adapter).deleteOwnProperties();
+			}
+			(<any>newChild).just_added_to_timeline = true;
+			newChild._setParent(<AwayDisplayObjectContainer> this.adaptee);
+			newChild.reset();
+		}
+	}
+
 	//---------------------------stuff added to make it work:
 
 	public registerScriptObject(child: AwayDisplayObject): void {
@@ -83,7 +349,6 @@ export class Sprite extends DisplayObjectContainer {
 		if (!(<any> this)._symbol) {
 			throw ('_symbol not defined when cloning movieclip');
 		}
-		//var clone: MovieClip = MovieClip.getNewMovieClip(AwayMovieClip.getNewMovieClip((<AwayMovieClip>this.adaptee).timeline));
 		const clone = constructClassFromSymbol((<any> this)._symbol, (<any> this)._symbol.symbolClass);
 		const adaptee = new AwaySprite();
 		this.adaptee.copyTo(adaptee);
@@ -142,7 +407,8 @@ export class Sprite extends DisplayObjectContainer {
 	 * do not enable user input numbereractivity for their child objects because
 	 * it confuses the event flow. To disable user input numbereractivity for all child
 	 * objects, you must set the mouseChildren property (inherited
-	 * from the DisplayObjectContainer class) to false.If you use the buttonMode property with the MovieClip class (which is a
+	 * from the DisplayObjectContainer class) to false.
+	 * If you use the buttonMode property with the MovieClip class (which is a
 	 * subclass of the Sprite class), your button might have some added
 	 * functionality. If you include frames labeled _up, _over, and _down,
 	 * Flash Player provides automatic state changes (functionality
@@ -194,7 +460,8 @@ export class Sprite extends DisplayObjectContainer {
 	 *
 	 *   You can change the hitArea property at any time; the modified sprite immediately
 	 * uses the new hit area behavior. The sprite designated as the hit area does not need to be
-	 * visible; its graphical shape, although not visible, is still detected as the hit area.Note: You must set to false the mouseEnabled
+	 * visible; its graphical shape, although not visible,
+	 * is still detected as the hit area.Note: You must set to false the mouseEnabled
 	 * property of the sprite designated as the hit area. Otherwise, your sprite button might
 	 * not work because the sprite designated as the hit area receives the user input events instead
 	 * of your sprite button.
@@ -232,7 +499,8 @@ export class Sprite extends DisplayObjectContainer {
 	 * false, the arrow ponumberer is used instead.
 	 *
 	 *   You can change the useHandCursor property at any time; the modified sprite
-	 * immediately takes on the new cursor appearance. Note: In Flex or Flash Builder, if your sprite has child sprites, you might want to
+	 * immediately takes on the new cursor appearance. Note: In Flex or Flash Builder,
+	 * if your sprite has child sprites, you might want to
 	 * set the mouseChildren property to false. For example, if you want a hand
 	 * cursor to appear over a Flex <mx:Label> control, set the useHandCursor and
 	 * buttonMode properties to true, and the mouseChildren property
@@ -273,7 +541,8 @@ export class Sprite extends DisplayObjectContainer {
 		this._dragBounds = bounds;
 		if (!this.isDragging) {
 			this.isDragging = true;
-			this.startDragPoint = this.adaptee.parent.transform.globalToLocal(new Point(this.stage.mouseX, this.stage.mouseY));
+			this.startDragPoint =
+				this.adaptee.parent.transform.globalToLocal(new Point(this.stage.mouseX, this.stage.mouseY));
 			if (lockCenter) {
 				this.adaptee.x = this.startDragPoint.x;
 				this.adaptee.y = this.startDragPoint.y;
@@ -286,7 +555,8 @@ export class Sprite extends DisplayObjectContainer {
 			//window.addEventListener("mouseup", this.stopDragDelegate);
 			//window.addEventListener("touchend", this.stopDragDelegate);
 			(<AVMStage> this.stage.adaptee).scene.mousePicker.dragEntity = this.adaptee;
-			MouseManager.getInstance((<AVMStage> this.stage.adaptee).scene.renderer.renderGroup.pickGroup).startDragObject(this.adaptee);
+			MouseManager.getInstance((<AVMStage> this.stage.adaptee).scene.renderer.renderGroup.pickGroup)
+				.startDragObject(this.adaptee);
 
 		}
 	}
@@ -318,7 +588,8 @@ export class Sprite extends DisplayObjectContainer {
 		//console.log("drag", e);
 
 		if (this.adaptee.parent) {
-			const tmpPoint = this.adaptee.parent.transform.globalToLocal(new Point(this.stage.mouseX, this.stage.mouseY));
+			const tmpPoint = this.adaptee.parent.transform.globalToLocal(
+				new Point(this.stage.mouseX, this.stage.mouseY));
 
 			this.adaptee.x = this.startDragMCPosition.x + (tmpPoint.x - this.startDragPoint.x);
 			this.adaptee.y = this.startDragMCPosition.y + (tmpPoint.y - this.startDragPoint.y);

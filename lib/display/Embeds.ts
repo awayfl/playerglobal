@@ -13,7 +13,7 @@ export class EmbedManager extends EventDispatcher {
 		this.processID = 0;
 	}
 
-	public load(): void{
+	public load(): void {
 
 		const assets: any = EmbedManager._embedAssets;
 		for (const key in EmbedManager._embedAssets) {
@@ -38,7 +38,7 @@ export class EmbedManager extends EventDispatcher {
 		return EmbedManager._singleton;
 	}
 
-	public static add(res: any): void{
+	public static add(res: any): void {
 		if (EmbedManager._hasLoaded)
 			throw ('Error: EmbedManager.add() - Can not add embed-resource when EmbedManager is already loaded.');
 		EmbedManager._embedAssets[res.id] = res;

@@ -1,7 +1,9 @@
-import { IAssetAdapter, Point } from '@awayjs/core';
-import { BitmapImage2D, Image2D } from '@awayjs/stage';
-import { Timeline, MovieClip as AwayMovieClip, Sprite as AwaySprite, DisplayObjectContainer as AwayDisplayObjectContainer, Billboard, ISceneGraphFactory, TextField as AwayTextField, PrefabBase } from '@awayjs/scene';
-import { MethodMaterial, MaterialBase } from '@awayjs/materials';
+
+import { Image2D } from '@awayjs/stage';
+import { IFrameScript, Timeline, MovieClip as AwayMovieClip,
+	Sprite as AwaySprite, DisplayObjectContainer as AwayDisplayObjectContainer,
+	Billboard, ISceneGraphFactory, TextField as AwayTextField, PrefabBase } from '@awayjs/scene';
+import { MaterialBase } from '@awayjs/materials';
 import { DefaultSceneGraphFactory } from '@awayjs/scene';
 import { SceneImage2D } from '@awayjs/scene';
 
@@ -42,7 +44,8 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 
 		let symbolClass = null;
 		if (symbol.className)
-			symbolClass = this._sec.application.getClass(Multiname.FromFQNString(symbol.className, NamespaceType.Public));
+			symbolClass =
+				this._sec.application.getClass(Multiname.FromFQNString(symbol.className, NamespaceType.Public));
 		else
 			symbolClass = this._sec.flash.display.Sprite.axClass;
 
@@ -71,7 +74,8 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 
 		let symbolClass: AXClass = null;
 		if (symbol.className) {
-			symbolClass = this._sec.application.getClass(Multiname.FromFQNString(symbol.className, NamespaceType.Public));
+			symbolClass =
+				this._sec.application.getClass(Multiname.FromFQNString(symbol.className, NamespaceType.Public));
 			(<any>symbolClass)._symbol = symbol;
 		} else
 			symbolClass = this._sec.flash.display.MovieClip.axClass;
@@ -92,7 +96,8 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 	public createTextField(symbol: any = null): AwayTextField {
 		let symbolClass: AXClass = null;
 		if (symbol.className)
-			symbolClass = this._sec.application.getClass(Multiname.FromFQNString(symbol.className, NamespaceType.Public));
+			symbolClass =
+				this._sec.application.getClass(Multiname.FromFQNString(symbol.className, NamespaceType.Public));
 		else
 			symbolClass = this._sec.flash.text.TextField.axClass;
 		symbol.symbolClass = symbolClass;
@@ -108,12 +113,21 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 		return <Billboard> new Bitmap(<BitmapData> material.style.image.adapter).adaptee;
 	}
 
-	public createImage2D(width: number, height: number, transparent: boolean = true, fillColor: number = null, powerOfTwo: boolean = true, symbol: any = null): Image2D {
+	public createImage2D(width: number, height: number,
+		transparent: boolean = true,
+		fillColor: number = null,
+		powerOfTwo: boolean = true,
+		symbol: any = null): Image2D {
 		const image = <SceneImage2D> new BitmapData(width, height, transparent, fillColor).adaptee;
 
 		// drop weak ref for symbols
 		image.unuseWeakRef();
 
 		return image;
+	}
+
+	createFrameScripts(scripts: IFrameScript[], frameIdx: number, objName: string, objID: number): IFrameScript[] {
+		console.warn('[FlashSceneGraphFactory] - createFrameScripts - should never be called');
+		return null;
 	}
 }
