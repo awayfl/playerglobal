@@ -87,11 +87,11 @@ export class SimpleButton extends MovieClip {
 		let scriptChildsOffset = 0;
 		for (let i = maxIndex; i >= 0; i--) {
 			const current = children[i];
-			if (current._as3DepthID == -1) {
+			if (current._avmDepthID == -1) {
 				scriptChildsOffset++;
 			}
-			if (current._as3DepthID > -1) {
-				if (current._as3DepthID < depth) {
+			if (current._avmDepthID > -1) {
+				if (current._avmDepthID < depth) {
 					index = i + 1 + scriptChildsOffset;
 					break;
 				}
@@ -99,7 +99,7 @@ export class SimpleButton extends MovieClip {
 				index = i;
 			}
 		}
-		child._as3DepthID = depth;
+		child._avmDepthID = depth;
 
 		(<any>child).just_added_to_timeline = true;
 		(<AwayMovieClip> this.adaptee)._sessionID_childs[child._sessionID] = child;
@@ -150,7 +150,7 @@ export class SimpleButton extends MovieClip {
 			if (jump_forward || child._sessionID == -1) {
 				virtualSceneGraph[virtualSceneGraph.length] = {
 					sessionID:child._sessionID,
-					as3DepthID:child._as3DepthID,
+					as3DepthID:child._avmDepthID,
 					addedOnTargetFrame:false,
 					child:child
 				};
@@ -205,7 +205,7 @@ export class SimpleButton extends MovieClip {
 					let scriptChildsOffset = 0;
 					for (let i = maxIndex; i >= 0; i--) {
 						const current = virtualSceneGraph[i];
-						if (current._as3DepthID == -1) {
+						if (current._avmDepthID == -1) {
 							scriptChildsOffset++;
 						}
 						if (current.as3DepthID > -1) {
@@ -292,7 +292,7 @@ export class SimpleButton extends MovieClip {
 					newChild.isSlice9ScaledSprite = true;
 				}
 				newChild._sessionID = vsItem.sessionID;
-				newChild._as3DepthID = vsItem.as3DepthID;
+				newChild._avmDepthID = vsItem.as3DepthID;
 				adaptee._sessionID_childs[vsItem.sessionID] = newChild;
 				newChildren[i] = newChild;
 				if (vsItem.addedOnTargetFrame) {
@@ -328,7 +328,6 @@ export class SimpleButton extends MovieClip {
 
 		// step6: setup children that have been added on new frame (allow frame-scripts)
 		this.finalizeChildren(newChildsOnTargetFrame);
-		adaptee.setChildrenDepthsFromIndex(0);
 	}
 
 	public finalizeChildren(children: AwayDisplayObject[]) {

@@ -70,11 +70,11 @@ export class Sprite extends DisplayObjectContainer {
 		let scriptChildsOffset = 0;
 		for (let i = maxIndex; i >= 0; i--) {
 			const current = children[i];
-			if (current._as3DepthID == -1) {
+			if (current._avmDepthID == -1) {
 				scriptChildsOffset++;
 			}
-			if (current._as3DepthID > -1) {
-				if (current._as3DepthID < depth) {
+			if (current._avmDepthID > -1) {
+				if (current._avmDepthID < depth) {
 					index = i + 1 + scriptChildsOffset;
 					break;
 				}
@@ -82,7 +82,7 @@ export class Sprite extends DisplayObjectContainer {
 				index = i;
 			}
 		}
-		child._as3DepthID = depth;
+		child._avmDepthID = depth;
 
 		(<any>child).just_added_to_timeline = true;
 		(<AwayMovieClip> this.adaptee)._sessionID_childs[child._sessionID] = child;
@@ -126,14 +126,13 @@ export class Sprite extends DisplayObjectContainer {
 
 		for (let i = 0; i < len; i++) {
 			// collect the existing children into a virtual-scenegraph
-			// also collect existing session ids into a map
 			const child = adaptee._children[i];
 			// if jumping forward, we continue from current frame, so we collect all objects
 			// if jumping back, we want to only collect script-children. timeline childs are ignored
 			if (jump_forward || child._sessionID == -1) {
 				virtualSceneGraph[virtualSceneGraph.length] = {
 					sessionID:child._sessionID,
-					as3DepthID:child._as3DepthID,
+					as3DepthID:child._avmDepthID,
 					addedOnTargetFrame:false,
 					child:child
 				};
@@ -141,9 +140,6 @@ export class Sprite extends DisplayObjectContainer {
 			if (child._sessionID != -1)
 				existingSessionIDs[child._sessionID] = child;
 		}
-		//for(var key in virtualSceneGraphAS2){
-		//console.log("existing childs=", key, virtualSceneGraphAS2[key]);
-		//}
 
 		let i: number;
 		let k: number;
@@ -188,7 +184,7 @@ export class Sprite extends DisplayObjectContainer {
 					let scriptChildsOffset = 0;
 					for (let i = maxIndex; i >= 0; i--) {
 						const current = virtualSceneGraph[i];
-						if (current._as3DepthID == -1) {
+						if (current._avmDepthID == -1) {
 							scriptChildsOffset++;
 						}
 						if (current.as3DepthID > -1) {
@@ -275,7 +271,7 @@ export class Sprite extends DisplayObjectContainer {
 					newChild.isSlice9ScaledSprite = true;
 				}
 				newChild._sessionID = vsItem.sessionID;
-				newChild._as3DepthID = vsItem.as3DepthID;
+				newChild._avmDepthID = vsItem.as3DepthID;
 				adaptee._sessionID_childs[vsItem.sessionID] = newChild;
 				newChildren[i] = newChild;
 				if (vsItem.addedOnTargetFrame) {
@@ -292,26 +288,22 @@ export class Sprite extends DisplayObjectContainer {
 		for (let i = 0; i < len; i++) {
 			if (newChildren.indexOf(adaptee._children[i]) < 0) {
 				adaptee._children[i]._setParent(null);
-				// todo call dispatch remove events
+				// todo dispatch remove events needed here ?
 			}
 		}
 		adaptee._children = newChildren;
 
-		// step4: setup children that have been added between old frame and new frame (do not allow frame-scripts)
-
+		// step4: setup new children that have not been added on new frame (prevent frame-scripts)
 		adaptee.preventScript = true;
 		this.finalizeChildren(newChilds);
-		adaptee.preventScript = false;
 
 		// step5: queue frame-script for new frame
-
-		// if there is a framescript on this frame, we queue it now, so it sits after the initAdapter of the children
 		if (queue_script)
 			this.queueFrameScripts(timeline, frame_idx, !queue_pass2);
 
 		// step6: setup children that have been added on new frame (allow frame-scripts)
+		adaptee.preventScript = true;
 		this.finalizeChildren(newChildsOnTargetFrame);
-		adaptee.setChildrenDepthsFromIndex(0);
 	}
 
 	public finalizeChildren(children: AwayDisplayObject[]) {
