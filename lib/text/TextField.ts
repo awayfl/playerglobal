@@ -1111,23 +1111,25 @@ export class TextField extends InteractiveObject {
 	 * @throws	RangeError The beginIndex or endIndex specified is out of range.
 	 */
 	public getTextFormat (beginIndex: number = -1, endIndex: number = -1): TextFormat {
-		// todo: support multiple formats
-		console.warn('[TextField] getTextFormat not implemented correctly');
+
 		const awt = (<AwayTextField> this._adaptee).getTextFormat(beginIndex, endIndex);
 
-		if (awt && awt.adaptee !== awt.adapter) {
+		if (!awt) {
+			console.warn('[playerglobal/Textfield] - getTextFormat - textformat should not be null');
+			return;
+		}
+		if (awt.adaptee !== awt.adapter) {
 			return <any>awt.adapter;
 		}
-
 		const tf = new (<SecurityDomain> this.sec).flash.text.TextFormat();
-		tf.adaptee = awt;// || new AwayTexFormat();
-
+		tf.adaptee = awt;
+		awt.adapter = <any>tf;
 		return tf;
 	}
 
 	public getTextRuns (beginIndex: number = 0, endIndex: number = 2147483647): any[] {
 		//todo
-		console.log('getTextRuns not implemented yet in flash/TextField');
+		console.warn('getTextRuns not implemented yet in flash/TextField');
 		return [];
 	}
 
