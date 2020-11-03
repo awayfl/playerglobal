@@ -60,7 +60,7 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 				let message = '';
 
 				if (arguments.length == 2) {
-					message = expression[1]?.toString();
+					message = arguments[1]?.toString();
 				} else {
 					for (let i = 1; i < arguments.length; i++) {
 						// eslint-disable-next-line prefer-rest-params
