@@ -15,12 +15,9 @@ import { SimpleButton } from './display/SimpleButton';
 import { ColorTransform } from './geom/ColorTransform';
 import { Matrix } from './geom/Matrix';
 import { Matrix3D } from './geom/Matrix3D';
-import { Orientation3D } from './geom/Orientation3D';
-import { PerspectiveProjection } from './geom/PerspectiveProjection';
 import { Point } from './geom/Point';
 import { Rectangle } from './geom/Rectangle';
 import { Transform } from './geom/Transform';
-import { Utils3D } from './geom/Utils3D';
 import { Vector3D } from './geom/Vector3D';
 import { LoaderContext } from './system/LoaderContext';
 import { ApplicationDomain } from './system/ApplicationDomain';
@@ -342,35 +339,6 @@ export function initLink() {
 
 	registerNativeFunction('flash.system.fscommand', fscommand);
 
-	// needed by externalInterface when doing "eval"
+	ExternalInterface.ensureInitialized();
 
-	window['__flash__toXML'] = function __flash__toXML(obj) {
-		switch (typeof obj) {
-			case 'boolean':
-				return obj ? '<true/>' : '<false/>';
-			case 'number':
-				return '<number>' + obj + '</number>';
-			case 'object':
-				if (obj === null) {
-					return '<null/>';
-				}
-				if ('hasOwnProperty' in obj && obj.hasOwnProperty('length')) {
-					// array
-					var xml = '<array>';
-					for (let i = 0; i < obj.length; i++) {
-						xml += '<property id="' + i + '">' + __flash__toXML(obj[i]) + '</property>';
-					}
-					return xml + '</array>';
-				}
-				var xml = '<object>';
-				for (const key in obj) {
-					xml += '<property id="' + key + '">' + __flash__toXML(obj[key]) + '</property>';
-				}
-				return xml + '</object>';
-			case 'string':
-				return '<string>' + obj.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</string>';
-			case 'undefined':
-				return '<undefined/>';
-		}
-	};
 }

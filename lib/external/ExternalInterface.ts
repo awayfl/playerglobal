@@ -38,10 +38,6 @@ export class ExternalInterface extends ASObject {
 		if (this.initialized) {
 			return;
 		}
-		/*Telemetry.instance.reportTelemetry({
-                                          topic: 'feature',
-                                          feature: Telemetry.Feature.EXTERNAL_INTERFACE_FEATURE
-                                        });*/
 		this.initialized = true;
 		ExternalInterfaceService.initJS(this._callIn);
 	}
@@ -59,8 +55,10 @@ export class ExternalInterface extends ASObject {
 		const catchExpr = this.$BgmarshallExceptions ?
 			'"<exception>" + e + "</exception>";' :
 			'"<undefined/>";';
-		const evalExpr = 'try {' + '__flash__toXML(' + functionName + '(' + argsExpr + '));' +
-                    '} catch (e) {' + catchExpr + '}';
+		const evalExpr = 'try {'
+					+ ExternalInterfaceService.interfaceID
+					+ '.__flash__toXML(' + functionName + '(' + argsExpr + '));'
+					+ '} catch (e) {' + catchExpr + '}';
 		const result = this._evalJS(evalExpr);
 		if (result == null) {
 			return null;
@@ -86,7 +84,10 @@ export class ExternalInterface extends ASObject {
 						const arg = args[i];
 						// Objects have to be converted into proper AS objects in the current security domain.
 						if (typeof arg === 'object' && arg) {
-							wrappedArgs.push(self.sec.createObjectFromJS(arg, true));
+							if (Array.isArray(arg))
+								wrappedArgs.push(self.sec.createArray(arg));
+							else
+								wrappedArgs.push(self.sec.createObjectFromJS(arg, true));
 						} else {
 							wrappedArgs.push(arg);
 						}
