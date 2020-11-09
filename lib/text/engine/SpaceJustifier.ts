@@ -3,6 +3,7 @@ import { TextJustifier } from './TextJustifier';
 
 export class SpaceJustifier extends TextJustifier {
 
+	static forceNative: boolean = true;
 	// Called whenever the class is initialized.
 	public static classInitializer: any = null;
 

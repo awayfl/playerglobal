@@ -6,6 +6,7 @@ import { ElementFormat } from './ElementFormat';
 
 export class GraphicElement extends ContentElement {
 
+	static forceNative: boolean = true;
 	// Called whenever the class is initialized.
 	public static classInitializer: any = null;
 

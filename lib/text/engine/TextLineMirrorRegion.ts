@@ -6,6 +6,7 @@ import { TextLine } from './TextLine';
 
 export class TextLineMirrorRegion extends ASObject {
 
+	static forceNative: boolean = true;
 	// Called whenever the class is initialized.
 	static classInitializer: any = null;
 

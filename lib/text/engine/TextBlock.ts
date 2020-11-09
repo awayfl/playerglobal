@@ -6,6 +6,7 @@ import { TextLine } from './TextLine';
 
 export class TextBlock extends ASObject {
 
+	static forceNative: boolean = true;
 	// Called whenever the class is initialized.
 	public static classInitializer: any = null;
 

@@ -2,6 +2,7 @@ import { ASObject, axCoerceString } from '@awayfl/avm2';
 
 export class TextJustifier extends ASObject {
 
+	static forceNative: boolean = true;
 	// Called whenever the class is initialized.
 	public static classInitializer: any = null;
 

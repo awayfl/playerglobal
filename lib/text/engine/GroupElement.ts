@@ -6,6 +6,7 @@ import { TextElement } from './TextElement';
 
 export class GroupElement extends ContentElement {
 
+	static forceNative: boolean = true;
 	// Called whenever the class is initialized.
 	public static classInitializer: any = null;
 

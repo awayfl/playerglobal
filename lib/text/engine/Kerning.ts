@@ -2,6 +2,7 @@ import { ASObject } from '@awayfl/avm2';
 
 export class Kerning extends ASObject {
 
+	static forceNative: boolean = true;
 	// Called whenever the class is initialized.
 	static classInitializer: any = null;
 
