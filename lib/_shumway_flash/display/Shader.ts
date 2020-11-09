@@ -1,70 +1,46 @@
-import { release, notImplemented } from '../../base/utilities/Debug';
-import { axCoerceString } from '../../avm2/run';
-import { ByteArray } from '../../avm2/natives/byteArray';
-import { ASObject } from '../../avm2/nat';
+import { ASObject, ByteArray } from '@awayfl/avm2';
 import { ShaderData } from './ShaderData';
-
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: Shader
 export class Shader extends ASObject {
 
 	// Called whenever the class is initialized.
-	static classInitializer: any = null;
+	public static classInitializer: any = null;
 
 	// List of static symbols to link.
-	static classSymbols: string [] = null; // [];
+	public static classSymbols: string [] = null; // [];
 
 	// List of instance symbols to link.
-	static instanceSymbols: string [] = null; // ["byteCode"];
+	public static instanceSymbols: string [] = null; // ["byteCode"];
 
-	constructor (code: ByteArray = null) {
+	constructor (byteCode: ByteArray = null) {
 		super();
 		// TODO: coerce
-		this.code = code;
+		this.byteCode = byteCode;
 	}
 
 	// JS -> AS Bindings
 
-	byteCode: ByteArray;
+	public byteCode: ByteArray;
 
 	// AS -> JS Bindings
 
 	// _byteCode: flash.utils.ByteArray;
 	// _data: flash.display.ShaderData;
 	// _precisionHint: string;
-	get data(): ShaderData {
-		release || notImplemented('public flash.display.Shader::get data'); return;
-		// return this._data;
+	public get data(): ShaderData {
+		console.warn('[playerglobal/display/Shader] - get data not implemented');
+		return null;
 	}
 
-	set data(p: ShaderData) {
-		p = p;
-		release || notImplemented('public flash.display.Shader::set data'); return;
-		// this._data = p;
+	public set data(p: ShaderData) {
+		console.warn('[playerglobal/display/Shader] - set data not implemented');
 	}
 
-	get precisionHint(): string {
-		release || notImplemented('public flash.display.Shader::get precisionHint'); return;
-		// return this._precisionHint;
+	public get precisionHint(): string {
+		console.warn('[playerglobal/display/Shader] - get precisionHint not implemented');
+		return null;
 	}
 
-	set precisionHint(p: string) {
-		p = axCoerceString(p);
-		release || notImplemented('public flash.display.Shader::set precisionHint'); return;
-		// this._precisionHint = p;
+	public set precisionHint(p: string) {
+		console.warn('[playerglobal/display/Shader] - set precisionHint not implemented');
 	}
 }

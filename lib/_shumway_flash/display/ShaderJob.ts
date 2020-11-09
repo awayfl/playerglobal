@@ -1,37 +1,23 @@
-import { release, notImplemented } from '../../base/utilities/Debug';
-import { ASObject } from '../../avm2/nat';
+
 import { Shader } from './Shader';
 import { EventDispatcher } from '../events/EventDispatcher';
+import { ASObject } from '@awayfl/avm2';
 
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: ShaderJob
 export class ShaderJob extends EventDispatcher {
 
 	// Called whenever the class is initialized.
-	static classInitializer: any = null;
+	public static classInitializer: any = null;
 
 	// List of static symbols to link.
-	static classSymbols: string [] = null; // [];
+	public static classSymbols: string [] = null; // [];
 
 	// List of instance symbols to link.
-	static instanceSymbols: string [] = null; // [];
+	public static instanceSymbols: string [] = null; // [];
 
-	constructor (shader: Shader = null, target: ASObject = null, width: number /*int*/ = 0, height: number /*int*/ = 0) {
-		shader = shader; target = target; width = width | 0; height = height | 0;
+	constructor (shader: Shader = null,
+		target: ASObject = null,
+		width: number /*int*/ = 0,
+		height: number /*int*/ = 0) {
 		super();
 	}
 
@@ -44,61 +30,52 @@ export class ShaderJob extends EventDispatcher {
 	// _width: number /*int*/;
 	// _height: number /*int*/;
 	// _progress: number;
-	get shader(): Shader {
-		release || notImplemented('public flash.display.ShaderJob::get shader'); return;
-		// return this._shader;
+	public get shader(): Shader {
+		console.warn('[playerglobal/display/ShaderJob] - get shader not implemented');
+		return null;
 	}
 
-	set shader(s: Shader) {
-		s = s;
-		release || notImplemented('public flash.display.ShaderJob::set shader'); return;
-		// this._shader = s;
+	public set shader(s: Shader) {
+		console.warn('[playerglobal/display/ShaderJob] - set shader not implemented');
 	}
 
-	get target(): ASObject {
-		release || notImplemented('public flash.display.ShaderJob::get target'); return;
-		// return this._target;
+	public get target(): ASObject {
+		console.warn('[playerglobal/display/ShaderJob] - get target not implemented');
+		return null;
 	}
 
-	set target(s: ASObject) {
-		s = s;
-		release || notImplemented('public flash.display.ShaderJob::set target'); return;
-		// this._target = s;
+	public set target(s: ASObject) {
+		console.warn('[playerglobal/display/ShaderJob] - set target not implemented');
 	}
 
-	get width(): number /*int*/ {
-		release || notImplemented('public flash.display.ShaderJob::get width'); return;
-		// return this._width;
+	public get width(): number /*int*/ {
+		console.warn('[playerglobal/display/ShaderJob] - get width not implemented');
+		return null;
 	}
 
-	set width(v: number /*int*/) {
-		v = v | 0;
-		release || notImplemented('public flash.display.ShaderJob::set width'); return;
-		// this._width = v;
+	public set width(v: number /*int*/) {
+		console.warn('[playerglobal/display/ShaderJob] - set width not implemented');
 	}
 
-	get height(): number /*int*/ {
-		release || notImplemented('public flash.display.ShaderJob::get height'); return;
-		// return this._height;
+	public get height(): number /*int*/ {
+		console.warn('[playerglobal/display/ShaderJob] - get height not implemented');
+		return null;
 	}
 
-	set height(v: number /*int*/) {
-		v = v | 0;
-		release || notImplemented('public flash.display.ShaderJob::set height'); return;
-		// this._height = v;
+	public set height(v: number /*int*/) {
+		console.warn('[playerglobal/display/ShaderJob] - get height not implemented');
 	}
 
-	get progress(): number {
-		release || notImplemented('public flash.display.ShaderJob::get progress'); return;
-		// return this._progress;
+	public get progress(): number {
+		console.warn('[playerglobal/display/ShaderJob] - get progress not implemented');
+		return null;
 	}
 
-	start(waitForCompletion: boolean = false): void {
-		waitForCompletion = !!waitForCompletion;
-		release || notImplemented('public flash.display.ShaderJob::start'); return;
+	public start(waitForCompletion: boolean = false): void {
+		console.warn('[playerglobal/display/ShaderJob] - start not implemented');
 	}
 
-	cancel(): void {
-		release || notImplemented('public flash.display.ShaderJob::cancel'); return;
+	public cancel(): void {
+		console.warn('[playerglobal/display/ShaderJob] - cancel not implemented');
 	}
 }

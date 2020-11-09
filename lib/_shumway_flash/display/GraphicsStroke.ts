@@ -1,37 +1,25 @@
-import { IGraphicsFill } from './IGraphicsFill';
-import { axCoerceString } from '../../avm2/run';
-import { ASObject } from '../../avm2/nat';
-import { IGraphicsStroke } from './IGraphicsStroke';
-import { IGraphicsData } from './IGraphicsData';
+import { ASObject, axCoerceString } from '@awayfl/avm2';
+import { IGraphicsFill } from './interfaces';
 
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: GraphicsStroke
-export class GraphicsStroke extends ASObject implements IGraphicsStroke, IGraphicsData {
+export class GraphicsStroke extends ASObject {
 
 	// Called whenever the class is initialized.
-	static classInitializer: any = null;
+	public static classInitializer: any = null;
 
 	// List of static symbols to link.
-	static classSymbols: string [] = null; // [];
+	public static classSymbols: string [] = null; // [];
 
 	// List of instance symbols to link.
-	static instanceSymbols: string [] = null; // ["thickness", "pixelHinting", "miterLimit", "fill", "_scaleMode", "_caps", "_joints", "scaleMode", "scaleMode", "caps", "caps", "joints", "joints"];
+	public static instanceSymbols: string [] = null;
 
-	constructor (thickness: number = NaN, pixelHinting: boolean = false, scaleMode: string = 'normal', caps: string = 'none', joints: string = 'round', miterLimit: number = 3, fill: flash.display.IGraphicsFill = null) {
+	constructor (
+		thickness: number = NaN,
+		pixelHinting: boolean = false,
+		scaleMode: string = 'normal',
+		caps: string = 'none',
+		joints: string = 'round',
+		miterLimit: number = 3,
+		fill: IGraphicsFill = null) {
 		super();
 		this.thickness = +thickness;
 		this.pixelHinting = !!pixelHinting;
@@ -44,13 +32,13 @@ export class GraphicsStroke extends ASObject implements IGraphicsStroke, IGraphi
 
 	// JS -> AS Bindings
 
-	thickness: number;
-	pixelHinting: boolean;
-	miterLimit: number;
-	fill: IGraphicsFill;
-	scaleMode: string;
-	caps: string;
-	joints: string;
+	public thickness: number;
+	public pixelHinting: boolean;
+	public miterLimit: number;
+	public fill: IGraphicsFill;
+	public scaleMode: string;
+	public caps: string;
+	public joints: string;
 
 	// AS -> JS Bindings
 

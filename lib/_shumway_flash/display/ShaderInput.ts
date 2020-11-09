@@ -1,32 +1,15 @@
-import { release, notImplemented } from '../../base/utilities/Debug';
-import { ASObject } from '../../avm2/nat';
+import { ASObject } from '@awayfl/avm2';
 
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: ShaderInput
 export class ShaderInput extends ASObject {
 
 	// Called whenever the class is initialized.
-	static classInitializer: any = null;
+	public static classInitializer: any = null;
 
 	// List of static symbols to link.
-	static classSymbols: string [] = null; // [];
+	public static classSymbols: string [] = null; // [];
 
 	// List of instance symbols to link.
-	static instanceSymbols: string [] = null; // [];
+	public static instanceSymbols: string [] = null; // [];
 
 	constructor () {
 		super();
@@ -41,46 +24,40 @@ export class ShaderInput extends ASObject {
 	// _height: number /*int*/;
 	// _channels: number /*int*/;
 	// _index: number /*int*/;
-	get input(): ASObject {
-		release || notImplemented('public flash.display.ShaderInput::get input'); return;
-		// return this._input;
+	public get input(): ASObject {
+		console.warn('[playerglobal/display/ShaderInput] - get input not implemented');
+		return null;
 	}
 
-	set input(input: ASObject) {
-		input = input;
-		release || notImplemented('public flash.display.ShaderInput::set input'); return;
-		// this._input = input;
+	public set input(input: ASObject) {
+		console.warn('[playerglobal/display/ShaderInput] - set input not implemented');
 	}
 
-	get width(): number /*int*/ {
-		release || notImplemented('public flash.display.ShaderInput::get width'); return;
-		// return this._width;
+	public get width(): number /*int*/ {
+		console.warn('[playerglobal/display/ShaderInput] - get width not implemented');
+		return null;
 	}
 
-	set width(value: number /*int*/) {
-		value = value | 0;
-		release || notImplemented('public flash.display.ShaderInput::set width'); return;
-		// this._width = value;
+	public set width(value: number /*int*/) {
+		console.warn('[playerglobal/display/ShaderInput] - set width not implemented');
 	}
 
-	get height(): number /*int*/ {
-		release || notImplemented('public flash.display.ShaderInput::get height'); return;
-		// return this._height;
+	public get height(): number /*int*/ {
+		console.warn('[playerglobal/display/ShaderInput] - get height not implemented');
+		return null;
 	}
 
-	set height(value: number /*int*/) {
-		value = value | 0;
-		release || notImplemented('public flash.display.ShaderInput::set height'); return;
-		// this._height = value;
+	public set height(value: number /*int*/) {
+		console.warn('[playerglobal/display/ShaderInput] - set height not implemented');
 	}
 
-	get channels(): number /*int*/ {
-		release || notImplemented('public flash.display.ShaderInput::get channels'); return;
-		// return this._channels;
+	public get channels(): number /*int*/ {
+		console.warn('[playerglobal/display/ShaderInput] - get channels not implemented');
+		return null;
 	}
 
-	get index(): number /*int*/ {
-		release || notImplemented('public flash.display.ShaderInput::get index'); return;
-		// return this._index;
+	public get index(): number /*int*/ {
+		console.warn('[playerglobal/display/ShaderInput] - get index not implemented');
+		return null;
 	}
 }

@@ -1,32 +1,15 @@
-import { release, notImplemented } from '../../base/utilities/Debug';
-import { ASArray, ASObject } from '../../avm2/nat';
+import { ASArray, ASObject } from '@awayfl/avm2';
 
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: ShaderParameter
 export class ShaderParameter extends ASObject {
 
 	// Called whenever the class is initialized.
-	static classInitializer: any = null;
+	public static classInitializer: any = null;
 
 	// List of static symbols to link.
-	static classSymbols: string [] = null; // [];
+	public static classSymbols: string [] = null; // [];
 
 	// List of instance symbols to link.
-	static instanceSymbols: string [] = null; // [];
+	public static instanceSymbols: string [] = null; // [];
 
 	constructor () {
 		super();
@@ -39,24 +22,22 @@ export class ShaderParameter extends ASObject {
 	// _value: any [];
 	// _type: string;
 	// _index: number /*int*/;
-	get value(): ASArray {
-		release || notImplemented('public flash.display.ShaderParameter::get value'); return;
-		// return this._value;
+	public get value(): ASArray {
+		console.warn('[playerglobal/display/ShaderParameter] - get value not implemented');
+		return null;
 	}
 
-	set value(v: ASArray) {
-		v = v;
-		release || notImplemented('public flash.display.ShaderParameter::set value'); return;
-		// this._value = v;
+	public set value(v: ASArray) {
+		console.warn('[playerglobal/display/ShaderParameter] - set value not implemented');
 	}
 
-	get type(): string {
-		release || notImplemented('public flash.display.ShaderParameter::get type'); return;
-		// return this._type;
+	public get type(): string {
+		console.warn('[playerglobal/display/ShaderParameter] - get type not implemented');
+		return null;
 	}
 
-	get index(): number /*int*/ {
-		release || notImplemented('public flash.display.ShaderParameter::get index'); return;
-		// return this._index;
+	public get index(): number /*int*/ {
+		console.warn('[playerglobal/display/ShaderParameter] - get index not implemented');
+		return null;
 	}
 }

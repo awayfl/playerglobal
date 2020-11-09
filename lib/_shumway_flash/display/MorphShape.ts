@@ -1,37 +1,18 @@
+import { AXClass } from '@awayfl/avm2';
+import { DisplayObject } from './DisplayObject';
 import { Graphics } from './Graphics';
-import { SymbolData } from '../symbol';
-import { ISecurityDomain } from '../../avm2/nat/ISecurityDomain';
-import { Bounds } from '../../base/utilities';
-import { ShapeSymbol } from './Shape';
-import { LoaderInfo } from './LoaderInfo';
-import { DisplayObject, DisplayObjectFlags } from './DisplayObject';
-import { assert, release } from '../../base/utilities/Debug';
-import { AXClass } from '../../avm2/run/AXClass';
 
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: MorphShape
 export class MorphShape extends DisplayObject {
-	static classSymbols: string [] = null; // [];
-	static instanceSymbols: string [] = null; // [];
+	public static classSymbols: string [] = null; // [];
+	public static instanceSymbols: string [] = null; // [];
 
-	static axClass: typeof MorphShape & AXClass;
+	public static axClass: typeof MorphShape & AXClass;
 
-	static classInitializer: any = null;
-	_symbol: MorphShapeSymbol;
+	public static classInitializer: any = null;
+
+	//_symbol: MorphShapeSymbol;
+
+	/*
 	applySymbol() {
 		this._initializeFields();
 		release || assert(this._symbol);
@@ -39,16 +20,13 @@ export class MorphShape extends DisplayObject {
 		// TODO: Check what do do if the computed bounds of the graphics object don't
 		// match those given by the symbol.
 		this._setFlags(DisplayObjectFlags.ContainsMorph);
-	}
+	}*/
 
 	constructor () {
 		super();
-		if (this._symbol && !this._fieldsInitialized) {
-			this.applySymbol();
-		}
-		release || assert(!this._symbol);
 	}
 
+	/*
 	_canHaveGraphics(): boolean {
 		return true;
 	}
@@ -56,18 +34,22 @@ export class MorphShape extends DisplayObject {
 	_getGraphics(): Graphics {
 		return this._graphics;
 	}
+	*/
 
-	get graphics(): Graphics {
-		return this._ensureGraphics();
+	public get graphics(): Graphics {
+		console.warn('[playerglobal/display/MorphShape] - get graphics not implemented');
+		return null;
 	}
-
+	/*
 	_containsPointDirectly(localX: number, localY: number,
 		globalX: number, globalY: number): boolean {
 		const graphics = this._getGraphics();
 		return graphics && graphics._containsPoint(localX, localY, true, this._ratio / 0xffff);
 	}
+	*/
 }
 
+/*
 export class MorphShapeSymbol extends ShapeSymbol {
 	morphFillBounds: Bounds;
 	morphLineBounds: Bounds;
@@ -85,3 +67,4 @@ export class MorphShapeSymbol extends ShapeSymbol {
 		return symbol;
 	}
 }
+*/

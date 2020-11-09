@@ -1,45 +1,27 @@
-import { StageAlignFlags } from '../../base/remoting';
-import { ASObject } from '../../avm2/nat/ASObject';
-
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: StageAlign
+import { ASObject } from '@awayfl/avm2';
 
 export class StageAlign extends ASObject {
 
-	static classInitializer: any = null;
-	static classSymbols: string [] = null; // [];
-	static instanceSymbols: string [] = null; // [];
+	public static classInitializer: any = null;
+	public static classSymbols: string[] = null; // [];
+	public static instanceSymbols: string[] = null; // [];
 
-	constructor () {
+	constructor() {
 		super();
 	}
 
 	// JS -> AS Bindings
-	static TOP: string = 'T';
-	static LEFT: string = 'L';
-	static BOTTOM: string = 'B';
-	static RIGHT: string = 'R';
-	static TOP_LEFT: string = 'TL';
-	static TOP_RIGHT: string = 'TR';
-	static BOTTOM_LEFT: string = 'BL';
-	static BOTTOM_RIGHT: string = 'BR';
+	public static TOP: string = 'T';
+	public static LEFT: string = 'L';
+	public static BOTTOM: string = 'B';
+	public static RIGHT: string = 'R';
+	public static TOP_LEFT: string = 'TL';
+	public static TOP_RIGHT: string = 'TR';
+	public static BOTTOM_LEFT: string = 'BL';
+	public static BOTTOM_RIGHT: string = 'BR';
 
-	static fromNumber(n: number): string {
-		if (n === 0) {
+	public static fromNumber(n: number): string {
+		/*if (n === 0) {
 			return '';
 		}
 		let s = '';
@@ -55,16 +37,18 @@ export class StageAlign extends ASObject {
 		if (n & StageAlignFlags.Right) {
 			s += 'R';
 		}
-		return s;
+		return s;*/
+		console.warn('[playerglobal/display/StageAlign] - fromNumber not implemented');
+		return null;
 	}
 
 	/**
-   * Looks like the Flash player just searches for the "T", "B", "L", "R" characters and
-   * maintains an internal bit field for alignment, for instance it's possible to set the
-   * alignment value "TBLR" even though there is no enum for it.
-   */
-	static toNumber(value: string): number {
-		let n = 0;
+	* Looks like the Flash player just searches for the "T", "B", "L", "R" characters and
+	* maintains an internal bit field for alignment, for instance it's possible to set the
+	* alignment value "TBLR" even though there is no enum for it.
+	*/
+	public static toNumber(value: string): number {
+		/*let n = 0;
 		value = value.toUpperCase();
 		if (value.indexOf('T') >= 0) {
 			n |= StageAlignFlags.Top;
@@ -78,6 +62,8 @@ export class StageAlign extends ASObject {
 		if (value.indexOf('R') >= 0) {
 			n |= StageAlignFlags.Right;
 		}
-		return n;
+		return n;*/
+		console.warn('[playerglobal/display/StageAlign] - toNumber not implemented');
+		return null;
 	}
 }

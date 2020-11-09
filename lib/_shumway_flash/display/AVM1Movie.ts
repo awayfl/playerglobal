@@ -1,26 +1,6 @@
-import { assert, Bounds } from '@awayjs/graphics';
-import { release, notImplemented } from '../../base/utilities/Debug';
-import { DisplayObject, IAdvancable, DisplayObjectDirtyFlags, DisplayObjectFlags, HitTestingType, HitTestingResult } from './DisplayObject';
+import { Bounds } from '@awayjs/graphics';
 import { Sprite } from './Sprite';
-import { ASFunction } from '../../avm2/nat/ASFunction';
-import { SWFFrame } from '../../../parsers/SWFFrame';
-import { MovieClip } from './MovieClip';
-
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+import { DisplayObject } from './DisplayObject';
 
 /**
  * AVM1Movie is the reflection of AVM1 SWFs loaded into AVM2 content. Since AVM1 content is
@@ -41,7 +21,7 @@ import { MovieClip } from './MovieClip';
  * [1]: If you ignore the undocumented `call` and `addCallback` methods for a moment.
  */
 
-export class AVM1Movie extends DisplayObject implements IAdvancable {
+export class AVM1Movie extends DisplayObject {
 
 	static classInitializer: any = null;
 	static classSymbols: string [] = null;
@@ -49,6 +29,8 @@ export class AVM1Movie extends DisplayObject implements IAdvancable {
 
 	constructor(level0: DisplayObject) {
 		super();
+		console.warn('[AVM1Movie] - not implemented');
+		/*
 		this._content = Sprite.axClass.axConstruct();
 		this._children = [];
 		this._children[0] = this._content;
@@ -61,49 +43,55 @@ export class AVM1Movie extends DisplayObject implements IAdvancable {
 
 		// Setting _level0 root.
 		this._content.addTimelineObjectAtDepth(level0, 0);
+		*/
 	}
 
 	private _content: Sprite;
 	private _constructed: boolean;
 
 	call(functionName: string): any {
-		notImplemented('AVM1Movie#call');
+		console.warn('[AVM1Movie] - call not implemented');
 	}
 
-	addCallback(functionName: string, closure: ASFunction): void {
-		notImplemented('AVM1Movie#call');
+	addCallback(functionName: string, closure: any/*ASFunction*/): void {
+		console.warn('[AVM1Movie] - addCallback not implemented');
 	}
 
-	_addFrame(frame: SWFFrame) {
-		(<MovieClip> this._content._children[0])._addFrame(frame);
+	_addFrame(frame: any/*SWFFrame*/) {
+		//(<MovieClip> this._content._children[0])._addFrame(frame);
+		console.warn('[AVM1Movie] - _addFrame not implemented');
 	}
 
 	_initFrame(advance: boolean): void {
 		// Empty implementation: AVM1Movie doesn't have frames, and the contained MovieClip
 		// adds itself to the IAdvancables list.
+		console.warn('[AVM1Movie] - _initFrame not implemented');
 	}
 
 	_constructFrame(): void {
 		// On custructFrame we need to fully construct the roots container.
 		// Once constructed, its children (which are IAdvancable type) will be
 		// receiving their own _constructFrame events.
-		if (!this._constructed) {
+		/*if (!this._constructed) {
 			this._constructed = true;
 			this._content._constructChildren();
-		}
+		}*/
+		console.warn('[AVM1Movie] - _constructFrame not implemented');
 	}
 
 	_enqueueFrameScripts() {
-		this._removeFlags(DisplayObjectFlags.ContainsFrameScriptPendingChildren);
-		this._content._enqueueFrameScripts();
+		//this._removeFlags(DisplayObjectFlags.ContainsFrameScriptPendingChildren);
+		//this._content._enqueueFrameScripts();
+		console.warn('[AVM1Movie] - _enqueueFrameScripts not implemented');
 	}
 
-	_propagateFlagsDown(flags: DisplayObjectFlags) {
-		if (this._hasFlags(flags)) {
+	_propagateFlagsDown(flags: any/*DisplayObjectFlags*/) {
+		/*if (this._hasFlags(flags)) {
 			return;
 		}
 		this._setFlags(flags);
-		this._content._propagateFlagsDown(flags);
+		this._content._propagateFlagsDown(flags);*/
+		console.warn('[AVM1Movie] - _propagateFlagsDown not implemented');
 	}
 
 	/**
@@ -111,7 +99,8 @@ export class AVM1Movie extends DisplayObject implements IAdvancable {
    * bounding boxes, not otherwise.
    */
 	_containsPoint(globalX: number, globalY: number, localX: number, localY: number,
-		testingType: HitTestingType, objects: DisplayObject[]): HitTestingResult {
+		testingType: any/*HitTestingType*/, objects: DisplayObject[]): any/*HitTestingResult*/ {
+		/*
 		if (testingType === HitTestingType.Mouse) {
 			return this._content._containsPoint(globalX, globalY, localX, localY, testingType, objects);
 		}
@@ -119,41 +108,50 @@ export class AVM1Movie extends DisplayObject implements IAdvancable {
         !this._getContentBounds().contains(localX, localY)) {
 			return HitTestingResult.None;
 		}
-		return HitTestingResult.Bounds;
+		return HitTestingResult.Bounds;*/
+		console.warn('[AVM1Movie] - _containsPoint not implemented');
+		return null;
 	}
 
 	/**
    * Override of DisplayObject#_getChildBounds that retrieves the AVM1 content's bounds.
    */
 	_getChildBounds(bounds: Bounds, includeStrokes: boolean) {
-		const childBounds = this._content._getContentBounds(includeStrokes).clone();
+		/*const childBounds = this._content._getContentBounds(includeStrokes).clone();
 		// Always apply the SimpleButton's matrix.
 		this._getConcatenatedMatrix().transformBounds(childBounds);
-		bounds.unionInPlace(childBounds);
+		bounds.unionInPlace(childBounds);*/
+		console.warn('[AVM1Movie] - _getChildBounds not implemented');
 	}
 
 	_getLevelForRoot(root: DisplayObject): number {
-		release || assert(root.parent === this._content);
-		return root._depth;
+		/*release || assert(root.parent === this._content);
+		return root._depth;*/
+		console.warn('[AVM1Movie] - _getLevelForRoot not implemented');
+		return null;
 	}
 
 	_getRootForLevel(level: number): DisplayObject  {
-		return this._content.getTimelineObjectAtDepth(level);
+		//return this._content.getTimelineObjectAtDepth(level);
+		console.warn('[AVM1Movie] - _getRootForLevel not implemented');
+		return null;
 	}
 
 	_addRoot(level: number, root: DisplayObject): void {
-		release || assert(MovieClip.axClass.axIsType(root));
+		/*release || assert(MovieClip.axClass.axIsType(root));
 		this._removeRoot(level);
 		release || assert(!this._content.getTimelineObjectAtDepth(level));
-		this._content.addTimelineObjectAtDepth(root, level);
+		this._content.addTimelineObjectAtDepth(root, level);*/
+		console.warn('[AVM1Movie] - _addRoot not implemented');
 	}
 
 	_removeRoot(level: number): boolean {
-		const root = this._content.getTimelineObjectAtDepth(level);
+		/*const root = this._content.getTimelineObjectAtDepth(level);
 		if (!root) {
 			return false;
 		}
-		this._content.removeChild(root);
+		this._content.removeChild(root);*/
+		console.warn('[AVM1Movie] - _addRoot not implemented');
 		return true;
 	}
 }
