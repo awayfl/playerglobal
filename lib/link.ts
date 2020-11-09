@@ -37,6 +37,10 @@ import { SecurityDomain } from './system/SecurityDomain';
 
 import { XMLDocument, XMLNode, ASClass, registerNativeClass, registerNativeFunction } from '@awayfl/avm2';
 
+import { TextBlock } from './text/engine/TextBlock';
+import { TextJustifier } from './text/engine/TextJustifier';
+import { SpaceJustifier } from './text/engine/SpaceJustifier';
+
 // todo: this classes rely on the flash module, should be merged into our as3web module:
 
 import { IOErrorEvent } from './events/IOErrorEvent';
@@ -124,6 +128,7 @@ import { GameInputFinger } from './ui/GameInputFinger';
 import { GameInputHand } from './ui/GameInputHand';
 
 import { Font } from './text/Font';
+
 /*
 import { TextField } from "./text/TextField";
 import { StaticText } from "./text/StaticText";
@@ -216,6 +221,11 @@ export function initLink() {
 	M('flash.ui.Keyboard', Keyboard);
 	M('flash.events.KeyboardEvent', KeyboardEvent);
 	M('flash.text.TextField', TextField);
+
+	M('flash.text.engine.TextBlock', TextBlock);
+	M('flash.text.engine.TextJustifier', TextJustifier);
+	M('flash.text.engine.SpaceJustifier', SpaceJustifier);
+
 	// M("flash.display.MorphShape", MorphShape);
 	// M("flash.display.NativeMenu", NativeMenu);
 	M('flash.display.NativeMenuItem', NativeMenuItem);
