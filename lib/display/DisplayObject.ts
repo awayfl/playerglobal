@@ -1,12 +1,14 @@
-import { Transform as AwayTransform, Point as AwayPoint, Box, Vector3D as AwayVector3D, AbstractMethodError } from '@awayjs/core';
+import { Point as AwayPoint,
+	Box, AbstractMethodError } from '@awayjs/core';
 import { EventDispatcher, BroadcastEventDispatchQueue } from '../events/EventDispatcher';
 import { Event } from '../events/Event';
 import { StaticEvents } from '../events/StaticEvents';
-import { DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip,  IDisplayObjectAdapter, MovieClip, IFilter, TextField } from '@awayjs/scene';
+import { DisplayObject as AwayDisplayObject,
+	IDisplayObjectAdapter, IFilter, TextField } from '@awayjs/scene';
 import { LoaderInfo } from './LoaderInfo';
 import { DisplayObjectContainer } from './DisplayObjectContainer';
 import { Stage } from './Stage';
-import { PickGroup, BasicPartition, BoundsPicker } from '@awayjs/view';
+import { PickGroup, BoundsPicker } from '@awayjs/view';
 import { SceneGraphPartition } from '@awayjs/scene';
 import { constructClassFromSymbol, AXClass } from '@awayfl/avm2';
 import { Transform } from '../geom/Transform';
@@ -52,7 +54,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	public dispatch_ADDED_TO_STAGE(dispatchForThisChild: boolean = false) {
 		if (dispatchForThisChild) {
 			if (!StaticEvents.events[Event.ADDED_TO_STAGE])
-				StaticEvents.events[Event.ADDED_TO_STAGE] = new (<SecurityDomain> this.sec).flash.events.Event(Event.ADDED_TO_STAGE);
+				StaticEvents.events[Event.ADDED_TO_STAGE] =
+					new (<SecurityDomain> this.sec).flash.events.Event(Event.ADDED_TO_STAGE);
 			StaticEvents.events[Event.ADDED_TO_STAGE].target = this;
 			this.dispatchEvent(StaticEvents.events[Event.ADDED_TO_STAGE]);
 		}
@@ -61,7 +64,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	public dispatch_REMOVED_FROM_STAGE(dispatchForThisChild: boolean = false) {
 		if (dispatchForThisChild) {
 			if (!StaticEvents.events[Event.REMOVED_FROM_STAGE])
-				StaticEvents.events[Event.REMOVED_FROM_STAGE] = new (<SecurityDomain> this.sec).flash.events.Event(Event.REMOVED_FROM_STAGE);
+				StaticEvents.events[Event.REMOVED_FROM_STAGE] =
+					new (<SecurityDomain> this.sec).flash.events.Event(Event.REMOVED_FROM_STAGE);
 			StaticEvents.events[Event.REMOVED_FROM_STAGE].target = this;
 			this.dispatchEvent(StaticEvents.events[Event.REMOVED_FROM_STAGE]);
 		}
@@ -152,7 +156,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * @eventType	flash.events.Event.ENTER_FRAME
 	 [Event(name="enterFrame", type="flash.events.Event")]
 
-	 * [broadcast event] Dispatched after the constructors of frame displayobjects have run but before frame scripts have run.
+	 * [broadcast event] Dispatched after the constructors of frame displayobjects have run
+	 * but before frame scripts have run.
 	 * @eventType	flash.events.Event.FRAME_CONSTRUCTED
 	 [Event(name="frameConstructed", type="flash.events.Event")]
 
@@ -188,15 +193,22 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * DisplayObjectContainer anys can have child displayobjects, while other displayobjects, such as
 	 * Shape and TextField anys, are "leaf" nodes that have only parents and siblings, no children.
 	 *
-	 *   <p class="- topic/p ">The DisplayObject class supports basic ality like the <i class="+ topic/ph hi-d/i ">x</i> and <i class="+ topic/ph hi-d/i ">y</i> position of
+	 *   <p class="- topic/p ">The DisplayObject class supports basic ality like the
+	 * <i class="+ topic/ph hi-d/i ">x</i> and <i class="+ topic/ph hi-d/i ">y</i> position of
 	 * an any, as well as more advanced properties of the any such as its transformation matrix.
-	 * </p><p class="- topic/p ">DisplayObject is an abstract base class; therefore, you cannot call DisplayObject directly. Invoking
-	 * <codeph class="+ topic/ph pr-d/codeph ">new DisplayObject()</codeph> console.logs an <codeph class="+ topic/ph pr-d/codeph ">ArgumentError</codeph> exception. </p><p class="- topic/p ">All displayobjects inherit from the DisplayObject class.</p><p class="- topic/p ">The DisplayObject class itself does not include any APIs for rendering content onscreen.
+	 * </p><p class="- topic/p ">DisplayObject is an abstract base class; therefore,
+	 * you cannot call DisplayObject directly. Invoking
+	 * <codeph class="+ topic/ph pr-d/codeph ">new DisplayObject()</codeph> console.logs
+	 * an <codeph class="+ topic/ph pr-d/codeph ">ArgumentError</codeph> exception. </p>
+	 * <p class="- topic/p ">All displayobjects inherit from the DisplayObject class.</p>
+	 * <p class="- topic/p ">The DisplayObject class itself does not include any APIs for rendering content onscreen.
 	 * For that reason, if you want create a custom subclass of the DisplayObject class, you will want
 	 * to extend one of its subclasses that do have APIs for rendering content onscreen,
-	 * such as the Shape, Sprite, Bitmap, SimpleButton, TextField, or MovieClip class.</p><p class="- topic/p ">The DisplayObject class contains several broadcast events. Normally, the target
+	 * such as the Shape, Sprite, Bitmap, SimpleButton, TextField, or MovieClip class.</p>
+	 * <p class="- topic/p ">The DisplayObject class contains several broadcast events. Normally, the target
 	 * of any particular event is a specific DisplayObject instance. For example,
-	 * the target of an <codeph class="+ topic/ph pr-d/codeph ">added</codeph> event is the specific DisplayObject instance
+	 * the target of an <codeph class="+ topic/ph pr-d/codeph ">added</codeph>
+	 * event is the specific DisplayObject instance
 	 * that was added to the display list. Having a single target restricts the placement of
 	 * event listeners to that target and in some cases the target's ancestors on the display list.
 	 * With broadcast events, however, the target is not a specific DisplayObject instance,
@@ -204,10 +216,18 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * This means that you can add a listener to any DisplayObject instance to listen for broadcast events.
 	 * In addition to the broadcast events listed in the DisplayObject class's Events table,
 	 * the DisplayObject class also inherits two broadcast events from the EventDispatcher
-	 * class: <codeph class="+ topic/ph pr-d/codeph ">activate</codeph> and <codeph class="+ topic/ph pr-d/codeph ">deactivate</codeph>.</p><p class="- topic/p ">Some properties previously used in the ActionScript 1.0 and 2.0 MovieClip, TextField, and Button
-	 * classes (such as <codeph class="+ topic/ph pr-d/codeph ">_alpha</codeph>, <codeph class="+ topic/ph pr-d/codeph ">_height</codeph>, <codeph class="+ topic/ph pr-d/codeph ">_name</codeph>, <codeph class="+ topic/ph pr-d/codeph ">_width</codeph>,
-	 * <codeph class="+ topic/ph pr-d/codeph ">_x</codeph>, <codeph class="+ topic/ph pr-d/codeph ">_y</codeph>, and others) have equivalents in the ActionScript 3.0
-	 * DisplayObject class that are renamed so that they no longer begin with the underscore (_) character.</p><p class="- topic/p ">For more information, see the "Display Programming" chapter of the <i class="+ topic/ph hi-d/i ">ActionScript 3.0 Developer's Guide</i>.</p>
+	 * class: <codeph class="+ topic/ph pr-d/codeph ">activate</codeph> and <codeph class="+ topic/ph pr-d/codeph ">
+	 * deactivate</codeph>.</p><p class="- topic/p ">Some properties previously used
+	 * in the ActionScript 1.0 and 2.0 MovieClip, TextField, and Button
+	 * classes (such as <codeph class="+ topic/ph pr-d/codeph ">_alpha</codeph>,
+	 * <codeph class="+ topic/ph pr-d/codeph ">_height</codeph>,
+	 * <codeph class="+ topic/ph pr-d/codeph ">_name</codeph>,
+	 * <codeph class="+ topic/ph pr-d/codeph ">_width</codeph>,
+	 * <codeph class="+ topic/ph pr-d/codeph ">_x</codeph>,
+	 * <codeph class="+ topic/ph pr-d/codeph ">_y</codeph>, and others) have equivalents in the ActionScript 3.0
+	 * DisplayObject class that are renamed so that they no longer begin with the underscore (_) character.</p>
+	 * <p class="- topic/p ">For more information, see the "Display Programming" chapter of the
+	 * <i class="+ topic/ph hi-d/i ">ActionScript 3.0 Developer's Guide</i>.</p>
 
 	 */
 
@@ -323,7 +343,6 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		if (!(<any> this)._symbol) {
 			throw ('_symbol not defined when cloning movieclip');
 		}
-		//var clone: MovieClip = MovieClip.getNewMovieClip(AwayMovieClip.getNewMovieClip((<AwayMovieClip>this.adaptee).timeline));
 		const clone = constructClassFromSymbol((<any> this)._symbol, (<any> this)._symbol.symbolClass);
 		clone.axInitializer();
 		clone.loaderInfo = this.loaderInfo;
@@ -395,67 +414,91 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * value for the red component of the displayed color.The following table describes the blendMode settings.
 	 * The BlendMode class defines string values you can use.
 	 * The illustrations in the table show blendMode values applied to a circular
-	 * displayobject (2) superimposed on another displayobject (1).BlendMode ConstantIllustrationDescriptionBlendMode.NORMALThe displayobject appears in front of the background. Pixel values of the displayobject
+	 * displayobject (2) superimposed on another displayobject (1).
+	 * BlendMode ConstantIllustrationDescription
+	 * BlendMode.NORMAL
+	 * The displayobject appears in front of the background. Pixel values of the displayobject
 	 * override those of the background. Where the displayobject is transparent, the background is
-	 * visible.BlendMode.LAYERForces the creation of a transparency group for the displayobject. This means that the display
+	 * visible.BlendMode.LAYERForces the creation of a transparency group for the displayobject.
+	 * This means that the display
 	 * any is pre-composed in a temporary buffer before it is processed further. This is done
 	 * automatically if the displayobject is pre-cached using bitmap caching or if the displayobject is
 	 * a displayobject container with at least one child any with a blendMode
 	 * setting other than BlendMode.NORMAL. Not supported under GPU rendering.
-	 * BlendMode.MULTIPLYMultiplies the values of the displayobject constituent colors by the colors of the background color,
+	 *
+	 * BlendMode.MULTIPLYMultiplies the values of the displayobject constituent
+	 * colors by the colors of the background color,
 	 * and then normalizes by dividing by 0xFF,
 	 * resulting in darker colors. This setting is commonly used for shadows and depth effects.
-	 *
-	 *   For example, if a constituent color (such as red) of one pixel in the displayobject and the
+	 * For example, if a constituent color (such as red) of one pixel in the displayobject and the
 	 * corresponding color of the pixel in the background both have the value 0x88, the multiplied
 	 * result is 0x4840. Dividing by 0xFF yields a value of 0x48 for that constituent color,
-	 * which is a darker shade than the color of the displayobject or the color of the background.BlendMode.SCREENMultiplies the complement (inverse) of the displayobject color by the complement of the background
-	 * color, resulting in a bleaching effect. This setting is commonly used for highlights or to remove black
-	 * areas of the displayobject.BlendMode.LIGHTENSelects the lighter of the constituent colors of the displayobject and the color of the background (the
-	 * colors with the larger values). This setting is commonly used for superimposing type.
+	 * which is a darker shade than the color of the displayobject or the color of the background.
 	 *
-	 *   For example, if the displayobject has a pixel with an RGB value of 0xFFCC33, and the background
+	 * BlendMode.SCREEN Multiplies the complement (inverse) of the displayobject color by the complement
+	 * of the background color, resulting in a bleaching effect.
+	 * This setting is commonly used for highlights or to remove black areas of the displayobject.
+	 *
+	 * BlendMode.LIGHTEN Selects the lighter of the constituent colors of the displayobject and the
+	 * color of the background (the colors with the larger values).
+	 * This setting is commonly used for superimposing type.
+	 * For example, if the displayobject has a pixel with an RGB value of 0xFFCC33, and the background
 	 * pixel has an RGB value of 0xDDF800, the resulting RGB value for the displayed pixel is
-	 * 0xFFF833 (because 0xFF > 0xDD, 0xCC < 0xF8, and 0x33 > 0x00 = 33). Not supported under GPU rendering.BlendMode.DARKENSelects the darker of the constituent colors of the displayobject and the colors of the
-	 * background (the colors with the smaller values). This setting is commonly used for superimposing type.
+	 * 0xFFF833 (because 0xFF > 0xDD, 0xCC < 0xF8, and 0x33 > 0x00 = 33).
+	 * Not supported under GPU rendering.
 	 *
-	 *   For example, if the displayobject has a pixel with an RGB value of 0xFFCC33, and the background
+	 * BlendMode.DARKEN Selects the darker of the constituent colors of the displayobject and the colors of the
+	 * background (the colors with the smaller values). This setting is commonly used for superimposing type.	 *
+	 * For example, if the displayobject has a pixel with an RGB value of 0xFFCC33, and the background
 	 * pixel has an RGB value of 0xDDF800, the resulting RGB value for the displayed pixel is
-	 * 0xDDCC00 (because 0xFF > 0xDD, 0xCC < 0xF8, and 0x33 > 0x00 = 33). Not supported under GPU rendering.BlendMode.DIFFERENCECompares the constituent colors of the displayobject with the colors of its background, and subtracts
-	 * the darker of the values of the two constituent colors from the lighter value. This setting is commonly
-	 * used for more vibrant colors.
+	 * 0xDDCC00 (because 0xFF > 0xDD, 0xCC < 0xF8, and 0x33 > 0x00 = 33).
+	 * Not supported under GPU rendering.
 	 *
-	 *   For example, if the displayobject has a pixel with an RGB value of 0xFFCC33, and the background
+	 * BlendMode.DIFFERENCE Compares the constituent colors of the displayobject with the colors
+	 * of its background, and subtracts the darker of the values of the two constituent colors from the lighter value.
+	 * This setting is commonly used for more vibrant colors.	 *
+	 * For example, if the displayobject has a pixel with an RGB value of 0xFFCC33, and the background
 	 * pixel has an RGB value of 0xDDF800, the resulting RGB value for the displayed pixel is
-	 * 0x222C33 (because 0xFF - 0xDD = 0x22, 0xF8 - 0xCC = 0x2C, and 0x33 - 0x00 = 0x33).BlendMode.ADDAdds the values of the constituent colors of the displayobject to the colors of its background, applying a
-	 * ceiling of 0xFF. This setting is commonly used for animating a lightening dissolve between
-	 * two anys.
+	 * 0x222C33 (because 0xFF - 0xDD = 0x22, 0xF8 - 0xCC = 0x2C, and 0x33 - 0x00 = 0x33).
 	 *
-	 *   For example, if the displayobject has a pixel with an RGB value of 0xAAA633, and the background
+	 * BlendMode.ADD Adds the values of the constituent colors of the displayobject to the colors of its background,
+	 * applying a ceiling of 0xFF. This setting is commonly used for animating a lightening dissolve between
+	 * two anys.	 *
+	 * For example, if the displayobject has a pixel with an RGB value of 0xAAA633, and the background
 	 * pixel has an RGB value of 0xDD2200, the resulting RGB value for the displayed pixel is
-	 * 0xFFC833 (because 0xAA + 0xDD > 0xFF, 0xA6 + 0x22 = 0xC8, and 0x33 + 0x00 = 0x33).BlendMode.SUBTRACTSubtracts the values of the constituent colors in the displayobject from the values of the
+	 * 0xFFC833 (because 0xAA + 0xDD > 0xFF, 0xA6 + 0x22 = 0xC8, and 0x33 + 0x00 = 0x33).
+	 *
+	 * BlendMode.SUBTRACTSubtracts the values of the constituent colors in the displayobject from the values of the
 	 * background color, applying a floor of 0. This setting is commonly used for animating a
 	 * darkening dissolve between two anys.
-	 *
-	 *   For example, if the displayobject has a pixel with an RGB value of 0xAA2233, and the background
+	 * For example, if the displayobject has a pixel with an RGB value of 0xAA2233, and the background
 	 * pixel has an RGB value of 0xDDA600, the resulting RGB value for the displayed pixel is
-	 * 0x338400 (because 0xDD - 0xAA = 0x33, 0xA6 - 0x22 = 0x84, and 0x00 - 0x33 < 0x00).BlendMode.INVERTInverts the background.BlendMode.ALPHAApplies the alpha value of each pixel of the displayobject to the background.
-	 * This requires the blendMode setting of the parent displayobject to be set to
-	 * BlendMode.LAYER.
+	 * 0x338400 (because 0xDD - 0xAA = 0x33, 0xA6 - 0x22 = 0x84, and 0x00 - 0x33 < 0x00).
+	 *
+	 * BlendMode.INVERT Inverts the background.
+	 * BlendMode.ALPHA Applies the alpha value of each pixel of the displayobject to the background.
+	 * This requires the blendMode setting of the parent displayobject to be set to BlendMode.LAYER.
 	 * For example, in the illustration, the parent displayobject, which is a white background,
-	 * has blendMode = BlendMode.LAYER. Not supported under GPU rendering.BlendMode.ERASEErases the background based on the alpha value of the displayobject. This requires the
-	 * blendMode of the parent displayobject to be set to
-	 * BlendMode.LAYER. For example, in the
-	 * illustration, the parent displayobject, which is a white background, has
-	 * blendMode = BlendMode.LAYER. Not supported under GPU rendering.BlendMode.OVERLAYAdjusts the color of each pixel based on the darkness of the background.
+	 * has blendMode = BlendMode.LAYER. Not supported under GPU rendering.
+	 *
+	 * BlendMode.ERASE Erases the background based on the alpha value of the displayobject.
+	 * This requires the blendMode of the parent displayobject to be set to BlendMode.LAYER.
+	 * For example, in the illustration, the parent displayobject, which is a white background, has
+	 * blendMode = BlendMode.LAYER. Not supported under GPU rendering.
+	 *
+	 * BlendMode.OVERLAY Adjusts the color of each pixel based on the darkness of the background.
 	 * If the background is lighter than 50% gray, the displayobject and background colors are
 	 * screened, which results in a lighter color. If the background is darker than 50% gray,
 	 * the colors are multiplied, which results in a darker color.
-	 * This setting is commonly used for shading effects. Not supported under GPU rendering.BlendMode.HARDLIGHTAdjusts the color of each pixel based on the darkness of the displayobject.
+	 * This setting is commonly used for shading effects. Not supported under GPU rendering.
+	 *
+	 * BlendMode.HARDLIGHTAdjusts the color of each pixel based on the darkness of the displayobject.
 	 * If the displayobject is lighter than 50% gray, the displayobject and background colors are
 	 * screened, which results in a lighter color. If the displayobject is darker than 50% gray,
 	 * the colors are multiplied, which results in a darker color.
-	 * This setting is commonly used for shading effects. Not supported under GPU rendering.BlendMode.SHADERN/AAdjusts the color using a custom shader routine. The shader that is used is specified
+	 * This setting is commonly used for shading effects. Not supported under GPU rendering.
+	 *
+	 * BlendMode.SHADERN/AAdjusts the color using a custom shader routine. The shader that is used is specified
 	 * as the Shader instance assigned to the blendShader property. Setting the
 	 * blendShader property of a displayobject to a Shader instance
 	 * automatically sets the displayobject's blendMode property to
@@ -492,7 +535,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * used as the first input (the input with index 0). The foreground displayobject
 	 * is used as the second input (the input with index 1). A shader used as a blend
 	 * shader can specify more than two inputs. In that case, any additional input must be specified
-	 * by setting its ShaderInput instance's input property.When you assign a Shader instance to this property the shader is copied internally. The
+	 * by setting its ShaderInput instance's input property.
+	 * When you assign a Shader instance to this property the shader is copied internally. The
 	 * blend operation uses that internal copy, not a reference to the original shader. Any changes
 	 * made to the shader, such as changing a parameter value, input, or bytecode, are not applied
 	 * to the copied shader that's used for the blend mode.
@@ -544,7 +588,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * In  AIR 1.5 and Flash Player 10, the maximum size for a bitmap image is 8,191 pixels in width or height,
 	 * and the total number of pixels cannot exceed 16,777,215 pixels. (So, if a bitmap image is 8,191 pixels
 	 * wide, it can only be 2,048 pixels high.) In Flash Player 9 and earlier, the limitation is
-	 * is 2880 pixels in height and 2,880 pixels in width.The bitmap fails to allocate (out of memory error). The cacheAsBitmap property is best used with movie clips that have
+	 * is 2880 pixels in height and 2,880 pixels in width.The bitmap fails to allocate (out of memory error).
+	 * The cacheAsBitmap property is best used with movie clips that have
 	 * mostly static content and that do not scale and rotate frequently. With such movie
 	 * clips, cacheAsBitmap can lead to performance increases when the
 	 * movie clip is translated (when its x and y position is changed).
@@ -567,28 +612,36 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * ActionScript code. To apply a filter by using ActionScript, you must make a temporary copy of the
 	 * entire filters [], modify the temporary [], then assign the value
 	 * of the temporary [] back to the filters []. You cannot directly
-	 * add a new filter any to the filters [].To add a filter by using ActionScript, perform the following steps (assume that the
-	 * target displayobject is named myDisplayObject):Create a new filter any by using the constructor method of your chosen filter
-	 * class.Assign the value of the myDisplayObject.filters [] to a temporary [], such
-	 * as one named myFilters.Add the new filter any to the myFilters temporary [].Assign the value of the temporary [] to the myDisplayObject.filters [].If the filters [] is undefined, you do not need to use a temporary [].
+	 * add a new filter any to the filters [].To add a filter by using ActionScript,
+	 * perform the following steps (assume that the
+	 * target displayobject is named myDisplayObject):Create a new filter any by using the constructor
+	 * method of your chosen filter class.Assign the value of the myDisplayObject.filters [] to a temporary [], such
+	 * as one named myFilters.Add the new filter any to the myFilters temporary [].
+	 * Assign the value of the temporary [] to the myDisplayObject.filters [].
+	 * If the filters [] is undefined, you do not need to use a temporary [].
 	 * Instead, you can directly assign an [] literal that contains one or more filter anys that
 	 * you create. The first example in the Examples section adds a drop shadow filter by using
 	 * code that handles both defined and undefined filters []s.To modify an existing filter any,
-	 * you must use the technique of modifying a copy of the filters []:Assign the value of the filters [] to a temporary [], such as one
+	 * you must use the technique of modifying a copy of the filters []:
+	 * Assign the value of the filters [] to a temporary [], such as one
 	 * named myFilters.Modify the property by using the temporary [], myFilters. For example,
 	 * to set the quality property of the first filter in the [], you could use the
-	 * following code: myFilters[0].quality = 1;Assign the value of the temporary [] to the filters [].At load time, if a displayobject has an associated filter, it is marked to cache itself as a
+	 * following code: myFilters[0].quality = 1;
+	 * Assign the value of the temporary [] to the filters [].
+	 * At load time, if a displayobject has an associated filter, it is marked to cache itself as a
 	 * transparent bitmap. From this point forward, as long as the displayobject has a valid filter list,
 	 * the player caches the displayobject as a bitmap. This source bitmap is used as a source
 	 * image for the filter effects. Each displayobject usually has two bitmaps: one with the
 	 * original unfiltered source displayobject and another for the final image after filtering.
 	 * The final image is used when rendering. As long as the displayobject does not
-	 * change, the final image does not need updating.The flash.filters package includes classes for filters. For example, to create a DropShadow
+	 * change, the final image does not need updating.
+	 * The flash.filters package includes classes for filters. For example, to create a DropShadow
 	 * filter, you would write:
 	 * <codeblock>
 	 *
 	 *   import flash.filters.DropShadowFilter
-	 * var myFilter:DropShadowFilter = new DropShadowFilter (distance, angle, color, alpha, blurX, blurY, quality, inner, knockout)
+	 * var myFilter:DropShadowFilter =
+	 *      new DropShadowFilter (distance, angle, color, alpha, blurX, blurY, quality, inner, knockout)
 	 *
 	 *   </codeblock>
 	 * You can use the is operator to determine the type of filter assigned to
@@ -657,7 +710,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	/**
-	 * Indicates the height of the displayobject, in pixels. The height is calculated based on the bounds of the content of the displayobject.
+	 * Indicates the height of the displayobject, in pixels.
+	 * The height is calculated based on the bounds of the content of the displayobject.
 	 * When you set the height property, the scaleY property is adjusted accordingly, as shown in the
 	 * following code:
 	 *
@@ -737,13 +791,15 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   To be able to scale a mask any, it must be on the display list. To be able to drag a mask Sprite any
 	 * (by calling its startDrag() method), it must be on the display list. To call the
 	 * startDrag() method for a mask sprite based on a mouseDown event
-	 * being dispatched by the sprite, set the sprite's buttonMode property to true.When displayobjects are cached by setting the cacheAsBitmap property to
+	 * being dispatched by the sprite, set the sprite's buttonMode property to true.
+	 * When displayobjects are cached by setting the cacheAsBitmap property to
 	 * true an the cacheAsBitmapMatrix property to a Matrix any,
 	 * both the mask and the displayobject being masked must be part of the same cached
 	 * bitmap. Thus, if the displayobject is cached, then the mask must be a child of the displayobject.
 	 * If an ancestor of the displayobject on the display list is cached, then the mask must be a child of
 	 * that ancestor or one of its descendents. If more than one ancestor of the masked any is cached,
-	 * then the mask must be a descendent of the cached container closest to the masked any in the display list.Note: A single mask any cannot be used to mask more than one calling displayobject.
+	 * then the mask must be a descendent of the cached container closest to the masked any in the display list.
+	 * Note: A single mask any cannot be used to mask more than one calling displayobject.
 	 * When the mask is assigned to a second displayobject, it is removed as the mask of the first
 	 * any, and that any's mask property becomes null.
 	 */
@@ -850,7 +906,9 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   the parent movie call the Security.allowDomain() method.
 	 */
 	public get parent(): DisplayObjectContainer {
-		if (this.adaptee.parent == null || this.adaptee.parent.adapter == null || this.adaptee.parent.adapter == this.adaptee.parent) {
+		if (this.adaptee.parent == null
+			|| this.adaptee.parent.adapter == null
+			|| this.adaptee.parent.adapter == this.adaptee.parent) {
 			return null;
 		}
 		return (<DisplayObjectContainer> this.adaptee.parent.adapter);
@@ -868,7 +926,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *
 	 *   For example, if you create a new Sprite any by calling the Sprite() constructor method,
 	 * its root property is null until you add it to the display list (or to a display
-	 * any container that is off the display list but that is a child of the top-most displayobject in a SWF file).For a loaded SWF file, even though the Loader any used to load the file may not be on the display list,
+	 * any container that is off the display list but that is a child of the top-most displayobject in a SWF file).
+	 * For a loaded SWF file, even though the Loader any used to load the file may not be on the display list,
 	 * the top-most displayobject in the SWF file has its root property set to itself.  The Loader any
 	 * does not have its root property set until it is added as a child of a displayobject for which the
 	 * root property is set.
@@ -884,8 +943,10 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	/**
-	 * Indicates the rotation of the DisplayObject instance, in degrees, from its original orientation. Values from 0 to 180 represent
-	 * clockwise rotation; values from 0 to -180 represent counterclockwise rotation. Values outside this range are added to or
+	 * Indicates the rotation of the DisplayObject instance, in degrees, from its original orientation.
+	 * Values from 0 to 180 represent
+	 * clockwise rotation; values from 0 to -180 represent counterclockwise rotation.
+	 * Values outside this range are added to or
 	 * subtracted from 360 to obtain a value within the range. For example, the statement my_video.rotation = 450 is the
 	 * same as  my_video.rotation = 90.
 	 */
@@ -899,8 +960,10 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	/**
-	 * Indicates the x-axis rotation of the DisplayObject instance, in degrees, from its original orientation relative to the 3D parent container. Values from 0 to 180 represent
-	 * clockwise rotation; values from 0 to -180 represent counterclockwise rotation. Values outside this range are added to or
+	 * Indicates the x-axis rotation of the DisplayObject instance,
+	 * in degrees, from its original orientation relative to the 3D parent container. Values from 0 to 180 represent
+	 * clockwise rotation; values from 0 to -180 represent counterclockwise rotation.
+	 * Values outside this range are added to or
 	 * subtracted from 360 to obtain a value within the range.
 	 */
 	public get rotationX(): number {
@@ -914,8 +977,10 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	/**
-	 * Indicates the y-axis rotation of the DisplayObject instance, in degrees, from its original orientation relative to the 3D parent container. Values from 0 to 180 represent
-	 * clockwise rotation; values from 0 to -180 represent counterclockwise rotation. Values outside this range are added to or
+	 * Indicates the y-axis rotation of the DisplayObject instance, in degrees,
+	 * from its original orientation relative to the 3D parent container. Values from 0 to 180 represent
+	 * clockwise rotation; values from 0 to -180 represent counterclockwise rotation.
+	 * Values outside this range are added to or
 	 * subtracted from 360 to obtain a value within the range.
 	 * @langversion	3.0
 	 * @playerversion	Flash 10
@@ -934,8 +999,10 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	/**
-	 * Indicates the z-axis rotation of the DisplayObject instance, in degrees, from its original orientation relative to the 3D parent container. Values from 0 to 180 represent
-	 * clockwise rotation; values from 0 to -180 represent counterclockwise rotation. Values outside this range are added to or
+	 * Indicates the z-axis rotation of the DisplayObject instance,
+	 * in degrees, from its original orientation relative to the 3D parent container. Values from 0 to 180 represent
+	 * clockwise rotation; values from 0 to -180 represent counterclockwise rotation.
+	 * Values outside this range are added to or
 	 * subtracted from 360 to obtain a value within the range.
 	 */
 	public get rotationZ(): number {
@@ -956,14 +1023,27 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *
 	 *   When you define the scale9Grid property, the displayobject is divided into a
 	 * grid with nine regions based on the scale9Grid rectangle, which defines the
-	 * center region of the grid. The eight other regions of the grid are the following areas: The upper-left corner outside of the rectangleThe area above the rectangle The upper-right corner outside of the rectangleThe area to the left of the rectangleThe area to the right of the rectangleThe lower-left corner outside of the rectangleThe area below the rectangleThe lower-right corner outside of the rectangleYou can think of the eight regions outside of the center (defined by the rectangle)
-	 * as being like a picture frame that has special rules applied to it when scaled.When the scale9Grid property is set and a displayobject is scaled, all text and
-	 * gradients are scaled normally; however, for other types of anys the following rules apply:Content in the center region is scaled normally. Content in the corners is not scaled. Content in the top and bottom regions is scaled horizontally only. Content in the
-	 * left and right regions is scaled vertically only.All fills (including bitmaps, video, and gradients) are stretched to fit their shapes.If a displayobject is rotated, all subsequent scaling is normal (and the
-	 * scale9Grid property is ignored).For example, consider the following displayobject and a rectangle that is applied as the display
-	 * any's scale9Grid:The displayobject.The red rectangle shows the scale9Grid.When the displayobject is scaled or stretched, the anys within the rectangle scale
+	 * center region of the grid. The eight other regions of the grid are the following areas:
+	 * The upper-left corner outside of the rectangleThe area above the rectangle
+	 * The upper-right corner outside of the rectangleThe area to the left of the rectangle
+	 * The area to the right of the rectangleThe lower-left corner outside of the rectangle
+	 * The area below the rectangleThe lower-right corner outside of the rectangle
+	 * You can think of the eight regions outside of the center (defined by the rectangle)
+	 * as being like a picture frame that has special rules applied to it when scaled.
+	 * When the scale9Grid property is set and a displayobject is scaled, all text and
+	 * gradients are scaled normally; however, for other types of anys the following rules apply:
+	 * Content in the center region is scaled normally. Content in the corners is not scaled.
+	 * Content in the top and bottom regions is scaled horizontally only. Content in the
+	 * left and right regions is scaled vertically only.All fills (including bitmaps, video, and gradients)
+	 * are stretched to fit their shapes.If a displayobject is rotated, all subsequent scaling is normal (and the
+	 * scale9Grid property is ignored).For example, consider the following displayobject and a rectangle
+	 * that is applied as the display
+	 * any's scale9Grid:The displayobject.The red rectangle shows the scale9Grid.
+	 * When the displayobject is scaled or stretched, the anys within the rectangle scale
 	 * normally, but the anys outside of the rectangle scale according to the
-	 * scale9Grid rules:Scaled to 75%:Scaled to 50%:Scaled to 25%:Stretched horizontally 150%: A common use for setting scale9Grid is to set up a displayobject to be used
+	 * scale9Grid rules:
+	 * Scaled to 75%:Scaled to 50%:Scaled to 25%:Stretched horizontally
+	 * 150%: A common use for setting scale9Grid is to set up a displayobject to be used
 	 * as a component, in which edge regions retain the same width when the component is scaled.
 	 * @maelexample	The following creates a movie clip that contains a 20-pixel line (which forms a border)
 	 *   and a gradient fill. The movie clip scales based on the mouse position, and because of the
@@ -1110,7 +1190,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *
 	 *   Each of the transform any's properties is itself an any. This concept is important because the only
 	 * way to set new values for the matrix or colorTransform anys is to create a new any and copy that
-	 * any into the transform.matrix or transform.colorTransform property.For example, to increase the tx value of a displayobject's matrix, you must make a
+	 * any into the transform.matrix or transform.colorTransform property.For example,
+	 * to increase the tx value of a displayobject's matrix, you must make a
 	 * copy of the entire matrix any, then copy the new any into the matrix property of the transform
 	 * any:
 	 * var myMatrix:Matrix = myDisplayObject.transform.matrix;
@@ -1122,8 +1203,10 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * You can also copy an entire transform any and assign it to another
 	 * displayobject's transform property. For example, the following code
 	 * copies the entire transform any from myOldDisplayObj to
-	 * myNewDisplayObj:myNewDisplayObj.transform = myOldDisplayObj.transform;The resulting displayobject, myNewDisplayObj, now has the same values for its
-	 * matrix, color transform, and pixel bounds as the old displayobject, myOldDisplayObj.Note that AIR for TV devices use hardware acceleration, if it is available, for color transforms.
+	 * myNewDisplayObj:myNewDisplayObj.transform = myOldDisplayObj.transform;
+	 * The resulting displayobject, myNewDisplayObj, now has the same values for its
+	 * matrix, color transform, and pixel bounds as the old displayobject, myOldDisplayObj.
+	 * Note that AIR for TV devices use hardware acceleration, if it is available, for color transforms.
 	 */
 	public get transform(): Transform {
 		this._ctBlockedByScript = true;
@@ -1152,7 +1235,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	/**
-	 * Indicates the width of the displayobject, in pixels. The width is calculated based on the bounds of the content of the displayobject.
+	 * Indicates the width of the displayobject, in pixels.
+	 * The width is calculated based on the bounds of the content of the displayobject.
 	 * When you set the width property, the scaleX property is adjusted accordingly, as shown in the
 	 * following code:
 	 *
@@ -1254,9 +1338,11 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * displayobject's position and orientation
 	 * in three dimensions. When working with the z-axis,
 	 * the existing behavior of x and y properties changes from screen or pixel coordinates to
-	 * positions relative to the 3D parent container.For example, a child of the _root  at position x = 100, y = 100, z = 200
+	 * positions relative to the 3D parent container.For example,
+	 * a child of the _root  at position x = 100, y = 100, z = 200
 	 * is not drawn at pixel location (100,100). The child is drawn wherever the 3D projection
-	 * calculation puts it. The calculation is: (x~~cameraFocalLength/cameraRelativeZPosition, y~~cameraFocalLength/cameraRelativeZPosition)
+	 * calculation puts it. The calculation is:
+	 * (x~~cameraFocalLength/cameraRelativeZPosition, y~~cameraFocalLength/cameraRelativeZPosition)
 	 */
 	public get z(): number {
 		// return raw value to avoid prototype jumping and method execution
@@ -1291,7 +1377,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   </codeblock>
 	 * Note: Use the localToGlobal() and
 	 * globalToLocal() methods to convert the displayobject's local coordinates
-	 * to display coordinates, or display coordinates to local coordinates, respectively.The getBounds() method is similar to the getRect() method;
+	 * to display coordinates, or display coordinates to local coordinates,
+	 * respectively.The getBounds() method is similar to the getRect() method;
 	 * however, the Rectangle returned by the getBounds() method includes any strokes
 	 * on shapes, whereas the Rectangle returned by the getRect() method does not.
 	 * For an example, see the description of the getRect() method.
@@ -1338,12 +1425,14 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   the targetCoordinateSpace any's coordinate system.
 	 */
 	public getRect(targetCoordinateSpace: DisplayObject): Rectangle {
-		const box: Box = PickGroup.getInstance(this._stage.view).getBoundsPicker(this.adaptee.partition).getBoxBounds(this.adaptee);
+		const box: Box = PickGroup.getInstance(this._stage.view).getBoundsPicker(
+			this.adaptee.partition).getBoxBounds(this.adaptee);
 		if (!box) {
 			return new (<SecurityDomain> this.sec).flash.geom.Rectangle();
 		}
 		//console.log("DisplayObject:getRect not yet implemented");FromBounds
-		return new (<SecurityDomain> this.sec).flash.geom.Rectangle(box.x - this.x, box.y - this.y, box.width, box.height);
+		return new (<SecurityDomain> this.sec).flash.geom.Rectangle(
+			box.x - this.x, box.y - this.y, box.width, box.height);
 
 	}
 
@@ -1384,7 +1473,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 */
 	public globalToLocal3D(point: Point): Vector3D {
 		console.log('DisplayObject:globalToLocal3D not yet implemented');
-		return new (<SecurityDomain> this.sec).flash.geom.Vector3D(); //todo: works with vector3D-input instead of pouibnt: this.adaptee.globalToLocal3D();
+		return new (<SecurityDomain> this.sec).flash.geom.Vector3D();
 
 	}
 
@@ -1396,7 +1485,9 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 */
 	public hitTestObject(obj: DisplayObject): boolean {
 
-		return PickGroup.getInstance(this._stage.view).getBoundsPicker(this.adaptee.partition).hitTestObject(PickGroup.getInstance(this._stage.view).getBoundsPicker(obj.adaptee.partition));
+		return PickGroup.getInstance(this._stage.view).getBoundsPicker(
+			this.adaptee.partition).hitTestObject(
+			PickGroup.getInstance(this._stage.view).getBoundsPicker(obj.adaptee.partition));
 
 	}
 
@@ -1414,7 +1505,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   false otherwise.
 	 */
 	public hitTestPoint(x: number, y: number, shapeFlag: boolean = false): boolean {
-		return PickGroup.getInstance(this._stage.view).getBoundsPicker(this.adaptee.partition).hitTestPoint(x, y, shapeFlag);
+		return PickGroup.getInstance(this._stage.view).getBoundsPicker(
+			this.adaptee.partition).hitTestPoint(x, y, shapeFlag);
 	}
 
 	protected _getObjectsUnderPointInternal(point: Point, children: DisplayObject[]) {
@@ -1451,7 +1543,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *
 	 *   This method allows you to convert any given x and y coordinates from
 	 * values that are relative to the origin (0,0) of a specific displayobject (local coordinates)
-	 * to values that are relative to the origin of the Stage (global coordinates).To use this method, first create an instance of the Point class. The
+	 * to values that are relative to the origin of the Stage (global coordinates).
+	 * To use this method, first create an instance of the Point class. The
 	 * x and y values that you assign represent local coordinates because they
 	 * relate to the origin of the displayobject.You then pass the Point instance that you created as the parameter to
 	 * the localToGlobal() method. The method returns a new Point any with

@@ -401,13 +401,12 @@ export class SimpleButton extends MovieClip {
 	 * is inactive — it does not respond to user input events.
 	 */
 	public get hitTestState (): DisplayObject {
-		console.log('hitTestState not implemented yet in flash/SimpleButton');
-		return null;
+		return <DisplayObject> this.adaptee.pickObject.adapter;
 
 	}
 
 	public set hitTestState (value: DisplayObject) {
-		console.log('hitTestState not implemented yet in flash/SimpleButton');
+		this.adaptee.pickObject = <AwayDisplayObjectContainer> value.adaptee;
 
 	}
 
@@ -492,7 +491,8 @@ export class SimpleButton extends MovieClip {
 	 *
 	 *   You can change the useHandCursor property at any time;
 	 * the modified button immediately uses the new cursor behavior.
-	 * @maelexample	Create two buttons on the Stage with the instance names <code>myBtn1_btn</code> and <code>myBtn2_btn</code>. Enter the following ActionScript in Frame 1 of the Timeline:
+	 * @maelexample	Create two buttons on the Stage with the instance names
+	 * <code>myBtn1_btn</code> and <code>myBtn2_btn</code>. Enter the following ActionScript in Frame 1 of the Timeline:
 	 *   <listing>
 	 *   myBtn1_btn.useHandCursor = false;
 	 *   myBtn1_btn.onRelease = buttonClick;
@@ -500,7 +500,9 @@ export class SimpleButton extends MovieClip {
 	 *   function buttonClick() {
 		 *   trace(this._name);
 		 *   }
-	 *   </listing><p class="- topic/p ">When the mouse is over and clicks <code>myBtn1_btn</code>, there is no pointing hand. However, you see the pointing hand when the button is over and clicks <code>myBtn2_btn</code>.</p>
+	 *   </listing><p class="- topic/p ">When the mouse is over and clicks <code>myBtn1_btn</code>,
+	 * there is no pointing hand. However, you see the pointing hand when the button is over and clicks
+	 * <code>myBtn2_btn</code>.</p>
 	 */
 	public get useHandCursor (): boolean {
 		console.log('useHandCursor not implemented yet in flash/SimpleButton');

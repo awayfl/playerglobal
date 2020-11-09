@@ -1,5 +1,9 @@
 import { Box } from '@awayjs/core';
-import { Billboard, TextField as AwayTextField, DisplayObjectContainer as AwayDisplayObjectContainer, Sprite as AwaySprite, MovieClip as AwayMovieClip, DisplayObject as AwayDisplayObject, FrameScriptManager, IDisplayObjectAdapter, IMovieClipAdapter } from '@awayjs/scene';
+import { Billboard, TextField as AwayTextField,
+	DisplayObjectContainer as AwayDisplayObjectContainer,
+	Sprite as AwaySprite, MovieClip as AwayMovieClip,
+	DisplayObject as AwayDisplayObject,
+	IDisplayObjectAdapter } from '@awayjs/scene';
 import { DisplayObject } from './DisplayObject';
 import { InteractiveObject } from './InteractiveObject';
 import { Event } from '../events/Event';
@@ -29,14 +33,18 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 * The z-order is the front-to-back order that determines which object is drawn in front, which is behind,
 	 * and so on.
 	 *
-	 *   <p class="- topic/p ">DisplayObject is an abstract base class; therefore, you cannot call DisplayObject directly. Invoking
-	 * <codeph class="+ topic/ph pr-d/codeph ">new DisplayObject()</codeph> throws an <codeph class="+ topic/ph pr-d/codeph ">ArgumentError</codeph> exception.</p>
+	 *   <p class="- topic/p ">DisplayObject is an abstract base class; therefore,
+	 * you cannot call DisplayObject directly. Invoking
+	 * <codeph class="+ topic/ph pr-d/codeph ">new DisplayObject()</codeph> throws an
+	 * <codeph class="+ topic/ph pr-d/codeph ">ArgumentError</codeph> exception.</p>
 	 *
 	 *   The DisplayObjectContainer class is an abstract base class for all objects that can contain child objects.
-	 * It cannot be instantiated directly; calling the <codeph class="+ topic/ph pr-d/codeph ">new DisplayObjectContainer()</codeph> constructor
+	 * It cannot be instantiated directly; calling the <codeph class="+ topic/ph pr-d/codeph ">
+	 * new DisplayObjectContainer()</codeph> constructor
 	 * throws an <codeph class="+ topic/ph pr-d/codeph ">ArgumentError</codeph> exception.
 	 *
-	 *   <p class="- topic/p ">For more information, see the "Display Programming" chapter of the <i class="+ topic/ph hi-d/i ">ActionScript 3.0 Developer's Guide</i>.</p>
+	 *   <p class="- topic/p ">For more information, see the "Display Programming" chapter of the
+	 * <i class="+ topic/ph hi-d/i ">ActionScript 3.0 Developer's Guide</i>.</p>
 
 	 /**
 	 * Calling the new DisplayObjectContainer() constructor throws an
@@ -47,7 +55,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 */
 	constructor() {
 		super();
-		if (this.adaptee) {
+		if (this.adaptee && (<AwayDisplayObjectContainer> this.adaptee)._children) {
 			const children = (<AwayDisplayObjectContainer> this.adaptee)._children;
 			for (let i: number = 0; i < children.length; i++) {
 
@@ -60,7 +68,8 @@ export class DisplayObjectContainer extends InteractiveObject {
 					constructorFunc();
 					//(<any>mcadapter).constructorHasRun=true;
 				}
-				if ((<any>mc).just_added_to_timeline && mc._sessionID != -1 && mcadapter && (<any>mcadapter).dispatchStaticEvent) {
+				if ((<any>mc).just_added_to_timeline && mc._sessionID != -1
+					&& mcadapter && (<any>mcadapter).dispatchStaticEvent) {
 
 					(<any>mcadapter).dispatchStaticEvent('added', mcadapter);
 					(<any>mc).just_added_to_timeline = false;
@@ -81,7 +90,6 @@ export class DisplayObjectContainer extends InteractiveObject {
 		if (!(<any> this)._symbol) {
 			throw ('_symbol not defined when cloning movieclip');
 		}
-		//var clone: MovieClip = MovieClip.getNewMovieClip(AwayMovieClip.getNewMovieClip((<AwayMovieClip>this.adaptee).timeline));
 		const clone = constructClassFromSymbol((<any> this)._symbol, (<any> this)._symbol.symbolClass);
 		clone.axInitializer();
 		this.adaptee.copyTo(clone.adaptee);
@@ -89,7 +97,8 @@ export class DisplayObjectContainer extends InteractiveObject {
 	}
 
 	/* gets called from stage in order to move the playhead of the root-movieclips to next frame.
-	 the DisplayObjectContainer should call this function on all children if they extend DisplayObjectContainer themself.
+	 the DisplayObjectContainer should call this function on all children
+	 if they extend DisplayObjectContainer themself.
 	 if any child is a MovieClip this function will not be called on its childrens adapter.
 	 */
 	public advanceFrame() {
@@ -104,7 +113,6 @@ export class DisplayObjectContainer extends InteractiveObject {
 					}
 				} else if (oneChild.isAsset(AwaySprite)) {
 					if (oneChild.adapter && (<any>oneChild.adapter).advanceFrame) {
-						// when Flash constructs Sprites for "Shape" it will not include the DispayObjectContainer in the inheritance chain
 						(<DisplayObjectContainer>oneChild.adapter).advanceFrame();
 					}
 				} else if (oneChild.isAsset(AwayMovieClip)) {
@@ -131,36 +139,21 @@ export class DisplayObjectContainer extends InteractiveObject {
 				obj.children[childname] = {};
 				obj.children[childname].object = oneChild.adapter;
 				obj.children[childname].name = oneChild.name;
-				obj.children[childname].rectangle = 'x:' + oneChild.x + ', y:' + oneChild.y;//+", width:"+oneChild.width+", height:"+oneChild.height;
-
-				/*var box:Box = PickGroup.getInstance(this._stage.view).getBoundsPicker(oneChild.partition).getBoxBounds(oneChild);
-				obj.children[childname].width=(box == null)? 0 : box.width;
-				obj.children[childname].height=(box == null)? 0 : box.height;*/
-				//(<AwayMovieClip>oneChild).graphics.endFill();
-				//console.log("Reached MC", oneChild);
-				//(<AwayMovieClip>oneChild).update();
+				obj.children[childname].rectangle = 'x:' + oneChild.x + ', y:' + oneChild.y;
 			} else if (oneChild.isAsset(AwayMovieClip)) {
 				obj.children[childname] = {};
 				obj.children[childname].object = oneChild.adapter;
 				obj.children[childname].name = oneChild.name;
-				obj.children[childname].rectangle = 'x:' + oneChild.x + ', y:' + oneChild.y;//+", width:"+oneChild.width+", height:"+oneChild.height;
-				/*var box:Box = PickGroup.getInstance(this._stage.view).getBoundsPicker(oneChild.partition).getBoxBounds(oneChild);
-				obj.children[childname].width=(box == null)? 0 : box.width;
-				obj.children[childname].height=(box == null)? 0 : box.height;*/
-				//(<AwayMovieClip>oneChild).graphics.endFill();
-				//console.log("Reached MC", oneChild);
-				//(<AwayMovieClip>oneChild).update();
+				obj.children[childname].rectangle = 'x:' + oneChild.x + ', y:' + oneChild.y;
 			} else if (oneChild.isAsset(AwayTextField)) {
 				obj.children[childname] = {};
 				obj.children[childname].object = oneChild.adapter;
 				obj.children[childname].text = (<AwayTextField>oneChild).text;
-				obj.children[childname].rectangle = 'x:' + oneChild.x + ', y:' + oneChild.y;//+", width:"+oneChild.width+", height:"+oneChild.height;
-				const box: Box = PickGroup.getInstance(this._stage.view).getBoundsPicker(oneChild.partition).getBoxBounds(oneChild);
+				obj.children[childname].rectangle = 'x:' + oneChild.x + ', y:' + oneChild.y;
+				const box: Box = PickGroup.getInstance(this._stage.view)
+					.getBoundsPicker(oneChild.partition).getBoxBounds(oneChild);
 				obj.children[childname].width = (box == null) ? 0 : box.width;
 				obj.children[childname].height = (box == null) ? 0 : box.height;
-				//(<AwayMovieClip>oneChild).graphics.endFill();
-				//console.log("Reached MC", oneChild);
-				//(<AwayMovieClip>oneChild).update();
 			}
 		}
 
@@ -171,7 +164,8 @@ export class DisplayObjectContainer extends InteractiveObject {
 
 		if (dispatchForThisChild) {
 			if (!StaticEvents.events[Event.ADDED_TO_STAGE])
-				StaticEvents.events[Event.ADDED_TO_STAGE] = new (<SecurityDomain> this.sec).flash.events.Event(Event.ADDED_TO_STAGE);
+				StaticEvents.events[Event.ADDED_TO_STAGE] =
+					new (<SecurityDomain> this.sec).flash.events.Event(Event.ADDED_TO_STAGE);
 			StaticEvents.events[Event.ADDED_TO_STAGE].target = this;
 			this.dispatchEvent(StaticEvents.events[Event.ADDED_TO_STAGE]);
 		}
@@ -180,7 +174,8 @@ export class DisplayObjectContainer extends InteractiveObject {
 			const len = children.length;
 			for (let i = 0;i < len; i++) {
 				const oneChild: AwayDisplayObject = children[i];
-				if (oneChild.adapter && (<any>oneChild.adapter).dispatchEventRecursive && !oneChild.hasDispatchedAddedToStage) {
+				if (oneChild.adapter && (<any>oneChild.adapter).dispatchEventRecursive
+					&& !oneChild.hasDispatchedAddedToStage) {
 					oneChild.hasDispatchedAddedToStage = true;
 					(<DisplayObject>oneChild.adapter).dispatch_ADDED_TO_STAGE(true);
 				}
@@ -192,9 +187,9 @@ export class DisplayObjectContainer extends InteractiveObject {
 
 		if (dispatchForThisChild) {
 			if (!StaticEvents.events[Event.REMOVED_FROM_STAGE])
-				StaticEvents.events[Event.REMOVED_FROM_STAGE] = new (<SecurityDomain> this.sec).flash.events.Event(Event.REMOVED_FROM_STAGE);
+				StaticEvents.events[Event.REMOVED_FROM_STAGE] =
+					new (<SecurityDomain> this.sec).flash.events.Event(Event.REMOVED_FROM_STAGE);
 			StaticEvents.events[Event.REMOVED_FROM_STAGE].target = this;
-			//FrameScriptManager.queue_removed_mc(this.adaptee, StaticEvents.events[Event.REMOVED_FROM_STAGE], this.adaptee);
 			this.dispatchEvent(StaticEvents.events[Event.REMOVED_FROM_STAGE]);
 		}
 		if ((<AwayDisplayObjectContainer> this._adaptee)) {
@@ -202,7 +197,8 @@ export class DisplayObjectContainer extends InteractiveObject {
 			const len = children.length;
 			for (let i = 0;i < len; i++) {
 				const oneChild: AwayDisplayObject = children[i];
-				if (oneChild.adapter && (<any>oneChild.adapter).dispatchEventRecursive && oneChild.hasDispatchedAddedToStage) {
+				if (oneChild.adapter && (<any>oneChild.adapter).dispatchEventRecursive
+					&& oneChild.hasDispatchedAddedToStage) {
 					oneChild.hasDispatchedAddedToStage = false;
 					(<DisplayObject>oneChild.adapter).dispatch_REMOVED_FROM_STAGE(true);
 				}
@@ -239,7 +235,8 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 * the Sprite instances you add as children can become the target object of a mouse event
 	 * when you expect the parent instance to be the target object. To ensure that the parent
 	 * instance serves as the target objects for mouse events, you can set the
-	 * mouseChildren property of the parent instance to false. No event is dispatched by setting this property. You must use the
+	 * mouseChildren property of the parent instance to false.
+	 * No event is dispatched by setting this property. You must use the
 	 * addEventListener() method to create interactive functionality.
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
@@ -302,8 +299,10 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 * specific index position, use the addChildAt() method.)
 	 *
 	 *   If you add a child object that already has a different display object container as
-	 * a parent, the object is removed from the child list of the other display object container. Note: The command stage.addChild() can cause problems with a published SWF file,
-	 * including security problems and conflicts with other loaded SWF files. There is only one Stage within a Flash runtime instance,
+	 * a parent, the object is removed from the child list of the other display object container.
+	 * Note: The command stage.addChild() can cause problems with a published SWF file,
+	 * including security problems and conflicts with other loaded SWF files.
+	 * There is only one Stage within a Flash runtime instance,
 	 * no matter how many SWF files you load into the runtime. So, generally, objects
 	 * should not be added to the Stage, directly, at all. The only object the Stage should
 	 * contain is the root object. Create a DisplayObjectContainer to contain all of the items on the
@@ -337,7 +336,8 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 * of the display list for this DisplayObjectContainer object.
 	 *
 	 *   For example, the following example shows three display objects, labeled a, b, and c, at
-	 * index positions 0, 2, and 1, respectively:If you add a child object that already has a different display object container as
+	 * index positions 0, 2, and 1, respectively
+	 * If you add a child object that already has a different display object container as
 	 * a parent, the object is removed from the child list of the other display object container.
 	 * @param	child	The DisplayObject instance to add as a child of this
 	 *   DisplayObjectContainer instance.
@@ -453,7 +453,8 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 *   the child movie call the Security.allowDomain() method.
 	 */
 	public getChildByName (name: string): DisplayObject {
-		return (<AwayDisplayObjectContainer> this._adaptee).getChildByName(name) ? (<DisplayObject>(<AwayDisplayObjectContainer> this._adaptee).getChildByName(name).adapter) : null;
+		return (<AwayDisplayObjectContainer> this._adaptee).getChildByName(name) ?
+			(<DisplayObject>(<AwayDisplayObjectContainer> this._adaptee).getChildByName(name).adapter) : null;
 	}
 
 	/**
@@ -503,7 +504,8 @@ export class DisplayObjectContainer extends InteractiveObject {
 			child = (<AwayDisplayObjectContainer> this._adaptee)._children[i];
 			if (child.visible) {
 
-				if (PickGroup.getInstance(this._stage.view).getBoundsPicker((<AwayDisplayObject>child.adaptee).partition).hitTestPoint(point.x, point.y, true))
+				if (PickGroup.getInstance(this._stage.view)
+					.getBoundsPicker((<AwayDisplayObject>child.adaptee).partition).hitTestPoint(point.x, point.y, true))
 					children.push(<DisplayObject> child.adapter);
 
 				const adapt = (<DisplayObjectContainer> child.adapter);
@@ -577,10 +579,13 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 * display objects, labeled a, b, and c, at index positions 0, 1, and 2, respectively:
 	 *
 	 *   When you use the setChildIndex() method and specify an index position
-	 * that is already occupied, the only positions that change are those in between the display object's former and new position.
+	 * that is already occupied, the only positions that change are those in between the display object's
+	 * former and new position.
 	 * All others will stay the same.
-	 * If a child is moved to an index LOWER than its current index, all children in between will INCREASE by 1 for their index reference.
-	 * If a child is moved to an index HIGHER than its current index, all children in between will DECREASE by 1 for their index reference.
+	 * If a child is moved to an index LOWER than its current index,
+	 * all children in between will INCREASE by 1 for their index reference.
+	 * If a child is moved to an index HIGHER than its current index,
+	 * all children in between will DECREASE by 1 for their index reference.
 	 * For example, if the display object container
 	 * in the previous example is named container, you can swap the position
 	 * of the display objects labeled a and b by calling the following code:
@@ -600,7 +605,8 @@ export class DisplayObjectContainer extends InteractiveObject {
 	public setChildIndex (child: DisplayObject, index: number)  {
 		const idx = (<AwayDisplayObjectContainer> this.adaptee)._children.indexOf(child.adaptee);
 		if (idx < 0)
-			throw ('[DisplayObjectContainer.setChildindex] - todo: throw as3 error when child is not child of this obj');
+			throw ('[DisplayObjectContainer.setChildindex] \
+				- todo: throw as3 error when child is not child of this obj');
 		if (idx == index)
 			return;
 		if (index > (<AwayDisplayObjectContainer> this.adaptee)._children.length)

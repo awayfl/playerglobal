@@ -55,7 +55,8 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	/**
      * Sets a solid color and opacity as the fill for subsequent drawing commands.
      *
-     * @see http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/display/Graphics.html#beginFill%28%29
+     * @see
+	 * http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/display/Graphics.html#beginFill%28%29
      * @param color
      * @param alpha While any Number is a valid input, the value is clamped to [0,1] and then scaled
      * to an integer in the interval [0,0xff].
@@ -67,7 +68,9 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	public beginGradientFill(type: string, colors: ASArray, alphas: ASArray, ratios: ASArray,
 		matrix: Matrix = null, spreadMethod: string = 'pad',
 		interpolationMethod: string = 'rgb', focalPointRatio: number = 0): void {
-		this.adaptee.beginGradientFill(<any>type, colors.value, alphas.value, ratios.value, matrix?.adaptee, spreadMethod, interpolationMethod, focalPointRatio);
+		this.adaptee.beginGradientFill(
+			<any>type, colors.value, alphas.value, ratios.value, matrix?.adaptee,
+			spreadMethod, interpolationMethod, focalPointRatio);
 	}
 
 	public beginBitmapFill(bitmap: BitmapData, matrix: Matrix = null,
@@ -87,18 +90,21 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	public lineStyle(thickness: number, color: number /*uint*/ = 0, alpha: number = 1,
 		pixelHinting: boolean = false, scaleMode: string = 'normal', caps: string = null,
 		joints: string = null, miterLimit: number = 3): void {
-		this.adaptee.lineStyle(thickness, color, alpha, pixelHinting, <any>scaleMode, <any>caps, <any>joints, miterLimit);
+		this.adaptee.lineStyle(
+			thickness, color, alpha, pixelHinting, <any>scaleMode, <any>caps, <any>joints, miterLimit);
 	}
 
 	public lineGradientStyle(type: string, colors: ASArray, alphas: ASArray, ratios: ASArray,
 		matrix: Matrix = null, spreadMethod: string = 'pad',
 		interpolationMethod: string = 'rgb', focalPointRatio: number = 0): void {
-		this.adaptee.lineGradientStyle(<any>type, colors.value, alphas.value, ratios.value, matrix?.adaptee, spreadMethod, interpolationMethod, focalPointRatio);
+		this.adaptee.lineGradientStyle(
+			<any>type, colors.value, alphas.value, ratios.value,
+			matrix?.adaptee, spreadMethod, interpolationMethod, focalPointRatio);
 	}
 
 	public lineBitmapStyle(bitmap: BitmapData, matrix: Matrix = null,
 		repeat: boolean = true, smooth: boolean = false): void {
-    	this.adaptee.lineBitmapStyle(bitmap.adaptee, matrix?.adaptee, repeat, smooth);
+		this.adaptee.lineBitmapStyle(bitmap.adaptee, matrix?.adaptee, repeat, smooth);
 	}
 
 	public drawRect(x: number, y: number, width: number, height: number): void {
@@ -116,7 +122,8 @@ export class Graphics extends ASObject implements IAssetAdapter {
 		bottomLeftRadius: number,
 		bottomRightRadius: number): void {
 
-		this.adaptee.drawRoundRectComplex(x, y, width, height, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius);
+		this.adaptee.drawRoundRectComplex(
+			x, y, width, height, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius);
 
 	}
 

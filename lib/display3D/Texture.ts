@@ -5,7 +5,7 @@ export class Texture {
 	// todo. can probably route directly to awayjs class
 
 	public static fromBitmapData(bitmapData: BitmapData): Texture {
-		console.log('fromBitmapData not implemented yet in flash/Texture');
+		console.warn('[playerglobal/display3D/Texture] - fromBitmapData not implemented');
 		return null;
 	}
 
@@ -13,17 +13,17 @@ export class Texture {
 	}
 
 	public uploadCompressedTextureFromByteArray (data: ByteArray, byteArrayOffset: number, async: boolean = false) {
-		console.log('uploadCompressedTextureFromByteArray not implemented yet in flash/Texture');
+		console.warn('[playerglobal/display3D/Texture] - uploadCompressedTextureFromByteArray not implemented');
 
 	}
 
 	public uploadFromBitmapData (source: BitmapData, miplevel: number = 0) {
-		console.log('uploadFromBitmapData not implemented yet in flash/Texture');
+		console.warn('[playerglobal/display3D/Texture] - uploadFromBitmapData not implemented');
 
 	}
 
 	public uploadFromByteArray (data: ByteArray, byteArrayOffset: number, miplevel: number = 0) {
-		console.log('uploadFromByteArray not implemented yet in flash/Texture');
+		console.warn('[playerglobal/display3D/Texture] - uploadFromByteArray not implemented');
 
 	}
 }

@@ -1,10 +1,14 @@
 /**
- * The ClipboardFormats class defines constants for the names of the standard data formats used with the Clipboard class.
+ * The ClipboardFormats class defines constants for the names of the standard data formats
+ * used with the Clipboard class.
  * Flash Player 10 only supports TEXT_FORMAT, RICH_TEXT_FORMAT, and HTML_FORMAT.
- * @internal	Clipboard, ClipboardFormats and ClipboardTransferMode were all added to AIR 1.0. These are also being added, with some exceptions listed in this file, to FP10.
+ * @internal	Clipboard, ClipboardFormats and ClipboardTransferMode were all added to AIR 1.0.
+ * These are also being added, with some exceptions listed in this file, to FP10.
  */
 
-export class ClipboardFormats extends Object {
+import { ASObject } from '@awayfl/avm2';
+
+export class ClipboardFormats extends ASObject {
 	static AIR_PREFIX: string;
 
 	/**

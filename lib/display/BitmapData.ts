@@ -1,9 +1,5 @@
-import { IAssetAdapter, ColorUtils } from '@awayjs/core';
-import { StageManager, ImageUtils, BitmapImage2D } from '@awayjs/stage';
-//****************************************************************************
-// ActionScript Standard Library
-// flash.display.BitmapData object
-//****************************************************************************
+import { IAssetAdapter } from '@awayjs/core';
+import { StageManager, BitmapImage2D } from '@awayjs/stage';
 import { Rectangle } from '../geom/Rectangle';
 import { Point } from '../geom/Point';
 import { Matrix } from '../geom/Matrix';
@@ -86,13 +82,15 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		notImplemented('public flash.display.BitmapData::drawWithQuality');
 	}
 
-	constructor(width: number | SceneImage2D | BitmapImage2D, height: number, transparent: boolean = true, fillColor: number = 0xffffffff) {
+	constructor(width: number | SceneImage2D | BitmapImage2D,
+		height: number, transparent: boolean = true, fillColor: number = 0xffffffff) {
 		super();
 
 		if (typeof width === 'number') {
 
 			if (!this._adaptee) {
-				this._adaptee = SceneImage2D.getImage(width, height, transparent, fillColor, false, StageManager.getInstance().getStageAt(0));
+				this._adaptee =	SceneImage2D.getImage(width, height, transparent, fillColor, false,
+					StageManager.getInstance().getStageAt(0));
 
 				// we construct a SceneImage2D direct, use weak, that call dispose after garbaging
 				this._adaptee.useWeakRef();
@@ -262,7 +260,8 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	public getColorBoundsRect(mask: number, color: number, findColor: boolean): Rectangle {
 
 		console.warn('Unsage implementation `getColorBoundsRect`!');
-		return  new (<SecurityDomain> this.sec).flash.geom.Rectangle(this._adaptee.getColorBoundsRect(mask, color, findColor));
+		return  new (<SecurityDomain> this.sec).flash.geom.Rectangle(
+			this._adaptee.getColorBoundsRect(mask, color, findColor));
 	}
 
 	public hitTest(

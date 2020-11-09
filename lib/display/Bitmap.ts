@@ -11,22 +11,37 @@ import { BitmapImage2D } from '@awayjs/stage';
  * that you load with the flash.display.Loader class, or they can be images that you create with
  * the <codeph class="+ topic/ph pr-d/codeph ">Bitmap()</codeph> constructor.
  *
- *   <p class="- topic/p ">The <codeph class="+ topic/ph pr-d/codeph ">Bitmap()</codeph> constructor allows you to create a Bitmap object that
+ *   <p class="- topic/p ">The <codeph class="+ topic/ph pr-d/codeph ">
+ * Bitmap()</codeph> constructor allows you to create a Bitmap object that
  * contains a reference to a BitmapData object. After you create a Bitmap object, use the
- * <codeph class="+ topic/ph pr-d/codeph ">addChild()</codeph> or <codeph class="+ topic/ph pr-d/codeph ">addChildAt()</codeph> method of the parent DisplayObjectContainer
- * instance to place the bitmap on the display list.</p><p class="- topic/p ">A Bitmap object can share its BitmapData reference among several Bitmap objects,
+ * <codeph class="+ topic/ph pr-d/codeph ">addChild()</codeph> or
+ * <codeph class="+ topic/ph pr-d/codeph ">addChildAt()</codeph> method of the parent DisplayObjectContainer
+ * instance to place the bitmap on the display list.</p><p class="- topic/p ">
+ * A Bitmap object can share its BitmapData reference among several Bitmap objects,
  * independent of translation or rotation properties. Because you can create multiple Bitmap
  * objects that reference the same BitmapData object, multiple display objects can use the
  * same complex BitmapData object without incurring the memory overhead of a BitmapData
- * object for each display object instance.</p><p class="- topic/p ">A BitmapData object can be drawn to the screen by a Bitmap object in one of two ways:
+ * object for each display object instance.</p><p class="- topic/p ">
+ * A BitmapData object can be drawn to the screen by a Bitmap object in one of two ways:
  * by using the vector renderer as a fill-bitmap shape, or by using a faster pixel-copying routine.
  * The pixel-copying routine is substantially faster than the vector renderer, but the Bitmap object
- * must meet certain conditions to use it:</p><ul class="- topic/ul "><li class="- topic/li "> No stretching, rotation, or skewing can be applied to the Bitmap object.</li><li class="- topic/li "> No color transform can be applied to the Bitmap object. </li><li class="- topic/li "> No blend mode can be applied to the Bitmap object. </li><li class="- topic/li "> No clipping can be done through mask layers or <codeph class="+ topic/ph pr-d/codeph ">setMask()</codeph> methods. </li><li class="- topic/li "> The image itself cannot be a mask. </li><li class="- topic/li "> The destination coordinates must be on a whole pixel boundary. </li></ul><p class="- topic/p ">If you load a Bitmap object from a domain other than that of the Loader object used to
+ * must meet certain conditions to use it:</p><ul class="- topic/ul ">
+ * <li class="- topic/li "> No stretching, rotation, or skewing can be applied to the Bitmap object.</li>
+ * <li class="- topic/li "> No color transform can be applied to the Bitmap object. </li>
+ * <li class="- topic/li "> No blend mode can be applied to the Bitmap object. </li>
+ * <li class="- topic/li "> No clipping can be done through mask layers or
+ * <codeph class="+ topic/ph pr-d/codeph ">setMask()</codeph> methods. </li>
+ * <li class="- topic/li "> The image itself cannot be a mask. </li>
+ * <li class="- topic/li "> The destination coordinates must be on a whole pixel boundary. </li>
+ * </ul><p class="- topic/p ">If you load a Bitmap object from a domain other than that of the Loader object used to
  * load the image, and there is no URL policy file that permits access to the domain of
  * the Loader object, then a script in that domain cannot access the Bitmap
  * object or its properties and methods. For more information, see the Flash Player Developer Center Topic:
- * <xref href="http://www.adobe.com/go/devnet_security_en" scope="external" class="- topic/xref ">Security</xref>.</p><p class="- topic/p "><b class="+ topic/ph hi-d/b ">Note:</b> The Bitmap class is not a subclass of the InteractiveObject class, so
- * it cannot dispatch mouse events. However, you can use the <codeph class="+ topic/ph pr-d/codeph ">addEventListener()</codeph> method
+ * <xref href="http://www.adobe.com/go/devnet_security_en" scope="external" class="- topic/xref ">
+ * Security</xref>.</p><p class="- topic/p "><b class="+ topic/ph hi-d/b ">Note:</b>
+ * The Bitmap class is not a subclass of the InteractiveObject class, so
+ * it cannot dispatch mouse events. However, you can use the <codeph class="+ topic/ph pr-d/codeph ">
+ * addEventListener()</codeph> method
  * of the display object container that contains the Bitmap object.</p>
  */
 export class Bitmap extends DisplayObject implements IBitmapDataOwner {
@@ -39,9 +54,13 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner {
 	private static argPixelSnapping: string;
 	private static argSmoothing: boolean;
 
-	public static getNewBitmap(bitmapData: BitmapData = null, pixelSnapping: string = 'auto', smoothing: boolean = false): Bitmap {
+	public static getNewBitmap(
+		bitmapData: BitmapData = null,
+		pixelSnapping: string = 'auto',
+		smoothing: boolean = false): Bitmap {
 		if (Bitmap._bitmaps.length) {
-			const newMaterial: MethodMaterial = bitmapData ? new MethodMaterial(bitmapData.adaptee) : new MethodMaterial(0x0);
+			const newMaterial: MethodMaterial = bitmapData ?
+				new MethodMaterial(bitmapData.adaptee) : new MethodMaterial(0x0);
 			newMaterial.alphaBlending = true;
 			newMaterial.useColorTransform = true;
 
@@ -62,7 +81,8 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner {
 	 *   smoothing set to false (left) and true (right):
 	 */
 	constructor(bitmapData: BitmapData = null, pixelSnapping: string = 'auto', smoothing: boolean = false) {
-		const newMaterial: MethodMaterial = bitmapData ? new MethodMaterial(bitmapData.adaptee) : new MethodMaterial(0x0);
+		const newMaterial: MethodMaterial = bitmapData ?
+			new MethodMaterial(bitmapData.adaptee) : new MethodMaterial(0x0);
 		newMaterial.alphaBlending = true;
 		newMaterial.useColorTransform = true;
 
@@ -95,7 +115,8 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner {
 	}
 
 	protected createAdaptee(): AwayDisplayObject {
-		const newAdaptee = Billboard.getNewBillboard(Bitmap.argBitmapMaterial, Bitmap.argPixelSnapping, Bitmap.argSmoothing);
+		const newAdaptee =
+			Billboard.getNewBillboard(Bitmap.argBitmapMaterial, Bitmap.argPixelSnapping, Bitmap.argSmoothing);
 		Bitmap.argBitmapMaterial = null;
 		Bitmap.argPixelSnapping = null;
 		Bitmap.argSmoothing = null;
