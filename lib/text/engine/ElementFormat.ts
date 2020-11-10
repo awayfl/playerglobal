@@ -4,18 +4,27 @@ import { FontMetrics } from './FontMetrics';
 
 export class ElementFormat extends ASObject {
 
-	static forceNative: boolean = true;
-	// Called whenever the class is initialized.
-	public static classInitializer: any = null;
+	static forceNativeConstructor: boolean = true;
+	static forceNativeMethods: boolean = true;
 
-	// Called whenever an instance of the class is initialized.
-	public static initializer: any = null;
-
-	// List of static symbols to link.
-	public static classSymbols: string[] = null; // [];
-
-	// List of instance symbols to link.
-	public static instanceSymbols: string[] = null; // ["clone"];
+	private _fontDescription: FontDescription;
+	private _fontSize: number;
+	private _color: number;
+	private _alpha: number;
+	private _textRotation: string;
+	private _dominantBaseline: string;
+	private _alignmentBaseline: string;
+	private _baselineShift;
+	private _kerning: string;
+	private _trackingRight: number;
+	private _trackingLeft: number;
+	private _locale: string;
+	private _breakOpportunity: string;
+	private _digitCase: string;
+	private _digitWidth: string;
+	private _ligatureLevel: string;
+	private _typographicCase: string;
+	private _locked: boolean;
 
 	constructor(
 		fontDescription: FontDescription = null,
@@ -25,31 +34,37 @@ export class ElementFormat extends ASObject {
 		textRotation: string = 'auto',
 		dominantBaseline: string = 'roman',
 		alignmentBaseline: string = 'useDominantBaseline',
-		baselineShift: number = 0, kerning: string = 'on',
-		trackingRight: number = 0, trackingLeft: number = 0,
-		locale: string = 'en', breakOpportunity: string = 'auto',
+		baselineShift: number = 0,
+		kerning: string = 'on',
+		trackingRight: number = 0,
+		trackingLeft: number = 0,
+		locale: string = 'en',
+		breakOpportunity: string = 'auto',
 		digitCase: string = 'default',
 		digitWidth: string = 'default',
 		ligatureLevel: string = 'common',
 		typographicCase: string = 'default') {
-		fontSize = +fontSize;
-		color = color >>> 0;
-		alpha = +alpha;
-		textRotation = axCoerceString(textRotation);
-		dominantBaseline = axCoerceString(dominantBaseline);
-		alignmentBaseline = axCoerceString(alignmentBaseline);
-		baselineShift = +baselineShift;
-		kerning = axCoerceString(kerning);
-		trackingRight = +trackingRight;
-		trackingLeft = +trackingLeft;
-		locale = axCoerceString(locale);
-		breakOpportunity = axCoerceString(breakOpportunity);
-		digitCase = axCoerceString(digitCase);
-		digitWidth = axCoerceString(digitWidth);
-		ligatureLevel = axCoerceString(ligatureLevel);
-		typographicCase = axCoerceString(typographicCase);
+
 		super();
-		console.warn('[ElementFormat] not implemented');
+
+		this._fontDescription = fontDescription;
+		this._fontSize = +fontSize;
+		this._color = color >>> 0;
+		this._alpha = +alpha;
+		this._textRotation = axCoerceString(textRotation);
+		this._dominantBaseline = axCoerceString(dominantBaseline);
+		this._alignmentBaseline = axCoerceString(alignmentBaseline);
+		this._baselineShift = +baselineShift;
+		this._kerning = axCoerceString(kerning);
+		this._trackingRight = +trackingRight;
+		this._trackingLeft = +trackingLeft;
+		this._locale = axCoerceString(locale);
+		this._breakOpportunity = axCoerceString(breakOpportunity);
+		this._digitCase = axCoerceString(digitCase);
+		this._digitWidth = axCoerceString(digitWidth);
+		this._ligatureLevel = axCoerceString(ligatureLevel);
+		this._typographicCase = axCoerceString(typographicCase);
+
 	}
 
 	// JS -> AS Bindings
@@ -58,200 +73,148 @@ export class ElementFormat extends ASObject {
 
 	// AS -> JS Bindings
 
-	// _alignmentBaseline: string;
-	// _alpha: number;
-	// _baselineShift: number;
-	// _breakOpportunity: string;
-	// _color: number /*uint*/;
-	// _dominantBaseline: string;
-	// _fontDescription: flash.text.engine.FontDescription;
-	// _digitCase: string;
-	// _digitWidth: string;
-	// _ligatureLevel: string;
-	// _fontSize: number;
-	// _kerning: string;
-	// _locale: string;
-	// _textRotation: string;
-	// _trackingRight: number;
-	// _trackingLeft: number;
-	// _typographicCase: string;
-	// _locked: boolean;
 	public get alignmentBaseline(): string {
-		console.warn('[ElementFormat] - get alignmentBaseline not implemented');
-		return null;
+		return this._alignmentBaseline;
 	}
 
 	public set alignmentBaseline(alignmentBaseline: string) {
-		alignmentBaseline = axCoerceString(alignmentBaseline);
-		console.warn('[ElementFormat] - set alignmentBaseline not implemented');
+		this._alignmentBaseline = axCoerceString(alignmentBaseline);
 	}
 
 	public get alpha(): number {
-		console.warn('[ElementFormat] - get alpha not implemented');
-		return null;
+		return this._alpha;
 	}
 
 	public set alpha(value: number) {
-		value = +value;
-		console.warn('[ElementFormat] - set alpha not implemented');
+		this._alpha = +value;
 	}
 
 	public get baselineShift(): number {
-		console.warn('[ElementFormat] - get baselineShift not implemented');
-		return null;
+		return this._baselineShift;
 	}
 
 	public set baselineShift(value: number) {
-		value = +value;
-		console.warn('[ElementFormat] - set baselineShift not implemented');
+		this._baselineShift = +value;
 	}
 
 	public get breakOpportunity(): string {
-		console.warn('[ElementFormat] - get breakOpportunity not implemented');
-		return null;
+		return this._breakOpportunity;
 	}
 
 	public set breakOpportunity(opportunityType: string) {
-		opportunityType = axCoerceString(opportunityType);
-		console.warn('[ElementFormat] - set breakOpportunity not implemented');
+		this._breakOpportunity = axCoerceString(opportunityType);
 	}
 
 	public get color(): number /*uint*/ {
-		console.warn('[ElementFormat] - get color not implemented');
-		return null;
+		return this._color;
 	}
 
 	public set color(value: number /*uint*/) {
-		value = value >>> 0;
-		console.warn('[ElementFormat] - set color not implemented');
+		this._color = value >>> 0;
 	}
 
 	public get dominantBaseline(): string {
-		console.warn('[ElementFormat] - get dominantBaseline not implemented');
-		return null;
+		return this._dominantBaseline;
 	}
 
 	public set dominantBaseline(dominantBaseline: string) {
-		dominantBaseline = axCoerceString(dominantBaseline);
-		console.warn('[ElementFormat] - set dominantBaseline not implemented');
+		this._dominantBaseline = axCoerceString(dominantBaseline);
 	}
 
 	public get fontDescription(): FontDescription {
-		console.warn('[ElementFormat] - get fontDescription not implemented');
-		return null;
+		return this._fontDescription;
 	}
 
 	public set fontDescription(value: FontDescription) {
-		console.warn('[ElementFormat] - set fontDescription not implemented');
+		this._fontDescription = value;
 	}
 
 	public get digitCase(): string {
-		console.warn('[ElementFormat] - get digitCase not implemented');
-		return null;
+		return this._digitCase;
 	}
 
 	public set digitCase(digitCaseType: string) {
-		digitCaseType = axCoerceString(digitCaseType);
-		console.warn('[ElementFormat] - set digitCase not implemented');
+		this._digitCase = axCoerceString(digitCaseType);
 	}
 
 	public get digitWidth(): string {
-		console.warn('[ElementFormat] - get digitWidth not implemented');
-		return null;
+		return this._digitWidth;
 	}
 
 	public set digitWidth(digitWidthType: string) {
-		digitWidthType = axCoerceString(digitWidthType);
-		console.warn('[ElementFormat] - set digitWidth not implemented');
+		this._digitWidth = axCoerceString(digitWidthType);
 	}
 
 	public get ligatureLevel(): string {
-		console.warn('[ElementFormat] - get ligatureLevel not implemented');
-		return null;
+		return this._ligatureLevel;
 	}
 
 	public set ligatureLevel(ligatureLevelType: string) {
-		ligatureLevelType = axCoerceString(ligatureLevelType);
-		console.warn('[ElementFormat] - set ligatureLevel not implemented');
+		this._ligatureLevel = axCoerceString(ligatureLevelType);
 	}
 
 	public get fontSize(): number {
-		console.warn('[ElementFormat] - get fontSize not implemented');
-		return null;
+		return this._fontSize;
 	}
 
 	public set fontSize(value: number) {
-		value = +value;
-		console.warn('[ElementFormat] - set fontSize not implemented');
+		this._fontSize = +value;
 	}
 
 	public get kerning(): string {
-		console.warn('[ElementFormat] - get kerning not implemented');
-		return null;
+		return this._kerning;
 	}
 
 	public set kerning(value: string) {
-		value = axCoerceString(value);
-		console.warn('[ElementFormat] - set kerning not implemented');
+		this._kerning = axCoerceString(value);
 	}
 
 	public get locale(): string {
-		console.warn('[ElementFormat] - get locale not implemented');
-		return null;
+		return this._locale;
 	}
 
 	public set locale(value: string) {
-		value = axCoerceString(value);
-		console.warn('[ElementFormat] - set locale not implemented');
+		this._locale = axCoerceString(value);
 	}
 
 	public get textRotation(): string {
-		console.warn('[ElementFormat] - get textRotation not implemented');
-		return null;
+		return this._textRotation;
 	}
 
 	public set textRotation(value: string) {
-		value = axCoerceString(value);
-		console.warn('[ElementFormat] - set textRotation not implemented');
+		this._textRotation = axCoerceString(value);
 	}
 
 	public get trackingRight(): number {
-		console.warn('[ElementFormat] - get trackingRight not implemented');
-		return null;
+		return this._trackingRight;
 	}
 
 	public set trackingRight(value: number) {
-		value = +value;
-		console.warn('[ElementFormat] - set trackingRight not implemented');
+		this._trackingRight = +value;
 	}
 
 	public get trackingLeft(): number {
-		console.warn('[ElementFormat] - get trackingLeft not implemented');
-		return null;
+		return this._trackingLeft;
 	}
 
 	public set trackingLeft(value: number) {
-		value = +value;
-		console.warn('[ElementFormat] - set trackingLeft not implemented');
+		this._trackingLeft = +value;
 	}
 
 	public get typographicCase(): string {
-		console.warn('[ElementFormat] - get typographicCase not implemented');
-		return null;
+		return this._typographicCase;
 	}
 
 	public set typographicCase(typographicCaseType: string) {
-		typographicCaseType = axCoerceString(typographicCaseType);
-		console.warn('[ElementFormat] - set typographicCase not implemented');
+		this._typographicCase = axCoerceString(typographicCaseType);
 	}
 
 	public get locked(): boolean {
-		console.warn('[ElementFormat] - get locked not implemented');
-		return null;
+		return this._locked;
 	}
 
 	public set locked(value: boolean) {
-		console.warn('[ElementFormat] - set locked not implemented');
+		this._locked = value;
 	}
 
 	public getFontMetrics(): FontMetrics {

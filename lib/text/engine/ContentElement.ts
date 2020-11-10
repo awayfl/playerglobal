@@ -6,25 +6,17 @@ import { TextBlock } from './TextBlock';
 
 export class ContentElement extends ASObject {
 
-	static forceNative: boolean = true;
-	// Called whenever the class is initialized.
-	public static classInitializer: any = null;
-
-	// Called whenever an instance of the class is initialized.
-	public static initializer: any = null;
-
-	// List of static symbols to link.
-	public static classSymbols: string[] = null; // [];
-
-	// List of instance symbols to link.
-	public static instanceSymbols: string[] = null; // ["userData"];
+	static forceNativeConstructor: boolean = true;
+	static forceNativeMethods: boolean = true;
 
 	constructor(elementFormat: ElementFormat = null,
 		eventMirror: EventDispatcher = null,
 		textRotation: string = 'rotate0') {
-		textRotation = axCoerceString(textRotation);
 		super();
-		console.warn('[ContentElement] not implemented');
+		this._elementFormat = elementFormat;
+		this._eventMirror = eventMirror;
+		this._textRotation = axCoerceString(textRotation);
+		//console.warn('[ContentElement] not implemented');
 	}
 
 	// JS -> AS Bindings
@@ -34,64 +26,67 @@ export class ContentElement extends ASObject {
 
 	// AS -> JS Bindings
 
-	// _textBlock: flash.text.engine.TextBlock;
-	// _textBlockBeginIndex: number /*int*/;
-	// _elementFormat: flash.text.engine.ElementFormat;
-	// _eventMirror: flash.events.EventDispatcher;
-	// _groupElement: flash.text.engine.GroupElement;
-	// _rawText: string;
-	// _text: string;
-	// _textRotation: string;
+	public _textBlock: TextBlock;
+	public _textBlockBeginIndex: number /*int*/;
+	public _elementFormat: ElementFormat;
+	public _eventMirror: EventDispatcher;
+	public _groupElement: GroupElement;
+	public _rawText: string;
+	public _text: string;
+	public _textRotation: string;
+
 	public get textBlock(): TextBlock {
-		console.warn('[ContentElement] - get textBlock not implemented');
-		return null;
+		//console.warn('[ContentElement] - get textBlock not implemented');
+		return this._textBlock;
 	}
 
 	public get textBlockBeginIndex(): number /*int*/ {
 		console.warn('[ContentElement] - get textBlockBeginIndex not implemented');
-		return null;
+		return this._textBlockBeginIndex;
 	}
 
 	public get elementFormat(): ElementFormat {
-		console.warn('[ContentElement] - get elementFormat not implemented');
-		return null;
+		//console.warn('[ContentElement] - get elementFormat not implemented');
+		return this._elementFormat;
 	}
 
 	public set elementFormat(value: ElementFormat) {
-		console.warn('[ContentElement] - set textRotation not implemented');
+		//console.warn('[ContentElement] - set textRotation not implemented');
+		this._elementFormat = value;
 	}
 
 	public get eventMirror(): EventDispatcher {
-		console.warn('[ContentElement] - get eventMirror not implemented');
-		return null;
+		//console.warn('[ContentElement] - get eventMirror not implemented');
+		return this._eventMirror;
 	}
 
 	public set eventMirror(value: EventDispatcher) {
-		console.warn('[ContentElement] - set eventMirror not implemented');
+		//console.warn('[ContentElement] - set eventMirror not implemented');
+		this._eventMirror = value;
 	}
 
 	public get groupElement(): GroupElement {
-		console.warn('[ContentElement] - get groupElement not implemented');
-		return null;
+		//console.warn('[ContentElement] - get groupElement not implemented');
+		return this._groupElement;
 	}
 
 	public get rawText(): string {
-		console.warn('[ContentElement] - get rawText not implemented');
-		return null;
+		//console.warn('[ContentElement] - get rawText not implemented');
+		return this._rawText;
 	}
 
 	public get text(): string {
-		console.warn('[ContentElement] - get text not implemented');
-		return null;
+		//console.warn('[ContentElement] - get text not implemented');
+		return this._text;
 	}
 
 	public get textRotation(): string {
-		console.warn('[ContentElement] - get textRotation not implemented');
-		return null;
+		//console.warn('[ContentElement] - get textRotation not implemented');
+		return this._textRotation;
 	}
 
 	public set textRotation(value: string) {
-		value = axCoerceString(value);
-		console.warn('[ContentElement] - set textRotation not implemented');
+		//console.warn('[ContentElement] - set textRotation not implemented');
+		this._textRotation = axCoerceString(value);
 	}
 }

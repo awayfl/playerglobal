@@ -4,26 +4,17 @@ import { ElementFormat } from './ElementFormat';
 
 export class TextElement extends ContentElement {
 
-	static forceNative: boolean = true;
-	// Called whenever the class is initialized.
-	public static classInitializer: any = null;
-
-	// Called whenever an instance of the class is initialized.
-	public static initializer: any = null;
-
-	// List of static symbols to link.
-	public static classSymbols: string[] = null; // [];
-
-	// List of instance symbols to link.
-	public static instanceSymbols: string[] = null; // [];
+	static forceNativeConstructor: boolean = true;
+	static forceNativeMethods: boolean = true;
 
 	constructor(
 		text: string = null,
 		elementFormat: ElementFormat = null,
 		eventMirror: EventDispatcher = null,
 		textRotation: string = 'rotate0') {
-		super(undefined, undefined, undefined);
-		console.warn('[TextElement] not implemented');
+		super(elementFormat, eventMirror, textRotation);
+		this._text = text;
+		//console.warn('[TextElement] not implemented');
 	}
 
 	// JS -> AS Bindings
@@ -32,7 +23,8 @@ export class TextElement extends ContentElement {
 
 	// _text: string;
 	public set text(value: string) {
-		console.warn('[TextElement] - set text not implemented');
+		//console.warn('[TextElement] - set text not implemented');
+		this._text = value;
 	}
 
 	public replaceText(beginIndex: number /*int*/, endIndex: number /*int*/, newText: string): void {

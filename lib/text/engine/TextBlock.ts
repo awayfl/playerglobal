@@ -6,23 +6,23 @@ import { TextLine } from './TextLine';
 
 export class TextBlock extends ASObject {
 
-	static forceNative: boolean = true;
-	// Called whenever the class is initialized.
-	public static classInitializer: any = null;
+	static forceNativeConstructor: boolean = true;
+	static forceNativeMethods: boolean = true;
 
-	// Called whenever an instance of the class is initialized.
-	public static initializer: any = null;
-
-	// List of static symbols to link.
-	public static classSymbols: string[] = null; // [];
-
-	// List of instance symbols to link.
-	public static instanceSymbols: string[] = null;
-	// ["userData", "textJustifier", "textJustifier", "tabStops", "tabStops", "createTextLine", "recreateTextLine"];
+	private _content: ContentElement;
+	private _tabStops: any /*ASVector<TabStop>*/;
+	private _textJustifier: TextJustifier;
+	private _lineRotation: string;
+	private _baselineZero: string;
+	private _bidiLevel: number;
+	private _applyNonLinearFontScaling: boolean;
+	private _baselineFontDescription: FontDescription;
+	private _baselineFontSize: number;
+	private _userData: any;
 
 	constructor(
 		content: ContentElement = null,
-		tabStops: any /*ASVector<flash.text.engine.TabStop> */= null,
+		tabStops: any /*ASVector<TabStop>*/ = null,
 		textJustifier: TextJustifier = null,
 		lineRotation: string = 'rotate0',
 		baselineZero: string = 'roman',
@@ -31,21 +31,24 @@ export class TextBlock extends ASObject {
 		baselineFontDescription: FontDescription = null,
 		baselineFontSize: number = 12) {
 		super();
-		console.warn('[TextBlock] not implemented');
+		this._content = content;
+		this._tabStops = tabStops;
+		this._textJustifier = textJustifier;
+		this._lineRotation = lineRotation;
+		this._baselineZero = baselineZero;
+		this._bidiLevel = bidiLevel;
+		this._applyNonLinearFontScaling = applyNonLinearFontScaling;
+		this._baselineFontDescription = baselineFontDescription;
+		this._baselineFontSize = baselineFontSize;
 	}
 
-	// JS -> AS Bindings
-
-	public userData: any;
-	public textJustifier: TextJustifier;
-	// tabStops: ASVector<flash.text.engine.TabStop>;
 	public createTextLine (
 		previousLine?: TextLine,
 		width?: number,
 		lineOffset?: number,
 		fitSomething?: boolean): TextLine {
-		console.warn('[TextBlock] - createTextLine not implemented');
-		return null;
+		//console.warn('[TextBlock] - createTextLine not implemented', this._content, this._textJustifier);
+		return new (<any> this.sec).flash.text.engine.TextLine();
 	}
 
 	public recreateTextLine(textLine: TextLine,
@@ -53,82 +56,72 @@ export class TextBlock extends ASObject {
 		width?: number,
 		lineOffset?: number,
 		fitSomething?: boolean): TextLine {
-		console.warn('[TextBlock] - recreateTextLine not implemented');
-		return null;
-
+		//console.warn('[TextBlock] - recreateTextLine not implemented');
+		return new (<any> this.sec).flash.text.engine.TextLine();
 	}
 
-	// AS -> JS Bindings
-
-	// _applyNonLinearFontScaling: boolean;
-	// _baselineFontDescription: flash.text.engine.FontDescription;
-	// _baselineFontSize: number;
-	// _baselineZero: string;
-	// _content: flash.text.engine.ContentElement;
-	// _bidiLevel: number /*int*/;
-	// _firstInvalidLine: flash.text.engine.TextLine;
-	// _firstLine: flash.text.engine.TextLine;
-	// _lastLine: flash.text.engine.TextLine;
-	// _textJustifier: flash.text.engine.TextJustifier;
-	// _textLineCreationResult: string;
-	// _lineRotation: string;
-	// _tabStops: ASVector<flash.text.engine.TabStop>;
 	public get applyNonLinearFontScaling(): boolean {
-		console.warn('[TextBlock] - get applyNonLinearFontScaling not implemented');
-		return null;
+		//console.warn('[TextBlock] - get applyNonLinearFontScaling not implemented');
+		return this._applyNonLinearFontScaling;
 	}
 
 	public set applyNonLinearFontScaling(value: boolean) {
-		console.warn('[TextBlock] - set applyNonLinearFontScaling not implemented');
+		//console.warn('[TextBlock] - set applyNonLinearFontScaling not implemented');
+		this._applyNonLinearFontScaling = value;
 	}
 
 	public get baselineFontDescription(): FontDescription {
-		console.warn('[TextBlock] - get baselineFontDescription not implemented');
-		return null;
+		//console.warn('[TextBlock] - get baselineFontDescription not implemented');
+		return this._baselineFontDescription;
 	}
 
 	public set baselineFontDescription(value: FontDescription) {
-		console.warn('[TextBlock] - set baselineFontDescription not implemented');
+		//console.warn('[TextBlock] - set baselineFontDescription not implemented');
+		this._baselineFontDescription = value;
 	}
 
 	public get baselineFontSize(): number {
-		console.warn('[TextBlock] - get baselineFontSize not implemented');
-		return null;
+		//console.warn('[TextBlock] - get baselineFontSize not implemented');
+		return this._baselineFontSize;
 	}
 
 	public set baselineFontSize(value: number) {
-		console.warn('[TextBlock] - set baselineFontSize not implemented');
+		//console.warn('[TextBlock] - set baselineFontSize not implemented');
+		this._baselineFontSize = value;
 	}
 
 	public get baselineZero(): string {
-		console.warn('[TextBlock] - get baselineZero not implemented');
-		return null;
+		//console.warn('[TextBlock] - get baselineZero not implemented');
+		return this._baselineZero;
 	}
 
 	public set baselineZero(value: string) {
-		console.warn('[TextBlock] - set baselineZero not implemented');
+		//console.warn('[TextBlock] - set baselineZero not implemented');
+		this._baselineZero = value;
 	}
 
 	public get content(): ContentElement {
-		console.warn('[TextBlock] - get content not implemented');
-		return null;
+		//console.warn('[TextBlock] - get content not implemented');
+		return this._content;
 	}
 
 	public set content(value: ContentElement) {
-		console.warn('[TextBlock] - set content not implemented');
+		//console.warn('[TextBlock] - set content not implemented');
+		this._content = value;
 	}
 
 	public get bidiLevel(): number /*int*/ {
-		console.warn('[TextBlock] - get bidiLevel not implemented');
-		return null;
+		//console.warn('[TextBlock] - get bidiLevel not implemented');
+		return this._bidiLevel;
 	}
 
 	public set bidiLevel(value: number /*int*/) {
-		console.warn('[TextBlock] - set bidiLevel not implemented');
+		//console.warn('[TextBlock] - set bidiLevel not implemented');
+		this._bidiLevel = value;
 	}
 
 	public get firstInvalidLine(): TextLine {
-		console.warn('[TextBlock] - get firstInvalidLine not implemented');
+		//console.warn('[TextBlock] - get firstInvalidLine not implemented');
 		return null;
 	}
 
@@ -148,12 +141,11 @@ export class TextBlock extends ASObject {
 	}
 
 	public get lineRotation(): string {
-		console.warn('[TextBlock] - get lineRotation not implemented');
-		return null;
+		return this._lineRotation;
 	}
 
 	public set lineRotation(value: string) {
-		console.warn('[TextBlock] - set lineRotation not implemented');
+		this._lineRotation = value;
 	}
 
 	public findNextAtomBoundary(afterCharIndex: number /*int*/): number /*int*/ {
@@ -204,21 +196,27 @@ export class TextBlock extends ASObject {
 		return null;
 	}
 
-	getTabStops(): any/*ASVector<flash.text.engine.TabStop>*/ {
-		console.warn('[TextBlock] - getTabStops not implemented');
-		return null;
+	public getTabStops(): any/*ASVector<flash.text.engine.TabStop>*/ {
+		return this._tabStops;
 	}
 
-	setTabStops(value: any/*ASVector<flash.text.engine.TabStop>*/): void {
-		console.warn('[TextBlock] - setTabStops not implemented');
+	public setTabStops(value: any/*ASVector<flash.text.engine.TabStop>*/) {
+		this._tabStops = value;
 	}
 
 	public getTextJustifier(): TextJustifier {
-		console.warn('[TextBlock] - getTextJustifier not implemented');
-		return null;
+		return this._textJustifier;
 	}
 
-	public setTextJustifier(value: TextJustifier): void {
-		console.warn('[TextBlock] - setTextJustifier not implemented');
+	public setTextJustifier(value: TextJustifier) {
+		this._textJustifier = value;
+	}
+
+	public get userData(): TextJustifier {
+		return this._userData;
+	}
+
+	public set userData(value: TextJustifier) {
+		this._userData = value;
 	}
 }

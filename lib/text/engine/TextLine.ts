@@ -1,159 +1,136 @@
+import { ASObject } from '@awayfl/avm2';
 import { DisplayObject } from '../../display/DisplayObject';
 import { DisplayObjectContainer } from '../../display/DisplayObjectContainer';
 import { EventDispatcher } from '../../events/EventDispatcher';
 import { Rectangle } from '../../geom/Rectangle';
+import { ContextMenu } from '../../ui/ContextMenu';
 import { TextBlock } from './TextBlock';
+import { TextLineMirrorRegion } from './TextLineMirrorRegion';
 
 export class TextLine extends DisplayObjectContainer {
 
-	static forceNative: boolean = true;
-	// Called whenever the class is initialized.
-	public static classInitializer: any = null;
+	static forceNativeConstructor: boolean = true;
+	static forceNativeMethods: boolean = true;
 
-	// Called whenever an instance of the class is initialized.
-	public static initializer: any = null;
-
-	// List of static symbols to link.
-	public static classSymbols: string[] = null; // [];
-
-	// List of instance symbols to link.
-	public static instanceSymbols: string[] = null;
+	private _focusRect: ASObject;
+	private _tabChildren: boolean;
+	private _tabEnabled: boolean;
+	private _tabIndex: number /*int*/;
+	private _contextMenu: ContextMenu;
+	private _textBlock: TextBlock;
+	private _hasGraphicElement: boolean;
+	private _hasTabs: boolean;
+	private _nextLine: TextLine;
+	private _previousLine: TextLine;
+	private _ascent: number;
+	private _descent: number;
+	private _textHeight: number;
+	private _textWidth: number;
+	private _totalAscent: number;
+	private _totalDescent: number;
+	private _totalHeight: number;
+	private _textBlockBeginIndex: number /*int*/;
+	private _rawTextLength: number /*int*/;
+	private _specifiedWidth: number;
+	private _unjustifiedTextWidth: number;
+	private _validity: string;
+	private _atomCount: number /*int*/;
+	private _mirrorRegions: any /*ASVector<flash.text.engine.TextLineMirrorRegion>*/;
 
 	constructor() {
 		super();
-		console.warn('[TextLine] not implemented');
 	}
 
-	// JS -> AS Bindings
 	public static MAX_LINE_WIDTH: number /*int*/ = 1000000;
 
 	public userData: any;
-	public getMirrorRegion: (mirror: EventDispatcher) => any /* flash.text.engine.TextLineMirrorRegion */;
-	public flushAtomData: () => void;
-
-	// AS -> JS Bindings
-
-	// _focusRect: ASObject;
-	// _tabChildren: boolean;
-	// _tabEnabled: boolean;
-	// _tabIndex: number /*int*/;
-	// _contextMenu: flash.ui.ContextMenu;
-	// _textBlock: flash.text.engine.TextBlock;
-	// _hasGraphicElement: boolean;
-	// _hasTabs: boolean;
-	// _nextLine: flash.text.engine.TextLine;
-	// _previousLine: flash.text.engine.TextLine;
-	// _ascent: number;
-	// _descent: number;
-	// _textHeight: number;
-	// _textWidth: number;
-	// _totalAscent: number;
-	// _totalDescent: number;
-	// _totalHeight: number;
-	// _textBlockBeginIndex: number /*int*/;
-	// _rawTextLength: number /*int*/;
-	// _specifiedWidth: number;
-	// _unjustifiedTextWidth: number;
-	// _validity: string;
-	// _atomCount: number /*int*/;
-	// _mirrorRegions: ASVector<flash.text.engine.TextLineMirrorRegion>;
-	public get textBlock(): TextBlock {
+	public getMirrorRegion(mirror: EventDispatcher): TextLineMirrorRegion {
 		console.warn('[TextLine] - get textBlock not implemented');
 		return null;
 	}
 
+	public flushAtomData(): void {
+		console.warn('[TextLine] - get flushAtomData not implemented');
+	}
+
+	public get textBlock(): TextBlock {
+		return this._textBlock;
+	}
+
 	public get hasGraphicElement(): boolean {
-		console.warn('[TextLine] - get hasGraphicElement not implemented');
-		return null;
+		return this._hasGraphicElement;
 	}
 
 	public get hasTabs(): boolean {
-		console.warn('[TextLine] - get hasTabs not implemented');
-		return null;
+		return this._hasTabs;
 	}
 
 	public get nextLine(): TextLine {
-		console.warn('[TextLine] - get nextLine not implemented');
-		return null;
+		return this._nextLine;
 	}
 
 	public get previousLine(): TextLine {
-		console.warn('[TextLine] - get previousLine not implemented');
-		return null;
+		return this._previousLine;
 	}
 
 	public get ascent(): number {
-		console.warn('[TextLine] - get ascent not implemented');
-		return null;
+		return this._ascent;
 	}
 
 	public get descent(): number {
-		console.warn('[TextLine] - get descent not implemented');
-		return null;
+		return this._descent;
 	}
 
 	public get textHeight(): number {
-		console.warn('[TextLine] - get textHeight not implemented');
-		return null;
+		return this._textHeight;
 	}
 
 	public get textWidth(): number {
-		console.warn('[TextLine] - get textWidth not implemented');
-		return null;
+		return this._textWidth;
 	}
 
 	public get totalAscent(): number {
-		console.warn('[TextLine] - get totalAscent not implemented');
-		return null;
+		return this._totalAscent;
 	}
 
 	public get totalDescent(): number {
-		console.warn('[TextLine] - get totalDescent not implemented');
-		return null;
+		return this._totalDescent;
 	}
 
 	public get totalHeight(): number {
-		console.warn('[TextLine] - get totalHeight not implemented');
-		return null;
+		return this._totalHeight;
 	}
 
 	public get textBlockBeginIndex(): number /*int*/ {
-		console.warn('[TextLine] - get textBlockBeginIndex not implemented');
-		return null;
+		return this._textBlockBeginIndex;
 	}
 
 	public get rawTextLength(): number /*int*/ {
-		console.warn('[TextLine] - get rawTextLength not implemented');
-		return null;
+		return this._rawTextLength;
 	}
 
 	public get specifiedWidth(): number {
-		console.warn('[TextLine] - get specifiedWidth not implemented');
-		return null;
+		return this._specifiedWidth;
 	}
 
 	public get unjustifiedTextWidth(): number {
-		console.warn('[TextLine] - get unjustifiedTextWidth not implemented');
-		return null;
+		return this._unjustifiedTextWidth;
 	}
 
 	public get validity(): string {
-		console.warn('[TextLine] - get validity not implemented');
-		return null;
+		return this._validity;
 	}
 
 	public set validity(value: string) {
-		console.warn('[TextLine] - set validity not implemented');
+		this._validity = value;
 	}
 
 	public get atomCount(): number /*int*/ {
-		console.warn('[TextLine] - get atomCount not implemented');
-		return null;
+		return this._atomCount;
 	}
 
-	public get mirrorRegions(): any/*ASVector<flash.text.engine.TextLineMirrorRegion >*/ {
-		console.warn('[TextLine] - get mirrorRegions not implemented');
-		return null;
+	public get mirrorRegions(): any/*ASVector<TextLineMirrorRegion >*/ {
+		return this._mirrorRegions;
 	}
 
 	public getAtomIndexAtPoint(stageX: number, stageY: number): number /*int*/ {

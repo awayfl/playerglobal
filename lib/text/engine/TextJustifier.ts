@@ -2,50 +2,42 @@ import { ASObject, axCoerceString } from '@awayfl/avm2';
 
 export class TextJustifier extends ASObject {
 
-	static forceNative: boolean = true;
-	// Called whenever the class is initialized.
-	public static classInitializer: any = null;
+	static forceNativeConstructor: boolean = true;
+	static forceNativeMethods: boolean = true;
 
-	// Called whenever an instance of the class is initialized.
-	public static initializer: any = null;
-
-	// List of static symbols to link.
-	public static classSymbols: string[] = null; // ["getJustifierForLocale"];
-
-	// List of instance symbols to link.
-	public static instanceSymbols: string[] = null; // ["clone"];
+	private _locale: string;
+	private _lineJustification: string;
 
 	constructor(locale: string, lineJustification: string) {
-		locale = axCoerceString(locale);
-		lineJustification = axCoerceString(lineJustification);
 		super();
-		console.warn('[TextJustifier] not implemented');
+		this._locale = axCoerceString(locale);
+		this._lineJustification = axCoerceString(lineJustification);
 	}
 
-	// JS -> AS Bindings
-	public static getJustifierForLocale: (locale: string) => TextJustifier;
-
-	public clone: () => TextJustifier;
-
-	// AS -> JS Bindings
-
-	// _locale: string;
-	// _lineJustification: string;
-	public get locale(): string {
-		console.warn('[TextJustifier] - get locale not implemented');
+	public static getJustifierForLocale(locale: string): TextJustifier {
+		console.warn('[TextJustifier] - getJustifierForLocale not implemented');
 		return null;
+
+	}
+
+	public clone(): TextJustifier {
+		console.warn('[TextJustifier] - clone not implemented');
+		return null;
+	}
+
+	public get locale(): string {
+		return this._locale;
 	}
 
 	public get lineJustification(): string {
-		console.warn('[TextJustifier] - get lineJustification not implemented');
-		return null;
+		return this._lineJustification;
 	}
 
 	public set lineJustification(value: string) {
-		console.warn('[TextJustifier] - set lineJustification not implemented');
+		this._lineJustification = axCoerceString(value);
 	}
 
 	public setLocale(value: string): void {
-		console.warn('[TextJustifier] - setLocale not implemented');
+		this._locale = axCoerceString(value);
 	}
 }

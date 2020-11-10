@@ -1,30 +1,21 @@
-import { axCoerceString } from '@awayfl/avm2';
 import { TextJustifier } from './TextJustifier';
 
 export class SpaceJustifier extends TextJustifier {
 
-	static forceNative: boolean = true;
-	// Called whenever the class is initialized.
-	public static classInitializer: any = null;
+	static forceNativeConstructor: boolean = true;
+	static forceNativeMethods: boolean = true;
 
-	// Called whenever an instance of the class is initialized.
-	public static initializer: any = null;
-
-	// List of static symbols to link.
-	public static classSymbols: string[] = null; // [];
-
-	// List of instance symbols to link.
-	public static instanceSymbols: string[] = null; // ["clone"];
+	private _letterSpacing: boolean;
+	private _minimumSpacing: number;
+	private _optimumSpacing: number;
+	private _maximumSpacing: number;
 
 	constructor(
 		locale: string = 'en',
 		lineJustification: string = 'unjustified',
 		letterSpacing: boolean = false) {
-		locale = axCoerceString(locale);
-		lineJustification = axCoerceString(lineJustification);
-		letterSpacing = !!letterSpacing;
-		super(undefined, undefined);
-		console.warn('[SpaceJustifier] not implemented');
+		super(locale, lineJustification);
+		this._letterSpacing = !!letterSpacing;
 	}
 
 	// JS -> AS Bindings
@@ -32,48 +23,35 @@ export class SpaceJustifier extends TextJustifier {
 	public clone: () => TextJustifier;
 
 	// AS -> JS Bindings
-
-	// _letterSpacing: boolean;
-	// _minimumSpacing: number;
-	// _optimumSpacing: number;
-	// _maximumSpacing: number;
 	public get letterSpacing(): boolean {
-		console.warn('[SpaceJustifier] - get letterSpacing not implemented');
-		return null;
+		return this._letterSpacing;
 	}
 
 	public set letterSpacing(value: boolean) {
-		value = !!value;
-		console.warn('[SpaceJustifier] - set letterSpacing not implemented');
+		this._letterSpacing = !!value;
 	}
 
 	public get minimumSpacing(): number {
-		console.warn('[SpaceJustifier] - get maximumSpacing not implemented');
-		return null;
+		return this._minimumSpacing;
 	}
 
 	public set minimumSpacing(value: number) {
-		value = +value;
-		console.warn('[SpaceJustifier] - set minimumSpacing not implemented');
+		this._minimumSpacing = +value;
 	}
 
 	public get optimumSpacing(): number {
-		console.warn('[SpaceJustifier] - get maximumSpacing not implemented');
-		return null;
+		return this._optimumSpacing;
 	}
 
 	public set optimumSpacing(value: number) {
-		value = +value;
-		console.warn('[SpaceJustifier] - set optimumSpacing not implemented');
+		this._optimumSpacing = +value;
 	}
 
 	public get maximumSpacing(): number {
-		console.warn('[SpaceJustifier] - get maximumSpacing not implemented');
-		return null;
+		return this._maximumSpacing;
 	}
 
 	public set maximumSpacing(value: number) {
-		value = +value;
-		console.warn('[SpaceJustifier] - set maximumSpacing not implemented');
+		this._maximumSpacing = +value;
 	}
 }

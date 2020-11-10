@@ -2,18 +2,8 @@ import { ASObject } from '@awayfl/avm2';
 
 export class Kerning extends ASObject {
 
-	static forceNative: boolean = true;
-	// Called whenever the class is initialized.
-	static classInitializer: any = null;
-
-	// Called whenever an instance of the class is initialized.
-	static initializer: any = null;
-
-	// List of static symbols to link.
-	static classSymbols: string[] = null; // [];
-
-	// List of instance symbols to link.
-	static instanceSymbols: string[] = null; // [];
+	static forceNativeConstructor: boolean = true;
+	static forceNativeMethods: boolean = true;
 
 	constructor() {
 		super();

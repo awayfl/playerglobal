@@ -2,18 +2,16 @@ import { ASObject, axCoerceString } from '@awayfl/avm2';
 
 export class FontDescription extends ASObject {
 
-	static forceNative: boolean = true;
-	// Called whenever the class is initialized.
-	public static classInitializer: any = null;
+	static forceNativeConstructor: boolean = true;
+	static forceNativeMethods: boolean = true;
 
-	// Called whenever an instance of the class is initialized.
-	public static initializer: any = null;
-
-	// List of static symbols to link.
-	public static classSymbols: string[] = null; // [];
-
-	// List of instance symbols to link.
-	public static instanceSymbols: string[] = null; // ["clone"];
+	private _renderingMode: string;
+	private _fontLookup: string;
+	private _fontName: string;
+	private _fontPosture: string;
+	private _fontWeight: string;
+	private _cffHinting: string;
+	private _locked: boolean;
 
 	constructor(
 		fontName: string = '_serif',
@@ -22,14 +20,13 @@ export class FontDescription extends ASObject {
 		fontLookup: string = 'device',
 		renderingMode: string = 'cff',
 		cffHinting: string = 'horizontalStem') {
-		fontName = axCoerceString(fontName);
-		fontWeight = axCoerceString(fontWeight);
-		fontPosture = axCoerceString(fontPosture);
-		fontLookup = axCoerceString(fontLookup);
-		renderingMode = axCoerceString(renderingMode);
-		cffHinting = axCoerceString(cffHinting);
 		super();
-		console.warn('[FontDescription] not implemented');
+		this._fontName = axCoerceString(fontName);
+		this._fontWeight = axCoerceString(fontWeight);
+		this._fontPosture = axCoerceString(fontPosture);
+		this._fontLookup = axCoerceString(fontLookup);
+		this._renderingMode = axCoerceString(renderingMode);
+		this._cffHinting = axCoerceString(cffHinting);
 	}
 
 	// JS -> AS Bindings
@@ -56,80 +53,59 @@ export class FontDescription extends ASObject {
 		return null;
 	}
 
-	// _renderingMode: string;
-	// _fontLookup: string;
-	// _fontName: string;
-	// _fontPosture: string;
-	// _fontWeight: string;
-	// _cffHinting: string;
-	// _locked: boolean;
 	public get renderingMode(): string {
-		console.warn('[FontDescription] - get renderingMode not implemented');
-		return null;
+		return this._renderingMode;
 	}
 
 	public set renderingMode(value: string) {
-		value = axCoerceString(value);
-		console.warn('[FontDescription] - set renderingMode not implemented');
+		this._renderingMode = axCoerceString(value);
 	}
 
 	public get fontLookup(): string {
-		console.warn('[FontDescription] - get fontLookup not implemented');
-		return null;
+		return this._fontLookup;
 	}
 
 	public set fontLookup(value: string) {
-		value = axCoerceString(value);
-		console.warn('[FontDescription] - set fontLookup not implemented');
+		this._fontLookup = axCoerceString(value);
 	}
 
 	public get fontName(): string {
-		console.warn('[FontDescription] - get fontName not implemented');
-		return null;
+		return this._fontName;
 	}
 
 	public set fontName(value: string) {
-		value = axCoerceString(value);
-		console.warn('[FontDescription] - set fontName not implemented');
+		this._fontName = axCoerceString(value);
 	}
 
 	public get fontPosture(): string {
-		console.warn('[FontDescription] - get fontPosture not implemented');
-		return null;
+		return this._fontPosture;
 	}
 
 	public set fontPosture(value: string) {
-		value = axCoerceString(value);
-		console.warn('[FontDescription] - set fontPosture not implemented');
+		this._fontPosture = axCoerceString(value);
 	}
 
 	public get fontWeight(): string {
-		console.warn('[FontDescription] - get fontWeight not implemented');
-		return null;
+		return this._fontWeight;
 	}
 
 	public set fontWeight(value: string) {
-		value = axCoerceString(value);
-		console.warn('[FontDescription] - set fontWeight not implemented');
+		this._fontWeight = axCoerceString(value);
 	}
 
 	public get cffHinting(): string {
-		console.warn('[FontDescription] - get cffHinting not implemented');
-		return null;
+		return this._cffHinting;
 	}
 
 	public set cffHinting(value: string) {
-		value = axCoerceString(value);
-		console.warn('[FontDescription] - set cffHinting not implemented');
+		this._cffHinting = axCoerceString(value);
 	}
 
 	public get locked(): boolean {
-		console.warn('[FontDescription] - get locked not implemented');
-		return null;
+		return this._locked;
 	}
 
 	public set locked(value: boolean) {
-		value = !!value;
-		console.warn('[FontDescription] - set locked not implemented');
+		this._locked = value;
 	}
 }
