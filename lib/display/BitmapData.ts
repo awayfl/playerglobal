@@ -1,4 +1,4 @@
-import { IAssetAdapter } from '@awayjs/core';
+import { IAssetAdapter, Point as APoint } from '@awayjs/core';
 import { StageManager, BitmapImage2D } from '@awayjs/stage';
 import { Rectangle } from '../geom/Rectangle';
 import { Point } from '../geom/Point';
@@ -342,7 +342,15 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public scroll(x: number, y: number) {
-		console.log('scroll not implemented yet in flash/BitmapData');
+		x = x | 0;
+		y = y | 0;
+
+		// 0, 0 scroll - is not scroll
+		if (!x && !y) return;
+
+		this._adaptee.copyPixels(
+			this._adaptee, this._adaptee.rect, new APoint(x,y) , null, null, false);
+		//console.log('scroll not implemented yet in flash/BitmapData');
 	}
 
 	public threshold(
