@@ -114,6 +114,12 @@ export class SharedObjectDebug {
 
 //@ts-ignore
 window._AWAY_DEBUG_STORAGE = SharedObjectDebug;
+window.addEventListener('unload', () => {
+	SharedObject.closeAll();
+});
+window.addEventListener('blur', () => {
+	SharedObject.closeAll();
+});
 
 let USED_SEC: any = undefined;
 export class SharedObject extends ASObject {
@@ -121,6 +127,7 @@ export class SharedObject extends ASObject {
 	private _object_name: string;
 
 	static axClass: typeof SharedObject;
+	static _sharedObjects: any = {};
 
 	//for AVM1:
 	//public fps: number;
@@ -183,9 +190,9 @@ export class SharedObject extends ASObject {
 		localPath = axCoerceString(localPath);
 		secure = !!secure;
 		const path = (localPath || '') + '/' + name;
-		/*if (this._sharedObjects[path]) {
-		return this._sharedObjects[path];
-		}*/
+		if (SharedObject._sharedObjects[path]) {
+			return SharedObject._sharedObjects[path];
+		}
 		const encodedData = getSharedObjectStorage().getItem(path);
 		let data;
 		const encoding = this._defaultObjectEncoding;
@@ -206,11 +213,20 @@ export class SharedObject extends ASObject {
 		so._path = path;
 		so._objectEncoding = encoding;
 		so._data = data;
+		SharedObject._sharedObjects[path] = so;
 		return so;
 	}
 
 	public static getRemote(name: string, remotePath?: string, persistence?: boolean, secure?: boolean): SharedObject {
 		return new (<SecurityDomain> this.sec).flash.net.SharedObject();
+	}
+
+	public static closeAll() {
+		for (const so of SharedObject._sharedObjects) {
+			if (so) {
+				so.close();
+			}
+		}
 	}
 
 	public flush(minDiskSpace: number = 0): void {
@@ -299,6 +315,7 @@ export class SharedObject extends ASObject {
 	public close(): void {
 		// should run flush when close is requested
 		this.flush();
+		delete SharedObject._sharedObjects[this._path];
 		//notImplemented('public flash.net.SharedObject::close');
 	}
 
@@ -311,6 +328,7 @@ export class SharedObject extends ASObject {
 		// should run flush to overwrite a data to empty, but we only remove key
 		// this is look like simmilar
 		getSharedObjectStorage().removeItem(this._path);
+		delete SharedObject._sharedObjects[this._path];
 	}
 
 	public get size(): number {
