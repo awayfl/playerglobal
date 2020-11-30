@@ -1,4 +1,4 @@
-import { Box } from '@awayjs/core';
+import { Box, Vector3D } from '@awayjs/core';
 import { Billboard, TextField as AwayTextField,
 	DisplayObjectContainer as AwayDisplayObjectContainer,
 	Sprite as AwaySprite, MovieClip as AwayMovieClip,
@@ -490,11 +490,22 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 * @playerversion	Lite 4
 	 */
 	public getObjectsUnderPoint(point: Point): DisplayObject[] {
-		const children: DisplayObject[] = [];
 
-		this._getObjectsUnderPointInternal(point, children);
+		const raycastPicker = PickGroup.getInstance(this._stage.view).getRaycastPicker(this.adaptee.partition);
 
-		return children;
+		const rayPosition: Vector3D = this._stage.view.unproject(point.x, point.y, 0);
+		const rayDirection: Vector3D = this._stage.view.unproject(point.x, point.y, 1).subtract(rayPosition);
+		const awayChildren: AwayDisplayObject[] =
+			raycastPicker.getObjectsUnderPoint(
+				rayPosition,
+				rayDirection);
+		const avm2Children: DisplayObject[] = [];
+		let i = awayChildren.length;
+		while (i > 0) {
+			i--;
+			avm2Children.push(<DisplayObject>awayChildren[i].adapter);
+		}
+		return avm2Children;
 	}
 
 	protected _getObjectsUnderPointInternal(point: Point, children: DisplayObject[]) {
