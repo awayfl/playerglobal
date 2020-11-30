@@ -3,6 +3,7 @@
 console.debug("AwayFL - PlayerGlobal - 0.2.136");
 
 export { Sprite } from "./lib/display/Sprite";
+export { MovieClip } from "./lib/display/MovieClip";
 export { FlashSceneGraphFactory } from "./lib/factories/FlashSceneGraphFactory";
 export { Loader } from "./lib/display/Loader";
 export { LoaderInfo } from "./lib/display/LoaderInfo";
