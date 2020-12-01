@@ -152,12 +152,17 @@ import { release } from '@awayfl/swf-loader';
 import { BlendMode } from '@awayjs/stage';
 import { GroupElement } from './text/engine/GroupElement';
 
+import { BaseTextLayoutImporter } from './text/engine/NativehacksForTLF';
+
 function M(name: string, asClass: ASClass) {
 	registerNativeClass(name, asClass);
 }
 
 export function initLink() {
 	release || console.log('init link');
+
+	//M('fl.text.TLFTextField', TLFTextField);
+	M('flashx.textLayout.conversion.BaseTextLayoutImporter', BaseTextLayoutImporter);
 
 	//M('flash.accessibility.Accessibility', Accessibility);
 	//M('flash.accessibility.AccessibilityProperties', AccessibilityProperties);
@@ -508,7 +513,7 @@ export function initLink() {
 	//M('flash.text.AntiAliasType', AntiAliasType);
 	//M('flash.text.AutoCapitalize', AutoCapitalize);//AIR
 	M('flash.text.CSMSettings', CSMSettings);
-	M('flash.text.Font', <any>Font);
+	M('flash.text.Font', Font);
 	//M('flash.text.FontStyle', FontStyle);
 	M('flash.text.FontType', FontType);
 	//M('flash.text.GridFitType', GridFitType);
@@ -588,8 +593,8 @@ export function initLink() {
 	M('flash.ui.Mouse', Mouse);
 	//M('flash.ui.MouseCursor', MouseCursor);
 	//M('flash.ui.MouseCursorData', MouseCursorData);
-	M('flash.ui.Multitouch',  <any>Multitouch);
-	M('flash.ui.MultitouchInputMode',  <any>MultitouchInputMode);
+	M('flash.ui.Multitouch', <any>Multitouch);
+	M('flash.ui.MultitouchInputMode', <any>MultitouchInputMode);
 
 	//M('flash.utils.ByteArray', ByteArray);
 	//M('flash.utils.CompressionAlgorithm', CompressionAlgorithm);
