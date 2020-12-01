@@ -1395,8 +1395,14 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			// FLASH return strange bounds for cases when object is not has real bounds
 			return new sec.flash.geom.Rectangle(6710886.4, 6710886.4,0,0);
 		}
+		if	(!targetCoordinateSpace)
+			targetCoordinateSpace = this;
 
-		return new sec.flash.geom.Rectangle(box.x - this.x, box.y - this.y, box.width, box.height);
+		return new sec.flash.geom.Rectangle(
+			box.x - targetCoordinateSpace.x,
+			box.y - targetCoordinateSpace.y,
+			box.width,
+			box.height);
 	}
 
 	/**

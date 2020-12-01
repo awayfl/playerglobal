@@ -910,8 +910,18 @@ export class Stage extends DisplayObjectContainer {
 	public set tabIndex (value: number) {}
 	public set transform (value: Transform) {}
 	public set visible (value: boolean) {}
+	public get x (): number {
+		return this.adaptee.x;
+	}
+
 	public set x (value: number) {}
+
+	public get y (): number {
+		return this.adaptee.y;
+	}
+
 	public set y (value: number) {}
+
 	public set z (value: number) {}
 
 	public set tabChildren (value: boolean) {}
