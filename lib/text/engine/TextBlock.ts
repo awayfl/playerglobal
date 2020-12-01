@@ -19,6 +19,7 @@ export class TextBlock extends ASObject {
 	private _baselineFontDescription: FontDescription;
 	private _baselineFontSize: number;
 	private _userData: any;
+	private _textLines: TextLine[];
 
 	constructor(
 		content: ContentElement = null,
@@ -40,6 +41,7 @@ export class TextBlock extends ASObject {
 		this._applyNonLinearFontScaling = applyNonLinearFontScaling;
 		this._baselineFontDescription = baselineFontDescription;
 		this._baselineFontSize = baselineFontSize;
+		this._textLines = [];
 	}
 
 	public createTextLine (
@@ -48,7 +50,16 @@ export class TextBlock extends ASObject {
 		lineOffset?: number,
 		fitSomething?: boolean): TextLine {
 		//console.warn('[TextBlock] - createTextLine not implemented', this._content, this._textJustifier);
-		return new (<any> this.sec).flash.text.engine.TextLine();
+		const newTextLine: TextLine = new (<any> this.sec).flash.text.engine.TextLine(
+			previousLine,
+			width,
+			lineOffset,
+			fitSomething,
+			this._content.text,
+			this._content._elementFormat);
+		newTextLine.setTextBlock(this);
+		this._textLines.push(newTextLine);
+		return newTextLine;
 	}
 
 	public recreateTextLine(textLine: TextLine,
@@ -56,7 +67,7 @@ export class TextBlock extends ASObject {
 		width?: number,
 		lineOffset?: number,
 		fitSomething?: boolean): TextLine {
-		//console.warn('[TextBlock] - recreateTextLine not implemented');
+		console.warn('[TextBlock] - recreateTextLine not implemented');
 		return new (<any> this.sec).flash.text.engine.TextLine();
 	}
 
@@ -126,13 +137,13 @@ export class TextBlock extends ASObject {
 	}
 
 	public get firstLine(): TextLine {
-		console.warn('[TextBlock] - get firstLine not implemented');
-		return null;
+		//console.warn('[TextBlock] - get firstLine not implemented');
+		return null;//this._textLines.length > 0 ? this._textLines[0] : null;
 	}
 
 	public get lastLine(): TextLine {
-		console.warn('[TextBlock] - get lastLine not implemented');
-		return null;
+		//console.warn('[TextBlock] - get lastLine not implemented');
+		return null;//this._textLines.length > 0 ? this._textLines[this._textLines.length - 1] : null;
 	}
 
 	public get textLineCreationResult(): string {
@@ -178,7 +189,8 @@ export class TextBlock extends ASObject {
 	}
 
 	public releaseLines(firstLine: TextLine, lastLine: TextLine): void {
-		console.warn('[TextBlock] - releaseLines not implemented');
+		//console.warn('[TextBlock] - releaseLines not implemented');
+		this._textLines.length = 0;
 	}
 
 	public dump(): string {

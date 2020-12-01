@@ -205,8 +205,9 @@ export class TextFormat extends ASObject {
 
 	constructor(
 		font: string = null, size: number = null, color: number = null, bold: boolean = null,
-		italic: boolean = null, underline: boolean = null, url: string = null, link_target: string = null, align: string = null,
-		leftMargin: number = null, rightMargin: number = null, indent: number = null, leading: number = null) {
+		italic: boolean = null, underline: boolean = null, url: string = null, link_target: string = null,
+		align: string = null, leftMargin: number = null, rightMargin: number = null, indent: number = null,
+		leading: number = null) {
 		super();
 		this.adaptee = new AwaytextFormat(font, size, color, bold,
 			italic, underline, url, link_target, align,

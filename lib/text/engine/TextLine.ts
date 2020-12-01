@@ -1,4 +1,5 @@
 import { ASObject } from '@awayfl/avm2';
+import { TextField, DisplayObjectContainer as AwayDisplayObjectContainer, TextFieldAutoSize } from '@awayjs/scene';
 import { DisplayObject } from '../../display/DisplayObject';
 import { DisplayObjectContainer } from '../../display/DisplayObjectContainer';
 import { EventDispatcher } from '../../events/EventDispatcher';
@@ -12,6 +13,7 @@ export class TextLine extends DisplayObjectContainer {
 	static forceNativeConstructor: boolean = true;
 	static forceNativeMethods: boolean = true;
 
+	private _text: string;
 	private _focusRect: ASObject;
 	private _tabChildren: boolean;
 	private _tabEnabled: boolean;
@@ -37,11 +39,42 @@ export class TextLine extends DisplayObjectContainer {
 	private _atomCount: number /*int*/;
 	private _mirrorRegions: any /*ASVector<flash.text.engine.TextLineMirrorRegion>*/;
 
-	constructor() {
+	private _textfield: TextField;
+
+	constructor(
+		previousLine,
+		width,
+		lineOffset,
+		fitSomething,
+		text,
+		elementFormat) {
 		super();
+		const adaptee: AwayDisplayObjectContainer = new AwayDisplayObjectContainer();
+		this.adaptee = adaptee;
+		this._textfield = new TextField();
+		this._textfield.autoSize = TextFieldAutoSize.LEFT;
+		adaptee.addChild(this._textfield);
+		this._textfield.text = text;
+		this._previousLine = previousLine;
+		if (previousLine) {
+			previousLine.setNextLine(this);
+		}
+		console.log('elementFormat', elementFormat);
+		this._text = text;
+		this._textBlockBeginIndex = 0;
+		this._rawTextLength = text.length;
+		this._specifiedWidth = width;
 	}
 
 	public static MAX_LINE_WIDTH: number /*int*/ = 1000000;
+
+	public setNextLine(value: TextLine) {
+		this._nextLine = value;
+	}
+
+	public setTextBlock(value: TextBlock) {
+		this._textBlock = value;
+	}
 
 	public userData: any;
 	public getMirrorRegion(mirror: EventDispatcher): TextLineMirrorRegion {
@@ -54,82 +87,101 @@ export class TextLine extends DisplayObjectContainer {
 	}
 
 	public get textBlock(): TextBlock {
+		//console.warn('[TextLine] - get textBlock not implemented');
 		return this._textBlock;
 	}
 
 	public get hasGraphicElement(): boolean {
-		return this._hasGraphicElement;
+		console.warn('[TextLine] - get hasGraphicElement not implemented', this._text);
+		return false;//this._hasGraphicElement;
 	}
 
 	public get hasTabs(): boolean {
+		console.warn('[TextLine] - get hasTabs not implemented');
 		return this._hasTabs;
 	}
 
 	public get nextLine(): TextLine {
+		//console.warn('[TextLine] - get nextLine not implemented');
 		return this._nextLine;
 	}
 
 	public get previousLine(): TextLine {
+		//console.warn('[TextLine] - get previousLine not implemented');
 		return this._previousLine;
 	}
 
 	public get ascent(): number {
-		return this._ascent;
+		//console.warn('[TextLine] - get ascent not implemented');
+		return 0;//this._ascent;
 	}
 
 	public get descent(): number {
-		return this._descent;
+		//console.warn('[TextLine] - get descent not implemented');
+		return 0;//this._descent;
 	}
 
 	public get textHeight(): number {
-		return this._textHeight;
+		return this._textfield.textHeight;
 	}
 
 	public get textWidth(): number {
-		return this._textWidth;
+		//console.warn('[TextLine] - get textWidth not implemented');
+		return 100;//this._textfield.textWidth;
 	}
 
 	public get totalAscent(): number {
-		return this._totalAscent;
+		console.warn('[TextLine] - get totalAscent not implemented');
+		return 0;//this._totalAscent;
 	}
 
 	public get totalDescent(): number {
-		return this._totalDescent;
+		console.warn('[TextLine] - get totalDescent not implemented');
+		return 0;//this._totalDescent;
 	}
 
 	public get totalHeight(): number {
-		return this._totalHeight;
+		console.warn('[TextLine] - get totalHeight not implemented');
+		return 100;//this._totalHeight;
 	}
 
 	public get textBlockBeginIndex(): number /*int*/ {
+		//console.warn('[TextLine] - get textBlockBeginIndex not implemented');
 		return this._textBlockBeginIndex;
 	}
 
 	public get rawTextLength(): number /*int*/ {
+		//console.warn('[TextLine] - get rawTextLength not implemented');
 		return this._rawTextLength;
 	}
 
 	public get specifiedWidth(): number {
+		//console.warn('[TextLine] - get specifiedWidth not implemented');
 		return this._specifiedWidth;
 	}
 
 	public get unjustifiedTextWidth(): number {
+		console.warn('[TextLine] - get unjustifiedTextWidth not implemented');
 		return this._unjustifiedTextWidth;
 	}
 
 	public get validity(): string {
+		//console.warn('[TextLine] - get validity not implemented');
 		return this._validity;
 	}
 
 	public set validity(value: string) {
+		//console.warn('[TextLine] - set validity not implemented');
 		this._validity = value;
 	}
 
 	public get atomCount(): number /*int*/ {
+		console.warn('[TextLine] - get atomCount not implemented');
 		return this._atomCount;
 	}
 
 	public get mirrorRegions(): any/*ASVector<TextLineMirrorRegion >*/ {
+		console.warn('[TextLine] - get mirrorRegions not implemented');
 		return this._mirrorRegions;
 	}
 
@@ -184,8 +236,8 @@ export class TextLine extends DisplayObjectContainer {
 	}
 
 	public getBaselinePosition(baseline: string): number {
-		console.warn('[TextLine] - getBaselinePosition not implemented');
-		return null;
+		//console.warn('[TextLine] - getBaselinePosition not implemented');
+		return 0;
 	}
 
 	public dump(): string {

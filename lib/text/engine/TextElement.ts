@@ -27,7 +27,12 @@ export class TextElement extends ContentElement {
 		this._text = value;
 	}
 
+	public get text(): string {
+		//console.warn('[ContentElement] - get text not implemented');
+		return this._text;
+	}
+
 	public replaceText(beginIndex: number /*int*/, endIndex: number /*int*/, newText: string): void {
-		console.warn('[TextElement] - replaceText not implemented');
+		this._text = this._text.slice(0, beginIndex) + newText + this._text.slice(endIndex, this._text.length - 1);
 	}
 }
