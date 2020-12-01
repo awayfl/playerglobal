@@ -16,7 +16,7 @@ import { Rectangle } from '../geom/Rectangle';
 import { Point } from '../geom/Point';
 import { Vector3D } from '../geom/Vector3D';
 import { SecurityDomain } from '../SecurityDomain';
-import { release, FilterType } from '@awayfl/swf-loader';
+import { release, FilterType, AVMStage } from '@awayfl/swf-loader';
 import { BitmapFilter } from '../filters/BitmapFilter';
 
 export class DisplayObject extends EventDispatcher implements IDisplayObjectAdapter {
@@ -1388,28 +1388,26 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 */
 	public getBounds(targetCoordinateSpace: DisplayObject): Rectangle {
 
-		if	(!targetCoordinateSpace)
-			targetCoordinateSpace = this;
+		const box = this.getBoundsInternal(targetCoordinateSpace, true);
+		const Rectangle = (<SecurityDomain> this.sec).flash.geom.Rectangle;
 
-		const box = this.getBoundsInternal(targetCoordinateSpace);
-		const sec = this.sec as SecurityDomain;
+		// FLASH return strange bounds for cases when object is not has real bounds
+		if (!box)
+			return new Rectangle(6710886.4, 6710886.4,0,0);
 
-		if (!box) {
-			// FLASH return strange bounds for cases when object is not has real bounds
-			return new sec.flash.geom.Rectangle(6710886.4, 6710886.4,0,0);
-		}
-
-		return new sec.flash.geom.Rectangle(
-			box.x,
-			box.y,
-			box.width,
-			box.height);
+		return new Rectangle(box.x, box.y, box.width, box.height);
 	}
 
 	/**
 	 * Internal method that return Box instance of bounds of DisplayObject
 	 */
-	protected getBoundsInternal(targetCoordinateSpace: DisplayObject = null): Box | null {
+	protected getBoundsInternal(targetCoordinateSpace: DisplayObject = null, strokeFlag:boolean = false): Box | null {
+
+		if	(!targetCoordinateSpace)
+			targetCoordinateSpace = this;
+
+		const target:AwayDisplayObject = targetCoordinateSpace.adaptee.parent
+										|| (<AVMStage> this._stage.adaptee).scene.root;
 
 		if	(!targetCoordinateSpace)
 			targetCoordinateSpace = this;
@@ -1417,7 +1415,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		this._boundsPicker = PickGroup.getInstance(this._stage.view).getBoundsPicker(this.adaptee.partition);
 		//}
 
-		return this._boundsPicker.getBoxBounds(targetCoordinateSpace.adaptee);
+		return this._boundsPicker.getBoxBounds(target, strokeFlag);
 	}
 
 	/**
@@ -1434,15 +1432,13 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   the targetCoordinateSpace any's coordinate system.
 	 */
 	public getRect(targetCoordinateSpace: DisplayObject): Rectangle {
-		const box: Box = PickGroup.getInstance(this._stage.view).getBoundsPicker(
-			this.adaptee.partition).getBoxBounds(this.adaptee);
-		if (!box) {
-			return new (<SecurityDomain> this.sec).flash.geom.Rectangle();
-		}
-		//console.log("DisplayObject:getRect not yet implemented");FromBounds
-		return new (<SecurityDomain> this.sec).flash.geom.Rectangle(
-			box.x - this.x, box.y - this.y, box.width, box.height);
+		const box = this.getBoundsInternal(targetCoordinateSpace);
+		const Rectangle = (<SecurityDomain> this.sec).flash.geom.Rectangle;
 
+		if (!box)
+			return new Rectangle();
+		
+		return new Rectangle(box.x, box.y, box.width, box.height);
 	}
 
 	/**
