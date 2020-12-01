@@ -493,13 +493,10 @@ export class DisplayObjectContainer extends InteractiveObject {
 
 		const raycastPicker = PickGroup.getInstance(this._stage.view).getRaycastPicker(this.adaptee.partition);
 
-		const vector: Vector3D = this._stage.view.project(new Vector3D(point.x, point.y, 0));
-		const rayPosition: Vector3D = this._stage.view.unproject(vector.x, vector.y, 0);
-		const rayDirection: Vector3D = this._stage.view.unproject(vector.x, vector.y, 1).subtract(rayPosition);
 		const awayChildren: IPartitionEntity[] =
 			raycastPicker.getObjectsUnderPoint(
-				rayPosition,
-				rayDirection);
+				new Vector3D(0, 0, -1000),
+				new Vector3D(point.x, point.y, 1000));
 		const avm2Children: DisplayObject[] = [];
 		let i = awayChildren.length;
 		while (i > 0) {
