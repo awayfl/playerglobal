@@ -1388,19 +1388,20 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 */
 	public getBounds(targetCoordinateSpace: DisplayObject): Rectangle {
 
-		const box = this.getBoundsInternal();
+		if	(!targetCoordinateSpace)
+			targetCoordinateSpace = this;
+
+		const box = this.getBoundsInternal(targetCoordinateSpace);
 		const sec = this.sec as SecurityDomain;
 
 		if (!box) {
 			// FLASH return strange bounds for cases when object is not has real bounds
 			return new sec.flash.geom.Rectangle(6710886.4, 6710886.4,0,0);
 		}
-		if	(!targetCoordinateSpace)
-			targetCoordinateSpace = this;
 
 		return new sec.flash.geom.Rectangle(
-			box.x - targetCoordinateSpace.x,
-			box.y - targetCoordinateSpace.y,
+			box.x,
+			box.y,
 			box.width,
 			box.height);
 	}
@@ -1408,13 +1409,15 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	/**
 	 * Internal method that return Box instance of bounds of DisplayObject
 	 */
-	protected getBoundsInternal(): Box | null {
+	protected getBoundsInternal(targetCoordinateSpace: DisplayObject = null): Box | null {
 
+		if	(!targetCoordinateSpace)
+			targetCoordinateSpace = this;
 		//if(!this._boundsPicker) {
 		this._boundsPicker = PickGroup.getInstance(this._stage.view).getBoundsPicker(this.adaptee.partition);
 		//}
 
-		return this._boundsPicker.getBoxBounds(this.adaptee);
+		return this._boundsPicker.getBoxBounds(targetCoordinateSpace.adaptee);
 	}
 
 	/**
