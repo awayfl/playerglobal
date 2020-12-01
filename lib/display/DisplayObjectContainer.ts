@@ -7,7 +7,7 @@ import { Billboard, TextField as AwayTextField,
 import { DisplayObject } from './DisplayObject';
 import { InteractiveObject } from './InteractiveObject';
 import { Event } from '../events/Event';
-import { PickGroup } from '@awayjs/view';
+import { IPartitionEntity, PickGroup } from '@awayjs/view';
 import { constructClassFromSymbol, OrphanManager } from '@awayfl/avm2';
 import { Point } from '../geom/Point';
 import { SecurityDomain } from '../SecurityDomain';
@@ -495,7 +495,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 
 		const rayPosition: Vector3D = this._stage.view.unproject(point.x, point.y, 0);
 		const rayDirection: Vector3D = this._stage.view.unproject(point.x, point.y, 1).subtract(rayPosition);
-		const awayChildren: AwayDisplayObject[] =
+		const awayChildren: IPartitionEntity[] =
 			raycastPicker.getObjectsUnderPoint(
 				rayPosition,
 				rayDirection);
