@@ -1401,12 +1401,12 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	/**
 	 * Internal method that return Box instance of bounds of DisplayObject
 	 */
-	protected getBoundsInternal(targetCoordinateSpace: DisplayObject = null, strokeFlag:boolean = false): Box | null {
+	protected getBoundsInternal(targetCoordinateSpace: DisplayObject = null, strokeFlag: boolean = false): Box | null {
 
 		if	(!targetCoordinateSpace)
 			targetCoordinateSpace = this;
 
-		const target:AwayDisplayObject = targetCoordinateSpace.adaptee.parent
+		const target: AwayDisplayObject = targetCoordinateSpace.adaptee.parent
 										|| (<AVMStage> this._stage.adaptee).scene.root;
 
 		if	(!targetCoordinateSpace)
@@ -1437,7 +1437,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 		if (!box)
 			return new Rectangle();
-		
+
 		return new Rectangle(box.x, box.y, box.width, box.height);
 	}
 
