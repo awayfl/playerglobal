@@ -1,19 +1,25 @@
 import { ASObject } from '@awayfl/avm2';
-import { Font as AwayFont } from '@awayjs/scene';
 
 export class Font extends ASObject {
+	static forceNativeConstructor: boolean = true;
+	static forceNativeMethods: boolean = true;
 	static classInitializer: any = null;
 	static classSymbols: string[] = null;
 	static instanceSymbols: string[] = null;
 
-	private _adaptee: AwayFont;
+	public isAVMFont: boolean = true;
+	private _fontName: string;
 	constructor() {
 		super();
-		this._adaptee = new AwayFont();
+		this.isAVMFont = true;
 	}
 
 	get fontName(): string {
-		return this._adaptee ? this._adaptee.fontName : '';
+		return this._fontName;
+	}
+
+	set fontName(value: string) {
+		this._fontName = value;
 	}
 
 	get fontStyle(): string {
