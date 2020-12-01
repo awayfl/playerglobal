@@ -3,7 +3,7 @@ import { Billboard, TextField as AwayTextField,
 	DisplayObjectContainer as AwayDisplayObjectContainer,
 	Sprite as AwaySprite, MovieClip as AwayMovieClip,
 	DisplayObject as AwayDisplayObject,
-	IDisplayObjectAdapter } from '@awayjs/scene';
+	IDisplayObjectAdapter, TextSprite } from '@awayjs/scene';
 import { DisplayObject } from './DisplayObject';
 import { InteractiveObject } from './InteractiveObject';
 import { Event } from '../events/Event';
@@ -493,8 +493,9 @@ export class DisplayObjectContainer extends InteractiveObject {
 
 		const raycastPicker = PickGroup.getInstance(this._stage.view).getRaycastPicker(this.adaptee.partition);
 
-		const rayPosition: Vector3D = this._stage.view.unproject(point.x, point.y, 0);
-		const rayDirection: Vector3D = this._stage.view.unproject(point.x, point.y, 1).subtract(rayPosition);
+		const vector: Vector3D = this._stage.view.project(new Vector3D(point.x, point.y, 0));
+		const rayPosition: Vector3D = this._stage.view.unproject(vector.x, vector.y, 0);
+		const rayDirection: Vector3D = this._stage.view.unproject(vector.x, vector.y, 1).subtract(rayPosition);
 		const awayChildren: IPartitionEntity[] =
 			raycastPicker.getObjectsUnderPoint(
 				rayPosition,
@@ -503,7 +504,14 @@ export class DisplayObjectContainer extends InteractiveObject {
 		let i = awayChildren.length;
 		while (i > 0) {
 			i--;
-			avm2Children.push(<DisplayObject>awayChildren[i].adapter);
+			let child = awayChildren[i];
+			if (child instanceof TextSprite) {
+				child = child.parent;
+			} else if (child.isAsset(AwaySprite) && (<any>child.adapter) == child) {
+				child.adapter = new (<any> this.sec).flash.display.Sprite();
+				child.adapter.adaptee = child;
+			}
+			avm2Children.push(<DisplayObject>child.adapter);
 		}
 		return avm2Children;
 	}
