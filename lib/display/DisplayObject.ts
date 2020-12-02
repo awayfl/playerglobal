@@ -738,7 +738,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			return 100;
 		}
 
-		const box: Box = this.getBoundsInternal();
+		const box: Box = this.getBoundsInternal(this.parent || this._stage);
 
 		return (box == null) ? 0 : box.height;
 	}
@@ -1264,7 +1264,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 		}
 
-		const box: Box = this.getBoundsInternal();
+		const box: Box = this.getBoundsInternal(this.parent || this._stage);
 
 		return (box == null) ? 0 : box.width;
 
@@ -1405,17 +1405,11 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 		if	(!targetCoordinateSpace)
 			targetCoordinateSpace = this;
-
-		const target: AwayDisplayObject = targetCoordinateSpace.adaptee.parent
-										|| (<AVMStage> this._stage.adaptee).scene.root;
-
-		if	(!targetCoordinateSpace)
-			targetCoordinateSpace = this;
 		//if(!this._boundsPicker) {
 		this._boundsPicker = PickGroup.getInstance(this._stage.view).getBoundsPicker(this.adaptee.partition);
 		//}
 
-		return this._boundsPicker.getBoxBounds(target, strokeFlag);
+		return this._boundsPicker.getBoxBounds(targetCoordinateSpace.adaptee, strokeFlag);
 	}
 
 	/**
