@@ -1,21 +1,13 @@
 
 import { StageAlign, StageScaleMode, AVMStage, release } from '@awayfl/swf-loader';
-import { Sprite } from './Sprite';
 import { Event } from '../events/Event';
 import { IEventMapper } from '../events/IEventMapper';
 import { DisplayObjectContainer } from './DisplayObjectContainer';
 import { DisplayObject } from './DisplayObject';
-
-import { AssetEvent, LoaderEvent, ParserEvent, AudioManager, URLRequest, RequestAnimationFrame, CoordinateSystem, PerspectiveProjection, Loader } from '@awayjs/core';
-import { Graphics, GradientFillStyle, TextureAtlas } from '@awayjs/graphics';
-import { HoverController, TextField, Billboard, MouseManager, SceneGraphPartition, Camera, LoaderContainer, MovieClip, FrameScriptManager } from '@awayjs/scene';
-
-import { MethodMaterial, MaterialBase }	from '@awayjs/materials';
-import { View, BasicPartition } from '@awayjs/view';
-import { Stage as AwayStage, StageManager } from '@awayjs/stage';
-import { MouseEvent as MouseEventAway, DisplayObject as AwayDisplayObject, Sprite as AwaySprite, Scene, DisplayObjectContainer as AwayDisplayObjectContainer } from '@awayjs/scene';
-
-import { MouseEvent } from '../events/MouseEvent';
+import { FrameScriptManager } from '@awayjs/scene';
+import { View } from '@awayjs/view';
+import { Stage as AwayStage } from '@awayjs/stage';
+import { DisplayObjectContainer as AwayDisplayObjectContainer } from '@awayjs/scene';
 import { Transform } from '../geom/Transform';
 import { Rectangle } from '../geom/Rectangle';
 import { SecurityDomain } from '../SecurityDomain';
@@ -54,17 +46,48 @@ import { LoaderInfo } from './LoaderInfo';
  *
  *   <p class="- topic/p ">For SWF content running in the browser (in
  * Flash<sup class="+ topic/ph hi-d/sup ">®</sup> Player), the Stage represents the entire area where Flash
- * content is shown. For content running in AIR on desktop operating systems, each NativeWindow object has a corresponding
- * Stage object.</p><p class="- topic/p ">The Stage object is not globally accessible. You need to access it through the
- * <codeph class="+ topic/ph pr-d/codeph ">stage</codeph> property of a DisplayObject instance.</p><p class="- topic/p ">The Stage class has several ancestor classes — DisplayObjectContainer, InteractiveObject,
+ * content is shown. For content running in AIR on desktop operating systems,
+ * each NativeWindow object has a corresponding
+ * Stage object.</p><p class="- topic/p ">The Stage object is not globally accessible.
+ * You need to access it through the
+ * <codeph class="+ topic/ph pr-d/codeph ">stage</codeph> property of a DisplayObject instance.
+ * </p><p class="- topic/p ">The Stage class has several ancestor classes — DisplayObjectContainer, InteractiveObject,
  * DisplayObject, and EventDispatcher — from which it inherits properties and methods.
  * Many of these properties and methods are either inapplicable to Stage objects,
  * or require security checks when called on a Stage object.  The properties and methods that
- * require security checks are documented as part of the Stage class.</p><p class="- topic/p ">In addition, the following inherited properties are inapplicable to Stage objects. If you
+ * require security checks are documented as part of the Stage class.</p><p class="- topic/p ">
+ * In addition, the following inherited properties are inapplicable to Stage objects. If you
  * try to set them, an IllegalOperationError is thrown. These properties may always be read, but
- * since they cannot be set, they will always contain default values.</p><ul class="- topic/ul "><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">accessibilityProperties</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">alpha</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">blendMode</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">cacheAsBitmap</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">contextMenu</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">filters</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">focusRect</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">loaderInfo</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">mask</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">mouseEnabled</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">name</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">opaqueBackground</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">rotation</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">scale9Grid</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">scaleX</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">scaleY</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">scrollRect</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">tabEnabled</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">tabIndex</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">transform</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">visible</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">x</codeph></li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">y</codeph></li></ul><p class="- topic/p ">Some events that you might expect to be a part of the Stage class,
- * such as <codeph class="+ topic/ph pr-d/codeph ">enterFrame</codeph>, <codeph class="+ topic/ph pr-d/codeph ">exitFrame</codeph>,
- * <codeph class="+ topic/ph pr-d/codeph ">frameConstructed</codeph>, and <codeph class="+ topic/ph pr-d/codeph ">render</codeph>,
+ * since they cannot be set, they will always contain default values.</p><ul class="- topic/ul ">
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">accessibilityProperties</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">alpha</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">blendMode</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">cacheAsBitmap</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">contextMenu</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">filters</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">focusRect</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">loaderInfo</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">mask</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">mouseEnabled</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">name</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">opaqueBackground</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">rotation</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">scale9Grid</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">scaleX</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">scaleY</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">scrollRect</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">tabEnabled</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">tabIndex</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">transform</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">visible</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">x</codeph></li>
+ * <li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">y</codeph></li>
+ * </ul>
+ * <p class="- topic/p ">Some events that you might expect to be a part of the Stage class,
+ * such as <codeph class="+ topic/ph pr-d/codeph ">enterFrame</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">exitFrame</codeph>,
+ * <codeph class="+ topic/ph pr-d/codeph ">frameConstructed</codeph>,
+ * and <codeph class="+ topic/ph pr-d/codeph ">render</codeph>,
  * cannot be Stage events because a reference to the Stage object
  * cannot be guaranteed to exist in every situation where these events
  * are used. Because these events cannot be dispatched by the Stage
@@ -74,9 +97,11 @@ import { LoaderInfo } from './LoaderInfo';
  * These events, which are part of the DisplayObject class,
  * are called broadcast events to differentiate them from events
  * that target a specific DisplayObject instance.
- * Two other broadcast events, <codeph class="+ topic/ph pr-d/codeph ">activate</codeph> and <codeph class="+ topic/ph pr-d/codeph ">deactivate</codeph>,
+ * Two other broadcast events, <codeph class="+ topic/ph pr-d/codeph ">activate</codeph>
+ * and <codeph class="+ topic/ph pr-d/codeph ">deactivate</codeph>,
  * belong to DisplayObject's superclass, EventDispatcher.
- * The <codeph class="+ topic/ph pr-d/codeph ">activate</codeph> and <codeph class="+ topic/ph pr-d/codeph ">deactivate</codeph> events
+ * The <codeph class="+ topic/ph pr-d/codeph ">activate</codeph>
+ * and <codeph class="+ topic/ph pr-d/codeph ">deactivate</codeph> events
  * behave similarly to the DisplayObject broadcast events, except
  * that these two events are dispatched not only by all DisplayObject
  * instances, but also by all EventDispatcher instances and instances
@@ -87,9 +112,15 @@ import { LoaderInfo } from './LoaderInfo';
  *
  *   The following example uses the <codeph class="+ topic/ph pr-d/codeph ">StageExample</codeph> class to dispatch
  * events whenever the stage is activated or resized.  This is accomplished by performing the following steps:
- * <ol class="- topic/ol "><li class="- topic/li ">The class constructor first sets the Flash application to be fixed, regardless of the size of
+ * <ol class="- topic/ol "><li class="- topic/li ">
+ * The class constructor first sets the Flash application to be fixed, regardless of the size of
  * the Flash Player window and then adds two event listeners with the
- * <codeph class="+ topic/ph pr-d/codeph ">activateHandler()</codeph> and <codeph class="+ topic/ph pr-d/codeph ">resizeHandler()</codeph> methods.</li><li class="- topic/li ">The <codeph class="+ topic/ph pr-d/codeph ">activateHandler()</codeph> method runs when the left mouse button is clicked.</li><li class="- topic/li ">The <codeph class="+ topic/ph pr-d/codeph ">resizeHandler()</codeph> method runs when the stage is resized.</li></ol><codeblock xml:space="preserve" class="+ topic/pre pr-d/codeblock ">
+ * <codeph class="+ topic/ph pr-d/codeph ">activateHandler()</codeph>
+ * and <codeph class="+ topic/ph pr-d/codeph ">resizeHandler()</codeph> methods.</li>
+ * <li class="- topic/li ">The <codeph class="+ topic/ph pr-d/codeph ">activateHandler()
+ * </codeph> method runs when the left mouse button is clicked.</li><li class="- topic/li ">
+ * The <codeph class="+ topic/ph pr-d/codeph ">resizeHandler()</codeph> method runs when the stage is resized.</li>
+ * </ol><codeblock xml:space="preserve" class="+ topic/pre pr-d/codeblock ">
  * package {
 	 * import flash.display.Sprite;
 	 * import flash.display.StageAlign;
@@ -157,7 +188,7 @@ export class Stage extends DisplayObjectContainer {
 	}
 
 	public get view(): View {
-		return (<AVMStage> this.adaptee).scene.renderer.view;
+		return (<AVMStage> <unknown> this.adaptee).scene.renderer.view;
 	}
 
 	// ---------- event mapping functions Event.RESIZE
@@ -267,7 +298,7 @@ export class Stage extends DisplayObjectContainer {
 
 	public get mouseX (): number {
 		//console.log("mouseX not implemented yet in flash/DisplayObject");
-		return (<AVMStage> this.adaptee).scene.getLocalMouseX(this.adaptee) | 0;
+		return (<AVMStage> <unknown> this.adaptee).scene.getLocalMouseX(this.adaptee) | 0;
 	}
 
 	/**
@@ -278,7 +309,7 @@ export class Stage extends DisplayObjectContainer {
 	 */
 	public get mouseY (): number {
 		//console.log("mouseY not implemented yet in flash/DisplayObject");
-		return (<AVMStage> this.adaptee).scene.getLocalMouseY(this.adaptee) | 0;
+		return (<AVMStage> <unknown> this.adaptee).scene.getLocalMouseY(this.adaptee) | 0;
 	}
 
 	public set accessibilityImplementation (value: any) {
@@ -290,18 +321,28 @@ export class Stage extends DisplayObjectContainer {
 	 * A value from the StageAlign class that specifies the alignment of the stage in
 	 * Flash Player or the browser. The following are valid values:
 	 *
-	 *   ValueVertical AlignmentHorizontalStageAlign.TOPTopCenterStageAlign.BOTTOMBottomCenterStageAlign.LEFTCenterLeftStageAlign.RIGHTCenterRightStageAlign.TOP_LEFTTopLeftStageAlign.TOP_RIGHTTopRightStageAlign.BOTTOM_LEFTBottomLeftStageAlign.BOTTOM_RIGHTBottomRightThe align property is only available to an object that is in the same security sandbox
+	 *   ValueVertical
+	 * AlignmentHorizontalStageAlign.TOP
+	 * TopCenterStageAlign.BOTTOM
+	 * BottomCenterStageAlign.LEFT
+	 * CenterLeftStageAlign.RIGHT
+	 * CenterRightStageAlign.TOP_LEFT
+	 * TopLeftStageAlign.TOP_RIGHT
+	 * TopRightStageAlign.BOTTOM_LEFT
+	 * BottomLeftStageAlign.BOTTOM_RIGHT
+	 * BottomRight
+	 * The align property is only available to an object that is in the same security sandbox
 	 * as the Stage owner (the main SWF file).
 	 * To avoid this, the Stage owner can grant permission to the domain of the
 	 * calling object by calling the Security.allowDomain() method or the Security.alowInsecureDomain() method.
 	 * For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
 	public get align(): StageAlign {
-		return (<AVMStage> this.adaptee).align;
+		return (<AVMStage> <unknown> this.adaptee).align;
 	}
 
 	public set align(value: StageAlign) {
-		(<AVMStage> this.adaptee).align = value;
+		(<AVMStage> <unknown> this.adaptee).align = value;
 	}
 
 	/**
@@ -331,11 +372,11 @@ export class Stage extends DisplayObjectContainer {
 	}
 
 	public get color(): number {
-		return (<AVMStage> this.adaptee).color;
+		return (<AVMStage> <unknown> this.adaptee).color;
 	}
 
 	public set color(color: number) {
-		(<AVMStage> this.adaptee).color = color;
+		(<AVMStage> <unknown> this.adaptee).color = color;
 	}
 
 	/**
@@ -347,19 +388,25 @@ export class Stage extends DisplayObjectContainer {
 	 *   Use the Stage.colorCorrectionSupport property
 	 * to determine if color correction is available on the current system and the default state.
 	 * .    If color correction is available, all colors on the stage are assumed to be in
-	 * the sRGB color space, which is the most standard color space. Source profiles of input devices are not considered during color correction.
+	 * the sRGB color space, which is the most standard color space.
+	 * Source profiles of input devices are not considered during color correction.
 	 * No input color correction is applied; only the stage output is mapped to the main
-	 * monitor's ICC color profile.In general, the benefits of activating color management include predictable and consistent color, better conversion,
+	 * monitor's ICC color profile.In general, the benefits of activating color management include predictable
+	 * and consistent color, better conversion,
 	 * accurate proofing and more efficient cross-media output. Be aware, though, that color management does not provide
 	 * perfect conversions due to devices having a different gamut from each other or original images.
 	 * Nor does color management eliminate the need for custom or edited profiles.
-	 * Color profiles are dependent on browsers, operating systems (OS), OS extensions, output devices, and application support.Applying color correction degrades the Flash runtime performance.
+	 * Color profiles are dependent on browsers, operating systems (OS), OS extensions,
+	 * output devices, and application support.Applying color correction degrades the Flash runtime performance.
 	 * A Flash runtime's color correction is document style color correction because
 	 * all SWF movies are considered documents with implicit sRGB profiles.
 	 * Use the Stage.colorCorrectionSupport property to tell the Flash runtime
 	 * to correct colors when displaying the SWF file (document) to the display color space.
-	 * Flash runtimes only compensates for differences between monitors, not for differences between input devices (camera/scanner/etc.).
-	 * The three possible values are strings with corresponding constants in the flash.display.ColorCorrection class:"default": Use the same color correction as the host system."on": Always perform color correction."off": Never perform color correction.
+	 * Flash runtimes only compensates for differences between monitors, not for differences between input devices
+	 * (camera/scanner/etc.).
+	 * The three possible values are strings with corresponding constants in the flash.display.ColorCorrection
+	 * class:"default": Use the same color correction as the host system."on":
+	 * Always perform color correction."off": Never perform color correction.
 	 */
 	public get colorCorrection (): string {
 		//todo
@@ -378,7 +425,10 @@ export class Stage extends DisplayObjectContainer {
 	 * monitor can be read and understood by the Flash runtime. This property also returns the default state
 	 * of color correction on the host system (usually the browser).
 	 * Currently the return values can be:
-	 * The three possible values are strings with corresponding constants in the flash.display.ColorCorrectionSupport class:"unsupported": Color correction is not available."defaultOn": Always performs color correction."defaultOff": Never performs color correction.
+	 * The three possible values are strings with corresponding constants in the
+	 * flash.display.ColorCorrectionSupport class:"unsupported":
+	 * Color correction is not available."defaultOn":
+	 * Always performs color correction."defaultOff": Never performs color correction.
 
 	 */
 	public get colorCorrectionSupport (): string {
@@ -404,16 +454,21 @@ export class Stage extends DisplayObjectContainer {
 	 * are valid values:
 	 *
 	 *   StageDisplayState.FULL_SCREEN Sets AIR application or Flash runtime to expand the
-	 * stage over the user's entire screen, with keyboard input disabled.StageDisplayState.FULL_SCREEN_INTERACTIVE Sets the AIR application to expand the
+	 * stage over the user's entire screen, with keyboard input disabled.StageDisplayState.FULL_SCREEN_INTERACTIVE
+	 * Sets the AIR application to expand the
 	 * stage over the user's entire screen, with keyboard input allowed.
-	 * (Not available for content running in Flash Player.)StageDisplayState.NORMAL Sets the Flash runtime back to the standard stage display mode.The scaling behavior of the movie in full-screen mode is determined by the scaleMode
+	 * (Not available for content running in Flash Player.)StageDisplayState.NORMAL
+	 * Sets the Flash runtime back to the standard stage display mode.
+	 * The scaling behavior of the movie in full-screen mode is determined by the scaleMode
 	 * setting (set using the Stage.scaleMode property or the SWF file's embed
 	 * tag settings in the HTML file). If the scaleMode property is set to noScale
 	 * while the application transitions to full-screen mode, the Stage width and height
 	 * properties are updated, and the Stage dispatches a resize event. If any other scale mode is set,
 	 * the stage and its contents are scaled to fill the new screen dimensions. The Stage object retains its original
-	 * width and height values and does not dispatch a resize event.The following restrictions apply to SWF files that play within an HTML page (not those using the stand-alone
-	 * Flash Player or not running in the AIR runtime):To enable full-screen mode, add the allowFullScreen parameter to the object
+	 * width and height values and does not dispatch a resize event.
+	 * The following restrictions apply to SWF files that play within an HTML page (not those using the stand-alone
+	 * Flash Player or not running in the AIR runtime):To enable full-screen mode,
+	 * add the allowFullScreen parameter to the object
 	 * and embed tags in the HTML page that includes the SWF file, with allowFullScreen set
 	 * to "true", as shown in the following example:
 	 *
@@ -431,15 +486,22 @@ export class Stage extends DisplayObjectContainer {
 	 * </codeblock>
 	 * Full-screen mode is initiated in response to a mouse click or key press by the user; the movie cannot change
 	 * Stage.displayState without user input. Flash runtimes restrict keyboard input  in full-screen mode.
-	 * Acceptable keys include keyboard shortcuts that terminate full-screen mode and non-printing keys such as arrows, space, Shift,
-	 * and Tab keys. Keyboard shortcuts that terminate full-screen mode are: Escape (Windows, Linux, and Mac), Control+W (Windows),
+	 * Acceptable keys include keyboard shortcuts that terminate full-screen mode and non-printing keys such as arrows,
+	 * space, Shift,
+	 * and Tab keys. Keyboard shortcuts that terminate full-screen mode are:
+	 * Escape (Windows, Linux, and Mac), Control+W (Windows),
 	 * Command+W (Mac), and Alt+F4.
-	 * A Flash runtime dialog box appears over the movie when users enter full-screen mode to inform the users they are in
-	 * full-screen mode and that they can press the Escape key to end full-screen mode.Starting with Flash Player 9.0.115.0, full-screen works the same in windowless mode as it does in window mode.
+	 * A Flash runtime dialog box appears over the movie when users enter full-screen mode
+	 * to inform the users they are in
+	 * full-screen mode and that they can press the Escape key to end full-screen mode.
+	 * Starting with Flash Player 9.0.115.0, full-screen works the same in windowless mode as it does in window mode.
 	 * If you set the Window Mode (wmode in the HTML) to Opaque Windowless (opaque)
 	 * or Transparent Windowless (transparent), full-screen can be initiated,
-	 * but the full-screen window will always be opaque.These restrictions are not present for SWF content running in the
-	 * stand-alone Flash Player or in AIR. AIR supports an interactive full-screen mode which allows keyboard input.For AIR content running in full-screen mode, the system screen saver
+	 * but the full-screen window will always be opaque.
+	 * These restrictions are not present for SWF content running in the
+	 * stand-alone Flash Player or in AIR.
+	 * AIR supports an interactive full-screen mode which allows keyboard input.
+	 * For AIR content running in full-screen mode, the system screen saver
 	 * and power saving options are disabled while video content is playing and until either the video stops
 	 * or full-screen mode is exited.On Linux, setting displayState to StageDisplayState.FULL_SCREEN or
 	 * StageDisplayState.FULL_SCREEN_INTERACTIVE is an asynchronous operation.
@@ -498,11 +560,11 @@ export class Stage extends DisplayObjectContainer {
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
 	public get frameRate (): number {
-		return (<AVMStage> this.adaptee).frameRate;
+		return (<AVMStage> <unknown> this.adaptee).frameRate;
 	}
 
 	public set frameRate (value: number) {
-		(<AVMStage> this.adaptee).frameRate = value;
+		(<AVMStage> <unknown> this.adaptee).frameRate = value;
 	}
 
 	/**
