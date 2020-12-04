@@ -5,7 +5,7 @@ import { Image2DParser, BitmapImage2D } from '@awayjs/stage';
 
 import { Graphics } from '@awayjs/graphics';
 
-import { LoaderContainer, IDisplayObjectAdapter, Font, DisplayObjectContainer as AwayDisplayObjectContainer, DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip, Sprite as AwaySprite, TextField as AwayTextField, SceneImage2D } from '@awayjs/scene';
+import { LoaderContainer, IDisplayObjectAdapter, Font, DisplayObjectContainer as AwayDisplayObjectContainer, DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip, Sprite as AwaySprite, TextField as AwayTextField, SceneImage2D, FrameScriptManager } from '@awayjs/scene';
 
 import { release, somewhatImplemented, SWFParser } from '@awayfl/swf-loader';
 
@@ -280,6 +280,7 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 				this._content = <DisplayObject>(<IDisplayObjectAdapter> asset.adapter).clone();
 				this._content.loaderInfo = this._contentLoaderInfo;
 				this._content.adaptee.reset();
+				FrameScriptManager.invalidAS3Constructors = true;
 				super.addChild(this._content);
 				//this.addChild(this._loaderInfo.content = (<MovieClip>(<AwayMovieClip>asset).adapter));
 			}
