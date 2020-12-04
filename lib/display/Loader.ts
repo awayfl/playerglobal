@@ -5,7 +5,18 @@ import { Image2DParser, BitmapImage2D } from '@awayjs/stage';
 
 import { Graphics } from '@awayjs/graphics';
 
-import { LoaderContainer, IDisplayObjectAdapter, Font, DisplayObjectContainer as AwayDisplayObjectContainer, DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip, Sprite as AwaySprite, TextField as AwayTextField, SceneImage2D, FrameScriptManager } from '@awayjs/scene';
+import {
+	LoaderContainer,
+	IDisplayObjectAdapter,
+	Font,
+	DisplayObjectContainer as AwayDisplayObjectContainer,
+	DisplayObject as AwayDisplayObject,
+	MovieClip as AwayMovieClip,
+	Sprite as AwaySprite,
+	TextField as AwayTextField,
+	SceneImage2D,
+	FrameScriptManager
+} from '@awayjs/scene';
 
 import { release, somewhatImplemented, SWFParser } from '@awayfl/swf-loader';
 
@@ -24,7 +35,6 @@ import { DisplayObject } from './DisplayObject';
 import { URLRequest } from '../net/URLRequest';
 import { ILoader } from '../ILoader';
 import { IRedirectRule, matchRedirect } from '@awayfl/swf-loader';
-import { Event } from '../events/Event';
 
 /**
  * The Loader class is used to load SWF files or image(JPG, PNG, or GIF)
@@ -275,7 +285,8 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 			this._contentLoaderInfo.applicationDomain.addDefinition(asset.name, <AwayMovieClip> asset);
 
 			// if this is the "Scene 1", we make it a child of the loader
-			if (asset.name == 'Scene 1' || (<any>asset).isAVMScene) {// "Scene 1" when AWDParser, isAVMScene when using SWFParser
+			// "Scene 1" when AWDParser, isAVMScene when using SWFParser
+			if (asset.name == 'Scene 1' || (<any>asset).isAVMScene) {
 
 				this._content = <DisplayObject>(<IDisplayObjectAdapter> asset.adapter).clone();
 				this._content.loaderInfo = this._contentLoaderInfo;
@@ -285,6 +296,7 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 				//this.addChild(this._loaderInfo.content = (<MovieClip>(<AwayMovieClip>asset).adapter));
 			}
 		} else if (asset.isAsset(Graphics)) {
+			// supress lint
 		} else {
 			console.log('loaded unhandled asset-type');
 		}
@@ -503,8 +515,14 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 			console.log('[LOADER] start loading the url:', cleanUrl);
 		}
 
-		const ext: string = request.url.substr(-3).toLocaleLowerCase();
-		this._isImage = (ext == 'jpg' || ext == 'png');
+		const ext: string = cleanUrl.substr(-3).toLowerCase();
+		this._isImage = (ext == 'jpg' || ext == 'png' /*|| ext == 'gif'*/);
+
+		if (ext === 'gif') {
+			console.warn('[Loader] Unsupported file type:', ext, cleanUrl);
+			return;
+		}
+
 		//url.url=url.url.replace(".swf", ".awd");
 
 		this._loaderContext = context || new LoaderContext(
@@ -514,12 +532,20 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 
 		this._contentLoaderInfo._setApplicationDomain(this._loaderContext.applicationDomain);
 
-		(<LoaderContainer> this._adaptee).load(request.adaptee, null, null, (this._isImage) ? new Image2DParser(this._factory) : new SWFParser(this._factory));
+		(<LoaderContainer> this._adaptee).load(
+			request.adaptee,
+			null,
+			null,
+			(this._isImage)
+				? new Image2DParser(this._factory)
+				: new SWFParser(this._factory)
+		);
 
 		if (redirect && redirect.supressErrors) {
 			this.adaptee.addEventListener(URLLoaderEvent.LOAD_ERROR, (event: URLLoaderEvent)=>{
 				console.log('[LOADER] Error supressed by redirect rule as empty complete events!', event);
-				this._contentLoaderInfo._onLoaderCompleteDelegate(new LoaderEvent(LoaderEvent.LOADER_COMPLETE, event.urlLoader.url,null));
+				this._contentLoaderInfo._onLoaderCompleteDelegate(
+					new LoaderEvent(LoaderEvent.LOADER_COMPLETE, event.urlLoader.url,null));
 			});
 		}
 	}
@@ -609,7 +635,12 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 	 *                      object when a loaded object is removed.
 	 */
 	public loadBytes(bytes: ByteArray, context: LoaderContext = null): void {
-		Loader.loaderQueue.push(()=>{
+		if (!bytes) {
+			console.warn('[Loader] Bytes byffer is `undefined`');
+			return;
+		}
+
+		Loader.loaderQueue.push(() => {
 			// 80pro: todo
 			//this._isImage = (ext == "jpg" || ext == "png");
 
@@ -625,7 +656,8 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 			/*
 			this.adaptee.addEventListener(URLLoaderEvent.LOAD_ERROR, (event: URLLoaderEvent)=>{
 				console.log("[LOADER] Error supressed by redirect rule as empty complete events!", event);
-				this._contentLoaderInfo._onLoaderCompleteDelegate(new LoaderEvent(LoaderEvent.LOADER_COMPLETE, event.urlLoader.url,null));
+				this._contentLoaderInfo._onLoaderCompleteDelegate(
+					new LoaderEvent(LoaderEvent.LOADER_COMPLETE, event.urlLoader.url,null));
 			})
 			*/
 			/*
