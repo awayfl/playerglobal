@@ -8,7 +8,7 @@ import { DisplayObject } from './DisplayObject';
 import { InteractiveObject } from './InteractiveObject';
 import { Event } from '../events/Event';
 import { IPartitionEntity, PickGroup } from '@awayjs/view';
-import { constructClassFromSymbol, OrphanManager } from '@awayfl/avm2';
+import { constructClassFromSymbol, Errors, OrphanManager } from '@awayfl/avm2';
 import { Point } from '../geom/Point';
 import { SecurityDomain } from '../SecurityDomain';
 import { StaticEvents } from '../events/StaticEvents';
@@ -553,7 +553,12 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 * @throws	ArgumentError Throws if the child parameter is not a child of this object.
 	 */
 	public removeChild (child: DisplayObject): DisplayObject {
-		(<AwayDisplayObjectContainer> this._adaptee).removeChild(child.adaptee);
+		try {
+			(<AwayDisplayObjectContainer> this._adaptee).removeChild(child.adaptee);
+		} catch (e) {
+			throw (<SecurityDomain> this.sec).createError('ArgumentError', Errors.NotAChildError);
+		}
+
 		return child;
 	}
 
