@@ -206,12 +206,11 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner {
 	 * smoothed when scaled. If false, the bitmap is not smoothed when scaled.
 	 */
 	public get smoothing (): boolean {
-		console.log('smoothing not implemented yet in flash/Bitmap');
-		return false;
+		return (<Billboard> this.adaptee).sampler.smooth;
 	}
 
 	public set smoothing (value: boolean) {
-		console.log('smoothing not implemented yet in flash/Bitmap');
+		(<Billboard> this.adaptee).sampler.smooth = value;
 	}
 
 }
