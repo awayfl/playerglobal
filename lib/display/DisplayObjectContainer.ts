@@ -96,31 +96,6 @@ export class DisplayObjectContainer extends InteractiveObject {
 		return clone;
 	}
 
-	/* gets called from stage in order to move the playhead of the root-movieclips to next frame.
-	 the DisplayObjectContainer should call this function on all children
-	 if they extend DisplayObjectContainer themself.
-	 if any child is a MovieClip this function will not be called on its childrens adapter.
-	 */
-	public advanceFrame() {
-		let i: number = (<AwayDisplayObjectContainer> this._adaptee)._children.length;
-		while (i > 0) {
-			i--;
-			const oneChild: AwayDisplayObject = (<AwayDisplayObjectContainer> this._adaptee)._children[i];
-			if (oneChild) {
-				if (oneChild.isAsset(AwayDisplayObjectContainer)) {
-					if (oneChild.adapter) {
-						(<DisplayObjectContainer>oneChild.adapter).advanceFrame();
-					}
-				} else if (oneChild.isAsset(AwaySprite)) {
-					if (oneChild.adapter && (<any>oneChild.adapter).advanceFrame) {
-						(<DisplayObjectContainer>oneChild.adapter).advanceFrame();
-					}
-				} else if (oneChild.isAsset(AwayMovieClip)) {
-					(<AwayMovieClip>oneChild).update();
-				}
-			}
-		}
-	}
 
 	public debugDisplayGraph(obj: any) {
 		obj.object = this;

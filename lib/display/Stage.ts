@@ -270,7 +270,7 @@ export class Stage extends DisplayObjectContainer {
 
 		//	advance the stage - this updates the timeline
 		//	objects get removed, created and updated - framescripts get queued
-		this._stage.advanceFrame();
+		this._stage.adaptee.advanceFrame();
 		OrphanManager.updateOrphans();
 
 		// execute pending constructors:
