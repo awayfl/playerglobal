@@ -16,7 +16,7 @@ import { Rectangle } from '../geom/Rectangle';
 import { Point } from '../geom/Point';
 import { Vector3D } from '../geom/Vector3D';
 import { SecurityDomain } from '../SecurityDomain';
-import { release, FilterType, AVMStage } from '@awayfl/swf-loader';
+import { release, FilterType } from '@awayfl/swf-loader';
 import { BitmapFilter } from '../filters/BitmapFilter';
 
 export class DisplayObject extends EventDispatcher implements IDisplayObjectAdapter {
@@ -105,9 +105,9 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 						filter.colors[1], 1, filter.blurX, filter.blurY, filter.strength,
 						filter.quality, '', filter.knockout);
 					break;
-				case FilterType.GRADIENTGLOW:
+				case FilterType.GRADIENTGLOW: {
 					// todo: set argument "type" (currently stubbed with "")
-					var alphas = [];
+					const alphas = [];
 					filter.colors.forEach(value=>alphas.push(1));
 					newASFilters[f] = new (<SecurityDomain> this.sec).flash.filters.GradientGlowFilter(
 						filter.distance, filter.angle, this.sec.createArrayUnsafe(filter.colors),
@@ -115,11 +115,12 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 						filter.blurX, filter.blurY, filter.strength, filter.quality, '', filter.knockout
 					);
 					break;
+				}
 				case FilterType.GRADIENTBEVEL:
 					// todo: set argument "type" (currently stubbed with "")
 					newASFilters[f] = new (<SecurityDomain> this.sec).flash.filters.GradientBevelFilter(
 						filter.distance, filter.angle, this.sec.createArrayUnsafe(filter.colors),
-						this.sec.createArrayUnsafe(alphas), this.sec.createArrayUnsafe(filter.ratios),
+						this.sec.createArrayUnsafe([]), this.sec.createArrayUnsafe(filter.ratios),
 						filter.blurX, filter.blurY, filter.strength, filter.quality, '', filter.knockout
 					);
 					break;
@@ -1409,7 +1410,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		this._boundsPicker = PickGroup.getInstance(this._stage.view).getBoundsPicker(this.adaptee.partition);
 		//}
 
-		return this._boundsPicker.getBoxBounds(targetCoordinateSpace.adaptee, strokeFlag);
+		return this._boundsPicker.getBoxBounds(targetCoordinateSpace.adaptee, strokeFlag, true);
 	}
 
 	/**
