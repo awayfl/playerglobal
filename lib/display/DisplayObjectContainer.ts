@@ -1,9 +1,14 @@
 import { Box, Vector3D } from '@awayjs/core';
-import { Billboard, TextField as AwayTextField,
+import {
+	Billboard,
+	TextField as AwayTextField,
 	DisplayObjectContainer as AwayDisplayObjectContainer,
-	Sprite as AwaySprite, MovieClip as AwayMovieClip,
+	Sprite as AwaySprite,
+	MovieClip as AwayMovieClip,
 	DisplayObject as AwayDisplayObject,
-	IDisplayObjectAdapter, TextSprite } from '@awayjs/scene';
+	IDisplayObjectAdapter,
+	TextSprite,
+} from '@awayjs/scene';
 import { DisplayObject } from './DisplayObject';
 import { InteractiveObject } from './InteractiveObject';
 import { Event } from '../events/Event';
@@ -95,7 +100,6 @@ export class DisplayObjectContainer extends InteractiveObject {
 		this.adaptee.copyTo(clone.adaptee);
 		return clone;
 	}
-
 
 	public debugDisplayGraph(obj: any) {
 		obj.object = this;
@@ -300,7 +304,8 @@ export class DisplayObjectContainer extends InteractiveObject {
 				child.dispatch_ADDED_TO_STAGE(true);
 			}
 		}
-		OrphanManager.removeOrphan(child);
+
+		OrphanManager.removeOrphan(child.adaptee);
 		return child;
 	}
 
