@@ -102,12 +102,12 @@ export class FontDescription extends ASObject {
 	}
 
 	public get locked(): boolean {
-		console.log("get FontDescription locked",  this._locked);
+		console.log('get FontDescription locked',  this._locked);
 		return this._locked;
 	}
 
 	public set locked(value: boolean) {
-		console.log("set FontDescription locked",  value);
+		console.log('set FontDescription locked',  value);
 		this._locked = value;
 	}
 }
