@@ -47,7 +47,7 @@ export class ElementFormat extends ASObject {
 
 		super();
 
-		console.log('ElementFormat');
+		console.log('create ElementFormat', fontSize, fontDescription?.fontName);
 		this._fontDescription = fontDescription;
 		this._fontSize = +fontSize;
 		this._color = color >>> 0;

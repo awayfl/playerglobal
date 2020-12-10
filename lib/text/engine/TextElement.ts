@@ -14,7 +14,8 @@ export class TextElement extends ContentElement {
 		textRotation: string = 'rotate0') {
 		super(elementFormat, eventMirror, textRotation);
 		this._text = text;
-		//console.warn('[TextElement] not implemented');
+		//this._rawText = text;
+		console.warn('[TextElement]', elementFormat);
 	}
 
 	// JS -> AS Bindings
@@ -33,6 +34,7 @@ export class TextElement extends ContentElement {
 	}
 
 	public replaceText(beginIndex: number /*int*/, endIndex: number /*int*/, newText: string): void {
-		this._text = this._text.slice(0, beginIndex) + newText + this._text.slice(endIndex, this._text.length - 1);
+		this._rawText = this._text.slice(0, beginIndex) + newText + this._text.slice(endIndex, this._text.length - 1);
+		this._text = this._rawText;
 	}
 }
