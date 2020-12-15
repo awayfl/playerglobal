@@ -7,7 +7,7 @@ import { StyleSheet } from './StyleSheet';
 import { Rectangle } from '../geom/Rectangle';
 import { TextLineMetrics } from './TextLineMetrics';
 import { DisplayObject } from '../display/DisplayObject';
-import { DisplayObject as AwayDisplayObject, TextField as AwayTextField, TextFormat as AwayTexFormat, TextFieldAutoSize, TextFormatAlign, FrameScriptManager, TextFieldType } from '@awayjs/scene';
+import { DisplayObject as AwayDisplayObject, TextField as AwayTextField, TextFormat as AwayTexFormat, TextFieldAutoSize, TextFormatAlign, FrameScriptManager, TextFieldType, TextfieldEvent } from '@awayjs/scene';
 import { constructClassFromSymbol } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 /**
@@ -55,6 +55,8 @@ import { SecurityDomain } from '../SecurityDomain';
 export class TextField extends InteractiveObject {
 	private static _textFields: Array<TextField> = new Array<TextField>();
 
+	private _textFieldChangeListener: StringMap<Function[]> ={};
+
 	public static getNewTextField(adaptee: AwayTextField = null): TextField {
 		if (TextField._textFields.length) {
 			const textField: TextField = TextField._textFields.pop();
@@ -80,9 +82,22 @@ export class TextField extends InteractiveObject {
 		this.eventMappingDummys[TextEvent.TEXT_INPUT] = 'TextField:TextEvent.TEXT_INPUT';
 		this.eventMappingDummys[TextEvent.LINK] = 'TextField:TextEvent.LINK';
 		this.eventMappingDummys[Event.SCROLL] = 'TextField:Event.SCROLL';
-		this.eventMappingDummys[Event.CHANGE] = 'TextField:Event.CHANGE';
 		this.eventMappingDummys[Event.TEXT_INTERACTION_MODE_CHANGE] = 'TextField:Event.TEXT_INTERACTION_MODE_CHANGE';
 
+		this._textChangeCallbackDelegate = (event: TextfieldEvent) => this.textChangeCallback(event);
+		if ((<AwayTextField> this.adaptee).type == TextFieldType.INPUT) {
+			this.adaptee.addEventListener(TextfieldEvent.CHANGED, this._textChangeCallbackDelegate);
+		}
+	}
+
+	private _textChangeCallbackDelegate: (event: TextfieldEvent) => void;
+	private textChangeCallback(event: TextfieldEvent): void {
+		const adaptedEvent: Event = new (<SecurityDomain> this.sec).flash.events.Event(Event.CHANGE);
+		//adaptedEvent.fillFromAway(event);
+		adaptedEvent.target = this;
+		//adaptedEvent.currentTarget=this;
+
+		this.dispatchEvent(adaptedEvent, false);
 	}
 
 	protected createAdaptee(): AwayDisplayObject {
@@ -891,6 +906,13 @@ export class TextField extends InteractiveObject {
 	}
 
 	public set type (value: TextFieldType) {
+
+		if (value == TextFieldType.INPUT && (<AwayTextField> this._adaptee).type != TextFieldType.INPUT)
+			this.adaptee.addEventListener(TextfieldEvent.CHANGED, this._textChangeCallbackDelegate);
+
+		else if (value != TextFieldType.INPUT && (<AwayTextField> this._adaptee).type == TextFieldType.INPUT)
+			this.adaptee.addEventListener(TextfieldEvent.CHANGED, this._textChangeCallbackDelegate);
+
 		(<AwayTextField> this._adaptee).type = value;
 	}
 
