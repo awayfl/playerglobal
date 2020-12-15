@@ -139,7 +139,7 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 								sec.system.executeABC(avmPlusABC);
 							}, result.reject)
 							.then(() => {
-								this._contentLoaderInfo = new sec.flash.display.LoaderInfo(this, this._avmStage);
+								this._contentLoaderInfo = new sec.flash.display.LoaderInfo(this, this._avmStage.root);
 								this._contentLoaderInfo.url = swfFile.url;
 								this._applicationDomain = new sec.flash.system.ApplicationDomain();
 								const loaderContext: LoaderContext = new sec.flash.system.LoaderContext(
@@ -149,8 +149,8 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 								ActiveLoaderContext.loaderContext = loaderContext;
 								this._stage = new sec.flash.display.Stage();
 								sec.flash.display.DisplayObject.axClass._activeStage = this._stage;
-								this._avmStage.adapter = this._stage;
-								this._stage.adaptee = this._avmStage;
+								this._avmStage.root.adapter = this._stage;
+								this._stage.adaptee = this._avmStage.root;
 								result.resolve(new FlashSceneGraphFactory(sec));
 							}, result.reject);
 					}, result.reject);

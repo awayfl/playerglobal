@@ -188,7 +188,7 @@ export class Stage extends DisplayObjectContainer {
 	}
 
 	public get view(): View {
-		return (<AVMStage> <unknown> this.adaptee).scene.renderer.view;
+		return AVMStage.instance().view;
 	}
 
 	// ---------- event mapping functions Event.RESIZE
@@ -298,7 +298,7 @@ export class Stage extends DisplayObjectContainer {
 
 	public get mouseX (): number {
 		//console.log("mouseX not implemented yet in flash/DisplayObject");
-		return (<AVMStage> <unknown> this.adaptee).scene.getLocalMouseX(this.adaptee) | 0;
+		return AVMStage.instance().getLocalMouseX(this.adaptee) | 0;
 	}
 
 	/**
@@ -309,7 +309,7 @@ export class Stage extends DisplayObjectContainer {
 	 */
 	public get mouseY (): number {
 		//console.log("mouseY not implemented yet in flash/DisplayObject");
-		return (<AVMStage> <unknown> this.adaptee).scene.getLocalMouseY(this.adaptee) | 0;
+		return AVMStage.instance().getLocalMouseY(this.adaptee) | 0;
 	}
 
 	public set accessibilityImplementation (value: any) {
@@ -715,11 +715,11 @@ export class Stage extends DisplayObjectContainer {
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
 	public get scaleMode(): StageScaleMode {
-		return (<AVMStage> this.adaptee).scaleMode;
+		return AVMStage.instance().scaleMode;
 	}
 
 	public set scaleMode(value: StageScaleMode) {
-		(<AVMStage> this.adaptee).scaleMode = value;
+		AVMStage.instance().scaleMode = value;
 	}
 
 	/**
@@ -818,11 +818,11 @@ export class Stage extends DisplayObjectContainer {
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
 	public get stageHeight (): number {
-		return (<AVMStage> this.adaptee).stageHeight;
+		return AVMStage.instance().stageHeight;
 	}
 
 	public set stageHeight (value: number) {
-		(<AVMStage> this.adaptee).stageHeight = value;
+		AVMStage.instance().stageHeight = value;
 	}
 
 	/**
@@ -871,11 +871,11 @@ export class Stage extends DisplayObjectContainer {
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
 	public get stageWidth (): number {
-		return (<AVMStage> this.adaptee).stageWidth;
+		return AVMStage.instance().stageWidth;
 	}
 
 	public set stageWidth (value: number) {
-		(<AVMStage> this.adaptee).stageWidth = value;
+		AVMStage.instance().stageWidth = value;
 	}
 
 	/**

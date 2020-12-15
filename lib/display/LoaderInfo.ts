@@ -376,7 +376,7 @@ export class LoaderInfo extends EventDispatcher {
 	 * @throws Error If the file is not a SWF file.
 	 */
 	public get frameRate(): number {
-		return (<AVMStage> this._loader.stage.adaptee).frameRate;
+		return AVMStage.instance().frameRate;
 	}
 
 	/**

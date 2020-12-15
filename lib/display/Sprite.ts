@@ -1,7 +1,8 @@
 import { Sprite as AwaySprite, DisplayObjectContainer as AwayDisplayObjectContainer,
 	DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip,
 	FrameScriptManager, MovieClip, MouseManager, Timeline,
-	IDisplayObjectAdapter } from '@awayjs/scene';
+	IDisplayObjectAdapter, 
+	MouseEvent} from '@awayjs/scene';
 import { DisplayObjectContainer } from './DisplayObjectContainer';
 import { DisplayObject } from './DisplayObject';
 import { Rectangle, Point } from '@awayjs/core';
@@ -10,6 +11,7 @@ import { IVirtualSceneGraphItem } from './IVirtualSceneGraphItem';
 import { constructClassFromSymbol } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 import { release, AVMStage } from '@awayfl/swf-loader';
+import { PickEntity } from '@awayjs/view';
 
 export class Sprite extends DisplayObjectContainer {
 
@@ -556,13 +558,12 @@ export class Sprite extends DisplayObjectContainer {
 				this.checkBounds();
 			this.startDragMCPosition.x = this.adaptee.x;
 			this.startDragMCPosition.y = this.adaptee.y;
-			(<AVMStage> this.stage.adaptee).addEventListener('mouseMove3d', this.dragListenerDelegate);
 			//window.addEventListener("mouseup", this.stopDragDelegate);
 			//window.addEventListener("touchend", this.stopDragDelegate);
-			(<AVMStage> this.stage.adaptee).scene.mousePicker.dragEntity = this.adaptee;
-			MouseManager.getInstance((<AVMStage> this.stage.adaptee).scene.renderer.renderGroup.pickGroup)
-				.startDragObject(this.adaptee);
-
+			const avmStage = AVMStage.instance();
+			avmStage.mousePicker.dragEntity = this.adaptee;
+			avmStage.mouseManager.startDragObject(this.adaptee.getAbstraction<PickEntity>(avmStage.mousePicker.pickGroup).pickingCollision);
+			avmStage.view.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.dragListenerDelegate);
 		}
 	}
 
@@ -640,9 +641,10 @@ export class Sprite extends DisplayObjectContainer {
 		}
 		this.isDragging = false;
 		Sprite.currentDraggedMC = null;
-		(<AVMStage> this.stage.adaptee).scene.mousePicker.dragEntity = null;
-		MouseManager.getInstance((<AVMStage> this.stage.adaptee).scene.renderer.renderGroup.pickGroup).stopDragObject();
-		(<AVMStage> this.stage.adaptee).removeEventListener('mouseMove3d', this.dragListenerDelegate);
+		const avmStage = AVMStage.instance();
+		avmStage.mousePicker.dragEntity = null;
+		avmStage.mouseManager.stopDragObject();
+		avmStage.view.stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.dragListenerDelegate);
 		//window.removeEventListener("mouseup", this.stopDragDelegate);
 		//window.removeEventListener("touchend", this.stopDragDelegate);
 	}
