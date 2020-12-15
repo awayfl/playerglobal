@@ -1,6 +1,6 @@
 
 
-console.debug("AwayFL - PlayerGlobal - 0.2.155");
+console.debug("AwayFL - PlayerGlobal - 0.2.156");
 
 export { Sprite } from "./lib/display/Sprite";
 export { MovieClip } from "./lib/display/MovieClip";
