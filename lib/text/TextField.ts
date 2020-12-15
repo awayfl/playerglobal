@@ -7,7 +7,12 @@ import { StyleSheet } from './StyleSheet';
 import { Rectangle } from '../geom/Rectangle';
 import { TextLineMetrics } from './TextLineMetrics';
 import { DisplayObject } from '../display/DisplayObject';
-import { DisplayObject as AwayDisplayObject, TextField as AwayTextField, TextFormat as AwayTexFormat, TextFieldAutoSize, TextFormatAlign, FrameScriptManager, TextFieldType, TextfieldEvent } from '@awayjs/scene';
+import { DisplayObject as AwayDisplayObject,
+	TextField as AwayTextField,
+	TextFormat as AwayTexFormat,
+	TextFieldAutoSize,
+	TextFieldType,
+	TextfieldEvent } from '@awayjs/scene';
 import { constructClassFromSymbol } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 /**
@@ -37,19 +42,28 @@ import { SecurityDomain } from '../SecurityDomain';
 
  * The TextField class is used to create display objects for text display and input.
  * <ph outputclass="flexonly" class="- topic/ph ">You can use the TextField class to perform low-level text rendering.
- * However, in Flex, you typically use the Label, Text, TextArea, and TextInput controls to process text.</ph><ph outputclass="flashonly" class="- topic/ph ">You can give a text field an instance name in the Property inspector and
+ * However, in Flex, you typically use the Label, Text, TextArea, and TextInput controls to process text.
+ * </ph><ph outputclass="flashonly" class="- topic/ph ">
+ * You can give a text field an instance name in the Property inspector and
  * use the methods and properties of the TextField class to manipulate it with ActionScript.
  * TextField instance names are displayed in the Movie Explorer and in the Insert Target Path dialog box
- * in the Actions panel.</ph><p class="- topic/p ">To create a text field dynamically, use the <codeph class="+ topic/ph pr-d/codeph ">TextField()</codeph> constructor.</p><p class="- topic/p ">The methods of the TextField class let you set, select, and manipulate text in a dynamic or input
- * text field that you create during authoring or at runtime. </p><p class="- topic/p ">ActionScript provides several ways to
+ * in the Actions panel.</ph><p class="- topic/p ">To create a text field dynamically,
+ * use the <codeph class="+ topic/ph pr-d/codeph ">TextField()</codeph> constructor.</p>
+ * <p class="- topic/p ">
+ * The methods of the TextField class let you set, select, and manipulate text in a dynamic or input
+ * text field that you create during authoring or at runtime. </p>
+ * <p class="- topic/p ">ActionScript provides several ways to
  * format your text at runtime. The TextFormat class lets you set character and paragraph formatting
  * for TextField objects. You can apply Cascading Style Sheets (CSS) styles
- * to text fields by using the <codeph class="+ topic/ph pr-d/codeph ">TextField.styleSheet</codeph> property and the StyleSheet class. You can use CSS to
+ * to text fields by using the <codeph class="+ topic/ph pr-d/codeph ">TextField.styleSheet</codeph>
+ * property and the StyleSheet class. You can use CSS to
  * style built-in HTML tags, define new formatting tags, or apply styles.
  * You can assign HTML formatted text, which optionally uses CSS styles, directly to a text
  * field. HTML text that you assign to a text field can contain embedded
  * media (movie clips, SWF files, GIF files, PNG files, and JPEG files). The text wraps around the
- * embedded media in the same way that a web browser wraps text around media embedded in an HTML document. </p><p class="- topic/p ">Flash Player supports a subset of HTML tags that you can use to format text. See the list of supported
+ * embedded media in the same way that a web browser wraps text around media embedded in an HTML document.
+ * </p><p class="- topic/p ">Flash Player supports a subset of HTML tags that you can use to format text.
+ * See the list of supported
  * HTML tags in the description of the <codeph class="+ topic/ph pr-d/codeph ">htmlText</codeph> property.</p>
  */
 export class TextField extends InteractiveObject {
@@ -157,8 +171,11 @@ export class TextField extends InteractiveObject {
 	 * embedded (with the embedFonts property set to true).
 	 * The default setting is flash.text.AntiAliasType.NORMAL.
 	 *
-	 *   To set values for this property, use the following string values:String valueDescriptionflash.text.AntiAliasType.NORMALApplies the regular text anti-aliasing. This value matches the type of anti-aliasing that
-	 * Flash Player 7 and earlier versions used.flash.text.AntiAliasType.ADVANCEDApplies advanced anti-aliasing, which makes text more legible. (This feature became
+	 *   To set values for this property, use the following string values:String valueDescription
+	 * flash.text.AntiAliasType.NORMALApplies the regular text anti-aliasing.
+	 * This value matches the type of anti-aliasing that
+	 * Flash Player 7 and earlier versions used.flash.text.AntiAliasType.ADVANCED
+	 * Applies advanced anti-aliasing, which makes text more legible. (This feature became
 	 * available in Flash Player 8.) Advanced anti-aliasing allows for high-quality rendering
 	 * of font faces at small sizes. It is best used with applications
 	 * with a lot of small text. Advanced anti-aliasing is not recommended for
@@ -177,17 +194,20 @@ export class TextField extends InteractiveObject {
 	 * Acceptable values for the TextFieldAutoSize constants: TextFieldAutoSize.NONE (the default),
 	 * TextFieldAutoSize.LEFT, TextFieldAutoSize.RIGHT, and TextFieldAutoSize.CENTER.
 	 *
-	 *   If autoSize is set to TextFieldAutoSize.NONE (the default) no resizing occurs.If autoSize is set to TextFieldAutoSize.LEFT, the text is
+	 *   If autoSize is set to TextFieldAutoSize.NONE (the default) no resizing occurs.
+	 * If autoSize is set to TextFieldAutoSize.LEFT, the text is
 	 * treated as left-justified text, meaning that the left margin of the text field remains fixed and any
 	 * resizing of a single line of the text field is on the right margin. If the text includes a line break
 	 * (for example, "\n" or "\r"), the bottom is also resized to fit the next
 	 * line of text. If wordWrap is also set to true, only the bottom
-	 * of the text field is resized and the right side remains fixed.If autoSize is set to TextFieldAutoSize.RIGHT, the text is treated as
+	 * of the text field is resized and the right side remains fixed.
+	 * If autoSize is set to TextFieldAutoSize.RIGHT, the text is treated as
 	 * right-justified text, meaning that the right margin of the text field remains fixed and any resizing
 	 * of a single line of the text field is on the left margin. If the text includes a line break
 	 * (for example, "\n" or "\r"), the bottom is also resized to fit the next
 	 * line of text. If wordWrap is also set to true, only the bottom
-	 * of the text field is resized and the left side remains fixed.If autoSize is set to TextFieldAutoSize.CENTER, the text is treated as
+	 * of the text field is resized and the left side remains fixed.
+	 * If autoSize is set to TextFieldAutoSize.CENTER, the text is treated as
 	 * center-justified text, meaning that any resizing of a single line of the text field is equally distributed
 	 * to both the right and left margins. If the text includes a line break (for example, "\n" or
 	 * "\r"), the bottom is also resized to fit the next line of text. If wordWrap is also
@@ -292,7 +312,8 @@ export class TextField extends InteractiveObject {
 	 * text with the text property, condenseWhite is ignored.
 	 *
 	 *   If condenseWhite is set to true, use standard HTML commands such as
-	 * <BR> and <P> to place line breaks in the text field.Set the condenseWhite property before setting the htmlText property.
+	 * <BR> and <P> to place line breaks in the text field.
+	 * Set the condenseWhite property before setting the htmlText property.
 	 */
 	public get condenseWhite (): boolean {
 		//todo
@@ -320,7 +341,8 @@ export class TextField extends InteractiveObject {
 	 * my_txt.setSelection(6,23); // text selected to end - defaultTextFormat applied
 	 * my_txt.replaceSelectedText("Windows version");
 	 * When you access the defaultTextFormat property, the returned TextFormat object has all
-	 * of its properties defined. No property is null.Note: You can't set this property if a style sheet is applied to the text field.
+	 * of its properties defined. No property is null.
+	 * Note: You can't set this property if a style sheet is applied to the text field.
 	 * @throws	Error This method cannot be used on a text field with a style sheet.
 	 */
 	public get defaultTextFormat (): TextFormat {
@@ -379,14 +401,19 @@ export class TextField extends InteractiveObject {
 	 * flash.text.AntiAliasType property of the text field is set to flash.text.AntiAliasType.ADVANCED.
 	 *
 	 *   The type of grid fitting used determines whether Flash Player forces strong horizontal and
-	 * vertical lines to fit to a pixel or subpixel grid, or not at all.For the flash.text.GridFitType property, you can use the following string values:String valueDescriptionflash.text.GridFitType.NONESpecifies no grid fitting. Horizontal and vertical lines in the glyphs are not
+	 * vertical lines to fit to a pixel or subpixel grid, or not at all.
+	 * For the flash.text.GridFitType property, you can use the following string values:String value
+	 * Descriptionflash.text.GridFitType.NONE
+	 * Specifies no grid fitting. Horizontal and vertical lines in the glyphs are not
 	 * forced to the pixel grid. This setting is recommended for animation or
-	 * for large font sizes.flash.text.GridFitType.PIXELSpecifies that strong horizontal and vertical lines are fit to the
+	 * for large font sizes.flash.text.GridFitType.PIXEL
+	 * Specifies that strong horizontal and vertical lines are fit to the
 	 * pixel grid. This setting works only for left-aligned text fields.
 	 * To use this setting, the flash.dispaly.AntiAliasType property of the text field
 	 * must be set to flash.text.AntiAliasType.ADVANCED.
 	 * This setting generally provides the best legibility for
-	 * left-aligned text.flash.text.GridFitType.SUBPIXELSpecifies that strong horizontal and vertical lines are fit to the subpixel grid on
+	 * left-aligned text.flash.text.GridFitType.SUBPIXEL
+	 * Specifies that strong horizontal and vertical lines are fit to the subpixel grid on
 	 * an LCD monitor. To use this setting, the
 	 * flash.text.AntiAliasType property of the text field must be set to
 	 * flash.text.AntiAliasType.ADVANCED. The flash.text.GridFitType.SUBPIXEL setting is often good
@@ -465,8 +492,10 @@ export class TextField extends InteractiveObject {
 	 * movie clips inside text fields. Text automatically flows around images you embed in text fields. You
 	 * must set the text field to be multiline to wrap text around an image.
 	 *
-	 *   The <img> tag supports the following attributes: src: Specifies the URL to an image or SWF file, or the linkage identifier for a movie clip
-	 * symbol in the library. This attribute is required; all other attributes are optional. External files (JPEG, GIF, PNG,
+	 *   The <img> tag supports the following attributes: src:
+	 * Specifies the URL to an image or SWF file, or the linkage identifier for a movie clip
+	 * symbol in the library.
+	 * This attribute is required; all other attributes are optional. External files (JPEG, GIF, PNG,
 	 * and SWF files) do not show until they are downloaded completely.
 	 * width: The width of the image, SWF file, or movie clip being inserted, in pixels.
 	 * height: The height of the image, SWF file, or movie clip being inserted, in pixels.
@@ -490,7 +519,8 @@ export class TextField extends InteractiveObject {
 	 * you are embedding, use the <img> tag height and width
 	 * attributes. In general, an image embedded in a text field appears on the line following the
 	 * <img> tag. However, when the <img> tag
-	 * is the first character in the text field, the image appears on the first line of the text field. For AIR content in the application security sandbox, AIR ignores img tags in
+	 * is the first character in the text field, the image appears on the first line of the text field.
+	 * For AIR content in the application security sandbox, AIR ignores img tags in
 	 * HTML content in ActionScript TextField objects. This is to prevent possible phishing attacks,
 	 * Italic tag
 	 *
@@ -526,7 +556,8 @@ export class TextField extends InteractiveObject {
 	 * The <textformat> tag lets you use a subset of paragraph formatting
 	 * properties of the TextFormat class within text fields, including line leading, indentation,
 	 * margins, and tab stops. You can combine <textformat> tags with the
-	 * built-in HTML tags. The <textformat> tag has the following attributes: blockindent: Specifies the block indentation in points; corresponds to
+	 * built-in HTML tags. The <textformat> tag has the following attributes: blockindent:
+	 * Specifies the block indentation in points; corresponds to
 	 * TextFormat.blockIndent.
 	 * indent: Specifies the indentation from the left margin to the first character
 	 * in the paragraph; corresponds to TextFormat.indent. Both positive and negative
@@ -664,10 +695,12 @@ export class TextField extends InteractiveObject {
 	 * the string into the text field. The string is scanned from left to right. You can specify a range by
 	 * using the hyphen (-) character. Only user interaction is restricted; a script can put any text into the
 	 * text field. This property does not synchronize with the Embed font options
-	 * in the Property inspector.If the string begins with a caret (^) character, all characters are initially accepted and
+	 * in the Property inspector.If the string begins with a caret (^) character,
+	 * all characters are initially accepted and
 	 * succeeding characters in the string are excluded from the set of accepted characters. If the string does
 	 * not begin with a caret (^) character, no characters are initially accepted and succeeding characters in the
-	 * string are included in the set of accepted characters.The following example allows only uppercase characters, spaces, and numbers to be entered into
+	 * string are included in the set of accepted characters.
+	 * The following example allows only uppercase characters, spaces, and numbers to be entered into
 	 * a text field:
 	 * my_txt.restrict = "A-Z 0-9";
 	 * The following example includes all characters, but excludes lowercase letters:
@@ -803,7 +836,8 @@ export class TextField extends InteractiveObject {
 	 *   You can change the style sheet associated with a text field at any time. If you change
 	 * the style sheet in use, the text field is redrawn with the new style sheet.
 	 * You can set the style sheet to null or undefined
-	 * to remove the style sheet. If the style sheet in use is removed, the text field is redrawn without a style sheet. Note: If the style sheet is removed, the contents of both TextField.text and
+	 * to remove the style sheet. If the style sheet in use is removed, the text field is redrawn without a style sheet.
+	 * Note: If the style sheet is removed, the contents of both TextField.text and
 	 * TextField.htmlText change to incorporate the formatting previously applied by the style sheet. To preserve
 	 * the original TextField.htmlText contents without the formatting, save the value in a variable before
 	 * removing the style sheet.
@@ -918,7 +952,9 @@ export class TextField extends InteractiveObject {
 
 	/**
 	 * Specifies whether to copy and paste the text formatting along with the text. When set to true,
-	 * Flash Player copies and pastes formatting (such as alignment, bold, and italics) when you copy and paste between text fields. Both the origin and destination text fields for the copy and paste procedure must have
+	 * Flash Player copies and pastes formatting (such as alignment, bold, and italics)
+	 * when you copy and paste between text fields.
+	 * Both the origin and destination text fields for the copy and paste procedure must have
 	 * useRichTextClipboard set to true. The default value
 	 * is false.
 	 */
@@ -1117,15 +1153,20 @@ export class TextField extends InteractiveObject {
 	 * at different points in the text, has a value of null.
 	 *
 	 *   If you do not specify
-	 * values for these parameters, this method is applied to all the text in the text field.  The following table describes three possible usages:UsageDescriptionmy_textField.getTextFormat()Returns a TextFormat object containing formatting information for all text in a text field.
+	 * values for these parameters, this method is applied to all the text in the text field.
+	 * The following table describes three possible usages:UsageDescriptionmy_textField.getTextFormat()
+	 * Returns a TextFormat object containing formatting information for all text in a text field.
 	 * Only properties that are common to all text in the text field are set in the resulting TextFormat
 	 * object. Any property that is mixed, meaning that it has different values at different
-	 * points in the text, has a value of null.my_textField.getTextFormat(beginIndex:Number)Returns a TextFormat object containing a copy of the text format of the character at the
-	 * beginIndex position.my_textField.getTextFormat(beginIndex:Number,endIndex:Number)Returns a TextFormat object containing formatting information for the span of
+	 * points in the text, has a value of null.my_textField.getTextFormat(beginIndex:Number)
+	 * Returns a TextFormat object containing a copy of the text format of the character at the
+	 * beginIndex position.my_textField.getTextFormat(beginIndex:Number,endIndex:Number)
+	 * Returns a TextFormat object containing formatting information for the span of
 	 * text from beginIndex to endIndex-1. Only properties that are common
 	 * to all of the text in the specified range are set in the resulting TextFormat object. Any property
 	 * that is mixed (that is, has different values at different points in the range) has its value set to null.
-	 * @param	beginIndex	Optional; an integer that specifies the starting location of a range of text within the text field.
+	 * @param	beginIndex	Optional; an integer that specifies the starting location
+	 * of a range of text within the text field.
 	 * @param	endIndex	Optional; an integer that specifies the position of the first character after the desired
 	 *   text span. As designed, if you specify beginIndex and endIndex values,
 	 *   the text from beginIndex to endIndex-1 is read.
@@ -1176,7 +1217,8 @@ export class TextField extends InteractiveObject {
 	 *
 	 *   TextField cannot use a font of type EMBEDDED_CFF. If embedFonts is set to true
 	 * and the only font available at run time with the specified name and style is of type EMBEDDED_CFF,
-	 * Flash Player fails to render the text, as if no embedded font were available with the specified name and style.If both EMBEDDED and EMBEDDED_CFF fonts are available with the same name and style, the EMBEDDED
+	 * Flash Player fails to render the text, as if no embedded font were available with the specified name and style.
+	 * If both EMBEDDED and EMBEDDED_CFF fonts are available with the same name and style, the EMBEDDED
 	 * font is selected and text renders with the EMBEDDED font.
 	 * @param	fontName	The name of the embedded font to check.
 	 * @param	fontStyle	Specifies the font style to check.  Use flash.text.FontStyle
@@ -1201,7 +1243,8 @@ export class TextField extends InteractiveObject {
 	 * format and default paragraph format. The text is not treated as HTML.
 	 *
 	 *   You can use the replaceSelectedText() method to insert and delete text without disrupting
-	 * the character and paragraph formatting of the rest of the text.Note: This method does not work if a style sheet is applied to the text field.
+	 * the character and paragraph formatting of the rest of the text.
+	 * Note: This method does not work if a style sheet is applied to the text field.
 	 * @param	value	The string to replace the currently selected text.
 	 * @throws	Error This method cannot be used on a text field with a style sheet.
 	 */
@@ -1246,15 +1289,18 @@ export class TextField extends InteractiveObject {
 	 * desired text formatting changes. Only the non-null properties of format are applied
 	 * to the text field. Any property of format that is set to null is not
 	 * applied. By default, all of the properties of a newly created TextFormat object are set to null.
-	 * Note: This method does not work if a style sheet is applied to the text field.The setTextFormat() method changes the text formatting applied to a range of
-	 * characters or to the entire body of text in a text field. To apply the properties of format to all text in the text
+	 * Note: This method does not work if a style sheet is applied to the text field.
+	 * The setTextFormat() method changes the text formatting applied to a range of
+	 * characters or to the entire body of text in a text field.
+	 * To apply the properties of format to all text in the text
 	 * field, do not specify values for beginIndex and endIndex. To apply the
 	 * properties of the format to a range of text, specify values for the beginIndex and
 	 * the endIndex parameters. You can use the length property to determine
 	 * the index values.The two types of formatting information in a TextFormat object are
 	 * character level formatting and paragraph level formatting.
 	 * Each character in a text field can have its own character formatting
-	 * settings, such as font name, font size, bold, and italic.For paragraphs, the first character of the paragraph is examined for the paragraph formatting
+	 * settings, such as font name, font size, bold, and italic.For paragraphs,
+	 * the first character of the paragraph is examined for the paragraph formatting
 	 * settings for the entire paragraph. Examples of paragraph formatting settings are left margin,
 	 * right margin, and indentation.Any text inserted manually by the user, or replaced by the
 	 * replaceSelectedText() method, receives the default text field formatting for new text,
@@ -1267,11 +1313,14 @@ export class TextField extends InteractiveObject {
 	 *   As designed, if you specify beginIndex and endIndex values,
 	 *   the text from beginIndex to endIndex-1 is updated.
 	 *
-	 *     UsageDescriptionmy_textField.setTextFormat(textFormat:TextFormat)Applies the properties of textFormat to all text in the text
-	 *   field.my_textField.setTextFormat(textFormat:TextFormat, beginIndex:int)Applies the properties of textFormat to the text starting with the
+	 *     UsageDescriptionmy_textField.setTextFormat(textFormat:TextFormat)
+	 * Applies the properties of textFormat to all text in the text
+	 *   field.my_textField.setTextFormat(textFormat:TextFormat, beginIndex:int)
+	 * Applies the properties of textFormat to the text starting with the
 	 *   beginIndex position.my_textField.setTextFormat(textFormat:TextFormat, beginIndex:int,
 	 *   endIndex:int)Applies the properties of the textFormat parameter to the span of
-	 *   text from the beginIndex position to the endIndex-1 position.Notice that any text inserted manually by the user, or replaced by the
+	 *   text from the beginIndex position to the endIndex-1 position.
+	 * Notice that any text inserted manually by the user, or replaced by the
 	 *   replaceSelectedText() method, receives the default text field formatting for new
 	 *   text, and not the formatting specified for the text insertion point. To set a text field's
 	 *   default formatting for new text, use the defaultTextFormat property.
