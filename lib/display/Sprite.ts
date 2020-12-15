@@ -1,8 +1,8 @@
 import { Sprite as AwaySprite, DisplayObjectContainer as AwayDisplayObjectContainer,
 	DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip,
 	FrameScriptManager, MovieClip, MouseManager, Timeline,
-	IDisplayObjectAdapter, 
-	MouseEvent} from '@awayjs/scene';
+	IDisplayObjectAdapter,
+	MouseEvent } from '@awayjs/scene';
 import { DisplayObjectContainer } from './DisplayObjectContainer';
 import { DisplayObject } from './DisplayObject';
 import { Rectangle, Point } from '@awayjs/core';
