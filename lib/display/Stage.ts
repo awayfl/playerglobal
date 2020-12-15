@@ -7,7 +7,7 @@ import { DisplayObject } from './DisplayObject';
 import { FrameScriptManager } from '@awayjs/scene';
 import { View } from '@awayjs/view';
 import { Stage as AwayStage } from '@awayjs/stage';
-import { DisplayObjectContainer as AwayDisplayObjectContainer } from '@awayjs/scene';
+import { DisplayObjectContainer as AwayDisplayObjectContainer, MouseEvent as MouseEventAway } from '@awayjs/scene';
 import { Transform } from '../geom/Transform';
 import { Rectangle } from '../geom/Rectangle';
 import { SecurityDomain } from '../SecurityDomain';
@@ -217,6 +217,32 @@ export class Stage extends DisplayObjectContainer {
 
 	private removeMouseLeaveListener(type: string, callback: (event: any) => void): void {
 		window.removeEventListener('mouseleave', callback);
+	}
+
+	protected initMouseListener(type: string, callback: (event: MouseEventAway) => void, listener: Function): void {
+		if (!this._mouseListnersCallbacksByType[type]) {
+			this.adaptee.addEventListener(type, callback);
+			AVMStage.instance().view.stage.addEventListener(type, callback);
+			this._mouseListnersCallbacksByType[type] = [listener];
+			return;
+		}
+		this._mouseListnersCallbacksByType[type].push(listener);
+
+	}
+
+	protected removeMouseListener(type: string, callback: (event: MouseEventAway) => void, listener: Function): void {
+		if (this._mouseListnersCallbacksByType[type]) {
+			const idx = this._mouseListnersCallbacksByType[type].indexOf(listener);
+			if (idx != -1) {
+				if (this._mouseListnersCallbacksByType[type].length == 1) {
+					delete this._mouseListnersCallbacksByType[type];
+					this.adaptee.removeEventListener(type, callback);
+					AVMStage.instance().view.stage.removeEventListener(type, callback);
+					return;
+				}
+				this._mouseListnersCallbacksByType[type].splice(idx, 1);
+			}
+		}
 	}
 
 	private _mouseLeaveCallbackDelegate: (event: any) => void;

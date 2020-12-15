@@ -13,7 +13,7 @@ export class InteractiveObject extends DisplayObject {
 
 	private _keyDownListeners: Function[];
 	private _keyUpListeners: Function[];
-	private _mouseListnersCallbacksByType: StringMap<Function[]> ={};
+	protected _mouseListnersCallbacksByType: StringMap<Function[]> ={};
 	/** these should be able to get setup:
 
 	 // listen on key directly
@@ -567,7 +567,7 @@ export class InteractiveObject extends DisplayObject {
 
 	// ---------- event mapping functions for MouseEvents:
 
-	private initMouseListener(type: string, callback: (event: MouseEventAway) => void, listener: Function): void {
+	protected initMouseListener(type: string, callback: (event: MouseEventAway) => void, listener: Function): void {
 		if (!this._mouseListnersCallbacksByType[type]) {
 			this.adaptee.addEventListener(type, callback);
 			this._mouseListnersCallbacksByType[type] = [listener];
@@ -577,7 +577,7 @@ export class InteractiveObject extends DisplayObject {
 
 	}
 
-	private removeMouseListener(type: string, callback: (event: MouseEventAway) => void, listener: Function): void {
+	protected removeMouseListener(type: string, callback: (event: MouseEventAway) => void, listener: Function): void {
 		if (this._mouseListnersCallbacksByType[type]) {
 			const idx = this._mouseListnersCallbacksByType[type].indexOf(listener);
 			if (idx != -1) {
