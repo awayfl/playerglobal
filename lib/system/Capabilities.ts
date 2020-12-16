@@ -21,6 +21,13 @@ import { TouchscreenType } from './TouchscreenType';
 
 declare let window;
 
+export const DEFAULT_CAPABILITIES = {
+	LANGUAGE: 'en',
+	PLAYER_TYPE: 'PlugIn',
+	SCREEN_DPI: 96,
+	IS_DEBUGGER: false,
+};
+
 export class Capabilities extends ASObject {
 
 	static classInitializer: any = null;
@@ -42,15 +49,15 @@ export class Capabilities extends ASObject {
 	// static _hasStreamingVideo: boolean;
 	// static _hasVideoEncoder: boolean;
 	// static _localFileReadDisable: boolean;
-	private static _language: string = 'en';
+	private static _language: string = null;// DEFAULT_CAPABILITIES.LANGUAGE;
 	private static _manufacturer: string = 'Mozilla Research';
 	private static _os: string = null;
 	// static _cpuArchitecture: string;
-	private static _playerType: string = 'PlugIn';
+	private static _playerType: string = null;// DEFAULT_CAPABILITIES.PLAYER_TYPE;
 	private static _version: string = 'SHUMWAY 10,0,0,0';
 	// static _screenColor: string;
 	// static _pixelAspectRatio: number;
-	private static _screenDPI: number = 96; // Using standard CSS DPI for now.
+	private static _screenDPI: number = 0;// = DEFAULT_CAPABILITIES.SCREEN_DPI;
 	// static _touchscreenType: string;
 	// static _hasIME: boolean;
 	// static _hasTLS: boolean;
@@ -123,7 +130,7 @@ export class Capabilities extends ASObject {
 	}
 
 	static get isDebugger(): boolean {
-		return false;
+		return DEFAULT_CAPABILITIES.IS_DEBUGGER;
 	}
 
 	static get localFileReadDisable(): boolean {
@@ -133,7 +140,7 @@ export class Capabilities extends ASObject {
 
 	static get language(): string {
 		release || somewhatImplemented('public flash.system.Capabilities::get language');
-		return Capabilities._language;
+		return Capabilities._language || DEFAULT_CAPABILITIES.LANGUAGE;
 	}
 
 	static get manufacturer(): string {
@@ -173,7 +180,7 @@ export class Capabilities extends ASObject {
 	}
 
 	static get playerType(): string {
-		return Capabilities._playerType;
+		return Capabilities._playerType || DEFAULT_CAPABILITIES.PLAYER_TYPE;
 	}
 
 	static get serverString(): string {
@@ -204,7 +211,7 @@ export class Capabilities extends ASObject {
 
 	static get screenDPI(): number {
 		release || somewhatImplemented('public flash.system.Capabilities::get screenDPI');
-		return Capabilities._screenDPI;
+		return Capabilities._screenDPI || DEFAULT_CAPABILITIES.SCREEN_DPI;
 	}
 
 	static get screenResolutionX(): number {
