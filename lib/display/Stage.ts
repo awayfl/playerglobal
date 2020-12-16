@@ -153,6 +153,8 @@ export class Stage extends DisplayObjectContainer {
 
 	private _stage3Ds: AwayStage[];
 
+	private _isAVMStage: boolean = true;
+
 	private _sendEventRender: boolean;
 
 	constructor() {
@@ -796,6 +798,17 @@ export class Stage extends DisplayObjectContainer {
 		// todo: any is stage3d
 		console.log('stage3Ds not implemented yet in flash/Stage');
 		return this._stage3Ds;
+	}
+
+	public get stage(): Stage {
+		// this override only works when called from ts
+		// when called from avm, it will still call DisplayObject.stage,
+		// because abc does not know stage overrides this getter
+		return this;
+	}
+
+	public set stage(value: Stage) {
+		this._stage = value;
 	}
 
 	/**

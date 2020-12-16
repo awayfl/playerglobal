@@ -842,7 +842,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * non-rotated Point.
 	 */
 	public get mouseX(): number {
-		return Math.floor(this.adaptee.transform.globalToLocal(new AwayPoint(this.stage.mouseX, this.stage.mouseY)).x);
+		return Math.floor(this.adaptee.transform.globalToLocal(
+			new AwayPoint(this._stage.mouseX, this._stage.mouseY)).x);
 	}
 
 	/**
@@ -852,7 +853,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * non-rotated Point.
 	 */
 	public get mouseY(): number {
-		return Math.floor(this.adaptee.transform.globalToLocal(new AwayPoint(this.stage.mouseX, this.stage.mouseY)).y);
+		return Math.floor(this.adaptee.transform.globalToLocal(
+			new AwayPoint(this._stage.mouseX, this._stage.mouseY)).y);
 	}
 
 	/**
@@ -935,7 +937,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 */
 	public get root(): DisplayObject {
 		//console.log("root not implemented yet in flash/DisplayObject");
-		const root = this.stage.getChildAt(0);
+		const root = this._stage.getChildAt(0);
 		if (!root) {
 			console.log('DisplayObject: could not get root');
 			return null;
@@ -1174,8 +1176,17 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * null.
 	 */
 	public get stage(): Stage {
-		return this._stage;
-
+		// nasty stuff:
+		// overrite for "get stage" does not work when called from avm
+		// if we call myStage.stage, it will still execute this function,
+		// because abc code does not know there exists a "get stage" on stage.
+		// also checking by "this instanceof Stage" does not work due to circular dependencies
+		// "_isAVMStage" is a workaround which should only ever return true if "this" is a Stage object
+		if ((<any> this)._isAVMStage)
+			return (<any> this);
+		if (this.adaptee.parent)
+			return (<DisplayObject> this.adaptee.parent.adapter).stage;
+		return null;
 	}
 
 	public set stage(value: Stage) {
