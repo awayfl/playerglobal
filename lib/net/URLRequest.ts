@@ -1,4 +1,4 @@
-import { URLRequest as URLRequestAway, URLVariables as URLVariablesAway} from '@awayjs/core';
+import { URLRequest as URLRequestAway, URLVariables as URLVariablesAway } from '@awayjs/core';
 import { ASObject, ASArray, axCoerceString, transformJSValueToAS, transformASValueToJS } from '@awayfl/avm2';
 import { URLVariables } from './URLVariables';
 
