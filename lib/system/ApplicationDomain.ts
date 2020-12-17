@@ -73,13 +73,15 @@ export class ApplicationDomain extends ASObject {
 
 		if (isSystemDomain) {
 			this.axApplicationDomain = this.sec.system;
+		} else if (!parentDomain) {
+			this.axApplicationDomain = this.sec.application;
 		} else {
-			this.axApplicationDomain = new AXApplicationDomain(
-				this.sec,
-				this.parentDomain
-					? this.parentDomain.axApplicationDomain
-					: this.sec.application);
+			this.axApplicationDomain =  new AXApplicationDomain(this.sec, this.parentDomain.axApplicationDomain);
 		}
+
+		//@ts-ignore
+		// store crossref back
+		this.axApplicationDomain.awayApplicationDomain = this;
 	}
 
 	/**
