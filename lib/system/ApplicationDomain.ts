@@ -1,12 +1,9 @@
 import { ByteArray, AssetBase } from '@awayjs/core';
-import { IDisplayObjectAdapter, Font, SceneImage2D } from '@awayjs/scene';
-import { DisplayObject as AwayDisplayObject } from '@awayjs/scene';
+import { Font, SceneImage2D } from '@awayjs/scene';
 import { MovieClip as AwayMovieClip } from '@awayjs/scene';
 import { WaveAudio } from '@awayjs/core';
-import { MovieClip } from '../display/MovieClip';
 import { Sound } from '../media/Sound';
-import { AXClass, ASObject, Multiname } from '@awayfl/avm2';
-import { SecurityDomain } from '../SecurityDomain';
+import { AXClass, ASObject, Multiname, AXApplicationDomain } from '@awayfl/avm2';
 
 /**
  * The ApplicationDomain class is a container for discrete groups of class definitions.
@@ -16,15 +13,19 @@ import { SecurityDomain } from '../SecurityDomain';
  *
  *   <p class="- topic/p ">Application domains are used when an external SWF file is loaded through the Loader class.
  * All ActionScript 3.0 definitions in the loaded SWF file are stored in the application
- * domain, which is specified by the <codeph class="+ topic/ph pr-d/codeph ">applicationDomain</codeph> property of the LoaderContext
- * object that you pass as a <codeph class="+ topic/ph pr-d/codeph ">context</codeph> parameter of the Loader object's <codeph class="+ topic/ph pr-d/codeph ">load()</codeph> or
- * <codeph class="+ topic/ph pr-d/codeph ">loadBytes()</codeph> method. The LoaderInfo object also contains an
- * <codeph class="+ topic/ph pr-d/codeph ">applicationDomain</codeph> property, which is read-only.</p><p class="- topic/p ">All code in a SWF file is defined to exist in an application domain. The current application
+ * domain, which is specified by the applicationDomain property of the LoaderContext
+ * object that you pass as a context parameter of the Loader object's load() or
+ * loadBytes() method. The LoaderInfo object also contains an
+ * applicationDomain property, which is read-only.
+ * All code in a SWF file is defined to exist in an application domain. The current application
  * domain is where your main application runs. The system domain contains all application domains,
- * including the current domain, which means that it contains all Flash Player classes.</p><p class="- topic/p ">Every application domain, except the system domain, has an associated parent domain.
+ * including the current domain, which means that it contains all Flash Player classes.Every application domain,
+ * except the system domain, has an associated parent domain.
  * The parent domain of your main application's application domain is the system domain.
  * Loaded classes are defined only when their parent doesn't already define them.
- * You cannot override a loaded class definition with a newer definition.</p><p class="- topic/p ">For usage examples of application domains, see the <i class="+ topic/ph hi-d/i ">ActionScript 3.0 Developer's Guide</i>.</p><p class="- topic/p ">The <codeph class="+ topic/ph pr-d/codeph ">ApplicationDomain()</codeph> constructor function allows you to create an ApplicationDomain object.</p>
+ * You cannot override a loaded class definition with a newer definition.
+ * For usage examples of application domains, see the.
+ * The ApplicationDomain() constructor function allows you to create an ApplicationDomain object.</p>
  *
  * @internal	Security considerations for application domains are discussed in the
  *   applicationDomain property entries of URLRequest and LoaderInfo.
@@ -47,22 +48,38 @@ export class ApplicationDomain extends ASObject {
 	private _memoryView: DataView;
 	private _memory: ByteArray;
 
+	/*internal*/ axApplicationDomain: AXApplicationDomain;
+
 	/**
 	 * Creates a new application domain.
-	 * @param	parentDomain	If no parent domain is passed in, this application domain takes the system domain as its parent.
+	 * @param	parentDomain	If no parent domain is passed in,
+	 * this application domain takes the system domain as its parent.
 	 */
 	constructor (parentDomain: ApplicationDomain = null, isSystemDomain: boolean = false) {
 		super();
+
 		if (!isSystemDomain && parentDomain == null && ApplicationDomain._currentDomain != null) {
 			//ApplicationDomain.currentDomain;
 			parentDomain = ApplicationDomain.getSystemDomain();
 		}
+
 		if (!ApplicationDomain._currentDomain)
 			ApplicationDomain._currentDomain = this;
+
 		this._parentDomain = parentDomain;
 		this._definitions = {};
 		this._font_definitions = {};
 		this._audio_definitions = {};
+
+		if (isSystemDomain) {
+			this.axApplicationDomain = this.sec.system;
+		} else {
+			this.axApplicationDomain = new AXApplicationDomain(
+				this.sec,
+				this.parentDomain
+					? this.parentDomain.axApplicationDomain
+					: this.sec.application);
+		}
 	}
 
 	/**
@@ -169,11 +186,11 @@ export class ApplicationDomain extends ASObject {
 				(<AwayMovieClip>clone.adaptee).currentFrameIndex = 0;
 			}
 			return clone;
-		} else if (this._font_definitions[name]) {
-			return this._font_definitions[name];
-		} else if (this._audio_definitions[name]) {
+		} else if (this._font_definitions[className]) {
+			return this._font_definitions[className];
+		} else if (this._audio_definitions[className]) {
 			const sound = new Sound();
-			sound.adaptee = this._audio_definitions[name];
+			sound.adaptee = this._audio_definitions[className];
 			//sound.adaptee.adapter=sound;
 			return sound;
 		}
@@ -193,7 +210,7 @@ export class ApplicationDomain extends ASObject {
 		/**
 		 * @todo Cache a FromSimpleName
 		 */
-		return (<SecurityDomain> this.sec).application.getClass(Multiname.FromSimpleName(name));
+		return this.axApplicationDomain.getClass(Multiname.FromSimpleName(name));
 	}
 
 	public getFontDefinition (name: string): Font {

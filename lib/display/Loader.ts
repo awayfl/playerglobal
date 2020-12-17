@@ -239,7 +239,7 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 		super();
 
 		this._contentLoaderInfo = new (<SecurityDomain> this.sec).flash.display.LoaderInfo(this, this.adaptee);
-		this._factory = new FlashSceneGraphFactory(<SecurityDomain> this.sec);
+		this._factory = new FlashSceneGraphFactory(<SecurityDomain> this.sec, this._contentLoaderInfo);
 	}
 
 	protected createAdaptee(): AwayDisplayObject {
@@ -651,7 +651,11 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 
 			this._contentLoaderInfo._setApplicationDomain(this._loaderContext.applicationDomain);
 
-			(<LoaderContainer> this._adaptee).loadData((<any>bytes).bytes);
+			(<LoaderContainer> this._adaptee).loadData(
+				(<any>bytes).bytes,
+				null,
+				null,
+				new SWFParser(this._factory));
 
 			/*
 			this.adaptee.addEventListener(URLLoaderEvent.LOAD_ERROR, (event: URLLoaderEvent)=>{

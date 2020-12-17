@@ -1,6 +1,8 @@
 
 import { ApplicationDomain } from '../system/ApplicationDomain';
 import { SecurityDomain } from '../system/SecurityDomain';
+import { SecurityDomain as SecurityDomainAS } from  './../SecurityDomain';
+
 import { ASObject } from '@awayfl/avm2';
 import { DisplayObjectContainer } from '../display/DisplayObjectContainer';
 
@@ -430,11 +432,18 @@ export class LoaderContext extends ASObject {
 	 *                          security sandbox cannot load content from
 	 *                          other sandboxes into its SecurityDomain.
 	 */
-	constructor(checkPolicyFile: boolean = false, applicationDomain: ApplicationDomain = null, securityDomain: SecurityDomain = null) {
+	constructor(
+		checkPolicyFile: boolean = false,
+		applicationDomain: ApplicationDomain = null,
+		securityDomain: SecurityDomain = null) {
+
 		super();
+		const sec = <SecurityDomainAS> this.sec;
 
 		this.checkPolicyFile = checkPolicyFile;
-		this.applicationDomain = applicationDomain;
+		this.applicationDomain =
+			applicationDomain || new sec.flash.system.ApplicationDomain(ApplicationDomain.currentDomain);
+
 		this.securityDomain = securityDomain;
 	}
 }
