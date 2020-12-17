@@ -1,5 +1,6 @@
-import { URLRequest as URLRequestAway } from '@awayjs/core';
-import { ASObject, ASArray, axCoerceString } from '@awayfl/avm2';
+import { URLRequest as URLRequestAway, URLVariables as URLVariablesAway} from '@awayjs/core';
+import { ASObject, ASArray, axCoerceString, transformJSValueToAS, transformASValueToJS } from '@awayfl/avm2';
+import { URLVariables } from './URLVariables';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -48,11 +49,32 @@ export class URLRequest extends ASObject {
 	}
 
 	get data(): ASObject {
-		return this._adaptee.data;
+		const adapteeData = this._adaptee.data;
+		let returnData = this._adaptee.data;
+		if (adapteeData instanceof URLVariablesAway) {
+			returnData = new URLVariables();
+			for (const key in this._adaptee.data.variables) {
+				returnData['$Bg' + key] = this._adaptee.data.variables[key];
+			}
+		} else if (typeof adapteeData === 'object') {
+			returnData = transformJSValueToAS(this.sec, adapteeData, true);
+		}
+		return returnData;
 	}
 
 	set data(value: ASObject) {
-		this._adaptee.data = value;
+		let jsValue;
+		if ((<any> this.sec).flash.net.URLVariables.axIsType(value)) {
+			jsValue = new URLVariablesAway();
+			for (const key in value) {
+				if (key.indexOf('$Bg') == 0 && !(typeof value[key] === 'function')) {
+					jsValue.variables[key.replace('$Bg', '')] = value[key];
+				}
+			}
+		} else {
+			jsValue = transformASValueToJS(this.sec, value, true);
+		}
+		this._adaptee.data = jsValue;
 	}
 
 	get method(): string {
