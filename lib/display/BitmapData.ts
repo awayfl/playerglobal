@@ -41,10 +41,13 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public getPixels(rect: Rectangle): ByteArray {
-		/*var outputByteArray = new ByteArray();
-		this.copyPixelsToByteArray(rect, outputByteArray);*/
-		console.log('getPixels not implemented yet in flash/BitmapData');
-		return null;
+		const buffer = this.adaptee.getPixels(rect.adaptee);
+		const arr = new (<SecurityDomain> this.sec).flash.utils.ByteArray();
+
+		// @ts-ignore
+		arr.setArrayBuffer(buffer.buffer);
+		//console.log('getPixels not implemented yet in flash/BitmapData');
+		return arr;
 	}
 
 	public copyPixelsToByteArray(rect: Rectangle, data: ByteArray): void {
@@ -52,8 +55,18 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public getVector(rect: Rectangle): Uint32Vector {
-		notImplemented('public flash.display.BitmapData::getVector');
-		return null;
+		const buffer = this.adaptee.getPixels(rect.adaptee);
+		// construct small buffer
+		const vector = new this.sec.Uint32Vector(0, true);
+
+		// replace a buffer for avoid copeing
+		//@ts-ignore
+		vector._buffer = new Uint32Array(buffer.buffer);
+		// remap size
+		//@ts-ignore
+		vector._length = buffer.length / 4;
+
+		return vector;
 	}
 
 	public setVector(rect: Rectangle, inputVector: Uint32Vector): void {
