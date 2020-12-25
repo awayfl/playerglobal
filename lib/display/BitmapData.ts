@@ -13,6 +13,13 @@ import { notImplemented } from '@awayfl/swf-loader';
 import { ASObject, ByteArray, Uint32Vector, GenericVector } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 
+const ALER_TABLE: StringMap<boolean> = {};
+const ALERT_ONCE = (id: string, message: string) => {
+	if (ALER_TABLE[id]) return;
+	console.warn(`${id}:`, message);
+	ALER_TABLE[id] = true;
+};
+
 export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapter {
 	private _adaptee: SceneImage2D;
 	private _owners: Array<IBitmapDataOwner> = new Array<IBitmapDataOwner>();
@@ -261,7 +268,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public floodFill(x: number, y: number, color: number) {
-		console.warn('Unsage implementation `floodFill`');
+		ALERT_ONCE('floodFill:' + this._adaptee.id, 'Unsage implementation!');
 		this._adaptee.floodFill(x, y, color);
 	}
 
@@ -272,7 +279,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 
 	public getColorBoundsRect(mask: number, color: number, findColor: boolean): Rectangle {
 
-		console.warn('Unsage implementation `getColorBoundsRect`!');
+		ALERT_ONCE('getColorBoundsRect:' + this._adaptee.id, 'Unsage implementation!');
 		return  new (<SecurityDomain> this.sec).flash.geom.Rectangle(
 			this._adaptee.getColorBoundsRect(mask, color, findColor));
 	}
