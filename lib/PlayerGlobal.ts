@@ -34,6 +34,7 @@ import { LoaderInfo } from './display/LoaderInfo';
 import { ILoader } from './ILoader';
 
 export class PlayerGlobal implements IPlayerGlobal, ILoader {
+	public static builtinsBaseUrl = './assets/builtins/';
 	private _contentLoaderInfo: LoaderInfo;
 	private _content: DisplayObject;
 	private _avmStage: AVMStage;
@@ -86,7 +87,7 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 		release || assert(!!(libraries & AVM2LoadLibrariesFlags.Builtin));
 		release || console.log('Load builtin.abc file');
 		BrowserSystemResourcesLoadingService.getInstance()
-			.load('./assets/builtins/builtin.abc', 'arraybuffer')
+			.load(`${PlayerGlobal.builtinsBaseUrl}/builtin.abc`, 'arraybuffer')
 			.then((buffer) => {
 				const sec = new SecurityDomain();
 				const env = { url: 'builtin.abc', app: sec.system };
@@ -115,11 +116,11 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 				if (libraries & AVM2LoadLibrariesFlags.Playerglobal) {
 					return Promise.all([
 						BrowserSystemResourcesLoadingService.getInstance().load(
-							'./assets/builtins/playerglobal.abcs',
+							`${PlayerGlobal.builtinsBaseUrl}/playerglobal.abcs`,
 							'arraybuffer'
 						),
 						BrowserSystemResourcesLoadingService.getInstance().load(
-							'./assets/builtins/playerglobal.json',
+							`${PlayerGlobal.builtinsBaseUrl}/playerglobal.json`,
 							'json'
 						),
 					]).then((results) => {
@@ -129,7 +130,7 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 						sec.addCatalog(catalog);
 
 						BrowserSystemResourcesLoadingService.getInstance()
-							.load('./assets/builtins/avmplus.abc', 'arraybuffer')
+							.load(`${PlayerGlobal.builtinsBaseUrl}/avmplus.abc`, 'arraybuffer')
 							.then((buffer) => {
 								//var sec = new AXSecurityDomain();
 								const env = { url: 'avmplus.File', app: sec.system };
