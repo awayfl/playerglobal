@@ -1,4 +1,4 @@
-import { TextFormat as AwaytextFormat, Font } from '@awayjs/scene';
+import { TextFormat as AwaytextFormat } from '@awayjs/scene';
 import { ASObject, AXClass, ASArray } from '@awayfl/avm2';
 
 export class TextFormat extends ASObject {
@@ -34,12 +34,12 @@ export class TextFormat extends ASObject {
 		console.log('not implemented: TextFormat display');
 	}
 
-	public get bullet(): any {
+	public get bullet(): boolean {
 		console.log('not implemented: TextFormat bullet');
 		return null;
 	}
 
-	public set bullet(value: any) {
+	public set bullet(value: boolean) {
 		console.log('not implemented: TextFormat bullet');
 		//this._bullet = TextFormat.coerceBoolean(value);
 	}
@@ -178,24 +178,9 @@ export class TextFormat extends ASObject {
 		this.adaptee.underline = value;
 	}
 
-	public get font_name(): string {
-		return this.adaptee.font_name;
-	}
-
-	public set font_name(value: string) {
-		this.adaptee.font_name = value;
-	}
-
-	public get style_name(): any {
-		return this.adaptee.style_name;
-	}
-
-	public set style_name(value: any) {
-		this.adaptee.style_name = value;
-	}
-
 	public get font(): string {
-		// font should return a `font_name`
+		// in awayjs textformat, font is a Awayjs Font object
+		// we have font_name for the font name string
 		return this.adaptee.font_name;
 	}
 
