@@ -7,7 +7,8 @@ import {
 	AXSecurityDomain,
 	Natives,
 } from '@awayfl/avm2';
-import { release, assert, PromiseWrapper, AVMStage, SWFFile } from '@awayfl/swf-loader';
+
+import { release, assert, AVMStage, SWFFile } from '@awayfl/swf-loader';
 import { SecurityDomain } from './SecurityDomain';
 import { initLink } from './link';
 import {
@@ -22,7 +23,6 @@ import {
 	FrameScriptManager,
 } from '@awayjs/scene';
 
-import { LoaderContext } from './system/LoaderContext';
 import { FlashSceneGraphFactory } from './factories/FlashSceneGraphFactory';
 import { AssetBase, IAsset, WaveAudio } from '@awayjs/core';
 import { ApplicationDomain } from './system/ApplicationDomain';
@@ -32,6 +32,12 @@ import { Stage } from './display/Stage';
 import { DisplayObject } from './display/DisplayObject';
 import { LoaderInfo } from './display/LoaderInfo';
 import { ILoader } from './ILoader';
+
+function browserLoader(url: string, type: 'json' | 'arraybuffer'): Promise<any> {
+	return fetch(url)
+		.then((r) => type === 'json' ? r.json() : r.arrayBuffer())
+		.catch(e => { throw new Error('Unable to load ' + url + ': ' + e);});
+}
 
 export class PlayerGlobal implements IPlayerGlobal, ILoader {
 	public static builtinsBaseUrl = './assets/builtins/';
@@ -57,10 +63,11 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 		this._avmStage = avmStage;
 
 		if (this._avmStage.avmTestHandler) {
-			Natives.print = function (sec: AXSecurityDomain, expression: any) {
+			Natives.print = function (_sec: AXSecurityDomain, _expression: any) {
 				let message = '';
 
 				if (arguments.length == 2) {
+					// eslint-disable-next-line prefer-rest-params
 					message = arguments[1]?.toString();
 				} else {
 					for (let i = 1; i < arguments.length; i++) {
@@ -82,84 +89,75 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 
 		initLink();
 
-		const result = new PromiseWrapper<ISceneGraphFactory>();
 		release || console.log('createSecurityDomain');
 		release || assert(!!(libraries & AVM2LoadLibrariesFlags.Builtin));
 		release || console.log('Load builtin.abc file');
-		BrowserSystemResourcesLoadingService.getInstance()
-			.load(`${PlayerGlobal.builtinsBaseUrl}/builtin.abc`, 'arraybuffer')
-			.then((buffer) => {
-				const sec = new SecurityDomain();
-				const env = { url: 'builtin.abc', app: sec.system };
-				const builtinABC = new ABCFile(env, new Uint8Array(buffer));
-				(<any>sec).swfVersion = swfFile.swfVersion;
-				sec.system.loadABC(builtinABC);
-				sec.initialize();
-				sec.system.executeABC(builtinABC);
-				sec.player = avmStage;
-				//SWF.leaveTimeline();
 
-				//// If library is shell.abc, then just go ahead and run it now since
-				//// it's not worth doing it lazily given that it is so small.
-				//if (!!(libraries & AVM2LoadLibrariesFlags.Shell)) {
-				//  var shellABC = new Shumway.AVMX.ABCFile(new Uint8Array(buffer));
-				//  sec.system.loadAndExecuteABC(shellABC);
-				//  result.resolve(sec);
-				//  SystemResourcesLoadingService.instance.load(SystemResourceId.ShellAbc).then(function (buffer) {
-				//    var shellABC = new Shumway.AVMX.ABCFile(new Uint8Array(buffer));
-				//    sec.system.loadAndExecuteABC(shellABC);
-				//    result.resolve(sec);
-				//  }, result.reject);
-				//  return;
-				//}
+		const base = PlayerGlobal.builtinsBaseUrl;
 
-				if (libraries & AVM2LoadLibrariesFlags.Playerglobal) {
-					return Promise.all([
-						BrowserSystemResourcesLoadingService.getInstance().load(
-							`${PlayerGlobal.builtinsBaseUrl}/playerglobal.abcs`,
-							'arraybuffer'
-						),
-						BrowserSystemResourcesLoadingService.getInstance().load(
-							`${PlayerGlobal.builtinsBaseUrl}/playerglobal.json`,
-							'json'
-						),
-					]).then((results) => {
-						release || console.log('Load playerglobal.abcs & playerglobal.json');
-						const catalog = new ABCCatalog(sec.system, new Uint8Array(results[0]), results[1]);
-						release || console.log('add playerglobals as ABCCatalog');
-						sec.addCatalog(catalog);
+		const tasks = [
+			browserLoader(`${base}/builtin.abc`, 'arraybuffer')
+		];
 
-						BrowserSystemResourcesLoadingService.getInstance()
-							.load(`${PlayerGlobal.builtinsBaseUrl}/avmplus.abc`, 'arraybuffer')
-							.then((buffer) => {
-								//var sec = new AXSecurityDomain();
-								const env = { url: 'avmplus.File', app: sec.system };
-								const avmPlusABC = new ABCFile(env, new Uint8Array(buffer));
-								sec.system.loadABC(avmPlusABC);
-								//sec.initialize();
-								sec.system.executeABC(avmPlusABC);
-							}, result.reject)
-							.then(() => {
-								this._contentLoaderInfo = new sec.flash.display.LoaderInfo(this, this._avmStage.root);
-								this._contentLoaderInfo.url = swfFile.url;
-								this._applicationDomain = new sec.flash.system.ApplicationDomain();
-								const loaderContext: LoaderContext = new sec.flash.system.LoaderContext(
-									false,
-									this._applicationDomain
-								);
-								ActiveLoaderContext.loaderContext = loaderContext;
-								this._stage = new sec.flash.display.Stage();
-								sec.flash.display.DisplayObject.axClass._activeStage = this._stage;
-								this._avmStage.root.adapter = this._stage;
-								this._stage.adaptee = this._avmStage.root;
-								result.resolve(new FlashSceneGraphFactory(sec));
-							}, result.reject);
-					}, result.reject);
-				}
-				// todo: is this needed:
-				result.resolve(null);
-			}, result.reject);
-		return result.promise;
+		if (libraries & AVM2LoadLibrariesFlags.Playerglobal) {
+			tasks.push(
+				browserLoader(`${base}/playerglobal.abcs`,'arraybuffer'),
+				browserLoader(`${base}/playerglobal.json`, 'json'),
+				browserLoader(`${base}/avmplus.abc`, 'arraybuffer')
+			);
+		}
+
+		return Promise.all(tasks).then(([builtins, pgByte, pgJson, avmplus]) => {
+			const sec = new SecurityDomain();
+			const builtinABC = new ABCFile({
+				url: 'builtin.abc',
+				app: sec.system
+			}, new Uint8Array(builtins));
+
+			(<any>sec).swfVersion = swfFile.swfVersion;
+			sec.system.loadABC(builtinABC);
+			sec.initialize();
+			sec.system.executeABC(builtinABC);
+			sec.player = avmStage;
+
+			if (!(libraries & AVM2LoadLibrariesFlags.Playerglobal)) {
+				return null;
+			}
+
+			release || console.log('Load playerglobal.abcs & playerglobal.json');
+			const catalog = new ABCCatalog(sec.system, new Uint8Array(pgByte), pgJson);
+
+			release || console.log('add playerglobals as ABCCatalog');
+			sec.addCatalog(catalog);
+
+			const avmPlusABC = new ABCFile({
+				url: 'avmplus.File',
+				app: sec.system
+			}, new Uint8Array(avmplus));
+
+			sec.system.loadAndExecuteABC(avmPlusABC);
+
+			this._constructStage(sec, swfFile);
+
+			return new FlashSceneGraphFactory(sec);
+		});
+	}
+
+	private _constructStage(sec: SecurityDomain, file: SWFFile) {
+		this._contentLoaderInfo = new sec.flash.display.LoaderInfo(this, this._avmStage.root);
+		this._contentLoaderInfo.url = file.url;
+		this._applicationDomain = new sec.flash.system.ApplicationDomain();
+
+		// not needs, because shuld be resolved from domain
+		ActiveLoaderContext.loaderContext = new sec.flash.system.LoaderContext(
+			false,
+			this._applicationDomain
+		);
+
+		this._stage = new sec.flash.display.Stage();
+		sec.flash.display.DisplayObject.axClass._activeStage = this._stage;
+		this._avmStage.root.adapter = this._stage;
+		this._stage.adaptee = this._avmStage.root;
 	}
 
 	public enterFrame() {
@@ -231,42 +229,5 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 				console.warn('Loaded unhandled asset-type', asset.assetType);
 			}
 		}
-	}
-}
-
-class BrowserSystemResourcesLoadingService {
-	private static _instance: BrowserSystemResourcesLoadingService;
-	public static getInstance() {
-		if (BrowserSystemResourcesLoadingService._instance) return BrowserSystemResourcesLoadingService._instance;
-		return (BrowserSystemResourcesLoadingService._instance = new BrowserSystemResourcesLoadingService());
-	}
-
-	public constructor() {}
-
-	public load(url, type): Promise<any> {
-		return this._promiseFile(url, type);
-	}
-
-	private _promiseFile(path, responseType) {
-		return new Promise(function (resolve, reject) {
-			const xhr = new XMLHttpRequest();
-			xhr.open('GET', path);
-			xhr.responseType = responseType;
-			xhr.onload = function () {
-				let response = xhr.response;
-				if (response) {
-					if (responseType === 'json' && xhr.responseType !== 'json') {
-						response = JSON.parse(response);
-					}
-					resolve(response);
-				} else {
-					reject('Unable to load ' + path + ': ' + xhr.statusText);
-				}
-			};
-			xhr.onerror = function () {
-				reject('Unable to load: xhr error');
-			};
-			xhr.send();
-		});
 	}
 }
