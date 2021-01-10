@@ -115,6 +115,7 @@ export class LoaderInfo extends EventDispatcher {
 
 	public static DefaultLocation: string = null;
 
+	private _source: ByteArray;
 	private _loader: ILoader;
 	private _container: AwayDisplayObject;
 	private _onLoaderErrorDelegate: (event: AwayLoaderEvent) => void;
@@ -144,6 +145,11 @@ export class LoaderInfo extends EventDispatcher {
 	public get actionScriptVersion(): number {
 		release || console.log('actionScriptVersion not implemented yet in flash/LoaderInfo');
 		return 0;
+	}
+
+	public set source(value: ByteArray) {
+		this._source = value;
+		this._bytesTotal = value?.length || 0;
 	}
 
 	// for AVM:
@@ -187,7 +193,7 @@ export class LoaderInfo extends EventDispatcher {
 
 	private _onLoaderStart(event: AwayLoaderEvent): void {
 		this._bytesLoaded = 0;
-		this._bytesTotal = 0;
+		this._bytesTotal = this._source?.length || 0;
 
 		this._url = event.url;
 	}
@@ -196,13 +202,16 @@ export class LoaderInfo extends EventDispatcher {
 		this._bytesLoaded = event.urlLoader.bytesLoaded;
 		this._bytesTotal = event.urlLoader.bytesTotal;
 
-		const newEvent = new (<SecurityDomain> this.sec).flash.events.ProgressEvent(ProgressEvent.PROGRESS, null, null, event.urlLoader.bytesLoaded, event.urlLoader.bytesTotal);
+		const newEvent = new (<SecurityDomain> this.sec).flash.events.ProgressEvent(
+			ProgressEvent.PROGRESS, null, null, event.urlLoader.bytesLoaded, event.urlLoader.bytesTotal);
 		newEvent.currentTarget = this;
 		this.dispatchEvent(newEvent);
 	}
 
 	private _onLoaderComplete(event: AwayLoaderEvent): void {
-		if (event.assets && event.assets.length) {
+		if (this._source) {
+			this._bytesTotal = this._bytesLoaded = this._source.length;
+		} else if (event.assets && event.assets.length) {
 			// use count of assets instead real bytes
 			this._bytesLoaded = event.assets.length;
 			this._bytesTotal = event.assets.length;
@@ -647,6 +656,8 @@ export class LoaderInfo extends EventDispatcher {
 	}
 
 	public _setApplicationDomain(value: ApplicationDomain) {
-		this._applicationDomain = value || new (<SecurityDomain> this.sec).flash.system.ApplicationDomain(ApplicationDomain.currentDomain);
+		this._applicationDomain = value
+			|| new (<SecurityDomain> this.sec).flash.system.ApplicationDomain(ApplicationDomain.currentDomain);
 	}
+
 }

@@ -650,6 +650,7 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 			);
 
 			this._contentLoaderInfo._setApplicationDomain(this._loaderContext.applicationDomain);
+			this._contentLoaderInfo.source = <any> bytes;
 
 			(<LoaderContainer> this._adaptee).loadData(
 				(<any>bytes).bytes,
