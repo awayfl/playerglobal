@@ -43,7 +43,6 @@ export class TextLine extends DisplayObjectContainer {
 	private _specifiedWidth: number;
 	private _unjustifiedTextWidth: number;
 	private _validity: string;
-	private _atomCount: number /*int*/;
 	private _mirrorRegions: any /*ASVector<flash.text.engine.TextLineMirrorRegion>*/;
 
 	private _textFormats: TextFormat[];
@@ -100,7 +99,7 @@ export class TextLine extends DisplayObjectContainer {
 		}
 		this._textWidth = newTextField.textWidth + 4;
 		this._textHeight = newTextField.textHeight;
-		//console.log('new textfield', this._rawText, this._textHeight);
+		console.log('new textfield', this._rawText, this._textHeight, this._textFormats);
 
 		if (previousLine) {
 			previousLine.setNextLine(this);
@@ -244,7 +243,7 @@ export class TextLine extends DisplayObjectContainer {
 
 	public get atomCount(): number /*int*/ {
 		console.warn('[TextLine] - get atomCount not implemented');
-		return this._atomCount;
+		return this._rawText.length;
 	}
 
 	public get mirrorRegions(): any/*ASVector<TextLineMirrorRegion >*/ {
@@ -264,7 +263,7 @@ export class TextLine extends DisplayObjectContainer {
 
 	public getAtomBounds(atomIndex: number /*int*/): Rectangle {
 		console.warn('[TextLine] - getAtomBounds not implemented');
-		return null;
+		return (<any> this.sec).flash.geom.Rectangle(0, 0, 10, 10);
 	}
 
 	public getAtomBidiLevel(atomIndex: number /*int*/): number /*int*/ {

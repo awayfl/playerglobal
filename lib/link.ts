@@ -152,7 +152,7 @@ import { release } from '@awayfl/swf-loader';
 import { BlendMode } from '@awayjs/stage';
 import { GroupElement } from './text/engine/GroupElement';
 
-import { BaseTextLayoutImporter } from './text/engine/NativehacksForTLF';
+import { BaseTextLayoutImporter, Property } from './text/engine/NativehacksForTLF';
 
 function M(name: string, asClass: ASClass) {
 	registerNativeClass(name, asClass);
@@ -163,6 +163,7 @@ export function initLink() {
 
 	//M('fl.text.TLFTextField', TLFTextField);
 	M('flashx.textLayout.conversion.BaseTextLayoutImporter', BaseTextLayoutImporter);
+	M('flashx.textLayout.property.Property', Property);
 
 	//M('flash.accessibility.Accessibility', Accessibility);
 	//M('flash.accessibility.AccessibilityProperties', AccessibilityProperties);

@@ -1,6 +1,29 @@
 
 import { ASObject } from '@awayfl/avm2';
 
+/**
+ * these classes are used to overrite some methods in the TLF classes,
+ * because the abc-classes make problems i could not fix otherwise
+ */
+
+// flashx/textlayout/property/Property
+export class Property extends ASObject {
+
+	static forceNativeConstructor: boolean = false;
+	static forceNativeMethods: boolean = true;
+	public static createObjectWithPrototype(obj: any): any {
+		const newObj = obj.sec.AXObject.axConstruct([]);
+
+		for (const attr in obj) {
+			if (obj.hasOwnProperty(attr)) {
+				newObj[attr] = obj[attr];
+			}
+		}
+		return newObj;
+	}
+}
+
+//flashx.textLayout.conversion.BaseTextLayoutImporter
 export class BaseTextLayoutImporter extends ASObject {
 
 	static forceNativeConstructor: boolean = false;
