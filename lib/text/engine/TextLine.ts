@@ -88,7 +88,7 @@ export class TextLine extends DisplayObjectContainer {
 			//newTextField.y += this._previousLine.textHeight;
 		}
 		//newTextField.autoSize = TextFieldAutoSize.LEFT;
-		(<AwayDisplayObjectContainer>this.adaptee).addChild(newTextField);
+		(<AwayDisplayObjectContainer> this.adaptee).addChild(newTextField);
 		this._textFormatsIndices.push(this._rawText.length);
 		newTextField.text = this._rawText;
 
