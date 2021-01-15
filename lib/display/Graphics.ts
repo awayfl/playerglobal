@@ -61,7 +61,7 @@ export class Graphics extends ASObject implements IAssetAdapter {
      * @param alpha While any Number is a valid input, the value is clamped to [0,1] and then scaled
      * to an integer in the interval [0,0xff].
      */
-	public beginFill(color: number /*uint*/, alpha: number = 1): void {		
+	public beginFill(color: number /*uint*/, alpha: number = 1): void {
 		if (alpha < 0)
 			alpha = 0;
 		if (alpha > 1)
