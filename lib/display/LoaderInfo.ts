@@ -616,6 +616,9 @@ export class LoaderInfo extends EventDispatcher {
 	public get url(): string {
 		if (LoaderInfo.DefaultLocation != null && typeof LoaderInfo.DefaultLocation !== 'undefined')
 			return LoaderInfo.DefaultLocation;
+		if (this._url.includes('?')) {
+			this._url = this._url.substr(0, this._url.indexOf('?'));
+		}
 		return this._url;
 	}
 
