@@ -9,14 +9,17 @@ export class GroupElement extends ContentElement {
 	static forceNativeConstructor: boolean = true;
 	static forceNativeMethods: boolean = true;
 
+	private _elements: any;
+
 	constructor(
 		elements: any/*ASVector<any>*/ = null,
 		elementFormat: ElementFormat = null,
 		eventMirror: EventDispatcher = null,
 		textRotation: string = 'rotate0') {
-		super(undefined, undefined, undefined);
-		textRotation = axCoerceString(textRotation);
-		console.warn('[GroupElement] not implemented');
+
+		super(elementFormat, eventMirror, textRotation);
+		this._elements = elements ? elements._buffer : [];
+		console.log('[GroupElement]', elements, elementFormat, eventMirror, textRotation);
 	}
 
 	// JS -> AS Bindings
@@ -27,19 +30,17 @@ export class GroupElement extends ContentElement {
 
 	// _elementCount: number /*int*/;
 	public get elementCount(): number /*int*/ {
-		console.warn('[GroupElement] - elementCount not implemented');
-		return 0;
+		return this._elements.length;
 	}
 
 	public getElementAt(index: number /*int*/): ContentElement {
-		//index = index | 0;
-		console.warn('[GroupElement] - getElementAt not implemented');
-		return null;
+		return this._elements[index];
 	}
 
 	public setElements(value: any/*ASVector<any>*/): void {
 		//value = value;
 		console.warn('[GroupElement] - setElements not implemented');
+		this._elements = value.value;
 	}
 
 	public groupElements(beginIndex: number /*int*/, endIndex: number /*int*/): GroupElement {
@@ -72,11 +73,16 @@ export class GroupElement extends ContentElement {
 		beginIndex: number /*int*/,
 		endIndex: number /*int*/,
 		newElements: any/*ASVector<any>*/): any/*ASVector<any>*/ {
-		//beginIndex = beginIndex | 0;
-		//endIndex = endIndex | 0;
-		//newElements = newElements;
-		console.warn('[GroupElement] - replaceElements not implemented');
-		return null;
+		let cnt = 0;
+		if (endIndex - beginIndex > newElements._buffer.length) {
+			console.warn('[GroupElement] - replaceElements error with range and vector size');
+
+		}
+		for (let i = beginIndex; i <= endIndex; i++) {
+			this._elements[i] = newElements._buffer[cnt++];
+		}
+
+		return newElements;
 	}
 
 	public getElementAtCharIndex(charIndex: number /*int*/): ContentElement {

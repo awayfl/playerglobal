@@ -1,10 +1,16 @@
 import { ASObject } from '@awayfl/avm2';
-import { TextField, DisplayObjectContainer as AwayDisplayObjectContainer, TextFieldAutoSize } from '@awayjs/scene';
+import {
+	TextField, DisplayObjectContainer as AwayDisplayObjectContainer,
+	TextFieldAutoSize, TextFormat
+} from '@awayjs/scene';
 import { DisplayObject } from '../../display/DisplayObject';
 import { DisplayObjectContainer } from '../../display/DisplayObjectContainer';
 import { EventDispatcher } from '../../events/EventDispatcher';
 import { Rectangle } from '../../geom/Rectangle';
 import { ContextMenu } from '../../ui/ContextMenu';
+import { ContentElement } from './ContentElement';
+import { ElementFormat } from './ElementFormat';
+import { GroupElement } from './GroupElement';
 import { TextBlock } from './TextBlock';
 import { TextLineMirrorRegion } from './TextLineMirrorRegion';
 
@@ -32,38 +38,98 @@ export class TextLine extends DisplayObjectContainer {
 	private _totalDescent: number;
 	private _totalHeight: number;
 	private _textBlockBeginIndex: number /*int*/;
-	private _rawTextLength: number /*int*/;
+	private _rawText: string /*int*/;
+	private _textFormatsIndices: number[] /*int*/;
 	private _specifiedWidth: number;
 	private _unjustifiedTextWidth: number;
 	private _validity: string;
 	private _atomCount: number /*int*/;
 	private _mirrorRegions: any /*ASVector<flash.text.engine.TextLineMirrorRegion>*/;
 
-	private _textfield: TextField;
+	private _textFormats: TextFormat[];
+
+	private _width: number;
+	private _lineOffset: number;
+	private _fitSomething: boolean;
+	private _content: ContentElement;
 
 	constructor(
-		previousLine,
-		width,
-		lineOffset,
-		fitSomething,
-		text,
-		elementFormat) {
+		previousLine: TextLine,
+		width: number,
+		lineOffset: number,
+		fitSomething: boolean,
+		content: ContentElement) {
 		super();
 		const adaptee: AwayDisplayObjectContainer = new AwayDisplayObjectContainer();
 		this.adaptee = adaptee;
-		this._textfield = new TextField();
-		this._textfield.autoSize = TextFieldAutoSize.LEFT;
-		adaptee.addChild(this._textfield);
-		this._textfield.text = text;
 		this._previousLine = previousLine;
+		this._width = width;
+		this._textWidth = 0;
+		this._textHeight = 0;
+		this._lineOffset = lineOffset;
+		this._fitSomething = fitSomething;
+		this._content = content;
+		this._rawText = '';
+		this._textFormatsIndices = [];
+		this._textFormats = [];
+		//console.log('create TextLine', this._width, this._lineOffset, this._fitSomething, content);
+		this.resolveGroupElements(content);
+		this._textBlockBeginIndex = 0;
+		this._specifiedWidth = this._width;
+
+		const newTextField = new TextField();
+		newTextField.multiline = true;
+		newTextField.wordWrap = true;
+		newTextField.width = this._width;
+
+		newTextField.y = -this._lineOffset * 3;
+		if (this._previousLine) {
+			//console.log("previousLine", this._previousLine);
+			//newTextField.y += this._previousLine.textHeight;
+		}
+		//newTextField.autoSize = TextFieldAutoSize.LEFT;
+		(<AwayDisplayObjectContainer>this.adaptee).addChild(newTextField);
+		this._textFormatsIndices.push(this._rawText.length);
+		newTextField.text = this._rawText;
+
+		let startIdx = 0;
+		for (let i = 0; i < this._textFormatsIndices.length; i++) {
+			const endIdx = this._textFormatsIndices[i];
+			newTextField.setTextFormat(this._textFormats[i], startIdx, endIdx);
+			startIdx = endIdx;
+		}
+		this._textWidth = newTextField.textWidth + 4;
+		this._textHeight = newTextField.textHeight;
+		//console.log('new textfield', this._rawText, this._textHeight);
+
 		if (previousLine) {
 			previousLine.setNextLine(this);
 		}
-		console.log('elementFormat', elementFormat);
-		this._text = text;
-		this._textBlockBeginIndex = 0;
-		this._rawTextLength = text.length;
-		this._specifiedWidth = width;
+	}
+
+	public resolveGroupElements(content: ContentElement) {
+
+		if (content.axClassName == 'flash.text.engine.TextElement') {
+			const text = content.text;
+			const elementFormat = content.elementFormat;
+			//console.log('create TextField', text, this._width, this._lineOffset, this._fitSomething, elementFormat);
+			let tf;
+			if (elementFormat)
+				tf = elementFormat.createAwayTextformat();
+			else {
+				tf = new TextFormat();
+			}
+			this._rawText += text ? text : '';
+			this._textFormats.push(tf);
+			this._textFormatsIndices.push(this._rawText.length);
+		}
+		if (content.axClassName == 'flash.text.engine.GroupElement') {
+			const group = <GroupElement><any>content;
+			//console.log('resolve GroupElement', group.elementCount);
+			for (let i = 0; i < group.elementCount; i++) {
+				this.resolveGroupElements(group.getElementAt(i));
+			}
+		}
 	}
 
 	public static MAX_LINE_WIDTH: number /*int*/ = 1000000;
@@ -112,47 +178,48 @@ export class TextLine extends DisplayObjectContainer {
 	}
 
 	public get ascent(): number {
-		//console.warn('[TextLine] - get ascent not implemented');
-		return 0;//this._ascent;
+		console.warn('[TextLine] - get ascent not implemented');
+		return this._textHeight;
 	}
 
 	public get descent(): number {
-		//console.warn('[TextLine] - get descent not implemented');
-		return 0;//this._descent;
+		console.warn('[TextLine] - get descent not implemented');
+		return 100;//this._descent;
 	}
 
 	public get textHeight(): number {
-		return this._textfield.textHeight;
+		//console.warn('[TextLine] - get textHeight not implemented');
+		return this._textHeight;
 	}
 
 	public get textWidth(): number {
 		//console.warn('[TextLine] - get textWidth not implemented');
-		return 100;//this._textfield.textWidth;
+		return this._textWidth;
 	}
 
 	public get totalAscent(): number {
 		console.warn('[TextLine] - get totalAscent not implemented');
-		return 0;//this._totalAscent;
+		return 100;//this._totalAscent;
 	}
 
 	public get totalDescent(): number {
 		console.warn('[TextLine] - get totalDescent not implemented');
-		return 0;//this._totalDescent;
+		return 100;//this._totalDescent;
 	}
 
 	public get totalHeight(): number {
 		console.warn('[TextLine] - get totalHeight not implemented');
-		return 100;//this._totalHeight;
+		return this._textHeight;
 	}
 
 	public get textBlockBeginIndex(): number /*int*/ {
-		//console.warn('[TextLine] - get textBlockBeginIndex not implemented');
+		console.warn('[TextLine] - get textBlockBeginIndex not implemented');
 		return this._textBlockBeginIndex;
 	}
 
 	public get rawTextLength(): number /*int*/ {
 		//console.warn('[TextLine] - get rawTextLength not implemented');
-		return this._rawTextLength;
+		return this._rawText.length;
 	}
 
 	public get specifiedWidth(): number {
@@ -236,8 +303,8 @@ export class TextLine extends DisplayObjectContainer {
 	}
 
 	public getBaselinePosition(baseline: string): number {
-		//console.warn('[TextLine] - getBaselinePosition not implemented');
-		return 0;
+		console.warn('[TextLine] - getBaselinePosition not implemented', baseline);
+		return 0;//this._textHeight;
 	}
 
 	public dump(): string {

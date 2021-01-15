@@ -15,7 +15,7 @@ export class TextElement extends ContentElement {
 		super(elementFormat, eventMirror, textRotation);
 		this._text = text;
 		//this._rawText = text;
-		console.warn('[TextElement]', elementFormat);
+		//console.warn('[TextElement]', elementFormat);
 	}
 
 	// JS -> AS Bindings

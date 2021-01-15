@@ -55,8 +55,7 @@ export class TextBlock extends ASObject {
 			width,
 			lineOffset,
 			fitSomething,
-			this._content.text,
-			this._content._elementFormat);
+			this._content);
 		newTextLine.setTextBlock(this);
 		this._textLines.push(newTextLine);
 		return newTextLine;

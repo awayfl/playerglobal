@@ -1,6 +1,7 @@
 import { ASObject, axCoerceString } from '@awayfl/avm2';
 import { FontDescription } from './FontDescription';
 import { FontMetrics } from './FontMetrics';
+import { TextFormat, TextFormatAlign } from '@awayjs/scene';
 
 export class ElementFormat extends ASObject {
 
@@ -47,7 +48,6 @@ export class ElementFormat extends ASObject {
 
 		super();
 
-		console.log('create ElementFormat', fontSize, fontDescription?.fontName);
 		this._fontDescription = fontDescription;
 		this._fontSize = +fontSize;
 		this._color = color >>> 0;
@@ -68,6 +68,22 @@ export class ElementFormat extends ASObject {
 
 	}
 
+	public createAwayTextformat(): TextFormat {
+		const awayTextFormat = new TextFormat();
+		awayTextFormat.size = this._fontSize;
+		awayTextFormat.color = this._color;
+		awayTextFormat.font = <any> this._fontDescription.fontName;
+		awayTextFormat.italic = this._fontDescription.fontPosture == 'italic';
+		awayTextFormat.bold = this._fontDescription.fontWeight == 'bold';
+		awayTextFormat.align = TextFormatAlign.LEFT;
+		//console.log('this._baselineShift', this._baselineShift);
+		/*console.log('createAwayTextformat', awayTextFormat);
+		console.log('this._trackingLeft', this._trackingLeft);
+		console.log('this._digitCase', this._digitCase);
+		console.log('this._digitWidth', this._digitWidth);*/
+
+		return awayTextFormat;
+	}
 	// JS -> AS Bindings
 
 	public clone: () => ElementFormat;
