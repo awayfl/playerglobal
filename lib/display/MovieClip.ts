@@ -455,7 +455,9 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 				return;
 			}
 		}
-		if (typeof frame === 'number' && frame <= 0)
+		//@todo check behaviour for gotoAndPlay(0) for all FP players
+		// in FP 11.2 it still starts playing for gotoAndPlay(0)
+		if (typeof frame === 'number' && frame < 0)
 			return;
 		this.play();
 		this._gotoFrame(frame);
