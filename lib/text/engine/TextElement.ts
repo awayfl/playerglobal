@@ -14,7 +14,7 @@ export class TextElement extends ContentElement {
 		textRotation: string = 'rotate0') {
 		super(elementFormat, eventMirror, textRotation);
 		this._text = text;
-		//this._rawText = text;
+		this._rawText = text;
 		//console.warn('[TextElement]', elementFormat);
 	}
 
