@@ -33,6 +33,7 @@ export class ContextMenu extends NativeMenu {
 		super();
 		this._builtInItems = new (<SecurityDomain> this.sec).flash.ui.ContextMenuBuiltInItems();
 		this._customItems = [];
+		this._clipboardItems = (<any> this.sec).flash.ui.ContextMenuClipboardItems();
 	}
 
 	static get isSupported(): boolean {
@@ -100,7 +101,6 @@ export class ContextMenu extends NativeMenu {
 	}
 
 	set clipboardItems(value: ContextMenuClipboardItems) {
-		value = value;
 		release || partialImp(this, 'set clipboardItems');
 		this._clipboardItems = value;
 	}
