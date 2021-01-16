@@ -303,7 +303,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		//todo
 		//console.log('currentScene not implemented yet in flash/MovieClip');
 		const scene = (<AwayMovieClip> this.adaptee).currentScene;
-		let newLabels = { value:[] };
+		const newLabels = { value:[] };
 		for (let i = 0; i < scene.labels.length; i++) {
 			newLabels.value.push(new (<any> this.sec).flash.display.FrameLabel(
 				scene.labels[i].name, scene.labels[i].frame
