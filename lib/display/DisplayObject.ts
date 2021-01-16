@@ -1163,7 +1163,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	public set scrollRect(value: Rectangle) {
-		this.adaptee.scrollRect = value.adaptee;
+		this.adaptee.scrollRect = value ? value.adaptee : null;
 	}
 
 	/**
