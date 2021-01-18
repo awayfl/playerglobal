@@ -3,6 +3,8 @@ import { FontDescription } from './FontDescription';
 import { FontMetrics } from './FontMetrics';
 import { TextFormat, TextFormatAlign } from '@awayjs/scene';
 
+const noLogs = true;
+let elementFormatIDs = 0;
 export class ElementFormat extends ASObject {
 
 	static forceNativeConstructor: boolean = true;
@@ -26,6 +28,7 @@ export class ElementFormat extends ASObject {
 	private _ligatureLevel: string;
 	private _typographicCase: string;
 	private _locked: boolean;
+	private _id: number;
 
 	constructor(
 		fontDescription: FontDescription = null,
@@ -48,6 +51,26 @@ export class ElementFormat extends ASObject {
 
 		super();
 
+		this._id = elementFormatIDs++;
+		noLogs || console.log('[ElementFormat] ' + this._id + ' constructor',
+			'fontDescription', fontDescription,
+			'fontSize', fontSize,
+			'color', color,
+			'alpha', alpha,
+			'textRotation', textRotation,
+			'dominantBaseline', dominantBaseline,
+			'alignmentBaseline', alignmentBaseline,
+			'baselineShift', baselineShift,
+			'kerning', kerning,
+			'trackingRight', trackingRight,
+			'trackingLeft', trackingLeft,
+			'locale', locale,
+			'breakOpportunity', breakOpportunity,
+			'digitCase', digitCase,
+			'digitWidth', digitWidth,
+			'ligatureLevel', ligatureLevel,
+			'typographicCase', typographicCase,
+		);
 		this._fontDescription = fontDescription;
 		this._fontSize = +fontSize;
 		this._color = color >>> 0;
@@ -72,15 +95,29 @@ export class ElementFormat extends ASObject {
 		const awayTextFormat = new TextFormat();
 		awayTextFormat.size = this._fontSize;
 		awayTextFormat.color = this._color;
-		awayTextFormat.font = <any> this._fontDescription.fontName;
-		awayTextFormat.italic = this._fontDescription.fontPosture == 'italic';
-		awayTextFormat.bold = this._fontDescription.fontWeight == 'bold';
+		awayTextFormat.font = <any> this._fontDescription?.fontName;
+		awayTextFormat.italic = this._fontDescription?.fontPosture == 'italic';
+		awayTextFormat.bold = this._fontDescription?.fontWeight == 'bold';
 		awayTextFormat.align = TextFormatAlign.LEFT;
-		//console.log('this._baselineShift', this._baselineShift);
-		/*console.log('createAwayTextformat', awayTextFormat);
-		console.log('this._trackingLeft', this._trackingLeft);
-		console.log('this._digitCase', this._digitCase);
-		console.log('this._digitWidth', this._digitWidth);*/
+		noLogs || console.log('[ElementFormat] ' + this._id + ' createAwayTextformat', awayTextFormat.id,
+			'fontDescription', this._fontDescription,
+			'fontSize', this._fontSize,
+			'color', this._color,
+			'alpha', this._alpha,
+			'textRotation', this._textRotation,
+			'dominantBaseline', this._dominantBaseline,
+			'alignmentBaseline', this._alignmentBaseline,
+			'baselineShift', this._baselineShift,
+			'kerning', this._kerning,
+			'trackingRight', this._trackingRight,
+			'trackingLeft', this._trackingLeft,
+			'locale', this._locale,
+			'breakOpportunity', this._breakOpportunity,
+			'digitCase', this._digitCase,
+			'digitWidth', this._digitWidth,
+			'ligatureLevel', this._ligatureLevel,
+			'typographicCase', this._typographicCase,
+		);
 
 		return awayTextFormat;
 	}
