@@ -36,6 +36,10 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	private _filters: BitmapFilter[];
 	private _boundsPicker: BoundsPicker;
 
+	// hack for TFL to return correct width / height for TextLine
+	public _forceWidth: number = 0;
+	public _forceHeight: number = 0;
+
 	public toString(): string {
 		return `[object ${(<any> this).classInfo.instanceInfo.name.name}]`;
 	}
@@ -730,6 +734,9 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 */
 	public get height(): number {
 
+		if (this._forceHeight != 0)
+			return this._forceHeight;
+
 		if (this.adaptee.isAsset(TextField)) {
 			return (<TextField> this.adaptee).height;
 		}
@@ -1265,6 +1272,9 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * of 0, even if you try to set width to a different value.
 	 */
 	public get width(): number {
+
+		if (this._forceWidth != 0)
+			return this._forceWidth;
 
 		if (this.adaptee.isAsset(TextField)) {
 			return (<TextField> this.adaptee).width;

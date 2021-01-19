@@ -1,8 +1,10 @@
 import { ASObject } from '@awayfl/avm2';
 import { TextFormat } from '@awayjs/scene';
 import { ContentElement } from './ContentElement';
+import { ElementFormat } from './ElementFormat';
 import { FontDescription } from './FontDescription';
 import { GroupElement } from './GroupElement';
+import { TextBaseline } from './TextBaseline';
 import { TextJustifier } from './TextJustifier';
 import { TextLine } from './TextLine';
 import { TextLineCreationResult } from './TextLineCreationResult';
@@ -18,6 +20,7 @@ const enum CHAR_CODES {
 }
 export interface ITextData {
 	formats: TextFormat[],
+	elementFormats: ElementFormat[],
 	formatIndices: number[],
 	text: string,
 	processedIdx: number,
@@ -92,6 +95,7 @@ export class TextBlock extends ASObject {
 		this._textData = {
 			text: '',
 			formats: [],
+			elementFormats: [],
 			formatIndices: [],
 			processedIdx: 0,
 			creationResult: null,
@@ -152,6 +156,7 @@ export class TextBlock extends ASObject {
 			}
 			this._textData.text += text ? text : '';
 			this._textData.formats.push(tf);
+			this._textData.elementFormats.push(elementFormat);
 			this._textData.formatIndices.push(this._textData.text.length);
 		}
 		if (content.axClassName == 'flash.text.engine.GroupElement') {
@@ -169,12 +174,30 @@ export class TextBlock extends ASObject {
 		lineOffset?: number,
 		fitSomething?: boolean): TextLine {
 
-		if (!this._textData)
+		if (!this._textData) {
+			this._textLines = [];
 			this._convertContentToTextData();
+		}
+
+		if (this._tabStops && this._tabStops.buffer.length > 0) {
+			console.warn('this._tabStops is not []', this._tabStops);
+		}
+		if (this._textJustifier && this._textJustifier.lineJustification != "unjustified") {
+			console.warn('lineJustification is not unjustified', this._textJustifier.lineJustification);
+		}
+		if (this._textJustifier && (<any> this._textJustifier).letterSpacing != 0) {
+			console.warn('letterSpacing is not 0', (<any> this._textJustifier).letterSpacing);
+		}
+		if (this._baselineZero != TextBaseline.ROMAN) {
+			console.warn('_baselineZero is not "roman"', this._baselineZero);
+		}
 
 		noLogs || console.log('[TextBlock]  ' + this._id + '   - createTextLine',
-			'width', width, 'previousLine', previousLine, 'lineOffset',
-			lineOffset, 'fitSomething', fitSomething, 'processedIdx', this._textData.processedIdx);
+			'\n		width', width,
+			'\n		previousLine', previousLine,
+			'\n		lineOffset', lineOffset,
+			'\n		fitSomething', fitSomething,
+			'\n		processedIdx', this._textData.processedIdx);
 
 		const text = this._textData.text;
 		const processedIdx = this._textData.processedIdx;
@@ -185,6 +208,7 @@ export class TextBlock extends ASObject {
 			return null;
 		}
 		const formats = this._textData.formats;
+		const elementFormats = this._textData.elementFormats;
 		const formatsIndicies = this._textData.formatIndices;
 		const spaces = this._textData.spaces;
 		const lineBreaks = this._textData.lineBreaks;
@@ -196,10 +220,12 @@ export class TextBlock extends ASObject {
 		let newWord = '';
 		let newCharCnt = 0;
 		const newFormats = [];
+		const newElementFormats = [];
 		const newFormatindices = [];
 		let result = TextLineCreationResult.EMERGENCY; // is valid if its a linebreak or at least one word that fits
-		let textWidth = 0;
+		let textWidth = 2;
 		let defaultFormat;
+		let defaultElementFormat;
 		loop1:
 		for (let f = 0; f < form_len; f++) {
 			if (processedIdx > formatsIndicies[f]) {
@@ -208,6 +234,8 @@ export class TextBlock extends ASObject {
 			const format = formats[f];
 			defaultFormat = format;
 			newFormats[newFormats.length] = format;
+			newElementFormats[newElementFormats.length] = elementFormats[f];
+			defaultElementFormat =  elementFormats[f];
 			newFormatindices[newFormatindices.length] = 0;
 			const lastChar = formatsIndicies[f];
 			for (c; c <= lastChar; c++) {
@@ -230,7 +258,7 @@ export class TextBlock extends ASObject {
 					this._textData.processedIdx = c;
 				}
 				if (newWord.length == 1 &&
-					newWord.charCodeAt(0) == CHAR_CODES.SPACE || newWord.charCodeAt(0) == CHAR_CODES.TAB) {
+					(newWord.charCodeAt(0) == CHAR_CODES.SPACE || newWord.charCodeAt(0) == CHAR_CODES.TAB)) {
 					result = TextLineCreationResult.SUCCESS;
 					newText += newWord;
 					newCharCnt += newWord.length;
@@ -239,12 +267,13 @@ export class TextBlock extends ASObject {
 				}
 				textWidth += charWidths[c];
 				if (textWidth > width) {
-					noLogs || console.log('text is to wide', newText, result, text[c], newWord);
+					noLogs || console.log('text is to wide', 'textWidth', textWidth,
+						'width', width, newText, result, text[c], newWord);
 					if (result == TextLineCreationResult.SUCCESS) {
 						break loop1;
 					}
-					newText += newWord + text[c];
-					newCharCnt += newWord.length + 1;
+					newText += newWord;
+					newCharCnt += newWord.length;
 					this._textData.processedIdx = c;
 					break loop1;
 
@@ -275,13 +304,17 @@ export class TextBlock extends ASObject {
 
 		//this._textData.processedIdx = text.length + 1;
 
+		if (newFormats.length == 0) {
+			newFormats[0] = defaultFormat;
+			newElementFormats[0] = defaultElementFormat;
+		}
 		const newTextLine: TextLine = new (<any> this.sec).flash.text.engine.TextLine(
 			previousLine,
 			width,
 			lineOffset,
 			fitSomething,
-			//text, this._textData.formats, this._textData.formatIndices, 0);
-			newText, newFormats, newFormatindices, processedIdx, newCharCnt, defaultFormat);
+			newText, newFormats, newFormatindices,
+			processedIdx, newCharCnt, newElementFormats);
 
 		this._creationResult = result;
 		newTextLine.setTextBlock(this);

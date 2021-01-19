@@ -2,6 +2,8 @@ import { ASObject, axCoerceString } from '@awayfl/avm2';
 import { FontDescription } from './FontDescription';
 import { FontMetrics } from './FontMetrics';
 import { TextFormat, TextFormatAlign } from '@awayjs/scene';
+import { FontLookUpMode } from '@awayjs/scene/dist/lib/text/FontLookUpMode';
+import { TextBaseline } from './TextBaseline';
 
 const noLogs = true;
 let elementFormatIDs = 0;
@@ -95,10 +97,44 @@ export class ElementFormat extends ASObject {
 		const awayTextFormat = new TextFormat();
 		awayTextFormat.size = this._fontSize;
 		awayTextFormat.color = this._color;
+		awayTextFormat.fontLookUpMode = <FontLookUpMode>(this._fontDescription ?
+			this._fontDescription.fontLookup : FontLookUpMode.DEVICE);
 		awayTextFormat.font = <any> this._fontDescription?.fontName;
 		awayTextFormat.italic = this._fontDescription?.fontPosture == 'italic';
 		awayTextFormat.bold = this._fontDescription?.fontWeight == 'bold';
 		awayTextFormat.align = TextFormatAlign.LEFT;
+
+		if (this._baselineShift != 0) {
+			console.warn('baselineshift is not 0', this._baselineShift);
+		}
+		if (this._alignmentBaseline != TextBaseline.USE_DOMINANT_BASELINE) {
+			console.warn('_alignmentBaseline is not USE_DOMINANT_BASELINE', this._alignmentBaseline);
+		}
+		if (this._dominantBaseline != TextBaseline.ROMAN) {
+			console.warn('_dominantBaseline is not ROMAN', this._dominantBaseline);
+		}
+		if (this._trackingRight != 0) {
+			console.warn('_trackingRight is not 0', this._trackingRight);
+		}
+		if (this._trackingLeft != 0) {
+			console.warn('_trackingLeft is not 0', this._trackingLeft);
+		}
+		if (this._alpha != 1) {
+			console.warn('_alpha is not 1', this._alpha);
+		}
+		if (this._digitCase != 'default') {
+			console.warn('_digitCase is not "default"', this._digitCase);
+		}
+		if (this._digitWidth != 'default') {
+			console.warn('_digitWidth is not "default"', this._digitWidth);
+		}
+		if (this._typographicCase != 'default') {
+			console.warn('_typographicCase is not "default"', this._typographicCase);
+		}
+		if (this._ligatureLevel != 'common') {
+			console.warn('_ligatureLevel is not "common"', this._ligatureLevel);
+		}
+
 		noLogs || console.log('[ElementFormat] ' + this._id + ' createAwayTextformat', awayTextFormat.id,
 			'fontDescription', this._fontDescription,
 			'fontSize', this._fontSize,
@@ -126,6 +162,13 @@ export class ElementFormat extends ASObject {
 	public clone: () => ElementFormat;
 
 	// AS -> JS Bindings
+
+	public getBaseline(): string {
+		if (this._alignmentBaseline == TextBaseline.USE_DOMINANT_BASELINE) {
+			return this._dominantBaseline;
+		}
+		return this._alignmentBaseline;
+	}
 
 	public get alignmentBaseline(): string {
 		return this._alignmentBaseline;

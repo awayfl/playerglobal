@@ -40,7 +40,7 @@ export class Font extends ASObject {
 	}
 
 	static registerFont(font: any): void {
-		console.warn('`Font.registerFont` not implement yet');
+		//console.warn('`Font.registerFont` not implement yet');
 	}
 
 	hasGlyphs(str: String): Boolean {

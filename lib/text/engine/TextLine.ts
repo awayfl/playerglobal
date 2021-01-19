@@ -9,6 +9,7 @@ import { EventDispatcher } from '../../events/EventDispatcher';
 import { Rectangle } from '../../geom/Rectangle';
 import { ContextMenu } from '../../ui/ContextMenu';
 import { ContentElement } from './ContentElement';
+import { ElementFormat } from './ElementFormat';
 import { TextBaseline } from './TextBaseline';
 import { TextBlock } from './TextBlock';
 import { TextLineMirrorRegion } from './TextLineMirrorRegion';
@@ -54,6 +55,7 @@ export class TextLine extends DisplayObjectContainer {
 	private _fitSomething: boolean;
 	private _content: ContentElement;
 	private _textLength: number;
+	private _textfield: TextField;
 
 	constructor(
 		previousLine: TextLine,
@@ -65,7 +67,7 @@ export class TextLine extends DisplayObjectContainer {
 		formatsIndices: number[],
 		textBlockBeginIndex: number,
 		textLength: number,
-		defaultFormat: TextFormat) {
+		elementsFormats: ElementFormat[]) {
 		super();
 		const adaptee: AwayDisplayObjectContainer = new AwayDisplayObjectContainer();
 		this.adaptee = adaptee;
@@ -79,25 +81,31 @@ export class TextLine extends DisplayObjectContainer {
 		this._textFormatsIndices = formatsIndices;
 		this._textFormats = formats;
 		this._textLength = textLength;
-		//noLogs || console.log('create TextLine', this._width, this._lineOffset, this._fitSomething, content);
 		this._textBlockBeginIndex = textBlockBeginIndex;
 		this._specifiedWidth = this._width;
 
 		this._ascent = 0;
 		this._descent = Number.POSITIVE_INFINITY;
-		const newTextField = new TextField();
-		newTextField.multiline = false;
-		newTextField.border = true;
-		newTextField.wordWrap = false;
-		(<AwayDisplayObjectContainer> this.adaptee).addChild(newTextField);
+		this._textfield = new TextField();
+		this._textfield.multiline = false;
+		this._textfield.border = false;
+		this._textfield.wordWrap = false;
+		const defaultFormat = this._textFormats[0];
+		const defaultElementFormat = elementsFormats[0];
+		const lastAlignmentBaseline = defaultElementFormat.getBaseline();
+		(<AwayDisplayObjectContainer> this.adaptee).addChild(this._textfield);
 		if (this._rawText !== '') {
 
-			newTextField.autoSize = TextFieldAutoSize.LEFT;
+			this._textfield.autoSize = TextFieldAutoSize.LEFT;
 
-			newTextField.text = this._rawText;
+			this._textfield.text = this._rawText;
 			let startIdx = 0;
 			for (let i = 0; i < this._textFormatsIndices.length; i++) {
 				const textFormat = this._textFormats[i];
+				const elementFormat = elementsFormats[i];
+				if (lastAlignmentBaseline != elementFormat.getBaseline()) {
+					console.warn('[TextLine] - one Textline with different alignmentBaseline');
+				}
 				const endIdx = this._textFormatsIndices[i];
 				let ascent = (<any> textFormat).font_table.ascent;
 				let descent = (<any> textFormat).font_table.descent;
@@ -115,9 +123,9 @@ export class TextLine extends DisplayObjectContainer {
 				if (this._descent > descent) {
 					this._descent = descent;
 				}
-				!newTextField || newTextField.setTextFormat(textFormat, startIdx, endIdx);
+				!this._textfield || this._textfield.setTextFormat(textFormat, startIdx, endIdx);
 				startIdx = endIdx;
-				newTextField.height = this._ascent - this._descent;
+				this._textfield.height = this._ascent - this._descent;
 			}
 		} else {
 			this._ascent = (<any> defaultFormat).font_table.ascent;
@@ -125,30 +133,46 @@ export class TextLine extends DisplayObjectContainer {
 			const em_size = (<any> defaultFormat).font_table.get_font_em_size();
 			this._ascent = (this._ascent / em_size) * defaultFormat.size;
 			this._descent = (this._descent / em_size) * defaultFormat.size;
-			newTextField.width = 1;
-			newTextField.height = this._ascent - this._descent;
+			this._textfield.width = 1;
+			this._textfield.height = this._ascent - this._descent;
 		}
-		this._textWidth = newTextField ? newTextField.textWidth : 1;
+		this._textWidth = this._textfield ? this._textfield.textWidth + 4 : 1;
 		this._unjustifiedTextWidth = this._textWidth;
-
-		//console.log("[TextLine]", lineOffset, text);
-		//newTextField.y = this._ascent - this._ascent * lineOffset;
+		//console.log("[TextLine]", this._descent);
 		this._descent = Math.abs(this._descent);
+
+		this._ascent += 1;
+		if (lastAlignmentBaseline == TextBaseline.ROMAN) {
+			this._textfield.y = -(this._ascent);
+		} else if (lastAlignmentBaseline == TextBaseline.ASCENT) {
+			this._textfield.y = -(this._ascent - this._descent) - this._ascent;
+		} else {
+			console.warn('[TextLine] - unsupported alignmentBaseline', lastAlignmentBaseline);
+		}
+		this._textfield.x = 0;
 		this._ascent = this._ascent - this._descent;
 
-		noLogs || console.log('[TextLine] ' + this.adaptee.id + ' - constructor', 'tf', newTextField,
-			'previousLine', previousLine,
-			'width', width,
-			'lineOffset', lineOffset,
-			'fitSomething', fitSomething,
-			'text', text,
-			'formats', formats,
-			'formatsIndices', formatsIndices,
-			'textBlockBeginIndex', textBlockBeginIndex,
-			'textLength', textLength,
-			'_ascent', this._ascent,
-			'_rawText', this._rawText,
-			'newTextField.textWidth', newTextField.textWidth);
+		//this._forceWidth = this._ascent + this._descent;
+		this._forceHeight = this._ascent + this._descent;
+		this._forceHeight = Math.ceil(this._forceHeight * 20) / 20;
+		/*if (lineOffset == 0 && previousLine && previousLine._lineOffset) {
+			lineOffset = previousLine._lineOffset;
+		}*/
+
+		noLogs || console.log('[TextLine] ' + this.adaptee.id, '_rawText', this._rawText);
+		noLogs || console.log(' 	tf', this._textfield,
+			'\n		previousLine', previousLine,
+			'\n		width', width,
+			'\n		lineOffset', lineOffset,
+			'\n		fitSomething', fitSomething,
+			'\n		text', text,
+			'\n		formats', formats,
+			'\n		formatsIndices', formatsIndices,
+			'\n		textBlockBeginIndex', textBlockBeginIndex,
+			'\n		textLength', textLength,
+			'\n		_ascent', this._ascent,
+			'\n		_descent', this._descent,
+			'\n		newTextField.textWidth', this._textfield.textWidth);
 
 		if (previousLine) {
 			previousLine.setNextLine(this);
@@ -157,6 +181,20 @@ export class TextLine extends DisplayObjectContainer {
 	}
 
 	public static MAX_LINE_WIDTH: number /*int*/ = 1000000;
+
+	public getBaselinePosition(baseline: string): number {
+		noLogs || console.log('[TextLine] ' + this.adaptee.id + ' - getBaselinePosition', baseline);
+		switch (baseline) {
+			case TextBaseline.ROMAN:
+				// does not seem to matter what we return here
+				// for each TLF it checks 2 times for this value,
+				// and than 1 time for the ASCENT value
+				return 0;//-(this._ascent + this._descent);
+			case TextBaseline.ASCENT:
+				return -(this._ascent);
+		}
+		return 0;
+	}
 
 	public setNextLine(value: TextLine) {
 		noLogs || console.log('[TextLine] ' + this.adaptee.id + ' - setNextLine',  value);
@@ -215,7 +253,7 @@ export class TextLine extends DisplayObjectContainer {
 
 	public get textHeight(): number {
 		noLogs || console.log('[TextLine] ' + this.adaptee.id + ' - get textHeight',  this._ascent + this._descent);
-		return this._ascent;
+		return this._ascent + this._descent;
 	}
 
 	public get textWidth(): number {
@@ -281,18 +319,21 @@ export class TextLine extends DisplayObjectContainer {
 	}
 
 	public getAtomIndexAtPoint(stageX: number, stageY: number): number /*int*/ {
+
 		console.warn('[TextLine] ' + this.adaptee.id + ' - getAtomIndexAtPoint not implemented');
 		return null;
 	}
 
 	public getAtomIndexAtCharIndex(charIndex: number /*int*/): number /*int*/ {
-		console.warn('[TextLine] ' + this.adaptee.id + ' - getAtomIndexAtCharIndex not implemented');
-		return null;
+		noLogs || console.log('[TextLine] ' + this.adaptee.id + ' - getAtomIndexAtCharIndex', charIndex);
+		return charIndex;
 	}
 
 	public getAtomBounds(atomIndex: number /*int*/): Rectangle {
-		console.warn('[TextLine] ' + this.adaptee.id + ' - getAtomBounds not implemented');
-		return (<any> this.sec).flash.geom.Rectangle(0, 0, 10, 10);
+		const bounds = this._textfield.getCharBoundaries(atomIndex);
+		noLogs || console.log('[TextLine] ' + this.adaptee.id + ' - getAtomBounds',
+			'atomIndex', atomIndex, 'bounds', bounds);
+		return (<any> this.sec).flash.geom.Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
 
 	public getAtomBidiLevel(atomIndex: number /*int*/): number /*int*/ {
@@ -328,17 +369,6 @@ export class TextLine extends DisplayObjectContainer {
 	public getAtomGraphic(atomIndex: number /*int*/): DisplayObject {
 		console.warn('[TextLine] ' + this.adaptee.id + ' - getAtomGraphic not implemented');
 		return null;
-	}
-
-	public getBaselinePosition(baseline: string): number {
-		noLogs || console.log('[TextLine] ' + this.adaptee.id + ' - getBaselinePosition', baseline);
-		switch (baseline) {
-			case TextBaseline.ROMAN:
-				return 0;
-			case TextBaseline.ASCENT:
-				return 0;//this._descent;
-		}
-		return 0;
 	}
 
 	public dump(): string {
