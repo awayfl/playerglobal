@@ -182,7 +182,7 @@ export class TextBlock extends ASObject {
 		if (this._tabStops && this._tabStops.buffer.length > 0) {
 			console.warn('this._tabStops is not []', this._tabStops);
 		}
-		if (this._textJustifier && this._textJustifier.lineJustification != "unjustified") {
+		if (this._textJustifier && this._textJustifier.lineJustification != 'unjustified') {
 			console.warn('lineJustification is not unjustified', this._textJustifier.lineJustification);
 		}
 		if (this._textJustifier && (<any> this._textJustifier).letterSpacing != 0) {
