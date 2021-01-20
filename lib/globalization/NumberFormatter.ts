@@ -1,6 +1,6 @@
 //import { NumberParseResult } from "./NumberParseResult";
 
-import { ASObject } from "@awayfl/avm2";
+import { ASObject } from '@awayfl/avm2';
 
 /**
  * The NumberFormatter class provides locale-sensitive formatting and parsing of numeric values.
@@ -28,8 +28,6 @@ import { ASObject } from "@awayfl/avm2";
 export class NumberFormatter extends ASObject {
 	static forceNativeConstructor: boolean = true;
 	static forceNativeMethods: boolean = true;
-
-
 
 	/**
 	 * The name of the actual locale ID used by this NumberFormatter object.
