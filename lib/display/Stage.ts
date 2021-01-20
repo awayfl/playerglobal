@@ -385,7 +385,7 @@ export class Stage extends DisplayObjectContainer {
 	public get allowsFullScreen (): boolean {
 		//todo
 		console.log('allowsFullScreen not implemented yet in flash/Stage');
-		return false;
+		return true;
 	}
 
 	public get allowsFullScreenInteractive (): boolean {
@@ -609,9 +609,7 @@ export class Stage extends DisplayObjectContainer {
 	 * and Stage.scaleMode is set to StageScaleMode.NO_SCALE.
 	 */
 	public get fullScreenHeight (): number {
-		//todo
-		console.log('fullScreenHeight not implemented yet in flash/Stage');
-		return 0;
+		return window.screen.height;
 	}
 
 	/**
@@ -664,9 +662,7 @@ export class Stage extends DisplayObjectContainer {
 	 * Stage.scaleMode is set to StageScaleMode.NO_SCALE.
 	 */
 	public get fullScreenWidth (): number {
-		//todo
-		console.log('fullScreenWidth not implemented yet in flash/Stage');
-		return 0;
+		return  window.screen.width;
 	}
 
 	public get mouseLock (): boolean {
