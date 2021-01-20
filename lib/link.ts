@@ -62,6 +62,8 @@ import { GlowFilter } from './filters/GlowFilter';
 import { GradientBevelFilter } from './filters/GradientBevelFilter';
 import { GradientGlowFilter } from './filters/GradientGlowFilter';
 
+import { NumberFormatter } from './globalization/NumberFormatter';
+
 import { Sound } from './media/Sound';
 import { SoundChannel } from './media/SoundChannel';
 import { SoundTransform } from './media/SoundTransform';
@@ -388,7 +390,7 @@ export function initLink() {
 	//M('flash.globalization.LastOperationStatus', LastOperationStatus);
 	M('flash.globalization.LocaleID', LocaleID);
 	//M('flash.globalization.NationalDigitsType', NationalDigitsType);
-	//M('flash.globalization.NumberFormatter', NumberFormatter);
+	M('flash.globalization.NumberFormatter', NumberFormatter);
 	//M('flash.globalization.NumberParseResult', NumberParseResult);
 	//M('flash.globalization.StringTools', StringTools);
 
