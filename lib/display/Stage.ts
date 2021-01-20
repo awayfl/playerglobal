@@ -544,13 +544,13 @@ export class Stage extends DisplayObjectContainer {
 	 */
 	public get displayState (): string {
 		//todo
-		console.log('displayState not implemented yet in flash/Stage');
+		//console.log('displayState not implemented yet in flash/Stage');
 		return '';
 	}
 
 	public set displayState (value: string) {
 		//todo
-		console.log('displayState not implemented yet in flash/Stage');
+		//console.log('displayState not implemented yet in flash/Stage');
 	}
 
 	/**
