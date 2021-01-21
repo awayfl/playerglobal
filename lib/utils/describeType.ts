@@ -1,3 +1,4 @@
+import { Debug } from '@awayjs/core';
 
 /**
  * Produces an XML object that describes the ActionScript object named as the parameter of
@@ -76,6 +77,6 @@
  * @playerversion	Lite 4
  */
 export const describeType = function(value: any): any {
-	//todo: any is XML
-	console.log('describeType is not implemented yet in flash/utils');
+	// @todo
+	Debug.throwPIR('playerglobals/utils/describeType', 'describeType', '');
 };

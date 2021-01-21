@@ -1,22 +1,6 @@
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import { EventDispatcher } from '../events/EventDispatcher';
-import { notImplemented, release } from '@awayfl/swf-loader';
 import { GameInputDevice } from './GameInputDevice';
+import { Debug } from '@awayjs/core';
 
 // Class: GameInputControl
 export class GameInputControl extends EventDispatcher {
@@ -41,43 +25,52 @@ export class GameInputControl extends EventDispatcher {
 	// _hand: string;
 	// _finger: string;
 	// _device: flash.ui.GameInputDevice;
-	get numValues(): number /*int*/ {
-		release || notImplemented('public flash.ui.GameInputControl::get numValues'); return;
-		// return this._numValues;
+	public get numValues(): number /*int*/ {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputControl', 'get numValues', '');
+		return 0;
 	}
 
-	get index(): number /*int*/ {
-		release || notImplemented('public flash.ui.GameInputControl::get index'); return;
-		// return this._index;
+	public get index(): number /*int*/ {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputControl', 'get index', '');
+		return 0;
 	}
 
-	get relative(): boolean {
-		release || notImplemented('public flash.ui.GameInputControl::get relative'); return;
-		// return this._relative;
+	public get relative(): boolean {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputControl', 'get relative', '');
+		return true;
 	}
 
-	get type(): string {
-		release || notImplemented('public flash.ui.GameInputControl::get type'); return;
-		// return this._type;
+	public get type(): string {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputControl', 'get type', '');
+		return '';
 	}
 
-	get hand(): string {
-		release || notImplemented('public flash.ui.GameInputControl::get hand'); return;
-		// return this._hand;
+	public get hand(): string {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputControl', 'get hand', '');
+		return '';
 	}
 
-	get finger(): string {
-		release || notImplemented('public flash.ui.GameInputControl::get finger'); return;
-		// return this._finger;
+	public get finger(): string {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputControl', 'get finger', '');
+		return '';
 	}
 
-	get device(): GameInputDevice {
-		release || notImplemented('public flash.ui.GameInputControl::get device'); return;
-		// return this._device;
+	public get device(): GameInputDevice {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputControl', 'get device', '');
+		return null;
 	}
 
-	getValueAt(index: number /*int*/ = 0): number {
+	public getValueAt(index: number /*int*/ = 0): number {
 		index = index | 0;
-		release || notImplemented('public flash.ui.GameInputControl::getValueAt'); return;
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputControl', 'getValueAt', '');
+		return 0;
 	}
 }

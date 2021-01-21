@@ -1,8 +1,7 @@
 
 import { Graphics as AwayGraphics } from '@awayjs/graphics';
-import { notImplemented } from '@awayfl/swf-loader';
 import { ASObject } from '@awayfl/avm2';
-import { IAssetAdapter } from '@awayjs/core';
+import { Debug, IAssetAdapter } from '@awayjs/core';
 
 import { ASArray, GenericVector, AXClass } from '@awayfl/avm2';
 import { BitmapData } from './BitmapData';
@@ -36,31 +35,30 @@ export class Graphics extends ASObject implements IAssetAdapter {
 
 	public static FromData(data: any, loaderInfo: LoaderInfo): Graphics {
 		const graphics: Graphics = new (<SecurityDomain> this.sec).flash.display.Graphics();
-
 		return graphics;
 	}
 	/*
-    public getGraphicsData(): ShapeData {
-        return this._graphicsData;
-    }
+	public getGraphicsData(): ShapeData {
+		return this._graphicsData;
+	}
 
-    public getUsedTextures(): BitmapData[] {
-        return this._textures;
-    }*/
+	public getUsedTextures(): BitmapData[] {
+		return this._textures;
+	}*/
 
 	public clear(): void {
 		this.adaptee.clear();
 	}
 
 	/**
-     * Sets a solid color and opacity as the fill for subsequent drawing commands.
-     *
-     * @see
+	 * Sets a solid color and opacity as the fill for subsequent drawing commands.
+	 *
+	 * @see
 	 * http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/display/Graphics.html#beginFill%28%29
-     * @param color
-     * @param alpha While any Number is a valid input, the value is clamped to [0,1] and then scaled
-     * to an integer in the interval [0,0xff].
-     */
+	 * @param color
+	 * @param alpha While any Number is a valid input, the value is clamped to [0,1] and then scaled
+	 * to an integer in the interval [0,0xff].
+	 */
 	public beginFill(color: number /*uint*/, alpha: number = 1): void {
 		if (alpha < 0)
 			alpha = 0;
@@ -136,9 +134,9 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	}
 
 	/**
-     * Here x and y are the top-left coordinates of the bounding box of the
-     * ellipse not the center as is the case for circles.
-     */
+	 * Here x and y are the top-left coordinates of the bounding box of the
+	 * ellipse not the center as is the case for circles.
+	 */
 	public drawEllipse(x: number, y: number, width: number, height: number): void {
 		this.adaptee.drawEllipse(x, y, width, height);
 	}
@@ -165,24 +163,24 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	}
 
 	public drawPath(commands: GenericVector, data: GenericVector, winding: string = 'evenOdd'): void {
-		notImplemented('Graphics.drawPath');
-		//this.adaptee.drawPath(commands, data, winding);
+		// @todo
+		Debug.throwPIR('playerglobals/display/Graphics', 'drawPath', '');
 	}
 
 	public drawTriangles(vertices: GenericVector, indices: GenericVector = null,
 		uvtData: GenericVector = null, culling: string = 'none'): void {
-		console.warn('Graphics.drawTriangles');
-		//this.adaptee.drawPath(commands, data, winding);
+		// @todo
+		Debug.throwPIR('playerglobals/display/Graphics', 'drawTriangles', '');
 	}
 
 	public drawGraphicsData(graphicsData: GenericVector): void {
-		console.warn('Graphics.drawGraphicsData');
-		//this.adaptee.drawPath(commands, data, winding);
+		// @todo
+		Debug.throwPIR('playerglobals/display/Graphics', 'drawGraphicsData', '');
 	}
 
 	public readGraphicsData(graphicsData: GenericVector): any[] {
-		console.warn('Graphics.readGraphicsData');
-		//this.adaptee.drawPath(commands, data, winding);
+		// @todo
+		Debug.throwPIR('playerglobals/display/Graphics', 'readGraphicsData', '');
 		return [];
 	}
 

@@ -1,4 +1,5 @@
 import { ASObject, axCoerceString } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 
 export class TabStop extends ASObject {
 
@@ -13,7 +14,6 @@ export class TabStop extends ASObject {
 		position = +position;
 		decimalAlignmentToken = axCoerceString(decimalAlignmentToken);
 		super();
-		console.warn('[TabStop] not implemented');
 	}
 
 	// JS -> AS Bindings
@@ -24,32 +24,38 @@ export class TabStop extends ASObject {
 	// _position: number;
 	// _decimalAlignmentToken: string;
 	public get alignment(): string {
-		console.warn('[TabStop] - get alignment not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TabStop', 'get alignment', '');
 		return;
 	}
 
 	public set alignment(value: string) {
 		value = axCoerceString(value);
-		console.warn('[TabStop] - set alignment not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TabStop', 'set alignment', '');
 	}
 
 	public get position(): number {
-		console.warn('[TabStop] - get position not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TabStop', 'get position', '');
 		return;
 	}
 
 	public set position(value: number) {
 		value = +value;
-		console.warn('[TabStop] - set position not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TabStop', 'set position', '');
 	}
 
 	public get decimalAlignmentToken(): string {
-		console.warn('[TabStop] - get decimalAlignmentToken not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TabStop', 'get decimalAlignmentToken', '');
 		return;
 	}
 
 	public set decimalAlignmentToken(value: string) {
 		value = axCoerceString(value);
-		console.warn('[TabStop] - set decimalAlignmentToken not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TabStop', 'set decimalAlignmentToken', '');
 	}
 }

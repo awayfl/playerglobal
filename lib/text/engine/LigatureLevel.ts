@@ -7,7 +7,6 @@ export class LigatureLevel extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[LigatureLevel] not implemented');
 	}
 
 	// JS -> AS Bindings

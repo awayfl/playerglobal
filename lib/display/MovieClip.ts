@@ -2,7 +2,7 @@ import { MovieClip as AwayMovieClip,
 	DisplayObject as AwayDisplayObject,
 	IMovieClipAdapter,  FrameScriptManager } from '@awayjs/scene';
 import { Sprite } from './Sprite';
-import { AssetBase } from '@awayjs/core';
+import { AssetBase, Debug } from '@awayjs/core';
 import { constructClassFromSymbol } from '@awayfl/avm2';
 import { Event } from '../events/Event';
 import { FrameLabel } from './FrameLabel';
@@ -346,14 +346,10 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * of frames loaded for all scenes in the movie clip.
 	 */
 	public get framesLoaded(): number {
-		//todo
-		console.log('framesLoaded not implemented yet in flash/MovieClip');
 		return this.totalFrames;
 	}
 
 	public get isPlaying(): boolean {
-		//todo
-		//console.log("isPlaying not implemented yet in flash/MovieClip");
 		return (<AwayMovieClip> this.adaptee).isPlaying;
 	}
 
@@ -362,8 +358,8 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * and the frame labels for a scene in the MovieClip instance.
 	 */
 	public get scenes(): any[] {
-		//todo
-		console.log('scenes not implemented yet in flash/MovieClip');
+		// @todo
+		Debug.throwPIR('playerglobals/display/MovieClip', 'get scenes', '');
 		return [];
 	}
 
@@ -387,15 +383,14 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * clip immediately uses the new behavior.
 	 */
 	public get trackAsMenu(): boolean {
-		//todo
-		console.log('trackAsMenu not implemented yet in flash/MovieClip');
+		// @todo
+		Debug.throwPIR('playerglobals/display/MovieClip', 'get trackAsMenu', '');
 		return false;
 	}
 
 	public set trackAsMenu(value: boolean) {
-		//todo
-
-		console.log('trackAsMenu not implemented yet in flash/MovieClip');
+		// @todo
+		Debug.throwPIR('playerglobals/display/MovieClip', 'set trackAsMenu', '');
 	}
 
 	public addFrameScript(...args) {
@@ -571,8 +566,8 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			this.queuedNavigationAction = ()=>this.nextScene(true);
 			return;
 		}
-		//todo
-		console.log('nextScene not implemented yet in flash/MovieClip');
+		// @todo
+		Debug.throwPIR('playerglobals/display/MovieClip', 'nextScene', '');
 	}
 
 	/**
@@ -613,8 +608,8 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			this.queuedNavigationAction = ()=>this.prevScene(true);
 			return;
 		}
-		//todo
-		console.log('prevScene not implemented yet in flash/MovieClip');
+		// @todo
+		Debug.throwPIR('playerglobals/display/MovieClip', 'prevScene', '');
 	}
 
 	/**

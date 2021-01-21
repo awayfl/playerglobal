@@ -1,4 +1,5 @@
 import { ASArray, ASObject, axCoerceString } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 
 export class TextRenderer extends ASObject {
 
@@ -13,7 +14,8 @@ export class TextRenderer extends ASObject {
 
 	constructor () {
 		super();
-		console.warn('[TextRenderer] not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextRenderer', 'constructor', '');
 	}
 
 	// static _antiAliasType: string;
@@ -21,33 +23,38 @@ export class TextRenderer extends ASObject {
 	// static _displayMode: string;
 
 	public get antiAliasType(): string {
-		console.warn('[TextRenderer] - get antiAliasType not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextRenderer', 'get antiAliasType', '');
 		return null;
 	}
 
 	public set antiAliasType(value: string) {
 		value = axCoerceString(value);
-		console.warn('[TextRenderer] - set antiAliasType not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextRenderer', 'set antiAliasType', '');
 	}
 
 	public get maxLevel(): number /*int*/ {
-		console.warn('[TextRenderer] - get maxLevel not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextRenderer', 'get maxLevel', '');
 		return 0;
 	}
 
 	public set maxLevel(value: number /*int*/) {
-		value = value | 0;
-		console.warn('[TextRenderer] - set maxLevel not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextRenderer', 'set maxLevel', '');
 	}
 
 	public get displayMode(): string {
-		console.warn('[TextRenderer] - get displayMode not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextRenderer', 'get displayMode', '');
 		return null;
 	}
 
 	public set displayMode(value: string) {
 		value = axCoerceString(value);
-		console.warn('[TextRenderer] - set displayMode not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextRenderer', 'set displayMode', '');
 	}
 
 	public static setAdvancedAntiAliasingTable(
@@ -56,6 +63,8 @@ export class TextRenderer extends ASObject {
 		fontName = axCoerceString(fontName);
 		fontStyle = axCoerceString(fontStyle);
 		colorType = axCoerceString(colorType);
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextRenderer', 'setAdvancedAntiAliasingTable', '');
 	}
 
 }

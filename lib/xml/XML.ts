@@ -1,6 +1,7 @@
 import { XMLNode } from './XMLNode';
 import { XMLNodeType } from './XMLNodeType';
 import { XMLList } from './XMLList';
+import { Debug } from '@awayjs/core';
 export class XML extends XMLNode {
 	public contentType: string;
 	public docTypeDecl: string;
@@ -17,82 +18,98 @@ export class XML extends XMLNode {
 	}
 
 	public addRequestHeader(header: any, headerValue: string) {
-		console.log('addRequestHeader not implemented yet in flash/XML');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XML', 'addRequestHeader', '');
 	}
 
 	public createElement(name: string): XMLNode {
-		console.log('createElement not implemented yet in flash/XML');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XML', 'createElement', '');
 		return null;
 	}
 
 	public createTextNode(value: string): XMLNode {
-		console.log('createTextNode not implemented yet in flash/XML');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XML', 'createTextNode', '');
 		return null;
 	}
 
 	public getBytesLoaded(): number {
-		console.log('getBytesLoaded not implemented yet in flash/XML');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XML', 'getBytesLoaded', '');
 		return 0;
 	}
 
 	public getBytesTotal(): number {
-		console.log('getBytesTotal not implemented yet in flash/XML');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XML', 'getBytesTotal', '');
 		return 0;
 	}
 
 	// Central API
 	public getRequestHeaders(): any {
-		console.log('getRequestHeaders not implemented yet in flash/XML');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XML', 'getRequestHeaders', '');
 		return null;
 	}
 
 	// Central API
 	public getRequestHeader(key: string): any {
-		console.log('getRequestHeader not implemented yet in flash/XML');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XML', 'getRequestHeader', '');
 		return null;
 	}
 
 	// Central API
 	public getResponseHeaders(): any {
-		console.log('getResponseHeaders not implemented yet in flash/XML');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XML', 'getResponseHeaders', '');
 		return null;
 	}
 
 	// Central API
 	public getResponseHeader(key: string): any {
-		console.log('getResponseHeader not implemented yet in flash/XML');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XML', 'getResponseHeader', '');
 		return null;
 	}
 
 	// Central API
 	public getResponseBody(): any {
-		console.log('getResponseBody not implemented yet in flash/XML');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XML', 'getResponseBody', '');
 		return null;
 	}
 
 	public load(url: string): boolean {
-		console.log('load not implemented yet in flash/XML');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XML', 'load', '');
 		return false;
 	}
 
 	public parseXML(value: string) {
-		console.log('parseXML not implemented yet in flash/XML');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XML', 'parseXML', '');
 	}
 
 	public send(url: string,target: string,method: string): boolean {
-		console.log('send not implemented yet in flash/XML');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XML', 'send', '');
 		return false;
 	}
 
 	public sendAndLoad(url: string, resultXML: XML) {
-		console.log('sendAndLoad not implemented yet in flash/XML');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XML', 'sendAndLoad', '');
 	}
 
 	public onLoad(success: boolean) {
-		console.log('onLoad not implemented yet in flash/XML');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XML', 'onLoad', '');
 	}
 
 	public onData(src: string) {
-		console.log('onData not implemented yet in flash/XML');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XML', 'onData', '');
 	}
 }

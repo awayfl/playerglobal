@@ -1,4 +1,5 @@
 import { ASObject } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 
 export class TextExtent extends ASObject {
 
@@ -18,6 +19,7 @@ export class TextExtent extends ASObject {
 		this.textFieldHeight = +textFieldHeight;
 		this.ascent = +ascent;
 		this.descent = +descent;
-		console.warn('[TextExtent] not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextExtent', 'constructor', '');
 	}
 }

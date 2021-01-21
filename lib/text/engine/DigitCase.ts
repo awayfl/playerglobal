@@ -7,7 +7,6 @@ export class DigitCase extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[DigitCase] not implemented');
 	}
 
 	// JS -> AS Bindings

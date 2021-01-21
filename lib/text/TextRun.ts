@@ -11,7 +11,6 @@ export class TextRun extends ASObject {
 		this._beginIndex = beginIndex | 0;
 		this._endIndex = endIndex | 0;
 		this._textFormat = textFormat;
-		console.warn('[TextRun] not implemented');
 	}
 
 	private _beginIndex: number /*int*/;

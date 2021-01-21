@@ -1,5 +1,5 @@
 
-import { StageAlign, StageScaleMode, AVMStage, release } from '@awayfl/swf-loader';
+import { StageAlign, StageScaleMode, AVMStage } from '@awayfl/swf-loader';
 import { Event } from '../events/Event';
 import { IEventMapper } from '../events/IEventMapper';
 import { DisplayObjectContainer } from './DisplayObjectContainer';
@@ -14,6 +14,7 @@ import { SecurityDomain } from '../SecurityDomain';
 import { OrphanManager } from '@awayfl/avm2';
 import { Loader as PlayerGlobalLoader } from './Loader';
 import { LoaderInfo } from './LoaderInfo';
+import { Debug } from '@awayjs/core';
 
 /**
  * Dispatched by the Stage object when the state of the stageVideos property changes.
@@ -325,7 +326,6 @@ export class Stage extends DisplayObjectContainer {
 	//---------------------------original as3 properties / methods:
 
 	public get mouseX (): number {
-		//console.log("mouseX not implemented yet in flash/DisplayObject");
 		return AVMStage.instance().getLocalMouseX(this.adaptee) | 0;
 	}
 
@@ -336,13 +336,12 @@ export class Stage extends DisplayObjectContainer {
 	 * non-rotated any.
 	 */
 	public get mouseY (): number {
-		//console.log("mouseY not implemented yet in flash/DisplayObject");
 		return AVMStage.instance().getLocalMouseY(this.adaptee) | 0;
 	}
 
 	public set accessibilityImplementation (value: any) {
-		//todo: any is AccessibilityImplementation
-		console.log('textSnapshot not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'set accessibilityImplementation', '');
 	}
 
 	/**
@@ -383,19 +382,20 @@ export class Stage extends DisplayObjectContainer {
 	 *   </pre>
 	 */
 	public get allowsFullScreen (): boolean {
-		//todo
-		console.log('allowsFullScreen not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get allowsFullScreen', '');
 		return true;
 	}
 
 	public get allowsFullScreenInteractive (): boolean {
-		console.log('allowsFullScreen not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get allowsFullScreenInteractive', '');
 		return null;
 	}
 
 	public get browserZoomFactor (): number {
-		//todo
-		console.log('browserZoomFactor not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get browserZoomFactor', '');
 		return 0;
 	}
 
@@ -437,14 +437,14 @@ export class Stage extends DisplayObjectContainer {
 	 * Always perform color correction."off": Never perform color correction.
 	 */
 	public get colorCorrection (): string {
-		//todo
-		console.log('colorCorrection not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get colorCorrection', '');
 		return '';
 	}
 
 	public set colorCorrection (value: string) {
-		//todo
-		console.log('colorCorrection not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'set colorCorrection', '');
 	}
 
 	/**
@@ -460,20 +460,20 @@ export class Stage extends DisplayObjectContainer {
 
 	 */
 	public get colorCorrectionSupport (): string {
-		//todo
-		console.log('colorCorrectionSupport not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get colorCorrectionSupport', '');
 		return '';
 	}
 
 	public get contentsScaleFactor (): number {
-		//todo
-		console.log('contentsScaleFactor not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get contentsScaleFactor', '');
 		return 0;
 	}
 
 	public get displayContextInfo (): string {
-		//todo
-		console.log('displayContextInfo not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get displayContextInfo', '');
 		return '';
 	}
 
@@ -543,14 +543,14 @@ export class Stage extends DisplayObjectContainer {
 	 *   true throws a security error.
 	 */
 	public get displayState (): string {
-		//todo
-		//console.log('displayState not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get displayState', '');
 		return '';
 	}
 
 	public set displayState (value: string) {
-		//todo
-		//console.log('displayState not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'set displayState', '');
 	}
 
 	/**
@@ -560,14 +560,14 @@ export class Stage extends DisplayObjectContainer {
 	 * @throws	Error Throws an error if focus cannot be set to the target.
 	 */
 	public get focus (): any {
-		//todo: any is InteractiveObject
-		//console.log("focus not implemented yet in flash/Stage");
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get focus', '');
 		return null;
 	}
 
 	public set focus (newFocus: any) {
-		//todo: any is InteractiveObject
-		//console.log("focus not implemented yet in flash/Stage");
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'set focus', '');
 	}
 
 	/**
@@ -638,14 +638,14 @@ export class Stage extends DisplayObjectContainer {
 	 * For more information, see www.adobe.com/go/display_settings.
 	 */
 	public get fullScreenSourceRect (): Rectangle {
-		//todo
-		console.log('fullScreenSourceRect not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get fullScreenSourceRect', '');
 		return null;
 	}
 
 	public set fullScreenSourceRect (value: Rectangle) {
-		//todo
-		console.log('fullScreenSourceRect not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'set fullScreenSourceRect', '');
 	}
 
 	/**
@@ -666,14 +666,14 @@ export class Stage extends DisplayObjectContainer {
 	}
 
 	public get mouseLock (): boolean {
-		//todo
-		console.log('mouseLock not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get mouseLock', '');
 		return false;
 	}
 
 	public set mouseLock (value: boolean) {
-		//todo
-		console.log('mouseLock not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'set mouseLock', '');
 	}
 
 	/**
@@ -681,21 +681,27 @@ export class Stage extends DisplayObjectContainer {
 	 * The following are valid values:
 	 *
 	 *   StageQuality.LOW—Low rendering quality. Graphics are not
-	 * anti-aliased, and bitmaps are not smoothed, but runtimes still use mip-mapping.StageQuality.MEDIUM—Medium rendering quality. Graphics are
+	 * anti-aliased, and bitmaps are not smoothed, but runtimes still use mip-mapping.StageQuality.
+	 * MEDIUM—Medium rendering quality. Graphics are
 	 * anti-aliased using a 2 x 2 pixel grid, bitmap smoothing is dependent on the Bitmap.smoothing setting.
-	 * Runtimes use mip-mapping. This setting is suitable for movies that do not contain text.StageQuality.HIGH—High rendering quality. Graphics are anti-aliased
+	 * Runtimes use mip-mapping. This setting is suitable for movies that do not contain text.
+	 * StageQuality.HIGH—High rendering quality. Graphics are anti-aliased
 	 * using a 4 x 4 pixel grid, and bitmap smoothing is dependent on the Bitmap.smoothing setting.
-	 * Runtimes use mip-mapping. This is the default rendering quality setting that Flash Player uses.StageQuality.BEST—Very high rendering quality. Graphics are
+	 * Runtimes use mip-mapping. This is the default rendering quality setting that Flash Player uses.
+	 * StageQuality.BEST—Very high rendering quality. Graphics are
 	 * anti-aliased using a 4 x 4 pixel grid. If Bitmap.smoothing is true the runtime uses a high quality
-	 * downscale algorithm that produces fewer artifacts (however, using StageQuality.BEST with Bitmap.smoothing set to true
-	 * slows performance significantly and is not a recommended setting).Higher quality settings produce better rendering of scaled bitmaps. However, higher
+	 * downscale algorithm that produces fewer artifacts
+	 * (however, using StageQuality.BEST with Bitmap.smoothing set to true
+	 * slows performance significantly and is not a recommended setting).
+	 * Higher quality settings produce better rendering of scaled bitmaps. However, higher
 	 * quality settings are computationally more expensive. In particular, when rendering scaled video,
 	 * using higher quality settings can reduce the frame rate.
 	 * In the desktop profile of Adobe AIR, quality can be set
 	 * to StageQuality.BEST or StageQuality.HIGH (and the default value
 	 * is StageQuality.HIGH). Attempting to set it to another value has no effect
 	 * (and the property remains unchanged). In the moble profile of AIR, all four quality settings
-	 * are available. The default value on mobile devices is StageQuality.MEDIUM.For content running in Adobe AIR, setting the quality property of one Stage
+	 * are available. The default value on mobile devices is StageQuality.MEDIUM.
+	 * For content running in Adobe AIR, setting the quality property of one Stage
 	 * object changes the rendering quality for all Stage objects (used by different NativeWindow objects).
 	 * Note: The operating system draws the device fonts,
 	 * which are therefore unaffected by the quality property.
@@ -706,15 +712,15 @@ export class Stage extends DisplayObjectContainer {
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
 	public get quality (): string {
-		//todo
-		//console.log("quality not implemented yet in flash/Stage");
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get quality', '');
 		return '';
 
 	}
 
 	public set quality (value: string) {
-		//todo
-		//console.log("quality not implemented yet in flash/Stage");
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'set quality', '');
 	}
 
 	/**
@@ -722,7 +728,8 @@ export class Stage extends DisplayObjectContainer {
 	 * The following are valid values:
 	 *
 	 *   StageScaleMode.EXACT_FIT—The entire application is visible
-	 * in the specified area without trying to preserve the original aspect ratio. Distortion can occur, and the application may appear stretched or compressed.
+	 * in the specified area without trying to preserve the original aspect ratio.
+	 * Distortion can occur, and the application may appear stretched or compressed.
 	 * StageScaleMode.SHOW_ALL—The entire application is visible
 	 * in the specified area without distortion while maintaining the original aspect ratio of the application.
 	 * Borders can appear on two sides of the application.
@@ -760,22 +767,23 @@ export class Stage extends DisplayObjectContainer {
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
 	public get showDefaultContextMenu (): boolean {
-		//todo
-		release || console.log('showDefaultContextMenu not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get showDefaultContextMenu', '');
 		return false;
 
 	}
 
 	public set showDefaultContextMenu (value: boolean) {
-		//todo
-		release || console.log('showDefaultContextMenu not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'set showDefaultContextMenu', '');
 
 	}
 
 	/**
 	 * The area of the stage that is currently covered by the software keyboard.
 	 *
-	 *   The area has a size of zero (0,0,0,0) when the soft keyboard is not visible.When the keyboard opens, the softKeyboardRect is set at the time the
+	 *   The area has a size of zero (0,0,0,0) when the soft keyboard is not visible.
+	 * When the keyboard opens, the softKeyboardRect is set at the time the
 	 * softKeyboardActivate event is dispatched. If the keyboard changes size while open,
 	 * the runtime updates the softKeyboardRect property and dispatches an
 	 * additional softKeyboardActivate event.Note: On Android, the area covered by the keyboard is estimated when
@@ -784,15 +792,15 @@ export class Stage extends DisplayObjectContainer {
 	 * an InteractiveObject receiving focus or invoking the requestSoftKeyboard() method.
 	 */
 	public get softKeyboardRect (): Rectangle {
-		//todo
-		console.log('softKeyboardRect not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get softKeyboardRect', '');
 		return null;
 
 	}
 
 	public get stage3Ds (): AwayStage[] {
-		// todo: any is stage3d
-		console.log('stage3Ds not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get stage3Ds', '');
 		return this._stage3Ds;
 	}
 
@@ -816,15 +824,15 @@ export class Stage extends DisplayObjectContainer {
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
 	public get stageFocusRect (): boolean {
-		//todo
-		console.log('stageFocusRect not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get stageFocusRect', '');
 		return false;
 
 	}
 
 	public set stageFocusRect (on: boolean) {
-		//todo
-		console.log('stageFocusRect not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'set stageFocusRect', '');
 	}
 
 	/**
@@ -837,12 +845,14 @@ export class Stage extends DisplayObjectContainer {
 	 * height of the SWF file.) You can add an event listener for the resize event and then use the
 	 * stageHeight property of the Stage class to determine the actual pixel dimension of the resized
 	 * Flash runtime window. The event listener allows you to control how
-	 * the screen content adjusts when the user resizes the window.Air for TV devices have slightly different behavior than desktop devices
+	 * the screen content adjusts when the user resizes the window.
+	 * Air for TV devices have slightly different behavior than desktop devices
 	 * when you set the stageHeight property.
 	 * If the Stage.scaleMode
 	 * property is set to StageScaleMode.NO_SCALE and you set the stageHeight
 	 * property, the stage height does not change until the next
-	 * frame of the SWF.Note: In an HTML page hosting the SWF file, both the object and embed tags' height attributes must be set to a percentage (such as 100%), not pixels. If the
+	 * frame of the SWF.Note: In an HTML page hosting the SWF file,
+	 * both the object and embed tags' height attributes must be set to a percentage (such as 100%), not pixels. If the
 	 * settings are generated by JavaScript code, the height parameter of the AC_FL_RunContent()
 	 * method must be set to a percentage, too. This percentage is applied to the stageHeight
 	 * value.
@@ -873,11 +883,12 @@ export class Stage extends DisplayObjectContainer {
 	 * three entries:The StageVideo object in the 0 index of the stageVideos Vector object is
 	 * displayed behind all StageVideo objects.The StageVideo object at index 1 is displayed in front
 	 * of the StageVideo object at index 0.The StageVideo object at index 2 is displayed in front
-	 * of the StageVideo object at index 1.Use the StageVideo.depth property to change this ordering.Note: AIR for TV devices support only one StageVideo object.
+	 * of the StageVideo object at index 1.Use the StageVideo.depth property to change this ordering.
+	 * Note: AIR for TV devices support only one StageVideo object.
 	 */
 	public get stageVideos (): any[] {
-		//todo: any is StageVideo
-		console.log('stageVideos not implemented yet in flash/Stage');
+		// @todo any is StageVideo
+		Debug.throwPIR('playerglobals/display/Stage', 'get stageVideos', '');
 		return [];
 	}
 
@@ -889,13 +900,16 @@ export class Stage extends DisplayObjectContainer {
 	 * property changes to reflect the new width size of the screen area occupied by the SWF file. (In the other scale
 	 * modes, the stageWidth property always reflects the original width of the SWF file.) You can add an event
 	 * listener for the resize event and then use the stageWidth property of the Stage class to
-	 * determine the actual pixel dimension of the resized Flash runtime window. The event listener allows you to control how
-	 * the screen content adjusts when the user resizes the window.Air for TV devices have slightly different behavior than desktop devices
+	 * determine the actual pixel dimension of the resized Flash runtime window.
+	 * The event listener allows you to control how
+	 * the screen content adjusts when the user resizes the window.
+	 * Air for TV devices have slightly different behavior than desktop devices
 	 * when you set the stageWidth property.
 	 * If the Stage.scaleMode
 	 * property is set to StageScaleMode.NO_SCALE and you set the stageWidth
 	 * property, the stage width does not change until the next
-	 * frame of the SWF.Note: In an HTML page hosting the SWF file, both the object and embed tags' width attributes must be set to a percentage (such as 100%), not pixels. If the
+	 * frame of the SWF.Note: In an HTML page hosting the SWF file,
+	 * both the object and embed tags' width attributes must be set to a percentage (such as 100%), not pixels. If the
 	 * settings are generated by JavaScript code, the width parameter of the AC_FL_RunContent()
 	 * method must be set to a percentage, too. This percentage is applied to the stageWidth
 	 * value.
@@ -925,8 +939,8 @@ export class Stage extends DisplayObjectContainer {
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
 	public get tabChildren (): boolean {
-		//todo
-		console.log('tabChildren not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get tabChildren', '');
 		return false;
 	}
 
@@ -937,26 +951,43 @@ export class Stage extends DisplayObjectContainer {
 	 *   textSnapshot property of a display object container other than the Stage object.
 	 */
 	public get textSnapshot (): any {
-		//todo
-		console.log('textSnapshot not implemented yet in flash/Stage');
-		//todo: any is flash.text.TextSnapshot
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get textSnapshot', '');
 		return null;
 	}
 
 	/**
 	 * Indicates whether GPU compositing is available and in use. The wmodeGPU value is trueonly
 	 * when all three of the following conditions exist:
-	 * GPU compositing has been requested.GPU compositing is available.GPU compositing is in use.Specifically, the wmodeGPU property indicates one of the following:GPU compositing has not been requested or is unavailable. In this case, the wmodeGPU property value is false.GPU compositing has been requested (if applicable and available), but the environment is operating in "fallback mode"
-	 * (not optimal rendering) due to limitations of the content. In this case, the wmodeGPU property value is true.GPU compositing has been requested (if applicable and available), and the environment is operating in the best mode. In this case, the
-	 * wmodeGPU property value is also true.In other words, the wmodeGPU property identifies the capability and state of the rendering environment. For runtimes
-	 * that do not support GPU compositing, such as AIR 1.5.2, the value is always false, because (as stated above) the value is
-	 * true only when GPU compositing has been requested, is available, and is in use.The wmodeGPU property is useful to determine, at runtime, whether or not GPU compositing is in use. The value of
-	 * wmodeGPU indicates if your content is going to be scaled by hardware, or not, so you can present graphics at the correct size.
-	 * You can also determine if you're rendering in a fast path or not, so that you can adjust your content complexity accordingly.For Flash Player in a browser, GPU compositing can be requested by the value of gpu for the wmode HTML
-	 * parameter in the page hosting the SWF file. For other configurations, GPU compositing can be requested in the header of a SWF file
-	 * (set using SWF authoring tools).However, the wmodeGPU property does not identify the current rendering performance. Even if GPU compositing is "in use" the rendering
-	 * process might not be operating in the best mode. To adjust your content for optimal rendering, use a Flash runtime debugger version,
-	 * and set the DisplayGPUBlendsetting in your mm.cfg file.Note: This property is always false when referenced
+	 * GPU compositing has been requested.GPU compositing is available.
+	 * GPU compositing is in use.Specifically, the wmodeGPU property indicates one of the following:
+	 * GPU compositing has not been requested or is unavailable. In this case, the wmodeGPU property value is false.
+	 * GPU compositing has been requested (if applicable and available),
+	 * but the environment is operating in "fallback mode"
+	 * (not optimal rendering) due to limitations of the content.
+	 * In this case, the wmodeGPU property value is true.
+	 * GPU compositing has been requested (if applicable and available),
+	 *  and the environment is operating in the best mode. In this case, the
+	 * wmodeGPU property value is also true.In other words, the wmodeGPU property identifies the capability
+	 * and state of the rendering environment. For runtimes
+	 * that do not support GPU compositing, such as AIR 1.5.2,
+	 * the value is always false, because (as stated above) the value is
+	 * true only when GPU compositing has been requested, is available, and is in use.
+	 * The wmodeGPU property is useful to determine, at runtime, whether or not GPU compositing is in use.
+	 * The value of wmodeGPU indicates if your content is going to be scaled by hardware, or not,
+	 * so you can present graphics at the correct size.
+	 * You can also determine if you're rendering in a fast path or not,
+	 * so that you can adjust your content complexity accordingly.For Flash Player in a browser,
+	 * GPU compositing can be requested by the value of gpu for the wmode HTML
+	 * parameter in the page hosting the SWF file. For other configurations,
+	 * GPU compositing can be requested in the header of a SWF file
+	 * (set using SWF authoring tools).However,
+	 * the wmodeGPU property does not identify the current rendering performance.
+	 * Even if GPU compositing is "in use" the rendering
+	 * process might not be operating in the best mode. To adjust your content for optimal rendering,
+	 * use a Flash runtime debugger version,
+	 * and set the DisplayGPUBlendsetting in your mm.cfg file.Note:
+	 * This property is always false when referenced
 	 * from ActionScript that runs before the runtime performs its first rendering
 	 * pass.  For example, if you examine wmodeGPU from a script in Frame 1 of
 	 * Adobe Flash Professional, and your SWF file is the first SWF file loaded in a new
@@ -967,8 +998,8 @@ export class Stage extends DisplayObjectContainer {
 	 * is the correct value.
 	 */
 	public get wmodeGPU (): boolean {
-		//todo
-		console.log('wmodeGPU not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'get wmodeGPU', '');
 		return false;
 	}
 
@@ -1078,7 +1109,8 @@ export class Stage extends DisplayObjectContainer {
 	 *
 	 *   The render event gives you an opportunity to make changes to the display list
 	 * immediately before it is actually rendered. This lets you defer updates to the display list until the
-	 * latest opportunity. This can increase performance by eliminating unnecessary screen updates.The render event is dispatched only to display objects that are in the same
+	 * latest opportunity. This can increase performance by eliminating unnecessary screen updates.
+	 * The render event is dispatched only to display objects that are in the same
 	 * security domain as the code that calls the stage.invalidate() method,
 	 * or to display objects from a security domain that has been granted permission via the
 	 * Security.allowDomain() method.
@@ -1096,8 +1128,8 @@ export class Stage extends DisplayObjectContainer {
 	 *   the SWF file does not have access.
 	 */
 	public isFocusInaccessible (): boolean {
-		//todo
-		console.log('isFocusInaccessible not implemented yet in flash/Stage');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Stage', 'isFocusInaccessible', '');
 		return false;
 	}
 

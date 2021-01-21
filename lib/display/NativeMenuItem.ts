@@ -1,8 +1,5 @@
-import { release, warning } from '@awayfl/swf-loader';
+import { Debug } from '@awayjs/core';
 import { EventDispatcher } from '../events/EventDispatcher';
-
-const partialImp =
-	(obj: Object, field: string) => warning(`[Builtins] Partial implemented ${obj.constructor.name}::${field}`);
 
 // Class: NativeMenuItem
 export class NativeMenuItem extends EventDispatcher {
@@ -23,13 +20,15 @@ export class NativeMenuItem extends EventDispatcher {
 
 	protected _enabled: boolean;
 	public get enabled(): boolean {
-		release || partialImp(this, 'get enabled');
+		// @todo
+		Debug.throwPIR('playerglobals/display/NativeMenuItem', 'get enabled', '');
 		return this._enabled;
 	}
 
 	public set enabled(isSeparator: boolean) {
 		isSeparator = !!isSeparator;
-		release || partialImp(this, 'set enabled');
+		// @todo
+		Debug.throwPIR('playerglobals/display/NativeMenuItem', 'set enabled', '');
 		this._enabled = isSeparator;
 	}
 }

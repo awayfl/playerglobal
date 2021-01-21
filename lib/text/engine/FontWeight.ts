@@ -7,7 +7,6 @@ export class FontWeight extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[FontWeight] not implemented');
 	}
 
 	// JS -> AS Bindings

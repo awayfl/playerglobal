@@ -1,14 +1,19 @@
+import { Debug } from '@awayjs/core';
 import { XML } from './XML';
 /**
  * The XMLList class contains methods for working with one or more XML elements. An XMLList object
  * can represent one or more XML objects or elements (including multiple nodes or attributes), so
  * you can call methods on the elements as a group or on the individual elements in the collection.
  * <p class="- topic/p ">If an XMLList object has only one XML element, you can use the XML class methods on the
- * XMLList object directly. In the following example, <codeph class="+ topic/ph pr-d/codeph ">example.two</codeph> is an XMLList
- * object of length 1, so you can call any XML method on it.</p><codeblock xml:space="preserve" class="+ topic/pre pr-d/codeblock ">
- * var example2 = &lt;example&gt;&lt;two&gt;2&lt;/two&gt;&lt;/example&gt;;</codeblock><p class="- topic/p ">If you attempt to use XML class methods with an XMLList object containing more than one XML
+ * XMLList object directly. In the following example, <codeph class="+ topic/ph pr-d/codeph ">example.two
+ * </codeph> is an XMLList
+ * object of length 1, so you can call any XML method on it.
+ * </p><codeblock xml:space="preserve" class="+ topic/pre pr-d/codeblock ">
+ * var example2 = &lt;example&gt;&lt;two&gt;2&lt;/two&gt;&lt;/example&gt;;</codeblock>
+ * <p class="- topic/p ">If you attempt to use XML class methods with an XMLList object containing more than one XML
  * object, an exception is thrown; instead, iterate over the XMLList collection (using a
- * <codeph class="+ topic/ph pr-d/codeph ">for each..in</codeph> statement, for example) and apply the methods to each XML object in
+ * <codeph class="+ topic/ph pr-d/codeph ">for each..in</codeph>
+ * statement, for example) and apply the methods to each XML object in
  * the collection.</p>
  */
 export class XMLList {
@@ -24,12 +29,14 @@ export class XMLList {
 	}
 
 	public addNamespace (ns: any): XML {
-		console.log('addNamespace not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'addNamespace', '');
 		return null;
 	}
 
 	public appendChild (child: any): XML {
-		console.log('appendChild not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'appendChild', '');
 		return null;
 	}
 
@@ -43,7 +50,8 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public attribute (arg: any): XMLList {
-		console.log('attribute not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'attribute', '');
 		return null;
 	}
 
@@ -55,7 +63,8 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public attributes (): XMLList {
-		console.log('attributes not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'attributes', '');
 		return null;
 	}
 
@@ -68,12 +77,14 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public child (propertyName: any): XMLList {
-		console.log('child not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'child', '');
 		return null;
 	}
 
 	public childIndex (): number {
-		console.log('childIndex not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'childIndex', '');
 		return 0;
 	}
 
@@ -85,7 +96,8 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public children (): XMLList {
-		console.log('children not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'children', '');
 		return null;
 	}
 
@@ -97,7 +109,8 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public comments (): XMLList {
-		console.log('comments not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'comments', '');
 		return null;
 	}
 
@@ -111,7 +124,8 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public contains (value: any): boolean {
-		console.log('contains not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'contains', '');
 		return false;
 	}
 
@@ -123,7 +137,8 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public copy (): XMLList {
-		console.log('copy not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'copy', '');
 		return null;
 	}
 
@@ -143,7 +158,8 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public descendants (name: any = '*'): XMLList {
-		console.log('descendants not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'descendants', '');
 		return null;
 	}
 
@@ -157,7 +173,8 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public elements (name: any = '*'): XMLList {
-		console.log('elements not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'elements', '');
 		return null;
 	}
 
@@ -171,7 +188,8 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public hasComplexContent (): boolean {
-		console.log('hasComplexContent not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'hasComplexContent', '');
 		return false;
 	}
 
@@ -183,7 +201,8 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public hasOwnProperty (P: any = null): boolean {
-		console.log('hasOwnProperty not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'hasOwnProperty', '');
 		return false;
 	}
 
@@ -191,28 +210,33 @@ export class XMLList {
 	 * Checks whether the XMLList object contains simple content. An XMLList object is
 	 * considered to contain simple content if one or more of the following
 	 * conditions is true:
-	 * The XMLList object is emptyThe XMLList object contains a single XML item with simple contentThe XMLList object contains no elements
+	 * The XMLList object is emptyThe XMLList object contains a single XML item with simple content
+	 * The XMLList object contains no elements
 	 * @return	If the XMLList contains simple content, then true; otherwise false.
 	 * @langversion	3.0
 	 * @playerversion	Flash 9
 	 */
 	public hasSimpleContent (): boolean {
-		console.log('hasSimpleContent not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'hasSimpleContent', '');
 		return false;
 	}
 
 	public inScopeNamespaces (): any[] {
-		console.log('inScopeNamespaces not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'inScopeNamespaces', '');
 		return [];
 	}
 
 	public insertChildAfter (child1: any, child2: any): any {
-		console.log('insertChildAfter not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'insertChildAfter', '');
 		return null;
 	}
 
 	public insertChildBefore (child1: any, child2: any): any {
-		console.log('insertChildBefore not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'insertChildBefore', '');
 		return null;
 	}
 
@@ -223,32 +247,38 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public length (): number {
-		console.log('length not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'length', '');
 		return 0;
 	}
 
 	public localName (): any {
-		console.log('localName not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'localName', '');
 		return null;
 	}
 
 	public name (): any {
-		console.log('name not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'name', '');
 		return null;
 	}
 
 	public namespace (prefix: any = null): any {
-		console.log('namespace not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'namespace', '');
 		return null;
 	}
 
 	public namespaceDeclarations (): any[] {
-		console.log('namespaceDeclarations not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'namespaceDeclarations', '');
 		return [];
 	}
 
 	public nodeKind (): string {
-		console.log('nodeKind not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'nodeKind', '');
 		return '';
 	}
 
@@ -262,7 +292,8 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public normalize (): XMLList {
-		console.log('normalize not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'normalize', '');
 		return null;
 	}
 
@@ -274,12 +305,14 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public parent (): any {
-		console.log('parent not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'parent', '');
 		return null;
 	}
 
 	public prependChild (value: any): XML {
-		console.log('prependChild not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'prependChild', '');
 		return null;
 	}
 
@@ -293,7 +326,8 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public processingInstructions (name: any = '*'): XMLList {
-		console.log('processingInstructions not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'processingInstructions', '');
 		return null;
 	}
 
@@ -307,35 +341,42 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public propertyIsEnumerable (P: any = null): boolean {
-		console.log('propertyIsEnumerable not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'propertyIsEnumerable', '');
 		return false;
 	}
 
 	public removeNamespace (ns: any): XML {
-		console.log('removeNamespace not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'removeNamespace', '');
 		return null;
 	}
 
 	public replace (propertyName: any, value: any): XML {
-		console.log('replace not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'replace', '');
 		return null;
 	}
 
 	public setChildren (value: any): XML {
-		console.log('setChildren not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'setChildren', '');
 		return null;
 	}
 
 	public setLocalName (name: any) {
-		console.log('setLocalName not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'setLocalName', '');
 	}
 
 	public setName (name: any) {
-		console.log('setName not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'setName', '');
 	}
 
 	public setNamespace (ns: any) {
-		console.log('setNamespace not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'setNamespace', '');
 	}
 
 	/**
@@ -346,12 +387,14 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public text (): XMLList {
-		console.log('text not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'text', '');
 		return null;
 	}
 
 	public toJSON (k: string): any {
-		console.log('toJSON not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'toJSON', '');
 		return null;
 	}
 
@@ -369,7 +412,8 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public toString (): string {
-		console.log('toString not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'toString', '');
 		return '';
 	}
 
@@ -385,7 +429,8 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public toXMLString (): string {
-		console.log('toXMLString not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'toXMLString', '');
 		return '';
 	}
 
@@ -396,7 +441,8 @@ export class XMLList {
 	 * @playerversion	Flash 9
 	 */
 	public valueOf (): XMLList {
-		console.log('valueOf not implemented yet in flash/XMLList');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLList', 'valueOf', '');
 		return null;
 	}
 

@@ -1,5 +1,5 @@
 
-import { IAsset, ParserBase,  AssetEvent, WaveAudio, URLLoaderEvent, LoaderEvent } from '@awayjs/core';
+import { IAsset, ParserBase,  AssetEvent, WaveAudio, URLLoaderEvent, LoaderEvent, Debug } from '@awayjs/core';
 
 import { Image2DParser, BitmapImage2D } from '@awayjs/stage';
 
@@ -15,7 +15,8 @@ import {
 	Sprite as AwaySprite,
 	TextField as AwayTextField,
 	SceneImage2D,
-	FrameScriptManager
+	FrameScriptManager,
+	ISceneGraphFactory
 } from '@awayjs/scene';
 
 import { release, somewhatImplemented, SWFParser } from '@awayfl/swf-loader';
@@ -181,7 +182,8 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 	 * uncaught errors in the AVM1 SWF file do not result in an `uncaughtError` event.
 	 */
 	public get uncaughtErrorEvents(): UncaughtErrorEvents {
-		release || somewhatImplemented('public flash.display.Loader::uncaughtErrorEvents');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Loader', 'get uncaughtErrorEvents', '');
 
 		if (!this._uncaughtErrorEvents)
 			this._uncaughtErrorEvents = new UncaughtErrorEvents();
@@ -752,7 +754,8 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 	}
 
 	private _unload(stopExecution: boolean, gc: boolean): void {
-		console.log('80pro todo: loader._unload');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Loader', '_unload', '');
 		// if (this._loadStatus < LoadStatus.Initialized) {
 		//   this._loadStatus = LoadStatus.Unloaded;
 		//   return;

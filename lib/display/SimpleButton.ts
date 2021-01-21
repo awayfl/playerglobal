@@ -5,6 +5,7 @@ import { Timeline, DisplayObjectContainer as AwayDisplayObjectContainer,
 	DisplayObject as AwayDisplayObject, IDisplayObjectAdapter, FrameScriptManager } from '@awayjs/scene';
 import { MovieClip as AwayMovieClip } from '@awayjs/scene';
 import { IVirtualSceneGraphItem } from './IVirtualSceneGraphItem';
+import { Debug } from '@awayjs/core';
 
 /**
  * The SimpleButton class lets you control all instances of button symbols in a SWF
@@ -361,13 +362,15 @@ export class SimpleButton extends MovieClip {
 	 * selects the hitTestState object.
 	 */
 	public get downState (): DisplayObject {
-		console.log('downState not implemented yet in flash/SimpleButton');
+		// @todo
+		Debug.throwPIR('playerglobals/display/SimpleButton', 'get downState', '');
 		return null;
 
 	}
 
 	public set downState (value: DisplayObject) {
-		console.log('downState not implemented yet in flash/SimpleButton');
+		// @todo
+		Debug.throwPIR('playerglobals/display/SimpleButton', 'set downState', '');
 
 	}
 
@@ -384,14 +387,15 @@ export class SimpleButton extends MovieClip {
 	 * and mouseEnabled properties to false.
 	 */
 	public get enabled (): boolean {
-		console.log('enabled not implemented yet in flash/SimpleButton');
+		// @todo
+		Debug.throwPIR('playerglobals/display/SimpleButton', 'get enabled', '');
 		return false;
 
 	}
 
 	public set enabled (value: boolean) {
-		console.log('enabled not implemented yet in flash/SimpleButton');
-
+		// @todo
+		Debug.throwPIR('playerglobals/display/SimpleButton', 'set enabled', '');
 	}
 
 	/**
@@ -416,14 +420,15 @@ export class SimpleButton extends MovieClip {
 	 * the pointer is positioned over the button.
 	 */
 	public get overState (): DisplayObject {
-		console.log('overState not implemented yet in flash/SimpleButton');
+		// @todo
+		Debug.throwPIR('playerglobals/display/SimpleButton', 'get overState', '');
 		return null;
 
 	}
 
 	public set overState (value: DisplayObject) {
-		console.log('overState not implemented yet in flash/SimpleButton');
-
+		// @todo
+		Debug.throwPIR('playerglobals/display/SimpleButton', 'set overState', '');
 	}
 
 	/**
@@ -436,14 +441,14 @@ export class SimpleButton extends MovieClip {
 	 *   best to use 22-KHZ 6-bit mono sounds?
 	 */
 	public get soundTransform (): SoundTransform {
-		console.log('soundTransform not implemented yet in flash/SimpleButton');
+		// @todo
+		Debug.throwPIR('playerglobals/display/SimpleButton', 'get soundTransform', '');
 		return null;
-
 	}
 
 	public set soundTransform (sndTransform: SoundTransform) {
-		console.log('soundTransform not implemented yet in flash/SimpleButton');
-
+		// @todo
+		Debug.throwPIR('playerglobals/display/SimpleButton', 'set soundTransform', '');
 	}
 
 	/**
@@ -457,14 +462,14 @@ export class SimpleButton extends MovieClip {
 	 * modified button immediately takes on the new behavior.
 	 */
 	public get trackAsMenu (): boolean {
-		console.log('trackAsMenu not implemented yet in flash/SimpleButton');
+		// @todo
+		Debug.throwPIR('playerglobals/display/SimpleButton', 'get trackAsMenu', '');
 		return false;
-
 	}
 
 	public set trackAsMenu (value: boolean) {
-		console.log('trackAsMenu not implemented yet in flash/SimpleButton');
-
+		// @todo
+		Debug.throwPIR('playerglobals/display/SimpleButton', 'set trackAsMenu', '');
 	}
 
 	/**
@@ -473,14 +478,14 @@ export class SimpleButton extends MovieClip {
 	 * the pointer is not positioned over the button.
 	 */
 	public get upState (): DisplayObject {
-		console.log('upState not implemented yet in flash/SimpleButton');
+		// @todo
+		Debug.throwPIR('playerglobals/display/SimpleButton', 'get upState', '');
 		return null;
-
 	}
 
 	public set upState (value: DisplayObject) {
-		console.log('upState not implemented yet in flash/SimpleButton');
-
+		// @todo
+		Debug.throwPIR('playerglobals/display/SimpleButton', 'set upState', '');
 	}
 
 	/**
@@ -505,12 +510,14 @@ export class SimpleButton extends MovieClip {
 	 * <code>myBtn2_btn</code>.</p>
 	 */
 	public get useHandCursor (): boolean {
-		console.log('useHandCursor not implemented yet in flash/SimpleButton');
+		// @todo
+		Debug.throwPIR('playerglobals/display/SimpleButton', 'get useHandCursor', '');
 		return false;
 	}
 
 	public set useHandCursor (value: boolean) {
-		console.log('useHandCursor not implemented yet in flash/SimpleButton');
+		// @todo
+		Debug.throwPIR('playerglobals/display/SimpleButton', 'set useHandCursor', '');
 	}
 
 }

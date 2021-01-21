@@ -7,7 +7,6 @@ export class TextRotation extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[TextRotation] not implemented');
 	}
 
 	// JS -> AS Bindings

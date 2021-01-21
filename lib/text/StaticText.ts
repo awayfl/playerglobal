@@ -1,22 +1,6 @@
+import { Debug } from '@awayjs/core';
 import { DisplayObject } from '../display/DisplayObject';
-//import { TextSymbol } from './TextField';
 
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: StaticText
 export class StaticText extends DisplayObject {
 
 	public static classInitializer: any = null;
@@ -27,28 +11,31 @@ export class StaticText extends DisplayObject {
 
 	//_symbol: TextSymbol;
 	public applySymbol() {
-		console.warn('[StaticText] - applySymbol not impolemented');
-		//this._initializeFields();
-		//this._setStaticContentFromSymbol(this._symbol);
+		// @todo
+		Debug.throwPIR('playerglobals/text/StaticText', 'applySymbol', '');
 	}
 
 	constructor () {
 		super();
-		console.warn('[StaticText] not impolemented');
-		/*if (!this._fieldsInitialized) {
-			this._initializeFields();
-		}*/
+		// @todo
+		Debug.throwPIR('playerglobals/text/StaticText', 'constructor', '');
 	}
 
 	public _canHaveTextContent(): boolean {
+		// @todo
+		Debug.throwPIR('playerglobals/text/StaticText', '_canHaveTextContent', '');
 		return true;
 	}
 
 	public _getTextContent(): any/*TextContent*/ {
+		// @todo
+		Debug.throwPIR('playerglobals/text/StaticText', '_getTextContent', '');
 		return this._textContent;
 	}
 
 	public get text(): string {
+		// @todo
+		Debug.throwPIR('playerglobals/text/StaticText', 'text', '');
 		return this._textContent.plainText;
 	}
 }

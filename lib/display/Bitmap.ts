@@ -5,6 +5,7 @@ import { ImageTexture2D, MethodMaterial } from '@awayjs/materials';
 
 import { IBitmapDataOwner } from './IBitmapDataOwner';
 import { BitmapImage2D } from '@awayjs/stage';
+import { Debug } from '@awayjs/core';
 
 /**
  * The Bitmap class represents display objects that represent bitmap images. These can be images
@@ -198,7 +199,8 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner {
 	}
 
 	public set pixelSnapping (value: string) {
-		console.log('pixelSnapping not implemented yet in flash/Bitmap');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Bitmap', 'set pixelSnapping', '');
 	}
 
 	/**

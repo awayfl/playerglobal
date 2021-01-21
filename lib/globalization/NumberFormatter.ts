@@ -1,6 +1,7 @@
 //import { NumberParseResult } from "./NumberParseResult";
 
 import { ASObject } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 
 /**
  * The NumberFormatter class provides locale-sensitive formatting and parsing of numeric values.
@@ -47,7 +48,8 @@ export class NumberFormatter extends ASObject {
 	 * retrieve those customized settings.
 	 */
 	public get actualLocaleIDName (): string {
-		console.log('actualLocaleIDName not implemented yet in flash/NumberFormatter');
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'get actualLocaleIDName', '');
 		return '';
 
 	}
@@ -64,14 +66,15 @@ export class NumberFormatter extends ASObject {
 	 * @throws	TypeError if this property is assigned a null value.
 	 */
 	public get decimalSeparator (): string {
-		console.log('decimalSeparator not implemented yet in flash/NumberFormatter');
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'get decimalSeparator', '');
 		return '';
 
 	}
 
 	public set decimalSeparator (value: string) {
-		console.log('decimalSeparator not implemented yet in flash/NumberFormatter');
-
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'set decimalSeparator', '');
 	}
 
 	/**
@@ -88,14 +91,15 @@ export class NumberFormatter extends ASObject {
 	 * @throws	TypeError if this property is assigned a null value.
 	 */
 	public get digitsType (): number {
-		console.log('digitsType not implemented yet in flash/NumberFormatter');
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'get digitsType', '');
 		return 0;
 
 	}
 
 	public set digitsType (value: number) {
-		console.log('digitsType not implemented yet in flash/NumberFormatter');
-
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'set digitsType', '');
 	}
 
 	/**
@@ -112,14 +116,15 @@ export class NumberFormatter extends ASObject {
 	 * LastOperationStatus class.
 	 */
 	public get fractionalDigits (): number {
-		console.log('fractionalDigits not implemented yet in flash/NumberFormatter');
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'get fractionalDigits', '');
 		return 0;
 
 	}
 
 	public set fractionalDigits (value: number) {
-		console.log('fractionalDigits not implemented yet in flash/NumberFormatter');
-
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'set fractionalDigits', '');
 	}
 
 	/**
@@ -153,14 +158,15 @@ export class NumberFormatter extends ASObject {
 	 * @throws	TypeError if this property is assigned a null value.
 	 */
 	public get groupingPattern (): string {
-		console.log('groupingPattern not implemented yet in flash/NumberFormatter');
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'get groupingPattern', '');
 		return '';
 
 	}
 
 	public set groupingPattern (value: string) {
-		console.log('groupingPattern not implemented yet in flash/NumberFormatter');
-
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'set groupingPattern', '');
 	}
 
 	/**
@@ -177,14 +183,14 @@ export class NumberFormatter extends ASObject {
 	 * @throws	TypeError if this property is assigned a null value.
 	 */
 	public get groupingSeparator (): string {
-		console.log('groupingSeparator not implemented yet in flash/NumberFormatter');
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'get groupingSeparator', '');
 		return '';
-
 	}
 
 	public set groupingSeparator (value: string) {
-		console.log('groupingSeparator not implemented yet in flash/NumberFormatter');
-
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'set groupingSeparator', '');
 	}
 
 	/**
@@ -193,9 +199,9 @@ export class NumberFormatter extends ASObject {
 	 * this class is called, or another property is set. For the possible values see the description for each method.
 	 */
 	public get lastOperationStatus (): string {
-		console.log('lastOperationStatus not implemented yet in flash/NumberFormatter');
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'get lastOperationStatus', '');
 		return '';
-
 	}
 
 	/**
@@ -220,14 +226,15 @@ export class NumberFormatter extends ASObject {
 	 * @throws	TypeError if this property is assigned a null value.
 	 */
 	public get leadingZero (): boolean {
-		console.log('leadingZero not implemented yet in flash/NumberFormatter');
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'get leadingZero', '');
 		return false;
 
 	}
 
 	public set leadingZero (value: boolean) {
-		console.log('leadingZero not implemented yet in flash/NumberFormatter');
-
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'set leadingZero', '');
 	}
 
 	/**
@@ -246,14 +253,14 @@ export class NumberFormatter extends ASObject {
 	 * @throws	ArgumentError if the assigned value is not a number between 0 and 4.
 	 */
 	public get negativeNumberFormat (): number {
-		console.log('negativeNumberFormat not implemented yet in flash/NumberFormatter');
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'get negativeNumberFormat', '');
 		return 0;
-
 	}
 
 	public set negativeNumberFormat (value: number) {
-		console.log('negativeNumberFormat not implemented yet in flash/NumberFormatter');
-
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'set negativeNumberFormat', '');
 	}
 
 	/**
@@ -272,13 +279,15 @@ export class NumberFormatter extends ASObject {
 	 * @throws	MemoryError if the system cannot allocate enough internal memory.
 	 */
 	public get negativeSymbol (): string {
-		console.log('negativeSymbol not implemented yet in flash/NumberFormatter');
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'get negativeSymbol', '');
 		return '';
 
 	}
 
 	public set negativeSymbol (value: string) {
-		console.log('negativeSymbol not implemented yet in flash/NumberFormatter');
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'set negativeSymbol', '');
 
 	}
 
@@ -290,7 +299,8 @@ export class NumberFormatter extends ASObject {
 	 * The name of the actual locale can be retrieved using the actualLocaleIDName property.
 	 */
 	public get requestedLocaleIDName (): string {
-		console.log('requestedLocaleIDName not implemented yet in flash/NumberFormatter');
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'get requestedLocaleIDName', '');
 		return '';
 
 	}
@@ -316,13 +326,15 @@ export class NumberFormatter extends ASObject {
 	 * @throws	TypeError if this property is assigned a null value.
 	 */
 	public get trailingZeros (): boolean {
-		console.log('trailingZeros not implemented yet in flash/NumberFormatter');
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'get trailingZeros', '');
 		return false;
 
 	}
 
 	public set trailingZeros (value: boolean) {
-		console.log('trailingZeros not implemented yet in flash/NumberFormatter');
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'set trailingZeros', '');
 
 	}
 
@@ -341,13 +353,15 @@ export class NumberFormatter extends ASObject {
 	 * LastOperationStatus class.
 	 */
 	public get useGrouping (): boolean {
-		console.log('useGrouping not implemented yet in flash/NumberFormatter');
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'get useGrouping', '');
 		return false;
 
 	}
 
 	public set useGrouping (value: boolean) {
-		console.log('useGrouping not implemented yet in flash/NumberFormatter');
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'set useGrouping', '');
 
 	}
 
@@ -368,8 +382,9 @@ export class NumberFormatter extends ASObject {
 	 * @throws	MemoryError for any internal memory allocation problems.
 	 */
 	public formatInt (value: number): string {
-		console.log('formatInt not implemented yet in flash/NumberFormatter');
-		return '';
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'formatInt', '');
+		return value.toString();
 
 	}
 
@@ -394,7 +409,8 @@ export class NumberFormatter extends ASObject {
 	 * @throws	MemoryError if there are any internal memory allocation problems.
 	 */
 	public formatNumber (value: number): string {
-		//console.log('formatNumber not implemented yet in flash/NumberFormatter');
+		// @todo
+		Debug.throwPIR('playerglobals/globalization/NumberFormatter', 'formatNumber', '');
 		return value.toString();
 
 	}

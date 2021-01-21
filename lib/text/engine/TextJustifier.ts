@@ -1,4 +1,5 @@
 import { ASObject, axCoerceString } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 
 export class TextJustifier extends ASObject {
 
@@ -15,13 +16,15 @@ export class TextJustifier extends ASObject {
 	}
 
 	public static getJustifierForLocale(locale: string): TextJustifier {
-		console.warn('[TextJustifier] - getJustifierForLocale not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextJustifier', 'getJustifierForLocale', '');
 		return null;
 
 	}
 
 	public clone(): TextJustifier {
-		console.warn('[TextJustifier] - clone not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextJustifier', 'clone', '');
 		return null;
 	}
 

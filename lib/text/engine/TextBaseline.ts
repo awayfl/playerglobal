@@ -7,7 +7,6 @@ export class TextBaseline extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[TextBaseline] not implemented');
 	}
 
 	// JS -> AS Bindings

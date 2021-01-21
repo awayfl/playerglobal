@@ -7,7 +7,6 @@ export class Kerning extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[Kerning] not implemented');
 	}
 
 	// JS -> AS Bindings

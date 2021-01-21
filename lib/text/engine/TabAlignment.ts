@@ -7,7 +7,6 @@ export class TabAlignment extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[TabAlignment] not implemented');
 	}
 
 	// JS -> AS Bindings

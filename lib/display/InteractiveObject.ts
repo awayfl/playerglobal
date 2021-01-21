@@ -1,9 +1,8 @@
 
-import { Rectangle, EventBase } from '@awayjs/core';
+import { Debug, Rectangle } from '@awayjs/core';
 import { DisplayObject } from './DisplayObject';
-import { DisplayObject as AwayDisplayObject, MouseEvent as MouseEventAway } from '@awayjs/scene';
+import { MouseEvent as MouseEventAway } from '@awayjs/scene';
 import { MouseEvent } from '../events/MouseEvent';
-import { Event } from '../events/Event';
 import { KeyboardEvent } from '../events/KeyboardEvent';
 
 import { IEventMapper } from '../events/IEventMapper';
@@ -13,7 +12,7 @@ export class InteractiveObject extends DisplayObject {
 
 	private _keyDownListeners: Function[];
 	private _keyUpListeners: Function[];
-	protected _mouseListnersCallbacksByType: StringMap<Function[]> ={};
+	protected _mouseListnersCallbacksByType: StringMap<Function[]> = {};
 	/** these should be able to get setup:
 
 	 // listen on key directly
@@ -100,9 +99,8 @@ export class InteractiveObject extends DisplayObject {
 	 * pointing device over the same InteractiveObject.
 	 * @eventType	flash.events.MouseEvent.CLICK
 	 [Event(name="click", type="flash.events.MouseEvent")]
-
 	 */
-	 /**
+	/**
 	 * Dispatched immediately after the soft keyboard is lowered.
 	 * @eventType	flash.events.SoftKeyboardEvent.SOFT_KEYBOARD_DEACTIVATE
 	 [Event(name="softKeyboardDeactivate", type="flash.events.SoftKeyboardEvent")]
@@ -171,23 +169,29 @@ export class InteractiveObject extends DisplayObject {
 	 * @eventType	flash.events.Event.TAB_CHILDREN_CHANGE
 	 [Event(name="tabChildrenChange", type="flash.events.Event")]
 
-	 * Dispatched when the user performs a swipe gesture at a point of contact with an InteractiveObject instance (such as touching three
-	 * fingers to a screen and then moving them in parallel over a display object on a mobile phone or tablet with a touch screen).
+	 * Dispatched when the user performs a swipe gesture at a point of contact with an InteractiveObject instance
+	 (such as touching three
+	 * fingers to a screen and then moving them in parallel over a display object on a mobile phone
+	 or tablet with a touch screen).
 	 * @eventType	flash.events.TransformGestureEvent.GESTURE_SWIPE
 	 [Event(name="gestureSwipe", type="flash.events.TransformGestureEvent")]
 
-	 * Dispatched when the user performs a zoom gesture at a point of contact with an InteractiveObject instance (such as touching two
-	 * fingers to a screen and then quickly spreading the fingers apart over a display object on a mobile phone or tablet with a touch screen).
+	 * Dispatched when the user performs a zoom gesture at a point of contact with an InteractiveObject instance
+	 (such as touching two
+	 * fingers to a screen and then quickly spreading the fingers apart over a display object on a mobile phone
+	 or tablet with a touch screen).
 	 * @eventType	flash.events.TransformGestureEvent.GESTURE_ZOOM
 	 [Event(name="gestureZoom", type="flash.events.TransformGestureEvent")]
 
-	 * Dispatched when the user performs a rotation gesture at a point of contact with an InteractiveObject instance (such as touching two fingers
+	 * Dispatched when the user performs a rotation gesture at a point of contact with an InteractiveObject instance
+	 (such as touching two fingers
 	 * and rotating them over a display object on a mobile phone or tablet with a touch screen).
 	 * @eventType	flash.events.TransformGestureEvent.GESTURE_ROTATE
 	 [Event(name="gestureRotate", type="flash.events.TransformGestureEvent")]
 
 	 * Dispatched when the user creates a point of contact with an InteractiveObject instance, then taps
-	 * on a touch-enabled device (such as placing several fingers over a display object to open a menu and then taps one finger to select a menu item
+	 * on a touch-enabled device (such as placing several fingers over a display object to open a menu and then taps
+	 * one finger to select a menu item
 	 * on a mobile phone or tablet with a touch screen).
 	 * @eventType	flash.events.PressAndTapGestureEvent.GESTURE_PRESS_AND_TAP
 	 [Event(name="gesturePressAndTap", type="flash.events.PressAndTapGestureEvent")]
@@ -204,41 +208,50 @@ export class InteractiveObject extends DisplayObject {
 	 * @eventType	flash.events.GestureEvent.GESTURE_TWO_FINGER_TAP
 	 [Event(name="gestureTwoFingerTap", type="flash.events.GestureEvent")]
 
-	 * Dispatched when the user lifts the point of contact over the same InteractiveObject instance on which the contact was initiated
+	 * Dispatched when the user lifts the point of contact over the same InteractiveObject
+	 instance on which the contact was initiated
 	 * on a touch-enabled device (such as presses and releases a finger from a single point over a display object
 	 * on a mobile phone or tablet with a touch screen).
 	 * @eventType	flash.events.TouchEvent.TOUCH_TAP
 	 [Event(name="touchTap", type="flash.events.TouchEvent")]
 
 	 * Dispatched when the user moves the point of contact over an InteractiveObject instance on a touch-enabled device
-	 * (such as drags a finger from a point outside a display object to a point over a display object on a mobile phone or tablet with a touch screen).
+	 * (such as drags a finger from a point outside a display object to a point over a displayobject
+	 * on a mobile phone or tablet with a touch screen).
 	 * @eventType	flash.events.TouchEvent.TOUCH_ROLL_OVER
 	 [Event(name="touchRollOver", type="flash.events.TouchEvent")]
 
-	 * Dispatched when the user moves the point of contact away from an InteractiveObject instance on a touch-enabled device
-	 * (such as drags a finger from over a display object to a point outside the display object on a mobile phone or tablet with a touch screen).
+	 * Dispatched when the user moves the point of contact away from an InteractiveObject instance
+	 on a touch-enabled device
+	 * (such as drags a finger from over a display object to a point outside the display object on a mobile phone
+		or tablet with a touch screen).
 	 * @eventType	flash.events.TouchEvent.TOUCH_ROLL_OUT
 	 [Event(name="touchRollOut", type="flash.events.TouchEvent")]
 
 	 * Dispatched when the user moves the point of contact over an InteractiveObject instance on a touch-enabled device
-	 * (such as drags a finger from a point outside a display object to a point over a display object on a mobile phone or tablet with a touch screen).
+	 * (such as drags a finger from a point outside a display object to a point over a display object
+	 * on a mobile phone or tablet with a touch screen).
 	 * @eventType	flash.events.TouchEvent.TOUCH_OVER
 	 [Event(name="touchOver", type="flash.events.TouchEvent")]
 
-	 * Dispatched when the user moves the point of contact away from InteractiveObject instance on a touch-enabled device
+	 * Dispatched when the user moves the point of contact away from InteractiveObject instance
+	 on a touch-enabled device
 	 * (such as drags a finger from one display object to another on a mobile phone or tablet with a touch screen).
 	 * @eventType	flash.events.TouchEvent.TOUCH_OUT
 	 [Event(name="touchOut", type="flash.events.TouchEvent")]
 
-	 * Dispatched when the user moves the point of contact with a touch-enabled device (such as drags a finger across a mobile phone or tablet with a touch screen).
+	 * Dispatched when the user moves the point of contact with a touch-enabled device
+	 (such as drags a finger across a mobile phone or tablet with a touch screen).
 	 * @eventType	flash.events.TouchEvent.TOUCH_MOVE
 	 [Event(name="touchMove", type="flash.events.TouchEvent")]
 
-	 * Dispatched when the user removes contact with a touch-enabled device (such as lifts a finger off a mobile phone or tablet with a touch screen).
+	 * Dispatched when the user removes contact with a touch-enabled device
+	 (such as lifts a finger off a mobile phone or tablet with a touch screen).
 	 * @eventType	flash.events.TouchEvent.TOUCH_END
 	 [Event(name="touchEnd", type="flash.events.TouchEvent")]
 
-	 * Dispatched when the user first contacts a touch-enabled device (such as touches a finger to a mobile phone or tablet with a touch screen).
+	 * Dispatched when the user first contacts a touch-enabled device
+	 (such as touches a finger to a mobile phone or tablet with a touch screen).
 	 * @eventType	flash.events.TouchEvent.TOUCH_BEGIN
 	 [Event(name="touchBegin", type="flash.events.TouchEvent")]
 
@@ -282,34 +295,55 @@ export class InteractiveObject extends DisplayObject {
 	 [Event(name="clear", type="flash.events.Event")]
 	 */
 
-	 /**
+	/**
 
 	* The InteractiveObject class is the abstract base class for all display objects with which the user can
 	 * interact, using the mouse, keyboard, or other user input device.
 	 *
-	 *   <p class="- topic/p ">You cannot instantiate the InteractiveObject class directly. A call to the <codeph class="+ topic/ph pr-d/codeph ">new
-	 * InteractiveObject()</codeph> constructor throws an <codeph class="+ topic/ph pr-d/codeph ">ArgumentError</codeph> exception.</p><p class="- topic/p ">The InteractiveObject class itself does not include any APIs for rendering content onscreen.
+	 *   <p class="- topic/p ">You cannot instantiate the InteractiveObject class directly.
+	 * A call to the <codeph class="+ topic/ph pr-d/codeph ">new
+	 * InteractiveObject()</codeph> constructor throws an
+	 * <codeph class="+ topic/ph pr-d/codeph ">ArgumentError</codeph> exception.</p><p class="- topic/p ">
+	 * The InteractiveObject class itself does not include any APIs for rendering content onscreen.
 	 * To create a custom subclass of the InteractiveObject class,
 	 * extend one of the subclasses that do have APIs for rendering content onscreen,
 	 * such as the Sprite, SimpleButton, TextField, or MovieClip classes.</p>
 	 *
 	 *   EXAMPLE:
 	 *
-	 *   The following example uses the <codeph class="+ topic/ph pr-d/codeph ">InteractiveObjectExample</codeph> class, which in
-	 * turn uses the <codeph class="+ topic/ph pr-d/codeph ">ChildSprite</codeph> class to draw a rectangle and then manipulate that rectangle
+	 *   The following example uses the <codeph class="+ topic/ph pr-d/codeph ">
+	 * InteractiveObjectExample</codeph> class, which in
+	 * turn uses the <codeph class="+ topic/ph pr-d/codeph ">ChildSprite</codeph>
+	 * class to draw a rectangle and then manipulate that rectangle
 	 * based on various mouse events.  This task is accomplished by performing the following steps:
-	 * <ol class="- topic/ol "><li class="- topic/li ">In the <codeph class="+ topic/ph pr-d/codeph ">InteractiveObjectExample</codeph> constructor, a new ChildSprite object of type Sprite
-	 * called <codeph class="+ topic/ph pr-d/codeph ">child</codeph> is created, which calls the ChildSprite constructor method to draw the shape
-	 * and add mouse events for the shape (as explained in the following steps).  The <codeph class="+ topic/ph pr-d/codeph ">child</codeph>
-	 * object is added to the top of the display list at coordinates <i class="+ topic/ph hi-d/i ">x = 0, y = 0</i>.  </li><li class="- topic/li ">In the <codeph class="+ topic/ph pr-d/codeph ">ChildSprite</codeph> class, declare the <codeph class="+ topic/ph pr-d/codeph ">size</codeph> and
-	 * <codeph class="+ topic/ph pr-d/codeph ">overSize</codeph> properties that are used later in the <codeph class="+ topic/ph pr-d/codeph ">draw()</codeph> method and
-	 * MouseEvent methods.</li><li class="- topic/li ">Declare properties that set the background color to orange, the mouse-over color to
-	 * dark yellow, and the mouse-down color to light blue.</li><li class="- topic/li ">In the <codeph class="+ topic/ph pr-d/codeph ">ChildSprite</codeph> constructor, an orange square is drawn by using methods from
-	 * the Graphics class and the <codeph class="+ topic/ph pr-d/codeph ">draw()</codeph> method.</li><li class="- topic/li ">The constructor adds four MouseEvent event listener methods:
+	 * <ol class="- topic/ol "><li class="- topic/li ">In the <codeph class="+ topic/ph pr-d/codeph ">
+	 * InteractiveObjectExample</codeph> constructor, a new ChildSprite object of type Sprite
+	 * called <codeph class="+ topic/ph pr-d/codeph ">child</codeph> is created,
+	 * which calls the ChildSprite constructor method to draw the shape
+	 * and add mouse events for the shape (as explained in the following steps).
+	 * The <codeph class="+ topic/ph pr-d/codeph ">child</codeph>
+	 * object is added to the top of the display list at coordinates <i class="+ topic/ph hi-d/i ">
+	 * x = 0, y = 0</i>.  </li><li class="- topic/li ">In the <codeph class="+ topic/ph pr-d/codeph ">
+	 * ChildSprite</codeph> class, declare the <codeph class="+ topic/ph pr-d/codeph ">size</codeph> and
+	 * <codeph class="+ topic/ph pr-d/codeph ">overSize</codeph> properties that are used later in the
+	 * <codeph class="+ topic/ph pr-d/codeph ">draw()</codeph> method and
+	 * MouseEvent methods.</li><li class="- topic/li ">
+	 * Declare properties that set the background color to orange, the mouse-over color to
+	 * dark yellow, and the mouse-down color to light blue.</li><li class="- topic/li ">
+	 * In the <codeph class="+ topic/ph pr-d/codeph ">ChildSprite</codeph> constructor,
+	 * an orange square is drawn by using methods from
+	 * the Graphics class and the <codeph class="+ topic/ph pr-d/codeph ">draw()</codeph> method.
+	 * </li><li class="- topic/li ">The constructor adds four MouseEvent event listener methods:
 	 *
-	 *   <ul class="- topic/ul "><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">mouseOverHandler</codeph>: redraws a larger 60 x 60 pixel square with a dark-yellow color
-	 * at the original coordinates.</li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">mouseOutHandler</codeph>: returns the square to its original size and color.</li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">mouseDownHandler</codeph>: redraws a larger 60 x 60 pixel square with a light-blue color
-	 * at the original coordinates.</li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">mouseUpHandler</codeph>: same as <codeph class="+ topic/ph pr-d/codeph ">mouseOverHandler</codeph>.</li></ul></li></ol><codeblock xml:space="preserve" class="+ topic/pre pr-d/codeblock ">
+	 *   <ul class="- topic/ul "><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph "
+	 * >mouseOverHandler</codeph>: redraws a larger 60 x 60 pixel square with a dark-yellow color
+	 * at the original coordinates.</li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">
+	 * mouseOutHandler</codeph>: returns the square to its original size and color.</li><li class="- topic/li ">
+	 * <codeph class="+ topic/ph pr-d/codeph ">mouseDownHandler</codeph>:
+	 * redraws a larger 60 x 60 pixel square with a light-blue color
+	 * at the original coordinates.</li><li class="- topic/li "><codeph class="+ topic/ph pr-d/codeph ">
+	 * mouseUpHandler</codeph>: same as <codeph class="+ topic/ph pr-d/codeph ">mouseOverHandler</codeph>.</li></ul>
+	 * </li></ol><codeblock xml:space="preserve" class="+ topic/pre pr-d/codeblock ">
 	 *
 	 * Calling the new InteractiveObject() constructor
 	 * throws an ArgumentError exception.
@@ -320,20 +354,22 @@ export class InteractiveObject extends DisplayObject {
 	constructor() {
 		super();
 
-		 // these events can not be mapped from awayjs: //todo (?)
-		 this.eventMappingDummys[MouseEvent.RIGHT_MOUSE_UP] = 'InteractiveObject:MouseEvent.RIGHT_MOUSE_UP';
-		 this.eventMappingDummys[MouseEvent.RIGHT_MOUSE_DOWN] = 'InteractiveObject:MouseEvent.RIGHT_MOUSE_DOWN';
-		 this.eventMappingDummys[MouseEvent.RIGHT_MOUSE_DOWN] = 'InteractiveObject:MouseEvent.RIGHT_MOUSE_DOWN';
-		 this.eventMappingDummys[MouseEvent.RIGHT_CLICK] = 'InteractiveObject:MouseEvent.RIGHT_CLICK';
-		 this.eventMappingDummys[MouseEvent.MIDDLE_MOUSE_UP] = 'InteractiveObject:MouseEvent.MIDDLE_MOUSE_UP';
-		 this.eventMappingDummys[MouseEvent.MIDDLE_MOUSE_DOWN] = 'InteractiveObject:MouseEvent.MIDDLE_MOUSE_DOWN';
-		 this.eventMappingDummys[MouseEvent.MIDDLE_CLICK] = 'InteractiveObject:MouseEvent.MIDDLE_CLICK';
+		// these events can not be mapped from awayjs: //todo (?)
+		this.eventMappingDummys[MouseEvent.RIGHT_MOUSE_UP] = 'InteractiveObject:MouseEvent.RIGHT_MOUSE_UP';
+		this.eventMappingDummys[MouseEvent.RIGHT_MOUSE_DOWN] = 'InteractiveObject:MouseEvent.RIGHT_MOUSE_DOWN';
+		this.eventMappingDummys[MouseEvent.RIGHT_MOUSE_DOWN] = 'InteractiveObject:MouseEvent.RIGHT_MOUSE_DOWN';
+		this.eventMappingDummys[MouseEvent.RIGHT_CLICK] = 'InteractiveObject:MouseEvent.RIGHT_CLICK';
+		this.eventMappingDummys[MouseEvent.MIDDLE_MOUSE_UP] = 'InteractiveObject:MouseEvent.MIDDLE_MOUSE_UP';
+		this.eventMappingDummys[MouseEvent.MIDDLE_MOUSE_DOWN] = 'InteractiveObject:MouseEvent.MIDDLE_MOUSE_DOWN';
+		this.eventMappingDummys[MouseEvent.MIDDLE_CLICK] = 'InteractiveObject:MouseEvent.MIDDLE_CLICK';
 
-		 /*
+		/*
 		 //todo
-		 this.eventMappingDummys[SoftKeyboardEvent.SOFT_KEYBOARD_DEACTIVATE]="SoftKeyboardEvent.SOFT_KEYBOARD_DEACTIVATE";
+		 this.eventMappingDummys[SoftKeyboardEvent.SOFT_KEYBOARD_DEACTIVATE]=
+			  "SoftKeyboardEvent.SOFT_KEYBOARD_DEACTIVATE";
 		 this.eventMappingDummys[SoftKeyboardEvent.SOFT_KEYBOARD_ACTIVATE]="SoftKeyboardEvent.SOFT_KEYBOARD_ACTIVATE";
-		 this.eventMappingDummys[SoftKeyboardEvent.SOFT_KEYBOARD_ACTIVATING]="SoftKeyboardEvent.SOFT_KEYBOARD_ACTIVATING";
+		 this.eventMappingDummys[SoftKeyboardEvent.SOFT_KEYBOARD_ACTIVATING]=
+			  "SoftKeyboardEvent.SOFT_KEYBOARD_ACTIVATING";
 		 this.eventMappingDummys[TextEvent.TEXT_INPUT]="TextEvent.TEXT_INPUT";
 		 this.eventMappingDummys[MouseEvent.CONTEXT_MENU]="MouseEvent.CONTEXT_MENU";
 		 this.eventMappingDummys[NativeDragEvent.NATIVE_DRAG_COMPLETE]="NativeDragEvent.NATIVE_DRAG_COMPLETE";
@@ -348,7 +384,8 @@ export class InteractiveObject extends DisplayObject {
 		 this.eventMappingDummys[Event.TAB_CHILDREN_CHANGE]="Event.TAB_CHILDREN_CHANGE";
 		 this.eventMappingDummys[TransformGestureEvent.GESTURE_SWIPE]="TransformGestureEvent.GESTURE_SWIPE";
 		 this.eventMappingDummys[TransformGestureEvent.GESTURE_ROTATE]="TransformGestureEvent.GESTURE_ROTATE";
-		 this.eventMappingDummys[TransformGestureEvent.GESTURE_PRESS_AND_TAP]="TransformGestureEvent.GESTURE_PRESS_AND_TAP";
+		 this.eventMappingDummys[TransformGestureEvent.GESTURE_PRESS_AND_TAP]=
+			  "TransformGestureEvent.GESTURE_PRESS_AND_TAP";
 		 this.eventMappingDummys[GestureEvent.GESTURE_PAN]="GestureEvent.GESTURE_PAN";
 		 this.eventMappingDummys[GestureEvent.GESTURE_TWO_FINGER_TAP]="GestureEvent.GESTURE_TWO_FINGER_TAP";
 		 this.eventMappingDummys[TouchEvent.TOUCH_TAP]="TouchEvent.TOUCH_TAP";
@@ -370,96 +407,108 @@ export class InteractiveObject extends DisplayObject {
 		 this.eventMappingDummys[Event.CLEAR]="Event.CLEAR";
 		  */
 
-		 // KeyboardEvent events adapt to js-events. they listen on document.onKeyUp / onKeyDown:
+		// KeyboardEvent events adapt to js-events. they listen on document.onKeyUp / onKeyDown:
 
-		 this._keyUpCallbackDelegate = (event: any) => this.keyUpCallback(event);
-		 this.eventMapping[KeyboardEvent.KEY_UP] = (<IEventMapper>{
-			 adaptedType:'',
-			 addListener:this.initKeyUpListener,
-			 removeListener:this.removeKeyUpListener,
-			 callback:this._keyUpCallbackDelegate });
+		this._keyUpCallbackDelegate = (event: any) => this.keyUpCallback(event);
+		this.eventMapping[KeyboardEvent.KEY_UP] = (<IEventMapper>{
+			adaptedType: '',
+			addListener: this.initKeyUpListener,
+			removeListener: this.removeKeyUpListener,
+			callback: this._keyUpCallbackDelegate
+		});
 
-		 this._keyDownCallbackDelegate = (event: any) => this.keyDownCallback(event);
-		 this.eventMapping[KeyboardEvent.KEY_DOWN] = (<IEventMapper>{
-			 adaptedType:'',
-			 addListener:this.initKeyDownListener,
-			 removeListener:this.removeKeyDownListener,
-			 callback:this._keyDownCallbackDelegate });
+		this._keyDownCallbackDelegate = (event: any) => this.keyDownCallback(event);
+		this.eventMapping[KeyboardEvent.KEY_DOWN] = (<IEventMapper>{
+			adaptedType: '',
+			addListener: this.initKeyDownListener,
+			removeListener: this.removeKeyDownListener,
+			callback: this._keyDownCallbackDelegate
+		});
 
-		 // MouseEvent events adapt to awayjs-MouseEvents. they listen on adapter:
-		 // these mapping share the same callback, thats why we need the setup the eventMappingInvert to
+		// MouseEvent events adapt to awayjs-MouseEvents. they listen on adapter:
+		// these mapping share the same callback, thats why we need the setup the eventMappingInvert to
 
-		 this._mouseCallbackDelegate = (event: MouseEventAway) => this.mouseCallback(event);
+		this._mouseCallbackDelegate = (event: MouseEventAway) => this.mouseCallback(event);
 
-		 this.eventMappingInvert[MouseEventAway.MOUSE_WHEEL] = MouseEvent.MOUSE_WHEEL;
-		 this.eventMapping[MouseEvent.MOUSE_WHEEL] = (<IEventMapper>{
-			 adaptedType:MouseEventAway.MOUSE_WHEEL,
-			 addListener:this.initMouseListener,
-			 removeListener:this.removeMouseListener,
-			 callback:this._mouseCallbackDelegate });
+		this.eventMappingInvert[MouseEventAway.MOUSE_WHEEL] = MouseEvent.MOUSE_WHEEL;
+		this.eventMapping[MouseEvent.MOUSE_WHEEL] = (<IEventMapper>{
+			adaptedType: MouseEventAway.MOUSE_WHEEL,
+			addListener: this.initMouseListener,
+			removeListener: this.removeMouseListener,
+			callback: this._mouseCallbackDelegate
+		});
 
-		 this.eventMappingInvert[MouseEventAway.MOUSE_UP] = MouseEvent.MOUSE_UP;
-		 this.eventMapping[MouseEvent.MOUSE_UP] = (<IEventMapper>{
-			 adaptedType:MouseEventAway.MOUSE_UP,
-			 addListener:this.initMouseListener,
-			 removeListener:this.removeMouseListener,
-			 callback:this._mouseCallbackDelegate });
+		this.eventMappingInvert[MouseEventAway.MOUSE_UP] = MouseEvent.MOUSE_UP;
+		this.eventMapping[MouseEvent.MOUSE_UP] = (<IEventMapper>{
+			adaptedType: MouseEventAway.MOUSE_UP,
+			addListener: this.initMouseListener,
+			removeListener: this.removeMouseListener,
+			callback: this._mouseCallbackDelegate
+		});
 
-		 this.eventMappingInvert[MouseEventAway.MOUSE_OVER] = MouseEvent.MOUSE_OVER;
-		 this.eventMapping[MouseEvent.MOUSE_OVER] = (<IEventMapper>{
-			 adaptedType:MouseEventAway.MOUSE_OVER,
-			 addListener:this.initMouseListener,
-			 removeListener:this.removeMouseListener,
-			 callback:this._mouseCallbackDelegate });
+		this.eventMappingInvert[MouseEventAway.MOUSE_OVER] = MouseEvent.MOUSE_OVER;
+		this.eventMapping[MouseEvent.MOUSE_OVER] = (<IEventMapper>{
+			adaptedType: MouseEventAway.MOUSE_OVER,
+			addListener: this.initMouseListener,
+			removeListener: this.removeMouseListener,
+			callback: this._mouseCallbackDelegate
+		});
 
-		 this.eventMappingInvert[MouseEventAway.MOUSE_OUT] = MouseEvent.MOUSE_OUT;
-		 this.eventMapping[MouseEvent.MOUSE_OUT] = (<IEventMapper>{
-			 adaptedType:MouseEventAway.MOUSE_OUT,
-			 addListener:this.initMouseListener,
-			 removeListener:this.removeMouseListener,
-			 callback:this._mouseCallbackDelegate });
+		this.eventMappingInvert[MouseEventAway.MOUSE_OUT] = MouseEvent.MOUSE_OUT;
+		this.eventMapping[MouseEvent.MOUSE_OUT] = (<IEventMapper>{
+			adaptedType: MouseEventAway.MOUSE_OUT,
+			addListener: this.initMouseListener,
+			removeListener: this.removeMouseListener,
+			callback: this._mouseCallbackDelegate
+		});
 
-		 this.eventMappingInvert[MouseEventAway.MOUSE_MOVE] = MouseEvent.MOUSE_MOVE;
-		 this.eventMapping[MouseEvent.MOUSE_MOVE] = (<IEventMapper>{
-			 adaptedType:MouseEventAway.MOUSE_MOVE,
-			 addListener:this.initMouseListener,
-			 removeListener:this.removeMouseListener,
-			 callback:this._mouseCallbackDelegate });
+		this.eventMappingInvert[MouseEventAway.MOUSE_MOVE] = MouseEvent.MOUSE_MOVE;
+		this.eventMapping[MouseEvent.MOUSE_MOVE] = (<IEventMapper>{
+			adaptedType: MouseEventAway.MOUSE_MOVE,
+			addListener: this.initMouseListener,
+			removeListener: this.removeMouseListener,
+			callback: this._mouseCallbackDelegate
+		});
 
-		 this.eventMappingInvert[MouseEventAway.MOUSE_DOWN] = MouseEvent.MOUSE_DOWN;
-		 this.eventMapping[MouseEvent.MOUSE_DOWN] = (<IEventMapper>{
-			 adaptedType:MouseEventAway.MOUSE_DOWN,
-			 addListener:this.initMouseListener,
-			 removeListener:this.removeMouseListener,
-			 callback:this._mouseCallbackDelegate });
+		this.eventMappingInvert[MouseEventAway.MOUSE_DOWN] = MouseEvent.MOUSE_DOWN;
+		this.eventMapping[MouseEvent.MOUSE_DOWN] = (<IEventMapper>{
+			adaptedType: MouseEventAway.MOUSE_DOWN,
+			addListener: this.initMouseListener,
+			removeListener: this.removeMouseListener,
+			callback: this._mouseCallbackDelegate
+		});
 
-		 this.eventMappingInvert[MouseEventAway.DOUBLE_CLICK] = MouseEvent.DOUBLE_CLICK;
-		 this.eventMapping[MouseEvent.DOUBLE_CLICK] = (<IEventMapper>{
-			 adaptedType:MouseEventAway.DOUBLE_CLICK,
-			 addListener:this.initMouseListener,
-			 removeListener:this.removeMouseListener,
-			 callback:this._mouseCallbackDelegate });
+		this.eventMappingInvert[MouseEventAway.DOUBLE_CLICK] = MouseEvent.DOUBLE_CLICK;
+		this.eventMapping[MouseEvent.DOUBLE_CLICK] = (<IEventMapper>{
+			adaptedType: MouseEventAway.DOUBLE_CLICK,
+			addListener: this.initMouseListener,
+			removeListener: this.removeMouseListener,
+			callback: this._mouseCallbackDelegate
+		});
 
 		this.eventMappingInvert[MouseEventAway.CLICK] = MouseEvent.CLICK;
 		this.eventMapping[MouseEvent.CLICK] = (<IEventMapper>{
-			adaptedType:MouseEventAway.CLICK,
-			addListener:this.initMouseListener,
-			removeListener:this.removeMouseListener,
-			callback:this._mouseCallbackDelegate });
+			adaptedType: MouseEventAway.CLICK,
+			addListener: this.initMouseListener,
+			removeListener: this.removeMouseListener,
+			callback: this._mouseCallbackDelegate
+		});
 
 		this.eventMappingInvert[MouseEventAway.ROLL_OUT] = MouseEvent.ROLL_OUT;
 		this.eventMapping[MouseEvent.ROLL_OUT] = (<IEventMapper>{
-			adaptedType:MouseEventAway.ROLL_OUT,
-			addListener:this.initMouseListener,
-			removeListener:this.removeMouseListener,
-			callback:this._mouseCallbackDelegate });
+			adaptedType: MouseEventAway.ROLL_OUT,
+			addListener: this.initMouseListener,
+			removeListener: this.removeMouseListener,
+			callback: this._mouseCallbackDelegate
+		});
 
 		this.eventMappingInvert[MouseEventAway.ROLL_OVER] = MouseEvent.ROLL_OVER;
 		this.eventMapping[MouseEvent.ROLL_OVER] = (<IEventMapper>{
-			adaptedType:MouseEventAway.ROLL_OVER,
-			addListener:this.initMouseListener,
-			removeListener:this.removeMouseListener,
-			callback:this._mouseCallbackDelegate });
+			adaptedType: MouseEventAway.ROLL_OVER,
+			addListener: this.initMouseListener,
+			removeListener: this.removeMouseListener,
+			callback: this._mouseCallbackDelegate
+		});
 	}
 
 	// ---------- event mapping functions for KeyboardEvent.KEY_UP:
@@ -497,15 +546,16 @@ export class InteractiveObject extends DisplayObject {
 			window.event.returnValue = false;
 		}
 		event.preventDefault ? event.preventDefault() : (event.returnValue = false);
-		const newkeyBoardEvent: KeyboardEvent = new (<SecurityDomain> this.sec).flash.events.KeyboardEvent(KeyboardEvent.KEY_UP,
-			true,
-			false,
-			event.charCode,
-			event.keyCode,
-			event.location,
-			event.ctrlKey,
-			event.altKey,
-			event.shiftKey);
+		const newkeyBoardEvent: KeyboardEvent =
+			new (<SecurityDomain> this.sec).flash.events.KeyboardEvent(KeyboardEvent.KEY_UP,
+				true,
+				false,
+				event.charCode,
+				event.keyCode,
+				event.location,
+				event.ctrlKey,
+				event.altKey,
+				event.shiftKey);
 		/*(<any>newkeyBoardEvent).axInitializer(KeyboardEvent.KEY_UP);
 		newkeyBoardEvent.keyCode = event.keyCode;
 		newkeyBoardEvent.charCode = event.charCode;
@@ -552,7 +602,8 @@ export class InteractiveObject extends DisplayObject {
 			window.event.returnValue = false;
 		}
 		event.preventDefault ? event.preventDefault() : (event.returnValue = false);
-		const newkeyBoardEvent: KeyboardEvent = new (<SecurityDomain> this.sec).flash.events.KeyboardEvent(KeyboardEvent.KEY_DOWN);
+		const newkeyBoardEvent: KeyboardEvent =
+			new (<SecurityDomain> this.sec).flash.events.KeyboardEvent(KeyboardEvent.KEY_DOWN);
 		(<any>newkeyBoardEvent).axInitializer(KeyboardEvent.KEY_DOWN);
 		//newkeyBoardEvent.type=KeyboardEvent.KEY_DOWN;
 		newkeyBoardEvent.keyCode = event.keyCode;
@@ -593,7 +644,8 @@ export class InteractiveObject extends DisplayObject {
 
 	private _mouseCallbackDelegate: (event: MouseEventAway) => void;
 	private mouseCallback(event: MouseEventAway): void {
-		const adaptedEvent: MouseEvent = new (<SecurityDomain> this.sec).flash.events.MouseEvent(this.eventMappingInvert[event.type]);
+		const adaptedEvent: MouseEvent =
+			new (<SecurityDomain> this.sec).flash.events.MouseEvent(this.eventMappingInvert[event.type]);
 		adaptedEvent.fillFromAway(event);
 		adaptedEvent.target = this;
 		//adaptedEvent.currentTarget=this;
@@ -610,16 +662,15 @@ export class InteractiveObject extends DisplayObject {
 	 * for this InteractiveObject instance.
 	 * @langversion	3.0
 	 */
-	public get accessibilityImplementation (): any {
-		console.log('accessibilityImplementation not implemented yet in flash/InteractiveObject');
-		//todo flash.accessibility.AccessibilityImplementation;
+	public get accessibilityImplementation(): any {
+		// @todo
+		Debug.throwPIR('playerglobals/display/InteractiveObject', 'get accessibilityImplementation', '');
 		return null;
 	}
 
-	public set accessibilityImplementation (value: any) {
-		//todo
-		console.log('accessibilityImplementation not implemented yet in flash/InteractiveObject');
-
+	public set accessibilityImplementation(value: any) {
+		// @todo
+		Debug.throwPIR('playerglobals/display/InteractiveObject', 'set accessibilityImplementation', '');
 	}
 
 	/**
@@ -629,20 +680,20 @@ export class InteractiveObject extends DisplayObject {
 	 * the ContextMenu class extends the NativeMenu class, however Flash Player only supports the
 	 * ContextMenu class, not the NativeMenu class.
 	 * Note: TextField objects always include a clipboard menu in the context menu. The clipboard menu contains
-	 * Cut, Copy, Paste, Clear, and Select All commands. You cannot remove these commands from the context menu for TextField objects.
+	 * Cut, Copy, Paste, Clear, and Select All commands.
+	 * You cannot remove these commands from the context menu for TextField objects.
 	 * For TextField objects, selecting these commands (or their keyboard equivalents) does not generate clear,
 	 * copy, cut, paste, or selectAll events.
 	 */
-	public get contextMenu (): any {
-		console.log('contextMenu not implemented yet in flash/InteractiveObject');
-		//todo flash.display.NativeMenu;
+	public get contextMenu(): any {
+		// @todo
+		Debug.throwPIR('playerglobals/display/InteractiveObject', 'get contextMenu', '');
 		return null;
 	}
 
-	public set contextMenu (cm: any) {
-		//todo
-		console.log('contextMenu not implemented yet in flash/InteractiveObject');
-
+	public set contextMenu(cm: any) {
+		// @todo
+		Debug.throwPIR('playerglobals/display/InteractiveObject', 'set contextMenu', '');
 	}
 
 	/**
@@ -657,16 +708,15 @@ export class InteractiveObject extends DisplayObject {
 	 * addEventListener() method to add an event listener
 	 * for the doubleClick event.
 	 */
-	public get doubleClickEnabled (): boolean {
-		//todo
-		console.log('doubleClickEnabled not implemented yet in flash/InteractiveObject');
+	public get doubleClickEnabled(): boolean {
+		// @todo
+		Debug.throwPIR('playerglobals/display/InteractiveObject', 'get doubleClickEnabled', '');
 		return false;
 	}
 
-	public set doubleClickEnabled (enabled: boolean) {
-		//todo
-		console.log('doubleClickEnabled not implemented yet in flash/InteractiveObject');
-
+	public set doubleClickEnabled(enabled: boolean) {
+		// @todo
+		Debug.throwPIR('playerglobals/display/InteractiveObject', 'set doubleClickEnabled', '');
 	}
 
 	/**
@@ -676,16 +726,15 @@ export class InteractiveObject extends DisplayObject {
 	 * appears. A value of null indicates that this object obeys the
 	 * stageFocusRect property of the Stage.
 	 */
-	public get focusRect (): any {
-		//todo
-		console.log('focusRect not implemented yet in flash/InteractiveObject');
+	public get focusRect(): any {
+		// @todo
+		Debug.throwPIR('playerglobals/display/InteractiveObject', 'get focusRect', '');
 		return null;
 	}
 
-	public set focusRect (focusRect: any) {
-		//todo
-		console.log('focusRect not implemented yet in flash/InteractiveObject');
-
+	public set focusRect(focusRect: any) {
+		// @todo
+		Debug.throwPIR('playerglobals/display/InteractiveObject', 'set focusRect', '');
 	}
 
 	/**
@@ -693,7 +742,8 @@ export class InteractiveObject extends DisplayObject {
 	 * which means that by default any InteractiveObject instance that is on the display list
 	 * receives mouse events or other user input events.
 	 * If mouseEnabled is set to false, the instance does not receive any
-	 * mouse events (or other user input events like keyboard events). Any children of this instance on the display list are not affected. To change
+	 * mouse events (or other user input events like keyboard events).
+	 * Any children of this instance on the display list are not affected. To change
 	 * the mouseEnabled behavior for all children of an object on the display list, use
 	 * flash.display.DisplayObjectContainer.mouseChildren.
 	 * No event is dispatched by setting this property. You must use the
@@ -701,11 +751,11 @@ export class InteractiveObject extends DisplayObject {
 	 */
 	//private _mouseEnabled:boolean=true;
 
-	public get mouseEnabled (): boolean {
+	public get mouseEnabled(): boolean {
 		return this.adaptee.mouseEnabled;
 	}
 
-	public set mouseEnabled (enabled: boolean) {
+	public set mouseEnabled(enabled: boolean) {
 		this.adaptee.mouseEnabled = enabled;
 	}
 
@@ -718,20 +768,20 @@ export class InteractiveObject extends DisplayObject {
 	 * the runtime raises a soft keyboard when the InteractiveObject instance is ready to accept user input.
 	 * An InteractiveObject instance is ready to accept user input after a programmatic call to set the Stage
 	 * focus property or a user interaction, such as a "tap." If the client system has a
-	 * hardware keyboard available or does not support virtual keyboards, then the soft keyboard is not raised.The InteractiveObject instance dispatches softKeyboardActivating,
+	 * hardware keyboard available or does not support virtual keyboards,
+	 * then the soft keyboard is not raised.The InteractiveObject instance dispatches softKeyboardActivating,
 	 * softKeyboardActivate, and softKeyboardDeactivate events
 	 * when the soft keyboard raises and lowers.Note: This property is not supported in AIR applications on iOS.
 	 */
-	public get needsSoftKeyboard (): boolean {
-		//todo
-		console.log('needsSoftKeyboard not implemented yet in flash/InteractiveObject');
+	public get needsSoftKeyboard(): boolean {
+		// @todo
+		Debug.throwPIR('playerglobals/display/InteractiveObject', 'get needsSoftKeyboard', '');
 		return false;
 	}
 
-	public set needsSoftKeyboard (value: boolean) {
-		//todo
-		console.log('needsSoftKeyboard not implemented yet in flash/InteractiveObject');
-
+	public set needsSoftKeyboard(value: boolean) {
+		// @todo
+		Debug.throwPIR('playerglobals/display/InteractiveObject', 'set needsSoftKeyboard', '');
 	}
 
 	/**
@@ -742,37 +792,37 @@ export class InteractiveObject extends DisplayObject {
 	 * object in view while the user types. Ordinarily, the runtime uses the object
 	 * bounds obtained from the DisplayObject.getBounds() method. You can
 	 * specify a different area using this softKeyboardInputAreaOfInterest
-	 * property.Specify the softKeyboardInputAreaOfInterest in stage coordinates.Note: On Android, the softKeyboardInputAreaOfInterest is not
+	 * property.Specify the softKeyboardInputAreaOfInterest in stage coordinates.
+	 * Note: On Android, the softKeyboardInputAreaOfInterest is not
 	 * respected in landscape orientations.
 	 */
-	public get softKeyboardInputAreaOfInterest (): Rectangle {
-		//todo
-		console.log('softKeyboardInputAreaOfInterest not implemented yet in flash/InteractiveObject');
+	public get softKeyboardInputAreaOfInterest(): Rectangle {
+		// @todo
+		Debug.throwPIR('playerglobals/display/InteractiveObject', 'get softKeyboardInputAreaOfInterest', '');
 		return null;
 	}
 
-	public set softKeyboardInputAreaOfInterest (value: Rectangle) {
-		//todo
-		console.log('softKeyboardInputAreaOfInterest not implemented yet in flash/InteractiveObject');
-
+	public set softKeyboardInputAreaOfInterest(value: Rectangle) {
+		// @todo
+		Debug.throwPIR('playerglobals/display/InteractiveObject', 'set softKeyboardInputAreaOfInterest', '');
 	}
 
 	/**
 	 * Specifies whether this object is in the tab order. If this object is in the tab order,
 	 * the value is true; otherwise, the value is false. By default,
 	 * the value is false, except for the following:
-	 * For a SimpleButton object, the value is true.For a TextField object with type = "input", the value is true.For a Sprite object or MovieClip object with buttonMode = true, the value is true.
+	 * For a SimpleButton object, the value is true.For a TextField object with type = "input",
+	 * the value is true.For a Sprite object or MovieClip object with buttonMode = true, the value is true.
 	 */
-	public get tabEnabled (): boolean {
-		//todo
-		//console.log("tabEnabled not implemented yet in flash/InteractiveObject");
+	public get tabEnabled(): boolean {
+		// @todo
+		Debug.throwPIR('playerglobals/display/InteractiveObject', 'get tabEnabled', '');
 		return false;
 	}
 
-	public set tabEnabled (enabled: boolean) {
-		//todo
-		//console.log("tabEnabled not implemented yet in flash/InteractiveObject");
-
+	public set tabEnabled(enabled: boolean) {
+		// @todo
+		Debug.throwPIR('playerglobals/display/InteractiveObject', 'set tabEnabled', '');
 	}
 
 	/**
@@ -789,7 +839,8 @@ export class InteractiveObject extends DisplayObject {
 	 *   value for multiple objects.The custom tab ordering that the tabIndex property defines is flat.
 	 * This means that no attention is paid to the hierarchical relationships of objects in the SWF file.
 	 * All objects in the SWF file with tabIndex properties are placed in the tab order, and the
-	 * tab order is determined by the order of the tabIndex values. Note: To set the tab order for TLFTextField instances, cast the display object child
+	 * tab order is determined by the order of the tabIndex values.
+	 * Note: To set the tab order for TLFTextField instances, cast the display object child
 	 * of the TLFTextField as an InteractiveObject, then set the tabIndex property. For example:
 	 *
 	 *   InteractiveObject(tlfInstance.getChildAt(1)).tabIndex = 3;
@@ -801,15 +852,15 @@ export class InteractiveObject extends DisplayObject {
 	 * InteractiveObject(tlfInstance2.getChildAt(1)).tabIndex = 2;
 	 * InteractiveObject(tlfInstance3.getChildAt(1)).tabIndex = 1;
 	 */
-	public get tabIndex (): number {
-		//todo
-		console.log('tabIndex not implemented yet in flash/InteractiveObject');
+	public get tabIndex(): number {
+		// @todo
+		Debug.throwPIR('playerglobals/display/InteractiveObject', 'get tabIndex', '');
 		return 0;
 	}
 
-	public set tabIndex (index: number) {
-		//todo
-		console.log('tabIndex not implemented yet in flash/InteractiveObject');
+	public set tabIndex(index: number) {
+		// @todo
+		Debug.throwPIR('playerglobals/display/InteractiveObject', 'set tabIndex', '');
 	}
 
 	/**
@@ -817,12 +868,14 @@ export class InteractiveObject extends DisplayObject {
 	 *
 	 *   Calling this method focuses the InteractiveObject instance and raises the soft keyboard, if necessary.
 	 * The needsSoftKeyboard must also be true. A keyboard is not raised
-	 * if a hardware keyboard is available, or if the client system does not support virtual keyboards.Note: This method is not supported in AIR applications on iOS.
-	 * @return	A value of true means that the soft keyboard request was granted; false means that the soft keyboard was not raised.
+	 * if a hardware keyboard is available, or if the client system does not support virtual keyboards.
+	 * Note: This method is not supported in AIR applications on iOS.
+	 * @return	A value of true means that the soft keyboard request was granted;
+	 * false means that the soft keyboard was not raised.
 	 */
-	public requestSoftKeyboard (): boolean {
-		//todo
-		console.log('requestSoftKeyboard not implemented yet in flash/InteractiveObject');
+	public requestSoftKeyboard(): boolean {
+		// @todo
+		Debug.throwPIR('playerglobals/display/InteractiveObject', 'requestSoftKeyboard', '');
 		return false;
 	}
 

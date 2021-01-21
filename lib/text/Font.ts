@@ -1,4 +1,5 @@
 import { ASObject } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 
 export class Font extends ASObject {
 	static forceNativeConstructor: boolean = true;
@@ -23,28 +24,31 @@ export class Font extends ASObject {
 	}
 
 	get fontStyle(): string {
-		console.warn('`Font#get:fontStyle` not implement yet');
-
+		// @todo
+		Debug.throwPIR('playerglobals/text/Font', 'get fontStyle', '');
 		return 'regular';
 	}
 
 	get fontType(): string {
-		console.warn('`Font#get:fontType` not implement yet');
-
+		// @todo
+		Debug.throwPIR('playerglobals/text/Font', 'get fontType', '');
 		return 'embedded';
 	}
 
 	static enumerateFonts(enumerateDeviceFonts: Boolean = false): [] {
-		console.warn('`Font.enumerateFonts` not implement yet');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Font', 'enumerateFonts', '');
 		return [];
 	}
 
 	static registerFont(font: any): void {
+		// this is not needed for AwayJS, because fonts are already registered after parsing
 		//console.warn('`Font.registerFont` not implement yet');
 	}
 
 	hasGlyphs(str: String): Boolean {
-		console.warn('`Font#hasGlyphs` not implement yet');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Font', 'hasGlyphs', '');
 		return false;
 	}
 }

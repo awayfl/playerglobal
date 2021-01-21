@@ -1,4 +1,5 @@
 import { ASObject } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 import {
 	TextField, DisplayObjectContainer as AwayDisplayObjectContainer,
 	TextFieldAutoSize, TextFormat
@@ -319,13 +320,14 @@ export class TextLine extends DisplayObjectContainer {
 	}
 
 	public getAtomIndexAtPoint(stageX: number, stageY: number): number /*int*/ {
-
-		console.warn('[TextLine] ' + this.adaptee.id + ' - getAtomIndexAtPoint not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextLine', 'getAtomIndexAtPoint', '');
 		return null;
 	}
 
 	public getAtomIndexAtCharIndex(charIndex: number /*int*/): number /*int*/ {
-		noLogs || console.log('[TextLine] ' + this.adaptee.id + ' - getAtomIndexAtCharIndex', charIndex);
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextLine', 'getAtomIndexAtCharIndex', '');
 		return charIndex;
 	}
 
@@ -337,42 +339,50 @@ export class TextLine extends DisplayObjectContainer {
 	}
 
 	public getAtomBidiLevel(atomIndex: number /*int*/): number /*int*/ {
-		console.warn('[TextLine] ' + this.adaptee.id + ' - getAtomBidiLevel not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextLine', 'getAtomBidiLevel', '');
 		return null;
 	}
 
 	public getAtomTextRotation(atomIndex: number /*int*/): string {
-		console.warn('[TextLine] ' + this.adaptee.id + ' - getAtomTextRotation not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextLine', 'getAtomTextRotation', '');
 		return null;
 	}
 
 	public getAtomTextBlockBeginIndex(atomIndex: number /*int*/): number /*int*/ {
-		console.warn('[TextLine] ' + this.adaptee.id + ' - getAtomTextBlockBeginIndex not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextLine', 'getAtomTextBlockBeginIndex', '');
 		return null;
 	}
 
 	public getAtomTextBlockEndIndex(atomIndex: number /*int*/): number /*int*/ {
-		console.warn('[TextLine] ' + this.adaptee.id + ' - getAtomTextBlockEndIndex not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextLine', 'getAtomTextBlockEndIndex', '');
 		return null;
 	}
 
 	public getAtomCenter(atomIndex: number /*int*/): number {
-		console.warn('[TextLine] ' + this.adaptee.id + ' - getAtomCenter not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextLine', 'getAtomCenter', '');
 		return null;
 	}
 
 	public getAtomWordBoundaryOnLeft(atomIndex: number /*int*/): boolean {
-		console.warn('[TextLine] ' + this.adaptee.id + ' - getAtomWordBoundaryOnLeft not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextLine', 'getAtomWordBoundaryOnLeft', '');
 		return null;
 	}
 
 	public getAtomGraphic(atomIndex: number /*int*/): DisplayObject {
-		console.warn('[TextLine] ' + this.adaptee.id + ' - getAtomGraphic not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextLine', 'getAtomGraphic', '');
 		return null;
 	}
 
 	public dump(): string {
-		console.warn('[TextLine] ' + this.adaptee.id + ' - dump not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextLine', 'dump', '');
 		return null;
 	}
 }

@@ -1,4 +1,5 @@
 import { ASObject } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 
 export class TextFormatDisplay extends ASObject {
 
@@ -11,7 +12,8 @@ export class TextFormatDisplay extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[TextFormatDisplay] not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextFormatDisplay', 'constructor', '');
 	}
 
 }

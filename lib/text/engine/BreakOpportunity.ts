@@ -7,7 +7,6 @@ export class BreakOpportunity extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[BreakOpportunity] not implemented');
 	}
 
 	public static AUTO: string = 'auto';

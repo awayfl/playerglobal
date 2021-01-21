@@ -1,6 +1,5 @@
 import { ASObject } from '@awayfl/avm2';
-
-import { TextLineMetrics as AwayLineMetrics } from '@awayjs/scene';
+import { Debug } from '@awayjs/core';
 
 export class TextLineMetrics extends ASObject {
 	/**
@@ -61,8 +60,13 @@ export class TextLineMetrics extends ASObject {
      * @param leading     The measurement of the vertical distance between the
      *                    lines of text.
      */
-	constructor(x: number = NaN, width: number = NaN, height: number = NaN, ascent: number = NaN, descent: number = NaN, leading: number = NaN) {
+	constructor(x: number = NaN,
+		width: number = NaN, height: number = NaN,
+		ascent: number = NaN, descent: number = NaN,
+		leading: number = NaN) {
 		super();
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextLineMetrics', 'constructor', '');
 	}
 
 }

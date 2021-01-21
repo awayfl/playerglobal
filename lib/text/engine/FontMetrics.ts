@@ -27,7 +27,6 @@ export class FontMetrics extends ASObject {
 		this.superscriptOffset = +superscriptOffset;
 		this.superscriptScale = +superscriptScale;
 		this.lineGap = +lineGap;
-		console.warn('[FontMetrics] not implemented');
 	}
 
 	// JS -> AS Bindings

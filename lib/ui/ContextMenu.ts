@@ -1,29 +1,10 @@
-import { release, warning } from '@awayfl/swf-loader';
 import { ContextMenuClipboardItems } from './ContextMenuClipboardItems';
 import { ASArray } from '@awayfl/avm2';
 import { URLRequest } from '../net/URLRequest';
 import { ContextMenuBuiltInItems } from './ContextMenuBuiltInItems';
 import { NativeMenu } from '../display/NativeMenu';
 import { SecurityDomain } from '../SecurityDomain';
-
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: ContextMenu
-
-const partialImp = (obj: Object, field: string) => warning(`[Builtins] Partial implemented ${obj.constructor.name}::${field}`);
+import { Debug } from '@awayjs/core';
 
 export class ContextMenu extends NativeMenu {
 
@@ -37,7 +18,8 @@ export class ContextMenu extends NativeMenu {
 	}
 
 	static get isSupported(): boolean {
-		partialImp(ContextMenu, 'get isSupported');
+		// @todo
+		Debug.throwPIR('playerglobals/ui/ContextMenu', 'isSupported', '');
 		return false;
 	}
 
@@ -49,59 +31,66 @@ export class ContextMenu extends NativeMenu {
 
 	get builtInItems(): ContextMenuBuiltInItems {
 		// TODO: Should clone here probably.
-		release || partialImp(this, 'get builtInItems');
+		// @todo
+		Debug.throwPIR('playerglobals/ui/ContextMenu', 'get builtInItems', '');
 		return this._builtInItems;
 	}
 
 	set builtInItems(value: ContextMenuBuiltInItems) {
 		// TODO: Should clone here probably.
-		value = value;
-		release || partialImp(this, 'set builtInItems');
+		// @todo
+		Debug.throwPIR('playerglobals/ui/ContextMenu', 'set builtInItems', '');
 		this._builtInItems = value;
 	}
 
 	get customItems(): ASArray {
 		// TODO: Should clone here probably.
-		release || partialImp(this, 'get customItems');
+		// @todo
+		Debug.throwPIR('playerglobals/ui/ContextMenu', 'get customItems', '');
 		return this.sec.createArrayUnsafe(this._customItems);
 	}
 
 	set customItems(value: ASArray) {
 		// TODO: Should clone here probably.
-		value = value;
-		release || partialImp(this, 'set customItems');
+		// @todo
+		Debug.throwPIR('playerglobals/ui/ContextMenu', 'set customItems', '');
 		this._customItems = value.value;
 	}
 
 	get link(): URLRequest {
-		release || partialImp(this, 'get link');
+		// @todo
+		Debug.throwPIR('playerglobals/ui/ContextMenu', 'get link', '');
 		return this._link;
 	}
 
 	set link(value: URLRequest) {
-		value = value;
-		release || partialImp(this, 'set link');
+		// @todo
+		Debug.throwPIR('playerglobals/ui/ContextMenu', 'set link', '');
 		this._link = value;
 	}
 
 	get clipboardMenu(): boolean {
-		release || partialImp(this, 'get clipboardMenu');
+		// @todo
+		Debug.throwPIR('playerglobals/ui/ContextMenu', 'set clipboardMenu', '');
 		return this._clipboardMenu;
 	}
 
 	set clipboardMenu(value: boolean) {
 		value = !!value;
-		release || partialImp(this, 'set clipboardMenu');
+		// @todo
+		Debug.throwPIR('playerglobals/ui/ContextMenu', 'set clipboardMenu', '');
 		this._clipboardMenu = value;
 	}
 
 	get clipboardItems(): ContextMenuClipboardItems {
-		release || partialImp(this, 'get clipboardItems');
+		// @todo
+		Debug.throwPIR('playerglobals/ui/ContextMenu', 'get clipboardItems', '');
 		return this._clipboardItems;
 	}
 
 	set clipboardItems(value: ContextMenuClipboardItems) {
-		release || partialImp(this, 'set clipboardItems');
+		// @todo
+		Debug.throwPIR('playerglobals/ui/ContextMenu', 'set clipboardItems', '');
 		this._clipboardItems = value;
 	}
 
@@ -133,7 +122,7 @@ export class ContextMenu extends NativeMenu {
 	}
 
 	cloneLinkAndClipboardProperties(c: ContextMenu): void {
-		c = c;
-		release || partialImp(this, 'cloneLinkAndClipboardProperties'); return;
+		// @todo
+		Debug.throwPIR('playerglobals/ui/ContextMenu', 'cloneLinkAndClipboardProperties', '');
 	}
 }

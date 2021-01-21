@@ -1,4 +1,5 @@
 import { axCoerceString } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 import { DisplayObject } from '../../display/DisplayObject';
 import { EventDispatcher } from '../../events/EventDispatcher';
 import { ContentElement } from './ContentElement';
@@ -23,7 +24,6 @@ export class GraphicElement extends ContentElement {
 		this.elementFormat = elementFormat;
 		this.eventMirror = eventMirror;
 		this.textRotation = axCoerceString(textRotation);
-		console.warn('[GraphicElement] not implemented');
 	}
 
 	// JS -> AS Bindings
@@ -34,30 +34,36 @@ export class GraphicElement extends ContentElement {
 	// _elementHeight: number;
 	// _elementWidth: number;
 	public get graphic(): DisplayObject {
-		console.warn('[GraphicElement] - get graphic not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/GraphicElement', 'get graphic', '');
 		return null;
 	}
 
 	public set graphic(value: DisplayObject) {
-		console.warn('[GraphicElement] - set graphic not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/GraphicElement', 'set graphic', '');
 	}
 
 	public get elementHeight(): number {
-		console.warn('[GraphicElement] - get elementHeight not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/GraphicElement', 'get elementHeight', '');
 		return null;
 	}
 
 	public set elementHeight(value: number) {
-		console.warn('[GraphicElement] - set elementHeight not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/GraphicElement', 'set elementHeight', '');
 	}
 
 	public get elementWidth(): number {
-		console.warn('[GraphicElement] - get elementWidth not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/GraphicElement', 'get elementWidth', '');
 		return null;
 	}
 
 	public set elementWidth(value: number) {
 		value = +value;
-		console.warn('[GraphicElement] - set elementWidth not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/GraphicElement', 'set elementWidth', '');
 	}
 }

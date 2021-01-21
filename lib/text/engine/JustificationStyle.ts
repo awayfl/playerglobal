@@ -7,7 +7,6 @@ export class JustificationStyle extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[JustificationStyle] not implemented');
 	}
 
 	// JS -> AS Bindings

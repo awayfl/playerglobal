@@ -7,7 +7,6 @@ export class TextLineCreationResult extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[TextLineCreationResult] not implemented');
 	}
 
 	// JS -> AS Bindings

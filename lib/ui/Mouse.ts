@@ -1,4 +1,5 @@
 import { ASObject } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 
 export class Mouse extends ASObject {
 
@@ -19,6 +20,8 @@ export class Mouse extends ASObject {
 	 [read-only] Indicates whether the computer or device displays a persistent cursor.
 	 */
 	public static  get supportsCursor(): boolean {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/Mouse', 'static get supportsCursor', '');
 		return true;
 	}
 
@@ -26,6 +29,8 @@ export class Mouse extends ASObject {
 	 [read-only] Indicates whether the current configuration supports native cursors.
 	 */
 	public static  get 	supportsNativeCursor(): boolean {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/Mouse', 'static get supportsNativeCursor', '');
 		return true;
 	}
 
@@ -33,24 +38,31 @@ export class Mouse extends ASObject {
 	 Hides the pointer.
 	 */
 	public static hide() {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/Mouse', 'static hide', '');
 	}
 
 	/*
 	 Displays the pointer.
 	 */
 	public static show() {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/Mouse', 'static show', '');
 	}
 
 	/*
 	 Registers a native cursor under the given name, with the given data.
 	 */
-	public static registerCursor(name: string, cursor: any)//todo MouseCursorData
-	{
+	public static registerCursor(name: string, cursor: any)	{
+		// @todo
+		Debug.throwPIR('playerglobals/ui/Mouse', 'static registerCursor', '');
 	}
 
 	/*
 	 Unregisters a native cursor under the given name, with the given data.
 	 */
 	public static unregisterCursor(name: string) {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/Mouse', 'static unregisterCursor', '');
 	}
 }

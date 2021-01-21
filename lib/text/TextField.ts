@@ -15,6 +15,7 @@ import { DisplayObject as AwayDisplayObject,
 	TextfieldEvent } from '@awayjs/scene';
 import { constructClassFromSymbol } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
+import { Debug } from '@awayjs/core';
 /**
  * Flash Player dispatches the textInteractionModeChange event when a user
  * changes the interaction mode of a text field.
@@ -182,10 +183,14 @@ export class TextField extends InteractiveObject {
 	 * fonts that are larger than 48 points.
 	 */
 	public get antiAliasType (): string {
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'get antiAliasType', '');
 		return '';//(<AwayTextField> this._adaptee).antiAliasType;
 	}
 
 	public set antiAliasType (antiAliasType: string) {
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'set antiAliasType', '');
 		//(<AwayTextField> this._adaptee).antiAliasType=value;
 	}
 
@@ -287,8 +292,9 @@ export class TextField extends InteractiveObject {
 	 * is currently visible in the text field.
 	 */
 	public get bottomScrollV (): number {
-		//todo
-		throw ('bottomScrollV not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'set bottomScrollV', '');
+		return 0;
 	}
 
 	/**
@@ -300,8 +306,9 @@ export class TextField extends InteractiveObject {
 	 * the second position is 1, and so on).
 	 */
 	public get caretIndex (): number {
-		//todo
-		throw ('caretIndex not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'get caretIndex', '');
+		return 0;
 	}
 
 	/**
@@ -316,13 +323,14 @@ export class TextField extends InteractiveObject {
 	 * Set the condenseWhite property before setting the htmlText property.
 	 */
 	public get condenseWhite (): boolean {
-		//todo
-		throw ('condenseWhite not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'get condenseWhite', '');
+		return false;
 	}
 
 	public set condenseWhite (value: boolean) {
-		//todo
-		throw ('condenseWhite not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'set condenseWhite', '');
 	}
 
 	/**
@@ -386,14 +394,14 @@ export class TextField extends InteractiveObject {
 	 * If the specified font is not embedded in the SWF file, the text is not displayed.
 	 */
 	public get embedFonts (): boolean {
-		//todo
-		//console.log("embedFonts not implemented yet in flash/TextField");
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'get embedFonts', '');
 		return false;
 	}
 
 	public set embedFonts (value: boolean) {
-		//todo
-		//console.log("embedFonts not implemented yet in flash/TextField");
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'set embedFonts', '');
 	}
 
 	/**
@@ -421,14 +429,14 @@ export class TextField extends InteractiveObject {
 	 * dynamic text, and it is sometimes a useful trade-off for animation versus text quality.
 	 */
 	public get gridFitType (): string {
-		//todo
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'get gridFitType', '');
 		return '';
-		//throw("gridFitType not implemented yet in flash/TextField");
 	}
 
 	public set gridFitType (gridFitType: string) {
-		//todo
-		//throw("gridFitType not implemented yet in flash/TextField");
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'set gridFitType', '');
 	}
 
 	/**
@@ -787,8 +795,8 @@ export class TextField extends InteractiveObject {
 	}
 
 	public get selectedText (): string {
-		//todo
-		console.log('selectedText not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'get selectedText', '');
 		return '';
 	}
 
@@ -819,14 +827,14 @@ export class TextField extends InteractiveObject {
 	 * the nearest value in the range (either -400 or 400).
 	 */
 	public get sharpness (): number {
-		//todo
-		console.log('sharpness not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'get sharpness', '');
 		return 0;
 	}
 
 	public set sharpness (value: number) {
-		//todo
-		console.log('sharpness not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'set sharpness', '');
 	}
 
 	/**
@@ -843,14 +851,14 @@ export class TextField extends InteractiveObject {
 	 * removing the style sheet.
 	 */
 	public get styleSheet (): StyleSheet {
-		//todo
-		console.log('styleSheet not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'get styleSheet', '');
 		return null;
 	}
 
 	public set styleSheet (value: StyleSheet) {
-		//todo
-		console.log('styleSheet not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'set styleSheet', '');
 	}
 
 	/**
@@ -897,8 +905,8 @@ export class TextField extends InteractiveObject {
 	 * On Desktop, the normal mode implies that the text is in scrollable as well as selection mode.
 	 */
 	public get textInteractionMode (): string {
-		//todo
-		console.log('textInteractionMode not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'get textInteractionMode', '');
 		return '';
 	}
 
@@ -918,14 +926,14 @@ export class TextField extends InteractiveObject {
 	 * nearest value in the range (either -200 or 200).
 	 */
 	public get thickness (): number {
-		//todo
-		console.log('thickness not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'get thickness', '');
 		return 0;
 	}
 
 	public set thickness (value: number) {
-		//todo
-		console.log('thickness not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'set thickness', '');
 	}
 
 	/**
@@ -959,14 +967,14 @@ export class TextField extends InteractiveObject {
 	 * is false.
 	 */
 	public get useRichTextClipboard (): boolean {
-		//todo
-		console.log('useRichTextClipboard not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'get useRichTextClipboard', '');
 		return false;
 	}
 
 	public set useRichTextClipboard (value: boolean) {
-		//todo
-		console.log('useRichTextClipboard not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'set useRichTextClipboard', '');
 	}
 
 	/**
@@ -995,8 +1003,8 @@ export class TextField extends InteractiveObject {
 	}
 
 	public copyRichText (): string {
-		//todo
-		console.log('copyRichText not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'copyRichText', '');
 		return '';
 	}
 
@@ -1008,8 +1016,8 @@ export class TextField extends InteractiveObject {
 	 *   defining the bounding box of the character.
 	 */
 	public getCharBoundaries (charIndex: number): Rectangle {
-		//todo
-		console.log('getCharBoundaries not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'getCharBoundaries', '');
 		return null;
 	}
 
@@ -1051,8 +1059,8 @@ export class TextField extends InteractiveObject {
 	 *   the matching id exists, the method returns null.
 	 */
 	public getImageReference (id: string): DisplayObject {
-		//todo
-		console.log('getImageReference not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'getImageReference', '');
 		return null;
 	}
 
@@ -1140,8 +1148,8 @@ export class TextField extends InteractiveObject {
 	}
 
 	public getRawText (): string {
-		//todo
-		console.log('getRawText not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'getRawText', '');
 		return '';
 	}
 
@@ -1191,20 +1199,20 @@ export class TextField extends InteractiveObject {
 	}
 
 	public getTextRuns (beginIndex: number = 0, endIndex: number = 2147483647): any[] {
-		//todo
-		console.warn('getTextRuns not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'getTextRuns', '');
 		return [];
 	}
 
 	public getXMLText (beginIndex: number = 0, endIndex: number = 2147483647): string {
-		//todo
-		console.log('getXMLText not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'getXMLText', '');
 		return '';
 	}
 
 	public insertXMLText (beginIndex: number, endIndex: number, richText: string, pasting: boolean = false) {
-		//todo
-		console.log('insertXMLText not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'insertXMLText', '');
 	}
 
 	/**
@@ -1226,14 +1234,14 @@ export class TextField extends InteractiveObject {
 	 * @throws	ArgumentError The fontStyle specified is not a member of flash.text.FontStyle.
 	 */
 	public static isFontCompatible (fontName: string, fontStyle: string): boolean {
-		//todo
-		console.log('isFontCompatible not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'isFontCompatible', '');
 		return false;
 	}
 
 	public pasteRichText (richText: string): boolean {
-		//todo
-		console.log('pasteRichText not implemented yet in flash/TextField');
+		// @todo
+		Debug.throwPIR('playerglobals/text/Textfield', 'pasteRichText', '');
 		return false;
 	}
 

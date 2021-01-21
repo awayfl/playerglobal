@@ -11,6 +11,5 @@ export class TextColorType extends ASObject {
 
 	constructor () {
 		super();
-		console.warn('[TextColorType] not implemented');
 	}
 }

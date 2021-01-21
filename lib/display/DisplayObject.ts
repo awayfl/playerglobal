@@ -1,5 +1,5 @@
 import { Point as AwayPoint,
-	Box, AbstractMethodError } from '@awayjs/core';
+	Box, AbstractMethodError, Debug } from '@awayjs/core';
 import { EventDispatcher, BroadcastEventDispatchQueue } from '../events/EventDispatcher';
 import { Event } from '../events/Event';
 import { StaticEvents } from '../events/StaticEvents';
@@ -16,7 +16,7 @@ import { Rectangle } from '../geom/Rectangle';
 import { Point } from '../geom/Point';
 import { Vector3D } from '../geom/Vector3D';
 import { SecurityDomain } from '../SecurityDomain';
-import { release, FilterType } from '@awayfl/swf-loader';
+import { FilterType } from '@awayfl/swf-loader';
 import { BitmapFilter } from '../filters/BitmapFilter';
 
 export class DisplayObject extends EventDispatcher implements IDisplayObjectAdapter {
@@ -378,13 +378,14 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * that any.
 	 */
 	public get accessibilityProperties(): any {
-		console.log('accessibilityProperties not implemented yet in flash/DisplayObject');
-		//todo: flash.accessibility.AccessibilityProperties
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObject', 'get accessibilityProperties', '');
 		return null;
 	}
 
 	public set accessibilityProperties(value: any) {
-		console.log('accessibilityProperties not implemented yet in flash/DisplayObject');
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObject', 'set accessibilityProperties', '');
 	}
 
 	/**
@@ -512,12 +513,14 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * the blendMode property is set to BlendMode.NORMAL. Not supported under GPU rendering.
 	 */
 	public get blendMode(): string {
-		release || console.log('blendMode not implemented yet in flash/DisplayObject');
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObject', 'get blendMode', '');
 		return '';
 	}
 
 	public set blendMode(value: string) {
-		release || console.log('blendMode not implemented yet in flash/DisplayObject');
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObject', 'set blendMode', '');
 		this._adaptee.blendMode = value;
 	}
 
@@ -562,8 +565,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   property for more information.
 	 */
 	public set blendShader(value: any) {
-		release || console.log('blendShader not implemented yet in flash/DisplayObject');
-		//todo (if ever)
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObject', 'set blendShader', '');
 	}
 
 	/**
@@ -600,12 +603,14 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * movie clip is translated (when its x and y position is changed).
 	 */
 	public get cacheAsBitmap(): boolean {
-		release || console.log('cacheAsBitmap not implemented yet in flash/DisplayObject');
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObject', 'get cacheAsBitmap', '');
 		return false;
 	}
 
 	public set cacheAsBitmap(value: boolean) {
-		release || console.log('cacheAsBitmap not implemented yet in flash/DisplayObject');
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObject', 'set cacheAsBitmap', '');
 	}
 
 	/**
@@ -834,12 +839,14 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	public get metaData(): any {
-		console.log('mask not implemented yet in flash/DisplayObject');
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObject', 'get metaData', '');
 		return null;
 	}
 
 	public set metaData(data: any) {
-		console.log('mask not implemented yet in flash/DisplayObject');
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObject', 'set metaData', '');
 	}
 
 	/**
@@ -897,12 +904,14 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * method with the shapeFlag parameter set to true.The opaque background region does not respond to mouse events.
 	 */
 	public get opaqueBackground(): any {
-		console.log('opaqueBackground not implemented yet in flash/DisplayObject');
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObject', 'get opaqueBackground', '');
 		return null;
 	}
 
 	public set opaqueBackground(value: any) {
-		console.log('opaqueBackground not implemented yet in flash/DisplayObject');
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObject', 'set opaqueBackground', '');
 	}
 
 	/**
@@ -1234,8 +1243,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	public set transform(value: Transform) {
-		console.log('DisplayObject:setter for transform not yet implemented');
-		//this._adaptee.transform=value;
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObject', 'set transform', '');
 	}
 
 	/**
@@ -1493,7 +1502,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   displayobject.
 	 */
 	public globalToLocal3D(point: Point): Vector3D {
-		console.log('DisplayObject:globalToLocal3D not yet implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObject', 'globalToLocal3D', '');
 		return new (<SecurityDomain> this.sec).flash.geom.Vector3D();
 
 	}
@@ -1553,7 +1563,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   in two-dimensional space.
 	 */
 	public local3DToGlobal(point3d: Vector3D): Point {
-		console.log('DisplayObject:local3DToGlobal not yet implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObject', 'local3DToGlobal', '');
 		return new (<SecurityDomain> this.sec).flash.geom.Point();//this._adaptee.getBounds();
 
 	}

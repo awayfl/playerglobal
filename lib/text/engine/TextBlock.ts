@@ -1,4 +1,5 @@
 import { ASObject } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 import { TextFormat } from '@awayjs/scene';
 import { ContentElement } from './ContentElement';
 import { ElementFormat } from './ElementFormat';
@@ -235,7 +236,7 @@ export class TextBlock extends ASObject {
 			defaultFormat = format;
 			newFormats[newFormats.length] = format;
 			newElementFormats[newElementFormats.length] = elementFormats[f];
-			defaultElementFormat =  elementFormats[f];
+			defaultElementFormat = elementFormats[f];
 			newFormatindices[newFormatindices.length] = 0;
 			const lastChar = formatsIndicies[f];
 			for (c; c <= lastChar; c++) {
@@ -327,7 +328,8 @@ export class TextBlock extends ASObject {
 		width?: number,
 		lineOffset?: number,
 		fitSomething?: boolean): TextLine {
-		console.warn('[TextBlock]  ' + this._id + '   - recreateTextLine not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'recreateTextLine', '');
 		return new (<any> this.sec).flash.text.engine.TextLine();
 	}
 
@@ -337,32 +339,38 @@ export class TextBlock extends ASObject {
 	}
 
 	public get applyNonLinearFontScaling(): boolean {
-		console.warn('[TextBlock]  ' + this._id + '   - get applyNonLinearFontScaling not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'get applyNonLinearFontScaling', '');
 		return this._applyNonLinearFontScaling;
 	}
 
 	public set applyNonLinearFontScaling(value: boolean) {
-		console.warn('[TextBlock]  ' + this._id + '   - set applyNonLinearFontScaling not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'set applyNonLinearFontScaling', '');
 		this._applyNonLinearFontScaling = value;
 	}
 
 	public get baselineFontDescription(): FontDescription {
-		console.warn('[TextBlock]  ' + this._id + '   - get baselineFontDescription not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'get baselineFontDescription', '');
 		return this._baselineFontDescription;
 	}
 
 	public set baselineFontDescription(value: FontDescription) {
-		console.warn('[TextBlock]  ' + this._id + '   - set baselineFontDescription not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'set baselineFontDescription', '');
 		this._baselineFontDescription = value;
 	}
 
 	public get baselineFontSize(): number {
-		console.warn('[TextBlock]  ' + this._id + '   - get baselineFontSize not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'get baselineFontSize', '');
 		return this._baselineFontSize;
 	}
 
 	public set baselineFontSize(value: number) {
-		console.warn('[TextBlock]  ' + this._id + '   - set baselineFontSize not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'set baselineFontSize', '');
 		this._baselineFontSize = value;
 	}
 
@@ -394,17 +402,20 @@ export class TextBlock extends ASObject {
 	}
 
 	public get bidiLevel(): number /*int*/ {
-		//console.warn('[TextBlock]  ' + this._id + '   - get bidiLevel not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'get bidiLevel', '');
 		return this._bidiLevel;
 	}
 
 	public set bidiLevel(value: number /*int*/) {
-		//console.warn('[TextBlock]  ' + this._id + '   - set bidiLevel not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'set bidiLevel', '');
 		this._bidiLevel = value;
 	}
 
 	public get firstInvalidLine(): TextLine {
-		console.warn('[TextBlock]  ' + this._id + '   - get firstInvalidLine not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'firstInvalidLine', '');
 		return null;
 	}
 
@@ -429,32 +440,38 @@ export class TextBlock extends ASObject {
 	}
 
 	public findNextAtomBoundary(afterCharIndex: number /*int*/): number /*int*/ {
-		console.warn('[TextBlock]  ' + this._id + '   - findNextAtomBoundary not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'findNextAtomBoundary', '');
 		return null;
 	}
 
 	public findPreviousAtomBoundary(beforeCharIndex: number /*int*/): number /*int*/ {
-		console.warn('[TextBlock]  ' + this._id + '   - findPreviousAtomBoundary not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'findPreviousAtomBoundary', '');
 		return null;
 	}
 
 	public findNextWordBoundary(afterCharIndex: number /*int*/): number /*int*/ {
-		console.warn('[TextBlock]  ' + this._id + '   - findNextWordBoundary not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'findNextWordBoundary', '');
 		return null;
 	}
 
 	public findPreviousWordBoundary(beforeCharIndex: number /*int*/): number /*int*/ {
-		console.warn('[TextBlock]  ' + this._id + '   - findPreviousWordBoundary not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'findPreviousWordBoundary', '');
 		return null;
 	}
 
 	public getTextLineAtCharIndex(charIndex: number /*int*/): TextLine {
-		console.warn('[TextBlock]  ' + this._id + '   - getTextLineAtCharIndex not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'getTextLineAtCharIndex', '');
 		return null;
 	}
 
 	public releaseLineCreationData(): void {
-		console.warn('[TextBlock]  ' + this._id + '   - releaseLineCreationData not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'releaseLineCreationData', '');
 	}
 
 	public releaseLines(firstLine: TextLine, lastLine: TextLine): void {
@@ -463,7 +480,8 @@ export class TextBlock extends ASObject {
 	}
 
 	public dump(): string {
-		console.warn('[TextBlock]  ' + this._id + '   - dump not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'dump', '');
 		return null;
 	}
 
@@ -473,7 +491,8 @@ export class TextBlock extends ASObject {
 		lineOffset: number = 0,
 		fitSomething: boolean = false,
 		reuseLine: TextLine = null): TextLine {
-		console.warn('[TextBlock]  ' + this._id + '   - DoCreateTextLine not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'DoCreateTextLine', '');
 		return null;
 	}
 

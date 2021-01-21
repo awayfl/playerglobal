@@ -7,7 +7,6 @@ export class TypographicCase extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[TypographicCase] not implemented');
 	}
 
 	// JS -> AS Bindings

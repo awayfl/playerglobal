@@ -7,7 +7,6 @@ export class FontPosture extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[FontPosture] not implemented');
 	}
 
 	// JS -> AS Bindings

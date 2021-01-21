@@ -7,7 +7,6 @@ export class TextLineValidity extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[TextLineValidity] not implemented');
 	}
 
 	// JS -> AS Bindings

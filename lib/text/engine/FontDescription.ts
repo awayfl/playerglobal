@@ -1,4 +1,5 @@
 import { ASObject, axCoerceString } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 
 export class FontDescription extends ASObject {
 
@@ -41,7 +42,8 @@ export class FontDescription extends ASObject {
 		fontName = axCoerceString(fontName);
 		fontWeight = axCoerceString(fontWeight);
 		fontPosture = axCoerceString(fontPosture);
-		console.warn('[FontDescription] - isFontCompatible not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/FontDescription', 'static isFontCompatible', '');
 		return null;
 	}
 
@@ -49,7 +51,8 @@ export class FontDescription extends ASObject {
 		fontName = axCoerceString(fontName);
 		fontWeight = axCoerceString(fontWeight);
 		fontPosture = axCoerceString(fontPosture);
-		console.warn('[FontDescription] - isDeviceFontCompatible not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/FontDescription', 'static isDeviceFontCompatible', '');
 		return null;
 	}
 
@@ -102,12 +105,10 @@ export class FontDescription extends ASObject {
 	}
 
 	public get locked(): boolean {
-		console.log('get FontDescription locked',  this._locked);
 		return this._locked;
 	}
 
 	public set locked(value: boolean) {
-		console.log('set FontDescription locked',  value);
 		this._locked = value;
 	}
 }

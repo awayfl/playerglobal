@@ -1,4 +1,4 @@
-import { Box, Vector3D } from '@awayjs/core';
+import { Box, Debug, Vector3D } from '@awayjs/core';
 import {
 	Billboard,
 	TextField as AwayTextField,
@@ -251,14 +251,14 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 *   throws an exception. The Stage object does not implement this property.
 	 */
 	public get tabChildren (): boolean {
-		//todo
-		//console.warn("tabChildren not implemented yet in flash/DisplayObjectContainer");
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObjectContainer', 'get tabChildren', '');
 		return false;
 	}
 
 	public set tabChildren (enable: boolean)  {
-		//console.warn("tabChildren not implemented yet in flash/DisplayObjectContainer");
-		//todo
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObjectContainer', 'set tabChildren', '');
 	}
 
 	/**
@@ -267,9 +267,9 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 * @playerversion	Flash 9
 	 */
 	public get textSnapshot (): any {
-		throw ('textSnapshot not implemented yet in flash/DisplayObjectContainer');
-		// todo: flash.text.TextSnapshot;
-		//return null;
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObjectContainer', 'get textSnapshot', '');
+		return null;
 	}
 
 	/**
@@ -368,9 +368,9 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 * @playerversion	Lite 4
 	 */
 	public areInaccessibleObjectsUnderPoint (point: Point): boolean {
-		//todo
-		throw ('areInaccessibleObjectsUnderPoint not implemented yet in flash/DisplayObjectContainer');
-		//return false;
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObjectContainer', 'areInaccessibleObjectsUnderPoint', '');
+		return false;
 	}
 
 	/**
@@ -617,8 +617,8 @@ export class DisplayObjectContainer extends InteractiveObject {
 	}
 
 	public stopAllMovieClips ()  {
-		//todo
-		throw ('stopAllMovieClips not implemented yet in flash/DisplayObjectContainer');
+		// @todo
+		Debug.throwPIR('playerglobals/display/DisplayObjectContainer', 'stopAllMovieClips', '');
 	}
 
 	/**

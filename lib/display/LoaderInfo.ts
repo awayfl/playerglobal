@@ -5,13 +5,13 @@ import { ProgressEvent } from '../events/ProgressEvent';
 import { Event } from '../events/Event';
 import { ILoader } from '../ILoader';
 import { Loader } from './Loader';
-import { URLLoaderEvent, LoaderEvent as AwayLoaderEvent, Box } from '@awayjs/core';
+import { URLLoaderEvent, LoaderEvent as AwayLoaderEvent, Box, Debug } from '@awayjs/core';
 import { DisplayObject } from './DisplayObject';
 import { ByteArray } from '../utils/ByteArray';
 import { DisplayObject as AwayDisplayObject } from '@awayjs/scene';
 import { SecurityDomain } from '../SecurityDomain';
 import { PickGroup } from '@awayjs/view';
-import { AVMStage, release } from '@awayfl/swf-loader';
+import { AVMStage } from '@awayfl/swf-loader';
 
 /**
  * The LoaderInfo export class provides information about a loaded SWF file or a
@@ -143,7 +143,8 @@ export class LoaderInfo extends EventDispatcher {
 	 * @throws	Error If the file is not a SWF file.
 	 */
 	public get actionScriptVersion(): number {
-		release || console.log('actionScriptVersion not implemented yet in flash/LoaderInfo');
+		// @todo
+		Debug.throwPIR('playerglobals/display/LoaderInfo', 'get actionScriptVersion', '');
 		return 0;
 	}
 
@@ -268,7 +269,8 @@ export class LoaderInfo extends EventDispatcher {
 	 *                       [Security](http://www.adobe.com/go/devnet_security_en).
 	 */
 	public get bytes(): ByteArray {
-		release || console.log('bytes not implemented yet in flash/LoaderInfo');
+		// @todo
+		Debug.throwPIR('playerglobals/display/LoaderInfo', 'get bytes', '');
 		return null;
 
 	}
@@ -309,7 +311,8 @@ export class LoaderInfo extends EventDispatcher {
 	 *               the requested information.
 	 */
 	public get childAllowsParent(): boolean {
-		release || console.log('childAllowsParent not implemented yet in flash/LoaderInfo');
+		// @todo
+		Debug.throwPIR('playerglobals/display/LoaderInfo', 'get childAllowsParent', '');
 		return false;
 	}
 
@@ -326,13 +329,14 @@ export class LoaderInfo extends EventDispatcher {
 	 *                       this property.
 	 */
 	public get childSandboxBridge(): any {
-		release || console.log('childSandboxBridge not implemented yet in flash/LoaderInfo');
+		// @todo
+		Debug.throwPIR('playerglobals/display/LoaderInfo', 'get childSandboxBridge', '');
 		return null;
 	}
 
 	public set childSandboxBridge(door: any) {
-		release || console.log('childSandboxBridge not implemented yet in flash/LoaderInfo');
-
+		// @todo
+		Debug.throwPIR('playerglobals/display/LoaderInfo', 'set childSandboxBridge', '');
 	}
 
 	/**
@@ -365,7 +369,8 @@ export class LoaderInfo extends EventDispatcher {
 	 * * `"image/png"`
 	 */
 	public get contentType(): string {
-		release || console.log('childSandboxBridge not implemented yet in flash/LoaderInfo');
+		// @todo
+		Debug.throwPIR('playerglobals/display/LoaderInfo', 'get contentType', '');
 		return null;
 	}
 
@@ -397,7 +402,8 @@ export class LoaderInfo extends EventDispatcher {
 	 *               requested information.
 	 */
 	public get height(): number {
-		const box: Box = PickGroup.getInstance(this._loader.stage.view).getBoundsPicker(this._container.partition).getBoxBounds(this._container);
+		const box: Box = PickGroup.getInstance(
+			this._loader.stage.view).getBoundsPicker(this._container.partition).getBoxBounds(this._container);
 
 		return (box == null) ? 0 : box.height;
 
@@ -433,7 +439,8 @@ export class LoaderInfo extends EventDispatcher {
 	 * For application content in AIR, the value of this property is always false.
 	 */
 	public get isURLInaccessible(): boolean {
-		release || console.log('isURLInaccessible not implemented yet in flash/LoaderInfo');
+		// @todo
+		Debug.throwPIR('playerglobals/display/LoaderInfo', 'get isURLInaccessible', '');
 		return false;
 
 	}
@@ -492,7 +499,8 @@ export class LoaderInfo extends EventDispatcher {
 	 * ActionScript 3.0.
 	 */
 	public get parameters(): any {
-		release || console.log('parameters not implemented yet in flash/LoaderInfo');
+		// @todo
+		Debug.throwPIR('playerglobals/display/LoaderInfo', 'get parameters', '');
 		return this.sec.createArrayUnsafe([]);
 	}
 
@@ -512,7 +520,8 @@ export class LoaderInfo extends EventDispatcher {
 	 *               retrieve the requested information.
 	 */
 	public get parentAllowsChild(): boolean {
-		release || console.log('parentAllowsChild not implemented yet in flash/LoaderInfo');
+		// @todo
+		Debug.throwPIR('playerglobals/display/LoaderInfo', 'get parentAllowsChild', '');
 		return false;
 
 	}
@@ -530,12 +539,14 @@ export class LoaderInfo extends EventDispatcher {
 	 *         this property.
 	 */
 	public get parentSandboxBridge(): any {
-		release || console.log('parentSandboxBridge not implemented yet in flash/LoaderInfo');
+		// @todo
+		Debug.throwPIR('playerglobals/display/LoaderInfo', 'get parentSandboxBridge', '');
 		return null;
 	}
 
 	public set parentSandboxBridge(door: any) {
-		release || console.log('parentSandboxBridge not implemented yet in flash/LoaderInfßo');
+		// @todo
+		Debug.throwPIR('playerglobals/display/LoaderInfo', 'set parentSandboxBridge', '');
 	}
 
 	/**
@@ -547,7 +558,8 @@ export class LoaderInfo extends EventDispatcher {
 	 *               retrieve the requested information.
 	 */
 	public get sameDomain(): boolean {
-		release || console.log('sameDomain not implemented yet in flash/LoaderInfo');
+		// @todo
+		Debug.throwPIR('playerglobals/display/LoaderInfo', 'get sameDomain', '');
 		return false;
 
 	}
@@ -560,7 +572,8 @@ export class LoaderInfo extends EventDispatcher {
 	 * object.
 	 */
 	public get sharedEvents(): EventDispatcher {
-		release || console.log('sharedEvents not implemented yet in flash/LoaderInfo');
+		// @todo
+		Debug.throwPIR('playerglobals/display/LoaderInfo', 'get sharedEvents', '');
 		return null;
 	}
 
@@ -593,8 +606,8 @@ export class LoaderInfo extends EventDispatcher {
 	 * `applicationComplete` event is dispatched.
 	 */
 	public get uncaughtErrorEvents(): any {
-		//todo: any is UncaughtErrorEvents
-		release || console.log('uncaughtErrorEvents not implemented yet in flash/LoaderInfo');
+		// @todo
+		Debug.throwPIR('playerglobals/display/LoaderInfo', 'get uncaughtErrorEvents', '');
 		return null;
 
 	}
@@ -635,7 +648,8 @@ export class LoaderInfo extends EventDispatcher {
 	 *               requested information.
 	 */
 	public get width(): number {
-		const box: Box = PickGroup.getInstance(this._loader.stage.view).getBoundsPicker(this._container.partition).getBoxBounds(this._container);
+		const box: Box = PickGroup.getInstance(
+			this._loader.stage.view).getBoundsPicker(this._container.partition).getBoxBounds(this._container);
 
 		return (box == null) ? 0 : box.width;
 	}
@@ -654,7 +668,8 @@ export class LoaderInfo extends EventDispatcher {
 	 *                       sandbox.
 	 */
 	public static getLoaderInfoByDefinition(object: any): LoaderInfo {
-		release || console.log('getLoaderInfoByDefinition not implemented yet in flash/LoaderInfo');
+		// @todo
+		Debug.throwPIR('playerglobals/display/LoaderInfo', 'static getLoaderInfoByDefinition', '');
 		return null;
 	}
 

@@ -1,5 +1,7 @@
+import { Debug } from '@awayjs/core';
 
 export const getAliasName = function(value: any): string {
-	console.log('getAliasName is not implemented yet in flash/utils');
+	// @todo
+	Debug.throwPIR('playerglobals/utils/getAliasName', 'getAliasName', '');
 	return '';
 };

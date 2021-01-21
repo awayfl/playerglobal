@@ -1,4 +1,5 @@
 import { ASObject } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 import { EventDispatcher } from '../../events/EventDispatcher';
 import { Rectangle } from '../../geom/Rectangle';
 import { ContentElement } from './ContentElement';
@@ -11,7 +12,6 @@ export class TextLineMirrorRegion extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[TextLineMirrorRegion] not implemented');
 	}
 
 	// JS -> AS Bindings
@@ -24,33 +24,39 @@ export class TextLineMirrorRegion extends ASObject {
 	// _mirror: flash.events.EventDispatcher;
 	// _element: flash.text.engine.ContentElement;
 	// _bounds: flash.geom.Rectangle;
-	get textLine(): TextLine {
-		console.warn('[TextLineMirrorRegion] - get textLine not implemented');
+	public get textLine(): TextLine {
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextLineMirrorRegion', 'get textLine', '');
 		return null;
 	}
 
-	get nextRegion(): TextLineMirrorRegion {
-		console.warn('[TextLineMirrorRegion] - get nextRegion not implemented');
+	public get nextRegion(): TextLineMirrorRegion {
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextLineMirrorRegion', 'get nextRegion', '');
 		return null;
 	}
 
-	get previousRegion(): TextLineMirrorRegion {
-		console.warn('[TextLineMirrorRegion] - get previousRegion not implemented');
+	public get previousRegion(): TextLineMirrorRegion {
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextLineMirrorRegion', 'get previousRegion', '');
 		return null;
 	}
 
-	get mirror(): EventDispatcher {
-		console.warn('[TextLineMirrorRegion] - get mirror not implemented');
+	public get mirror(): EventDispatcher {
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextLineMirrorRegion', 'get mirror', '');
 		return null;
 	}
 
-	get element(): ContentElement {
-		console.warn('[TextLineMirrorRegion] - get element not implemented');
+	public get element(): ContentElement {
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextLineMirrorRegion', 'get element', '');
 		return null;
 	}
 
-	get bounds(): Rectangle {
-		console.warn('[TextLineMirrorRegion] - get bounds not implemented');
+	public get bounds(): Rectangle {
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/TextLineMirrorRegion', 'get textLine', '');
 		return null;
 	}
 }

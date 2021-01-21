@@ -1,3 +1,4 @@
+import { Debug } from '@awayjs/core';
 import { EventDispatcher } from '../../events/EventDispatcher';
 import { ContentElement } from './ContentElement';
 import { ElementFormat } from './ElementFormat';
@@ -63,28 +64,30 @@ export class GroupElement extends ContentElement {
 	public groupElements(beginIndex: number /*int*/, endIndex: number /*int*/): GroupElement {
 		//beginIndex = beginIndex | 0;
 		//endIndex = endIndex | 0;
-		console.warn('[GroupElement]  ' + this._id + ' - groupElements');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/GroupElement', 'groupElements', '');
 		return null;
 	}
 
 	public ungroupElements(groupIndex: number /*int*/): void {
 		//groupIndex = groupIndex | 0;
-		console.warn('[GroupElement]  ' + this._id + ' - groupIndex');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/GroupElement', 'ungroupElements', '');
 	}
 
 	public mergeTextElements(beginIndex: number /*int*/, endIndex: number /*int*/): TextElement {
 		//beginIndex = beginIndex | 0;
 		//endIndex = endIndex | 0;
-		console.warn('[GroupElement]  ' + this._id + ' - mergeTextElements',
-			'beginIndex', beginIndex, 'endIndex', endIndex);
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/GroupElement', 'mergeTextElements', '');
 		return null;
 	}
 
 	public splitTextElement(elementIndex: number /*int*/, splitIndex: number /*int*/): TextElement {
 		//elementIndex = elementIndex | 0;
 		//splitIndex = splitIndex | 0;
-		console.warn('[GroupElement]  ' + this._id + ' - splitTextElement',
-			'elementIndex', elementIndex, 'splitIndex', splitIndex);
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/GroupElement', 'groupElements', '');
 		return null;
 	}
 

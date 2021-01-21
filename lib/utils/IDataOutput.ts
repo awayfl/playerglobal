@@ -7,10 +7,17 @@ import { ByteArray } from './ByteArray';
  * and ByteArray classes.
  * <p class="- topic/p ">All IDataInput and IDataOutput operations are "bigEndian" by default (the most significant
  * byte in the sequence is stored at the lowest or first storage address),
- * and are nonblocking. </p><p class="- topic/p ">Sign extension matters only when you read data, not when you write it. Therefore, you do not need separate
+ * and are nonblocking. </p><p class="- topic/p ">Sign extension matters only when you read data,
+ * not when you write it. Therefore, you do not need separate
  * write methods to work with <codeph class="+ topic/ph pr-d/codeph ">IDataInput.readUnsignedByte()</codeph> and
- * <codeph class="+ topic/ph pr-d/codeph ">IDataInput.readUnsignedShort()</codeph>. In other words:</p><ul class="- topic/ul "><li class="- topic/li ">Use <codeph class="+ topic/ph pr-d/codeph ">IDataOutput.writeByte()</codeph> with <codeph class="+ topic/ph pr-d/codeph ">IDataInput.readUnsignedByte()</codeph> and
- * <codeph class="+ topic/ph pr-d/codeph ">IDataInput.readByte()</codeph>.</li><li class="- topic/li ">Use <codeph class="+ topic/ph pr-d/codeph ">IDataOutput.writeShort()</codeph> with <codeph class="+ topic/ph pr-d/codeph ">IDataInput.readUnsignedShort()</codeph> and
+ * <codeph class="+ topic/ph pr-d/codeph ">IDataInput.readUnsignedShort()</codeph>.
+ * In other words:</p><ul class="- topic/ul "><li class="- topic/li ">Use <codeph class="+ topic/ph pr-d/codeph ">
+ * IDataOutput.writeByte()</codeph> with <codeph class="+ topic/ph pr-d/codeph ">
+ * IDataInput.readUnsignedByte()</codeph> and
+ * <codeph class="+ topic/ph pr-d/codeph ">IDataInput.readByte()</codeph>.</li>
+ * <li class="- topic/li ">Use <codeph class="+ topic/ph pr-d/codeph ">
+ * IDataOutput.writeShort()</codeph> with <codeph class="+ topic/ph pr-d/codeph ">
+ * IDataInput.readUnsignedShort()</codeph> and
  * <codeph class="+ topic/ph pr-d/codeph ">IDataInput.readShort()</codeph>.</li></ul>
  */
 export interface IDataOutput

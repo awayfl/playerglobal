@@ -1,23 +1,7 @@
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import { EventDispatcher } from '../events/EventDispatcher';
-import { somewhatImplemented, release } from '@awayfl/swf-loader';
 import { GameInputDevice } from './GameInputDevice';
 import { Errors } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 
 // Class: GameInput
 export class GameInput extends EventDispatcher {
@@ -41,20 +25,23 @@ export class GameInput extends EventDispatcher {
 	// static _numDevices: number /*int*/;
 	// static _isSupported: boolean;
 	static get numDevices(): number /*int*/ {
-		release || somewhatImplemented('public flash.ui.GameInput::get numDevices');
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInput', 'static get numDevices', '');
 		return 0;
 		// return this._numDevices;
 	}
 
 	static get isSupported(): boolean {
-		release || somewhatImplemented('public flash.ui.GameInput::get isSupported');
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInput', 'static get isSupported', '');
 		return false;
 	}
 
 	static getDeviceAt(index: number /*int*/): GameInputDevice {
 		index = index | 0;
 
-		release || somewhatImplemented('public flash.ui.GameInput::static getDeviceAt');
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInput', 'static getDeviceAt', '');
 		this.sec.throwError('RangeError', Errors.ParamRangeError, 'index');
 		return null;
 	}

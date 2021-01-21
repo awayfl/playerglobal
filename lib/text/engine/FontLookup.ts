@@ -7,7 +7,6 @@ export class FontLookup extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[FontLookup] not implemented');
 	}
 
 	// JS -> AS Bindings

@@ -7,7 +7,6 @@ export class DigitWidth extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[DigitWidth] not implemented');
 	}
 
 	// JS -> AS Bindings

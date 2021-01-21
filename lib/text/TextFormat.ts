@@ -1,5 +1,6 @@
 import { TextFormat as AwaytextFormat } from '@awayjs/scene';
 import { ASObject, AXClass, ASArray } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 
 export class TextFormat extends ASObject {
 
@@ -8,49 +9,59 @@ export class TextFormat extends ASObject {
 	public adaptee: AwaytextFormat;
 
 	public get target(): string {
-		console.log('not implemented: TextFormat target');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextFormat', 'get target', '');
 		return null;
 	}
 
 	public set target(value: string) {
-		console.log('not implemented: TextFormat target');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextFormat', 'set target', '');
 	}
 
 	public get tabStops(): ASArray {
-		console.log('not implemented: TextFormat tabStops');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextFormat', 'get tabStops', '');
 		return null;
 	}
 
 	public set tabStops(value: ASArray) {
-		console.log('not implemented: TextFormat tabStops');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextFormat', 'set tabStops', '');
 	}
 
 	public get display(): string {
-		console.log('not implemented: TextFormat display');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextFormat', 'get display', '');
 		return null;
 	}
 
 	public set display(value: string) {
-		console.log('not implemented: TextFormat display');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextFormat', 'set display', '');
 	}
 
 	public get bullet(): boolean {
-		console.log('not implemented: TextFormat bullet');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextFormat', 'get bullet', '');
 		return null;
 	}
 
 	public set bullet(value: boolean) {
-		console.log('not implemented: TextFormat bullet');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextFormat', 'set bullet', '');
 		//this._bullet = TextFormat.coerceBoolean(value);
 	}
 
 	public get url(): string {
-		console.log('not implemented: TextFormat url');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextFormat', 'get url', '');
 		return null;
 	}
 
 	public set url(value: string) {
-		console.log('not implemented: TextFormat url');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextFormat', 'set url', '');
 	}
 
 	/**
@@ -66,12 +77,14 @@ export class TextFormat extends ASObject {
 	 * have no effect.
 	 */
 	public get link_target(): string {
-		console.log('not implemented: TextFormat link_target');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextFormat', 'get target', '');
 		return null;
 	}
 
 	public set link_target(value: string) {
-		console.log('not implemented: TextFormat link_target');
+		// @todo
+		Debug.throwPIR('playerglobals/text/TextFormat', 'get target', '');
 	}
 
 	public get align(): string {

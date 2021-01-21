@@ -1,23 +1,7 @@
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import { EventDispatcher } from '../events/EventDispatcher';
-import { notImplemented, release } from '@awayfl/swf-loader';
 import { GameInputControl } from './GameInputControl';
 import { GenericVector, ByteArray } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 
 // Class: GameInputDevice
 export class GameInputDevice extends EventDispatcher {
@@ -42,59 +26,78 @@ export class GameInputDevice extends EventDispatcher {
 	// _enabled: boolean;
 	// _id: string;
 	// _name: string;
-	get numControls(): number /*int*/ {
-		release || notImplemented('public flash.ui.GameInputDevice::get numControls'); return;
-		// return this._numControls;
+	public get numControls(): number /*int*/ {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputDevice', 'get numControls', '');
+		return 0;
 	}
 
-	get sampleInterval(): number /*int*/ {
-		release || notImplemented('public flash.ui.GameInputDevice::get sampleInterval'); return;
+	public get sampleInterval(): number /*int*/ {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputDevice', 'get sampleInterval', '');
+		return;
 		// return this._sampleInterval;
 	}
 
-	set sampleInterval(val: number /*int*/) {
+	public set sampleInterval(val: number /*int*/) {
 		val = val | 0;
-		release || notImplemented('public flash.ui.GameInputDevice::set sampleInterval'); return;
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputDevice', 'set sampleInterval', '');
 		// this._sampleInterval = val;
 	}
 
-	get enabled(): boolean {
-		release || notImplemented('public flash.ui.GameInputDevice::get enabled'); return;
+	public get enabled(): boolean {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputDevice', 'get enabled', '');
 		// return this._enabled;
+		return true;
 	}
 
-	set enabled(val: boolean) {
+	public set enabled(val: boolean) {
 		val = !!val;
-		release || notImplemented('public flash.ui.GameInputDevice::set enabled'); return;
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputDevice', 'set enabled', '');
 		// this._enabled = val;
 	}
 
-	get id(): string {
-		release || notImplemented('public flash.ui.GameInputDevice::get id'); return;
+	public get id(): string {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputDevice', 'get id', '');
+		return '';
 		// return this._id;
 	}
 
-	get name(): string {
-		release || notImplemented('public flash.ui.GameInputDevice::get name'); return;
+	public get name(): string {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputDevice', 'get name', '');
+		return '';
 		// return this._name;
 	}
 
-	getControlAt(i: number /*int*/): GameInputControl {
+	public getControlAt(i: number /*int*/): GameInputControl {
 		i = i | 0;
-		release || notImplemented('public flash.ui.GameInputDevice::getControlAt'); return;
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputDevice', 'getControlAt', '');
+		return null;
 	}
 
-	startCachingSamples(numSamples: number /*int*/, controls: GenericVector): void {
-		numSamples = numSamples | 0; controls = controls;
-		release || notImplemented('public flash.ui.GameInputDevice::startCachingSamples'); return;
+	public startCachingSamples(numSamples: number /*int*/, controls: GenericVector): void {
+		numSamples = numSamples | 0;
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputDevice', 'startCachingSamples', '');
+		return;
 	}
 
-	stopCachingSamples(): void {
-		release || notImplemented('public flash.ui.GameInputDevice::stopCachingSamples'); return;
+	public stopCachingSamples(): void {
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputDevice', 'stopCachingSamples', '');
+		return;
 	}
 
-	getCachedSamples(data: ByteArray, append: boolean = false): number /*int*/ {
-		data = data; append = !!append;
-		release || notImplemented('public flash.ui.GameInputDevice::getCachedSamples'); return;
+	public getCachedSamples(data: ByteArray, append: boolean = false): number /*int*/ {
+		append = !!append;
+		// @todo
+		Debug.throwPIR('playerglobals/ui/GameInputDevice', 'getCachedSamples', '');
+		return 0;
 	}
 }

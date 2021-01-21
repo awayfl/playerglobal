@@ -1,5 +1,6 @@
 
 import { ASObject } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 
 export class CSMSettings extends ASObject {
 
@@ -17,7 +18,8 @@ export class CSMSettings extends ASObject {
 		this.fontSize = +fontSize;
 		this.insideCutoff = +insideCutoff;
 		this.outsideCutoff = +outsideCutoff;
-		console.warn('[CSMSettings] not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/CSMSettings', 'constructor', '');
 	}
 
 }

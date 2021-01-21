@@ -1,11 +1,11 @@
 import { Sprite as AwaySprite, DisplayObjectContainer as AwayDisplayObjectContainer,
 	DisplayObject as AwayDisplayObject, MovieClip as AwayMovieClip,
-	FrameScriptManager, MovieClip, MouseManager, Timeline,
+	FrameScriptManager, MovieClip, Timeline,
 	IDisplayObjectAdapter,
 	MouseEvent } from '@awayjs/scene';
 import { DisplayObjectContainer } from './DisplayObjectContainer';
 import { DisplayObject } from './DisplayObject';
-import { Rectangle, Point } from '@awayjs/core';
+import { Rectangle, Point, Debug } from '@awayjs/core';
 import { Graphics } from './Graphics';
 import { IVirtualSceneGraphItem } from './IVirtualSceneGraphItem';
 import { constructClassFromSymbol } from '@awayfl/avm2';
@@ -487,14 +487,14 @@ export class Sprite extends DisplayObjectContainer {
 	 *   Note: This property does not affect HTML content in an HTMLControl object (in Adobe AIR).
 	 */
 	public get soundTransform(): any {
-		// todo: any = SoundTransform
-		console.log('soundTransform not implemented yet in flash/Sprite');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Sprite', 'get soundTransform', '');
 		return null;
 	}
 
 	public set soundTransform(sndTransform: any) {
-		//todo
-		console.log('soundTransform not implemented yet in flash/Sprite');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Sprite', 'set soundTransform', '');
 	}
 
 	/**
@@ -514,15 +514,11 @@ export class Sprite extends DisplayObjectContainer {
 	 * to false.
 	 */
 	public get useHandCursor(): boolean {
-		//todo
-		//console.log("useHandCursor not implemented yet in flash/Sprite");
 		return (<AwayMovieClip> this.adaptee)._useHandCursor;
 	}
 
 	public set useHandCursor(value: boolean) {
-		//todo
 		(<AwayMovieClip> this.adaptee)._useHandCursor = value;
-		//console.log("useHandCursor not implemented yet in flash/Sprite");
 	}
 
 	/**
@@ -562,7 +558,8 @@ export class Sprite extends DisplayObjectContainer {
 			//window.addEventListener("touchend", this.stopDragDelegate);
 			const avmStage = AVMStage.instance();
 			avmStage.mousePicker.dragEntity = this.adaptee;
-			avmStage.mouseManager.startDragObject(this.adaptee.getAbstraction<PickEntity>(avmStage.mousePicker.pickGroup).pickingCollision);
+			avmStage.mouseManager.startDragObject(
+				this.adaptee.getAbstraction<PickEntity>(avmStage.mousePicker.pickGroup).pickingCollision);
 			avmStage.view.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.dragListenerDelegate);
 		}
 	}
@@ -623,8 +620,8 @@ export class Sprite extends DisplayObjectContainer {
 	 *   rectangle for the Sprite.
 	 */
 	public startTouchDrag(touchPonumberID: number, lockCenter: boolean = false, bounds: Rectangle = null) {
-		//todo
-		console.log('startTouchDrag not implemented yet in flash/Sprite');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Sprite', 'startTouchDrag', '');
 	}
 
 	/**
@@ -657,8 +654,8 @@ export class Sprite extends DisplayObjectContainer {
 	 * @param	touchPonumberID	The numbereger assigned to the touch ponumber in the startTouchDrag method.
 	 */
 	public stopTouchDrag(touchPonumberID: number) {
-		//todo
-		console.log('startTouchDrag not implemented yet in flash/Sprite');
+		// @todo
+		Debug.throwPIR('playerglobals/display/Sprite', 'stopTouchDrag', '');
 	}
 
 }

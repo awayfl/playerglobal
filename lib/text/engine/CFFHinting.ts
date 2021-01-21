@@ -7,7 +7,6 @@ export class CFFHinting extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[CFFHinting] not implemented');
 	}
 
 	public static NONE: string = 'none';

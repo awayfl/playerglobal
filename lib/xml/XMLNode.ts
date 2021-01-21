@@ -1,3 +1,4 @@
+import { Debug } from '@awayjs/core';
 /**
  * The XMLNode class represents the legacy XML object
  * that was present in ActionScript 2.0 and that was renamed in ActionScript 3.0.
@@ -76,7 +77,9 @@ export class XMLNode {
 	 * Level 1 recommendation:
 	 * http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html.
 	 * The following table lists the values:4CDATA_SECTION_NODEInteger valueDefined
-	 * constant1ELEMENT_NODE3TEXT_NODE5ENTITY_REFERENCE_NODE7PROCESSING_INSTRUCTION_NODE9DOCUMENT_NODE11DOCUMENT_FRAGMENT_NODEIn Flash Player, the built-in XMLNode class only supports XMLNodeType.ELEMENT_NODE and
+	 * constant1ELEMENT_NODE3TEXT_NODE5ENTITY_REFERENCE_NODE7PROCESSING_INSTRUCTION_NODE9
+	 * DOCUMENT_NODE11DOCUMENT_FRAGMENT_NODEIn Flash Player, the built-in XMLNode class only supports 
+	 * XMLNodeType.ELEMENT_NODE and
 	 * XMLNodeType.TEXT_NODE.
 	 */
 	public nodeType: number;
@@ -116,12 +119,14 @@ export class XMLNode {
 	 *   var myColor:String = doc.firstChild.attributes.color
 	 */
 	public get attributes (): any {
-		console.log('attributes not implemented yet in flash/XMLNode');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLNode', 'get attributes', '');
 		return null;
 	}
 
 	public set attributes (value: any) {
-		console.log('attributes not implemented yet in flash/XMLNode');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLNode', 'set attributes', '');
 	}
 
 	/**
@@ -133,7 +138,8 @@ export class XMLNode {
 	 *   This property is undefined for text nodes (nodeType == 3).
 	 */
 	public get childNodes (): any[] {
-		console.log('childNodes not implemented yet in flash/XMLNode');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLNode', 'get childNodes', '');
 		return [];
 	}
 
@@ -149,7 +155,8 @@ export class XMLNode {
 	 *   (including the prefix and the local name).
 	 */
 	public get localName (): string {
-		console.log('localName not implemented yet in flash/XMLNode');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLNode', 'localName', '');
 		return '';
 	}
 
@@ -164,11 +171,13 @@ export class XMLNode {
 	 * xmlns="http://www.example.com/"). If there is a default namespace, the value of
 	 * the namespaceURI property is the value of the default namespace.
 	 * If there is no default namespace, the namespaceURI property for
-	 * that node is an empty string ("").You can use the getNamespaceForPrefix() method to identify the namespace associated with a
+	 * that node is an empty string ("").You can use the getNamespaceForPrefix() method
+	 * to identify the namespace associated with a
 	 * specific prefix. The namespaceURI property returns the prefix associated with the node name.
 	 */
 	public get namespaceURI (): string {
-		console.log('namespaceURI not implemented yet in flash/XMLNode');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLNode', 'namespaceURI', '');
 		return '';
 	}
 
@@ -182,7 +191,8 @@ export class XMLNode {
 	 *   element's name via the localName property.
 	 */
 	public get prefix (): string {
-		console.log('prefix not implemented yet in flash/XMLNode');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLNode', 'get prefix', '');
 		return '';
 	}
 
@@ -197,7 +207,8 @@ export class XMLNode {
 	 *   list of the my_xml object.
 	 */
 	public appendChild (node: XMLNode) {
-		console.log('appendChild not implemented yet in flash/XMLNode');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLNode', 'appendChild', '');
 	}
 
 	/**
@@ -209,11 +220,13 @@ export class XMLNode {
 	 * all have a value of null. If the deep parameter is set to
 	 * false, or the my_xml node has no child nodes,
 	 * firstChild and lastChild are also null.
-	 * @param	deep	A Boolean value; if set to true, the children of the specified XML object will be recursively cloned.
+	 * @param	deep	A Boolean value; if set to true, the children of the specified
+	 * XML object will be recursively cloned.
 	 * @return	An XMLNode Object.
 	 */
 	public cloneNode (deep: boolean): XMLNode {
-		console.log('cloneNode not implemented yet in flash/XMLNode');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLNode', 'cloneNode', '');
 		return null;
 	}
 
@@ -223,7 +236,8 @@ export class XMLNode {
 	 * necessary, and returns the namespace URI of the first xmlns declaration for the
 	 * given prefix.
 	 *
-	 *   If no namespace is defined for the specified prefix, the method returns null.If you specify an empty string ("") as the prefix and there is a
+	 *   If no namespace is defined for the specified prefix, the method returns null.
+	 * If you specify an empty string ("") as the prefix and there is a
 	 * default namespace defined for the node (as in xmlns="http://www.example.com/"),
 	 * the method returns that default namespace URI.
 	 * @param	prefix	The prefix for which the method returns the associated namespace.
@@ -231,7 +245,8 @@ export class XMLNode {
 	 * @refpath
 	 */
 	public getNamespaceForPrefix (prefix: string): string {
-		console.log('getNamespaceForPrefix not implemented yet in flash/XMLNode');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLNode', 'getNamespaceForPrefix', '');
 		return '';
 	}
 
@@ -250,7 +265,8 @@ export class XMLNode {
 	 * @return	The prefix associated with the specified namespace.
 	 */
 	public getPrefixForNamespace (ns: string): string {
-		console.log('getPrefixForNamespace not implemented yet in flash/XMLNode');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLNode', 'getPrefixForNamespace', '');
 		return '';
 	}
 
@@ -261,7 +277,8 @@ export class XMLNode {
 	 *   specified XMLNode object has child nodes; otherwise, false.
 	 */
 	public hasChildNodes (): boolean {
-		console.log('hasChildNodes not implemented yet in flash/XMLNode');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLNode', 'hasChildNodes', '');
 		return false;
 	}
 
@@ -274,14 +291,16 @@ export class XMLNode {
 	 * @param	before	The XMLNode object before the insertion point for the childNode.
 	 */
 	public insertBefore (node: XMLNode, before: XMLNode) {
-		console.log('insertBefore not implemented yet in flash/XMLNode');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLNode', 'insertBefore', '');
 	}
 
 	/**
 	 * Removes the specified XML object from its parent. Also deletes all descendants of the node.
 	 */
 	public removeNode () {
-		console.log('removeNode not implemented yet in flash/XMLNode');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLNode', 'removeNode', '');
 	}
 
 	/**
@@ -299,7 +318,8 @@ export class XMLNode {
 	 * @return	The string representing the XMLNode object.
 	 */
 	public toString (): string {
-		console.log('toString not implemented yet in flash/XMLNode');
+		// @todo
+		Debug.throwPIR('playerglobals/xml/XMLNode', 'toString', '');
 		return '';
 	}
 

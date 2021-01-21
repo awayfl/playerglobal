@@ -13,7 +13,6 @@ export class FontType extends ASObject {
 
 	constructor () {
 		super();
-		console.warn('[FontType] not implemented');
 	}
 
 }

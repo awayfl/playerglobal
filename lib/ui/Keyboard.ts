@@ -1,24 +1,7 @@
-import { release, notImplemented } from '@awayfl/swf-loader';
+import { Debug } from '@awayjs/core';
 import { ASObject } from '@awayfl/avm2';
 import { EventDispatcher } from '../events/EventDispatcher';
 import { KeyboardEvent } from '../events/KeyboardEvent';
-
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: Keyboard
 
 /**
    * Dispatches AS3 keyboard events to the focus event dispatcher.
@@ -379,27 +362,33 @@ export class Keyboard extends ASObject {
 	// static _hasVirtualKeyboard: boolean;
 	// static _physicalKeyboardType: string;
 	static get capsLock(): boolean {
-		release || notImplemented('public flash.ui.Keyboard::get capsLock'); return;
-		// return this._capsLock;
+		// @todo
+		Debug.throwPIR('playerglobals/ui/Keyboard', 'static get capsLock', '');
+		return false;
 	}
 
 	static get numLock(): boolean {
-		release || notImplemented('public flash.ui.Keyboard::get numLock'); return;
-		// return this._numLock;
+		// @todo
+		Debug.throwPIR('playerglobals/ui/Keyboard', 'static get numLock', '');
+		return false;
 	}
 
 	static get hasVirtualKeyboard(): boolean {
-		release || notImplemented('public flash.ui.Keyboard::get hasVirtualKeyboard'); return;
-		// return this._hasVirtualKeyboard;
+		// @todo
+		Debug.throwPIR('playerglobals/ui/Keyboard', 'static get hasVirtualKeyboard', '');
+		return false;
 	}
 
 	static get physicalKeyboardType(): string {
-		release || notImplemented('public flash.ui.Keyboard::get physicalKeyboardType'); return;
-		// return this._physicalKeyboardType;
+		// @todo
+		Debug.throwPIR('playerglobals/ui/Keyboard', 'static get physicalKeyboardType', '');
+		return '';
 	}
 
 	static isAccessible(): boolean {
-		release || notImplemented('public flash.ui.Keyboard::static isAccessible'); return;
+		// @todo
+		Debug.throwPIR('playerglobals/ui/Keyboard', 'static isAccessiblek', '');
+		return true;
 	}
 
 }

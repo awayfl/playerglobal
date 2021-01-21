@@ -9,10 +9,17 @@ import { ByteArray } from './ByteArray';
  * and are nonblocking.
  * If insufficient data is available, an <codeph class="+ topic/ph pr-d/codeph ">EOFError</codeph> exception
  * is thrown. Use the <codeph class="+ topic/ph pr-d/codeph ">IDataInput.bytesAvailable</codeph> property to determine
- * how much data is available to read.</p><p class="- topic/p ">Sign extension matters only when you read data, not when you write it. Therefore you do not need separate
+ * how much data is available to read.</p><p class="- topic/p ">
+ * Sign extension matters only when you read data, not when you write it. Therefore you do not need separate
  * write methods to work with <codeph class="+ topic/ph pr-d/codeph ">IDataInput.readUnsignedByte()</codeph> and
- * <codeph class="+ topic/ph pr-d/codeph ">IDataInput.readUnsignedShort()</codeph>. In other words:</p><ul class="- topic/ul "><li class="- topic/li ">Use <codeph class="+ topic/ph pr-d/codeph ">IDataOutput.writeByte()</codeph> with <codeph class="+ topic/ph pr-d/codeph ">IDataInput.readUnsignedByte()</codeph> and
- * <codeph class="+ topic/ph pr-d/codeph ">IDataInput.readByte()</codeph>.</li><li class="- topic/li ">Use <codeph class="+ topic/ph pr-d/codeph ">IDataOutput.writeShort()</codeph> with <codeph class="+ topic/ph pr-d/codeph ">IDataInput.readUnsignedShort()</codeph> and
+ * <codeph class="+ topic/ph pr-d/codeph ">IDataInput.readUnsignedShort()</codeph>.
+ * In other words:</p><ul class="- topic/ul "><li class="- topic/li ">Use
+ * <codeph class="+ topic/ph pr-d/codeph ">IDataOutput.writeByte()</codeph> with
+ * <codeph class="+ topic/ph pr-d/codeph ">IDataInput.readUnsignedByte()</codeph> and
+ * <codeph class="+ topic/ph pr-d/codeph ">IDataInput.readByte()</codeph>.</li>
+ * <li class="- topic/li ">Use <codeph class="+ topic/ph pr-d/codeph ">
+ * IDataOutput.writeShort()</codeph> with <codeph class="+ topic/ph pr-d/codeph ">
+ * IDataInput.readUnsignedShort()</codeph> and
  * <codeph class="+ topic/ph pr-d/codeph ">IDataInput.readShort()</codeph>.</li></ul>
  */
 export interface IDataInput

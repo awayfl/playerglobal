@@ -1,4 +1,4 @@
-import { IAssetAdapter, Point as APoint } from '@awayjs/core';
+import { Debug, IAssetAdapter, Point as APoint } from '@awayjs/core';
 import { StageManager, BitmapImage2D } from '@awayjs/stage';
 import { Rectangle } from '../geom/Rectangle';
 import { Point } from '../geom/Point';
@@ -9,7 +9,6 @@ import { IBitmapDrawable } from './IBitmapDrawable';
 import { SceneImage2D } from '@awayjs/scene';
 
 import { IBitmapDataOwner } from './IBitmapDataOwner';
-import { notImplemented } from '@awayfl/swf-loader';
 import { ASObject, ByteArray, Uint32Vector, GenericVector } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 
@@ -38,13 +37,14 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	static loadBitmap(id: string): BitmapData {
-		console.log('loadBitmap not implemented yet in flash/BitmapData');
+		// @todo
+		Debug.throwPIR('playerglobals/display/BitmapData', 'loadBitmap', '');
 		return null;
 	}
 
 	public setPixels(rect: Rectangle, inputByteArray: ByteArray): void {
-		console.log('todo: BitmapData.setPixels');
-		//this._putPixelData(rect, new Int32Array(inputByteArray.readRawBytes()));
+		// @todo
+		Debug.throwPIR('playerglobals/display/BitmapData', 'setPixels', '');
 	}
 
 	public getPixels(rect: Rectangle): ByteArray {
@@ -58,7 +58,8 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public copyPixelsToByteArray(rect: Rectangle, data: ByteArray): void {
-		console.log('copyPixelsToByteArray not implemented yet in flash/BitmapData');
+		// @todo
+		Debug.throwPIR('playerglobals/display/BitmapData', 'copyPixelsToByteArray', '');
 	}
 
 	public getVector(rect: Rectangle): Uint32Vector {
@@ -77,16 +78,19 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public setVector(rect: Rectangle, inputVector: Uint32Vector): void {
-		notImplemented('public flash.display.BitmapData::encode');
+		// @todo
+		Debug.throwPIR('playerglobals/display/BitmapData', 'setVector', '');
 	}
 
 	public histogram(hRect: Rectangle = null): GenericVector {
-		notImplemented('public flash.display.BitmapData::encode');
+		// @todo
+		Debug.throwPIR('playerglobals/display/BitmapData', 'histogram', '');
 		return;
 	}
 
 	public encode(rect: Rectangle, compressor: ASObject, byteArray: ByteArray = null): ByteArray {
-		notImplemented('public flash.display.BitmapData::encode');
+		// @todo
+		Debug.throwPIR('playerglobals/display/BitmapData', 'encode', '');
 		return;
 	}
 
@@ -99,7 +103,8 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		smoothing: boolean = false,
 		quality: string = null
 	): void {
-		notImplemented('public flash.display.BitmapData::drawWithQuality');
+		// @todo
+		Debug.throwPIR('playerglobals/display/BitmapData', 'drawWithQuality', '');
 	}
 
 	constructor(width: number | SceneImage2D | BitmapImage2D,
@@ -191,7 +196,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		destPoint: Point,
 		filter: BitmapFilter
 	): number {
-		console.log('applyFilter not implemented yet in flash/BitmapData');
+		Debug.throwPIR('playerglobals/display/BitmapData', 'applyFilter', '');
 		return 0;
 	}
 
@@ -273,13 +278,12 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public generateFilterRect(sourceRect: Rectangle, filter: BitmapFilter): Rectangle {
-		console.log('generateFilterRect not implemented yet in flash/BitmapData');
+		Debug.throwPIR('playerglobals/display/BitmapData', 'generateFilterRect', '');
 		return null;
 	}
 
 	public getColorBoundsRect(mask: number, color: number, findColor: boolean): Rectangle {
-
-		ALERT_ONCE('getColorBoundsRect:' + this._adaptee.id, 'Unsage implementation!');
+		Debug.throwPIR('playerglobals/display/BitmapData', 'getColorBoundsRect', '');
 		return  new (<SecurityDomain> this.sec).flash.geom.Rectangle(
 			this._adaptee.getColorBoundsRect(mask, color, findColor));
 	}
@@ -291,7 +295,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		secondBitmapPoint: Point = new (<SecurityDomain> this.sec).flash.geom.Point(0, 0),
 		secondAlphaThreshold: number = 0
 	): boolean {
-		console.log('hitTest not implemented yet in flash/BitmapData');
+		Debug.throwPIR('playerglobals/display/BitmapData', 'hitTest', '');
 		return false;
 	}
 
@@ -320,7 +324,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public noise(randomSeed: number, low: number, high: number, channelOptions: number, grayScale: boolean) {
-		console.log('noise not implemented yet in flash/BitmapData');
+		Debug.throwPIR('playerglobals/display/BitmapData', 'noise', '');
 	}
 
 	public paletteMap(
@@ -332,7 +336,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		blueArray: any[],
 		alphaArray: any[]
 	) {
-		console.log('paletteMap not implemented yet in flash/BitmapData');
+		Debug.throwPIR('playerglobals/display/BitmapData', 'paletteMap', '');
 	}
 
 	public perlinNoise(
@@ -346,7 +350,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		grayScale: boolean,
 		offsets: any
 	) {
-		console.log('perlinNoise not implemented yet in flash/BitmapData');
+		Debug.throwPIR('playerglobals/display/BitmapData', 'perlinNoise', '');
 	}
 
 	public pixelDissolve(
@@ -357,7 +361,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		numberOfPixels: number,
 		fillColor: number
 	): number {
-		console.log('pixelDissolve not implemented yet in flash/BitmapData');
+		Debug.throwPIR('playerglobals/display/BitmapData', 'pixelDissolve', '');
 		return 0;
 	}
 

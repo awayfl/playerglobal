@@ -12,6 +12,5 @@ export class TextDisplayMode extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[TextDisplayMode] not implemented');
 	}
 }

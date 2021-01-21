@@ -7,7 +7,6 @@ export class RenderingMode extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[RenderingMode] not implemented');
 	}
 
 	// JS -> AS Bindings

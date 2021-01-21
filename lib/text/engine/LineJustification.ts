@@ -7,7 +7,6 @@ export class LineJustification extends ASObject {
 
 	constructor() {
 		super();
-		console.warn('[LineJustification] not implemented');
 	}
 
 	// JS -> AS Bindings

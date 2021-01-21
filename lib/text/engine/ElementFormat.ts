@@ -4,6 +4,7 @@ import { FontMetrics } from './FontMetrics';
 import { TextFormat, TextFormatAlign } from '@awayjs/scene';
 import { FontLookUpMode } from '@awayjs/scene/dist/lib/text/FontLookUpMode';
 import { TextBaseline } from './TextBaseline';
+import { Debug } from '@awayjs/core';
 
 const noLogs = true;
 let elementFormatIDs = 0;
@@ -315,7 +316,8 @@ export class ElementFormat extends ASObject {
 	}
 
 	public getFontMetrics(): FontMetrics {
-		console.warn('[ElementFormat] - getFontMetrics not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/ElementFormat', 'set getFontMetrics', '');
 		return null;
 	}
 }

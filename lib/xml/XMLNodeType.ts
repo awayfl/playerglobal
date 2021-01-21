@@ -4,7 +4,8 @@
  * <codeph class="+ topic/ph pr-d/codeph ">XMLNode.nodeType</codeph>. The values are defined
  * by the NodeType enumeration in the
  * W3C DOM Level 1 recommendation:
- * <xref href="http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html" scope="external" class="- topic/xref ">http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html</xref>
+ * <xref href="http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html" scope="external"
+ * class="- topic/xref ">http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html</xref>
  * @langversion	3.0
  * @playerversion	Flash 9
  * @playerversion	Lite 4

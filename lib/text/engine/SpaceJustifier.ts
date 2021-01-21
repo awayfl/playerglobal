@@ -16,7 +16,6 @@ export class SpaceJustifier extends TextJustifier {
 		letterSpacing: boolean = false) {
 		super(locale, lineJustification);
 		this._letterSpacing = !!letterSpacing;
-		//console.log('[SpaceJustifier]');
 	}
 
 	// JS -> AS Bindings

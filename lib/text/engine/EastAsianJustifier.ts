@@ -1,4 +1,5 @@
 import { axCoerceString } from '@awayfl/avm2';
+import { Debug } from '@awayjs/core';
 import { TextJustifier } from './TextJustifier';
 
 export class EastAsianJustifier extends TextJustifier {
@@ -14,7 +15,6 @@ export class EastAsianJustifier extends TextJustifier {
 		lineJustification = axCoerceString(lineJustification);
 		justificationStyle = axCoerceString(justificationStyle);
 		super(undefined, undefined);
-		console.warn('[EastAsianJustifier] not implemented');
 	}
 
 	// JS -> AS Bindings
@@ -26,21 +26,25 @@ export class EastAsianJustifier extends TextJustifier {
 	// _justificationStyle: string;
 	// _composeTrailingIdeographicSpaces: boolean;
 	public get justificationStyle(): string {
-		console.warn('[EastAsianJustifier] - get justificationStyle not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/EastAsianJustifier', 'get justificationStyle', '');
 		return null;
 	}
 
 	public set justificationStyle(value: string) {
 		value = axCoerceString(value);
-		console.warn('[EastAsianJustifier] - set justificationStyle not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/EastAsianJustifier', 'set justificationStyle', '');
 	}
 
 	public get composeTrailingIdeographicSpaces(): boolean {
-		console.warn('[EastAsianJustifier] - get composeTrailingIdeographicSpaces not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/EastAsianJustifier', 'get composeTrailingIdeographicSpaces', '');
 		return null;
 	}
 
 	public set composeTrailingIdeographicSpaces(value: boolean) {
-		console.warn('[EastAsianJustifier] - set composeTrailingIdeographicSpaces not implemented');
+		// @todo
+		Debug.throwPIR('playerglobals/text/engine/EastAsianJustifier', 'set composeTrailingIdeographicSpaces', '');
 	}
 }
