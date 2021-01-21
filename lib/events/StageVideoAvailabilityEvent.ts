@@ -1,4 +1,4 @@
-import { Event } from '../../events/Event';
+import { Event } from './Event';
 import { axCoerceString } from '@awayjs/graphics';
 
 export class StageVideoAvailabilityEvent extends Event {

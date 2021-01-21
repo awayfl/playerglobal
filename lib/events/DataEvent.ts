@@ -1,4 +1,4 @@
-import { TextEvent } from '../../events/TextEvent';
+import { TextEvent } from './TextEvent';
 export class DataEvent extends TextEvent {
 
 	static classInitializer: any = null;

@@ -1,19 +1,20 @@
-import { Event } from '../../events/Event';
-export class SyncEvent extends Event {
+import { ByteArray } from '@awayfl/avm2';
+import { Event } from './Event';
+export class NetFilterEvent extends Event {
 
 	static classInitializer: any = null;
 
 	static classSymbols: string [] = null;
 	static instanceSymbols: string [] = null;
-	changeList: any[];
+
+	header: ByteArray;
+	data: ByteArray;
 
 	constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-		changeList: any [] = null) {
+		header: ByteArray = null, data: ByteArray = null) {
 		super(type, bubbles, cancelable);
 		// TODO: coerce
-		this.changeList = changeList;
+		this.header = header;
+		this.data = data;
 	}
-
-	// JS -> AS Bindings
-	static SYNC: string = 'sync';
 }

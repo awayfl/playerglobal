@@ -1,5 +1,5 @@
-import { InteractiveObject } from '../../display/InteractiveObject';
-import { Event } from '../../events/Event';
+import { InteractiveObject } from '../display/InteractiveObject';
+import { Event } from './Event';
 
 export class ContextMenuEvent extends Event {
 

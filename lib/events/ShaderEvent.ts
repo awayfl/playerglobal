@@ -1,5 +1,5 @@
-import { Event } from '../../events/Event';
-import { BitmapData } from '../../display/BitmapData';
+import { Event } from './Event';
+import { BitmapData } from '../display/BitmapData';
 import { ByteArray } from '@awayfl/avm2';
 export class ShaderEvent extends Event {
 
@@ -10,7 +10,7 @@ export class ShaderEvent extends Event {
 
 	constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
 		bitmap: BitmapData = null, array: ByteArray = null,
-		vector: ASVector<any> = null) {
+		vector: any /*Vector>*/ = null) {
 		super(type, bubbles, cancelable);
 	}
 

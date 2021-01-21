@@ -1,7 +1,7 @@
+import { Event } from './Event';
+import { axCoerceString } from '@awayjs/graphics';
 
-import { axCoerceString } from '@awayfl/avm2';
-import { Event } from '../../events/Event';
-export class VideoEvent extends Event {
+export class StageVideoEvent extends Event {
 
 	static classInitializer: any = null;
 
@@ -9,11 +9,13 @@ export class VideoEvent extends Event {
 	static instanceSymbols: string [] = null;
 
 	status: string;
+	colorSpace: string;
 
 	constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-		status: string = null) {
+		status: string = null, colorSpace: string = null) {
 		super(type, bubbles, cancelable);
 		this.status = axCoerceString(status);
+		this.colorSpace = axCoerceString(colorSpace);
 	}
 
 	// JS -> AS Bindings

@@ -1,4 +1,4 @@
-import { ErrorEvent } from '../../events/ErrorEvent';
+import { ErrorEvent } from './ErrorEvent';
 
 export class UncaughtErrorEvent extends ErrorEvent {
 

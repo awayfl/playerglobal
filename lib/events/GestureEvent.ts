@@ -1,5 +1,5 @@
 import { axCoerceString } from '@awayjs/graphics';
-import { Event } from '../../events/Event';
+import { Event } from './Event';
 export class GestureEvent extends Event {
 
 	static classInitializer: any = null;

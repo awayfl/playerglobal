@@ -25,6 +25,14 @@ import { SimpleButton } from './display/SimpleButton';
 import { Sprite } from './display/Sprite';
 import { Stage } from './display/Stage';
 
+import { EOFError } from './errors/EOFError';
+import { IllegalOperationError } from './errors/IllegalOperationError';
+import { InvalidSWFError } from './errors/InvalidSWFError';
+import { IOError } from './errors/IOError';
+import { MemoryError } from './errors/MemoryError';
+import { ScriptTimeoutError } from './errors/ScriptTimeoutError';
+import { StackOverflowError } from './errors/StackOverflowError';
+
 import { ColorTransform } from './geom/ColorTransform';
 import { Matrix } from './geom/Matrix';
 import { Matrix3D } from './geom/Matrix3D';
@@ -35,19 +43,48 @@ import { Vector3D } from './geom/Vector3D';
 
 import { LocaleID } from './globalization/LocaleID';
 
+import { AccelerometerEvent } from './events/AccelerometerEvent';
+import { ActivityEvent } from './events/ActivityEvent';
+import { AsyncErrorEvent } from './events/AsyncErrorEvent';
+import { ContextMenuEvent } from './events/ContextMenuEvent';
+import { DataEvent } from './events/DataEvent';
+import { ErrorEvent } from './events/ErrorEvent';
 import { EventDispatcher } from './events/EventDispatcher';
 import { Event } from './events/Event';
-import { TimerEvent } from './events/TimerEvent';
-import { ProgressEvent } from './events/ProgressEvent';
+import { EventPhase } from './events/EventPhase';
+import { FocusEvent } from './events/FocusEvent';
+import { FullScreenEvent } from './events/FullScreenEvent';
+import { GameInputEvent } from './events/GameInputEvent';
+import { GeolocationEvent } from './events/GeolocationEvent';
+import { GestureEvent } from './events/GestureEvent';
+import { GesturePhase } from './events/GesturePhase';
+import { HTTPStatusEvent } from './events/HTTPStatusEvent';
+import { IMEEvent } from './events/IMEEvent';
 import { IOErrorEvent } from './events/IOErrorEvent';
-import { ErrorEvent } from './events/ErrorEvent';
-import { TextEvent } from './events/TextEvent';
 import { KeyboardEvent } from './events/KeyboardEvent';
 import { MouseEvent } from './events/MouseEvent';
-import { TouchEvent } from './events/TouchEvent';
-import { GameInputEvent } from './events/GameInputEvent';
+import { NetDataEvent } from './events/NetDataEvent';
 import { NetStatusEvent } from './events/NetStatusEvent';
-import { HTTPStatusEvent } from './events/HTTPStatusEvent';
+import { OutputProgressEvent } from './events/OutputProgressEvent';
+import { PressAndTapGestureEvent } from './events/PressAndTapGestureEvent';
+import { ProgressEvent } from './events/ProgressEvent';
+import { SampleDataEvent } from './events/SampleDataEvent';
+import { ShaderEvent } from './events/ShaderEvent';
+import { SoftKeyboardEvent } from './events/SoftKeyboardEvent';
+import { SoftKeyboardTrigger } from './events/SoftKeyboardTrigger';
+import { StageVideoAvailabilityEvent } from './events/StageVideoAvailabilityEvent';
+import { StageVideoEvent } from './events/StageVideoEvent';
+import { StatusEvent } from './events/StatusEvent';
+import { SyncEvent } from './events/SyncEvent';
+import { TextEvent } from './events/TextEvent';
+import { ThrottleEvent } from './events/ThrottleEvent';
+import { ThrottleType } from './events/ThrottleType';
+import { TimerEvent } from './events/TimerEvent';
+import { TouchEvent } from './events/TouchEvent';
+import { TransformGestureEvent } from './events/TransformGestureEvent';
+import { UncaughtErrorEvent } from './events/UncaughtErrorEvent';
+import { UncaughtErrorEvents } from './events/UncaughtErrorEvents';
+import { VideoEvent } from './events/VideoEvent';
 
 import { ExternalInterface } from './external/ExternalInterface';
 
@@ -253,27 +290,27 @@ export function initLink() {
 	// flash.display3D.textures
 
 	//M('flash.errors.DRMManagerError', DRMManagerError);//AIR
-	//M('flash.errors.EOFError', EOFError);
-	//M('flash.errors.IllegalOpperationError', IllegalOpperationError);
-	//M('flash.errors.InvalidSWFError', InvalidSWFError);
-	//M('flash.errors.IOError', IOError);
-	//M('flash.errors.MemoryError', MemoryError);
+	M('flash.errors.EOFError', EOFError);
+	M('flash.errors.IllegalOperationError', IllegalOperationError);
+	M('flash.errors.InvalidSWFError', InvalidSWFError);
+	M('flash.errors.IOError', IOError);
+	M('flash.errors.MemoryError', MemoryError);
 	//M('flash.errors.PermissionError', PermissionError);//AIR
-	//M('flash.errors.ScriptTimeoutError', ScriptTimeoutError);
+	M('flash.errors.ScriptTimeoutError', ScriptTimeoutError);
 	//M('flash.errors.SQLError', SQLError);//AIR
 	//M('flash.errors.SQLErrorOpperation', SQLErrorOpperation);//AIR
-	//M('flash.errors.StckOverflowError', StckOverflowError);
+	M('flash.errors.StackOverflowError', StackOverflowError);
 
-	//M('flash.events.AccelerometerEvent', AccelerometerEvent);
-	//M('flash.events.ActivityEvent', ActivityEvent);
-	//M('flash.events.AsyncErrorEvent', AsyncErrorEvent);
+	M('flash.events.AccelerometerEvent', AccelerometerEvent);
+	M('flash.events.ActivityEvent', ActivityEvent);
+	M('flash.events.AsyncErrorEvent', AsyncErrorEvent);
 	//M('flash.events.AudioOutputChangeEvent', AudioOutputChangeEvent);
 	//M('flash.events.AVDictionaryDataEvent', AVDictionaryDataEvent);
 	//M('flash.events.AVHTTPStatusEvent', AVHTTPStatusEvent);
 	//M('flash.events.AVPauseAtPeriodEvent', AVPauseAtPeriodEvent);
 	//M('flash.events.BrowserInvokeEvent', BrowserInvokeEvent); //AIR
-	//M('flash.events.ContextMenuEvent', ContextMenuEvent);
-	//M('flash.events.DataEvent', DataEvent);
+	M('flash.events.ContextMenuEvent', ContextMenuEvent);
+	M('flash.events.DataEvent', DataEvent);
 	//M('flash.events.DatagramSocketDataEvent', DatagramSocketDataEvent);//AIR
 	//M('flash.events.DeviceRotationEvent', DeviceRotationEvent);//AIR
 	//M('flash.events.DNSResolveEvent', DNSResolveEvent);//AIR
@@ -291,17 +328,17 @@ export function initLink() {
 	M('flash.events.ErrorEvent', ErrorEvent);
 	M('flash.events.Event', Event);
 	M('flash.events.EventDispatcher', EventDispatcher);
-	//M('flash.events.EventPhase', EventPhase);
+	M('flash.events.EventPhase', EventPhase);
 	//M('flash.events.FileListEvent', FileListEvent);//AIR
-	//M('flash.events.FocusEvent', FocusEvent);
-	//M('flash.events.FullScreenEvent', FullScreenEvent);
+	M('flash.events.FocusEvent', FocusEvent);
+	M('flash.events.FullScreenEvent', FullScreenEvent);
 	M('flash.events.GameInputEvent', GameInputEvent);//AIR
-	//M('flash.events.GeolocationEvent', GeolocationEvent);//AIR
-	//M('flash.events.GestureEvent', GestureEvent);
-	//M('flash.events.GesturePhase', GesturePhase);
+	M('flash.events.GeolocationEvent', GeolocationEvent);//AIR
+	M('flash.events.GestureEvent', GestureEvent);
+	M('flash.events.GesturePhase', GesturePhase);
 	//M('flash.events.HTMLUncaughtScriptExceptionEvent', HTMLUncaughtScriptExceptionEvent);
 	M('flash.events.HTTPStatusEvent', HTTPStatusEvent);
-	//M('flash.events.IMEEvent', IMEEvent);
+	M('flash.events.IMEEvent', IMEEvent);
 	//M('flash.events.InvokeEvent', InvokeEvent);//AIR
 	M('flash.events.IOErrorEvent', IOErrorEvent);
 	M('flash.events.KeyboardEvent', KeyboardEvent);
@@ -312,39 +349,39 @@ export function initLink() {
 	//M('flash.events.NativeProcessExitEvent', NativeProcessExitEvent);//AIR
 	//M('flash.events.NativeWindowBoundsEvent', NativeWindowBoundsEvent);//AIR
 	//M('flash.events.NativeWindowDisplayStateEvent', Nativ
-	//M('flash.events.NetDataEvent', NetDataEvent);eWindowDisplayStateEvent);//AIR
+	M('flash.events.NetDataEvent', NetDataEvent);//AIR
 	//M('flash.events.NetMonitorEvent', NetMonitorEvent);
 	M('flash.events.NetStatusEvent', NetStatusEvent);
-	//M('flash.events.OutputProgressEvent', OutputProgressEvent);//AIR
+	M('flash.events.OutputProgressEvent', OutputProgressEvent);//AIR
 	//M('flash.events.PermissionEvent', PermissionEvent);
-	//M('flash.events.PressAndTabGestureEvent', PressAndTabGestureEvent);
+	M('flash.events.PressAndTabGestureEvent', PressAndTapGestureEvent);
 	M('flash.events.ProgressEvent', ProgressEvent);
 	//M('flash.events.RemoteNotificationEvent', RemoteNotificationEvent);//AIR
-	//M('flash.events.SampleDataEvent', SampleDataEvent);
+	M('flash.events.SampleDataEvent', SampleDataEvent);
 	//M('flash.events.ScreenMouseEvent', ScreenMouseEvent);//AIR
 	//M('flash.events.SecurityErrorEvent', SecurityErrorEvent);
 	//M('flash.events.ServerSocketConnectEvent', ServerSocketConnectEvent);//AIR
-	//M('flash.events.ShaderEvent', ShaderEvent);
-	//M('flash.events.SoftKeyboardEvent', SoftKeyboardEvent);
-	//M('flash.events.SoftKeyboardTrigger', SoftKeyboardTrigger);
+	M('flash.events.ShaderEvent', ShaderEvent);
+	M('flash.events.SoftKeyboardEvent', SoftKeyboardEvent);
+	M('flash.events.SoftKeyboardTrigger', SoftKeyboardTrigger);
 	//M('flash.events.SQLEvent', SQLEvent);//AIR
 	//M('flash.events.SQLUpdateEvent', SQLUpdateEvent);//AIR
 	//M('flash.events.StageOrientationEvent', StageOrientationEvent);//AIR
-	//M('flash.events.StageVideoAvailabilityEvent', StageVideoAvailabilityEvent);
-	//M('flash.events.StageVideoEvent', StageVideoEvent);
-	//M('flash.events.StatusEvent', StatusEvent);
+	M('flash.events.StageVideoAvailabilityEvent', StageVideoAvailabilityEvent);
+	M('flash.events.StageVideoEvent', StageVideoEvent);
+	M('flash.events.StatusEvent', StatusEvent);
 	//M('flash.events.StorageVolumeChangeEvent', StorageVolumeChangeEvent);//AIR
-	//M('flash.events.SyncEvent', SyncEvent);
+	M('flash.events.SyncEvent', SyncEvent);
 	M('flash.events.TextEvent', TextEvent);
-	//M('flash.events.ThrottleEvent', ThrottleEvent);
-	//M('flash.events.ThrottleType', ThrottleType);
+	M('flash.events.ThrottleEvent', ThrottleEvent);
+	M('flash.events.ThrottleType', ThrottleType);
 	M('flash.events.TimerEvent', TimerEvent);
 	M('flash.events.TouchEvent', TouchEvent);
 	//M('flash.events.TouchEventIntent', TouchEventIntent);//AIR
-	//M('flash.events.TransformGestureEvent', TransformGestureEvent);
-	//M('flash.events.UncaughtErrorEvent', UncaughtErrorEvent);
-	//M('flash.events.UncaughtErrorEvents', UncaughtErrorEvents);
-	//M('flash.events.VideoEvent', VideoEvent);
+	M('flash.events.TransformGestureEvent', TransformGestureEvent);
+	M('flash.events.UncaughtErrorEvent', UncaughtErrorEvent);
+	M('flash.events.UncaughtErrorEvents', UncaughtErrorEvents);
+	M('flash.events.VideoEvent', VideoEvent);
 	//M('flash.events.VideoTextureEvent', VideoTextureEvent);
 	//M('flash.events.VsyncStateChangeAvailabilityEvent', VsyncStateChangeAvailabilityEvent);//AIR
 

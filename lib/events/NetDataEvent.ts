@@ -1,4 +1,4 @@
-import { Event } from '../../events/Event';
+import { Event } from './Event';
 import { ASObject } from '@awayfl/avm2';
 export class NetDataEvent extends Event {
 

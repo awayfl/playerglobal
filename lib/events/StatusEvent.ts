@@ -1,5 +1,5 @@
 import { axCoerceString } from '@awayfl/avm2';
-import { Event } from '../../events/Event';
+import { Event } from './Event';
 
 export class StatusEvent extends Event {
 

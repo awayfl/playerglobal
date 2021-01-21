@@ -1,19 +1,20 @@
-import { Event } from '../../events/Event';
-export class ActivityEvent extends Event {
+import { Event } from './Event';
+export class NetMonitorEvent extends Event {
 
 	static classInitializer: any = null;
 
 	static classSymbols: string [] = null;
 	static instanceSymbols: string [] = null;
 
-	activating: boolean;
+	netStream: NetStream;
 
 	constructor(type: string, bubbles: boolean = false, cancelable: boolean = false,
-		activating: boolean = false) {
+		netStream: NetStream = null) {
 		super(type, bubbles, cancelable);
-		this.activating = !!activating;
+		// TODO: coerce
+		this.netStream = netStream;
 	}
 
 	// JS -> AS Bindings
-	static ACTIVITY: string = 'activity';
+	static NET_STREAM_CREATE: string = 'netStreamCreate';
 }

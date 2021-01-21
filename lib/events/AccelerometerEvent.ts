@@ -1,4 +1,4 @@
-import { Event } from '../../events/Event';
+import { Event } from './Event';
 export class AccelerometerEvent extends Event {
 
 	static classInitializer: any = null;

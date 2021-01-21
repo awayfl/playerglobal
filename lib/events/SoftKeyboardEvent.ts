@@ -1,5 +1,5 @@
-import { Event } from '../../events/Event';
-import { InteractiveObject } from '../../display/InteractiveObject';
+import { Event } from './Event';
+import { InteractiveObject } from '../display/InteractiveObject';
 export class SoftKeyboardEvent extends Event {
 
 	static classInitializer: any = null;

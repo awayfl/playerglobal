@@ -1,6 +1,6 @@
 import { axCoerceString } from '@awayjs/graphics';
 
-import { Event } from '../../events/Event';
+import { Event } from './Event';
 export class ThrottleEvent extends Event {
 
 	static classInitializer: any = null;

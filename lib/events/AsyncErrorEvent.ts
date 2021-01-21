@@ -1,6 +1,6 @@
 import { ASError } from '@awayfl/avm2';
-import { ErrorEvent } from '../../events/ErrorEvent';
-import { Event } from '../../events/Event';
+import { ErrorEvent } from './ErrorEvent';
+import { Event } from './Event';
 export class AsyncErrorEvent extends ErrorEvent {
 
 	static ASYNC_ERROR: string = 'asyncError';
