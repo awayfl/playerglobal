@@ -1,51 +1,33 @@
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: Geolocation
-module Shumway.AVMX.AS.flash.sensors {
-	import notImplemented = Shumway.Debug.notImplemented;
-	export class Geolocation extends flash.events.EventDispatcher {
+import { EventDispatcher } from '../../events/EventDispatcher';
 
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
+export class Geolocation extends EventDispatcher {
 
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
+	// Called whenever the class is initialized.
+	static classInitializer: any = null;
 
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // [];
+	// List of static symbols to link.
+	static classSymbols: string[] = null; // [];
 
-		constructor () {
-			super();
-		}
+	// List of instance symbols to link.
+	static instanceSymbols: string[] = null; // [];
 
-		// static _isSupported: boolean;
-		get isSupported(): boolean {
-			release || notImplemented('public flash.sensors.Geolocation::get isSupported'); return;
-			// return this._isSupported;
-		}
+	constructor() {
+		super();
+	}
 
-		// _muted: boolean;
-		get muted(): boolean {
-			release || notImplemented('public flash.sensors.Geolocation::get muted'); return;
-			// return this._muted;
-		}
+	// static _isSupported: boolean;
+	get isSupported(): boolean {
+		return false;
+		// return this._isSupported;
+	}
 
-		setRequestedUpdateInterval(interval: number): void {
-			interval = +interval;
-			release || notImplemented('public flash.sensors.Geolocation::setRequestedUpdateInterval'); return;
-		}
+	// _muted: boolean;
+	get muted(): boolean {
+		return false;
+		// return this._muted;
+	}
+
+	setRequestedUpdateInterval(interval: number): void {
+		interval = +interval;
 	}
 }

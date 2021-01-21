@@ -1,23 +1,6 @@
 import { MapObject, ExternalInterfaceService } from '@awayfl/swf-loader';
-import { ASObject, ASXML, Errors, AXFunction, axCoerceString, AXXMLClass, AXObject, NamespaceType, Multiname } from '@awayfl/avm2';
-
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: ExternalInterface
-
+import { ASObject, ASXML, Errors, AXFunction, axCoerceString,
+	AXXMLClass, AXObject, NamespaceType, Multiname } from '@awayfl/avm2';
 export class ExternalInterface extends ASObject {
 
 	static classInitializer: any = null;
@@ -80,7 +63,7 @@ export class ExternalInterface extends ASObject {
 			if (typeof args !== 'undefined') {
 				if (Array.isArray(args)) {
 					const wrappedArgs = [];
-					for (var i = 0; i < args.length; i++) {
+					for (let i = 0; i < args.length; i++) {
 						const arg = args[i];
 						// Objects have to be converted into proper AS objects in the current security domain.
 						if (typeof arg === 'object' && arg) {
@@ -102,7 +85,7 @@ export class ExternalInterface extends ASObject {
 				returnAsJS = returnTypeAttr && (<any>returnTypeAttr)._value == 'javascript';
 				args = [];
 				if (xml._children) {
-					for (var i = 0; i < xml._children.length; i++) {
+					for (let i = 0; i < xml._children.length; i++) {
 						const x = xml._children[i];
 						args.push(this.convertFromXML(x));
 					}
@@ -196,16 +179,16 @@ export class ExternalInterface extends ASObject {
 				// Looks like length is used to detect array. (obj is Array) is better?
 				if (obj.hasOwnProperty('$Bglength')) {
 					const len = obj.$Bglength;
-					for (var i = 0; i < len; i++) {
-						var entry = this.convertToXMLString(obj.axGetNumericProperty(i));
+					for (let i = 0; i < len; i++) {
+						const entry = this.convertToXMLString(obj.axGetNumericProperty(i));
 						result.push('<property id="' + i + '">' + entry + '</property>');
 					}
 					return '<array>' + result.join('') + '</array>';
 				}
 				var keys = obj.axGetEnumerableKeys();
-				for (var i = 0; i < keys.length; i++) {
+				for (let i = 0; i < keys.length; i++) {
 					const key = keys[i];
-					var entry = this.convertToXMLString(obj.axGetPublicProperty(key));
+					const entry = this.convertToXMLString(obj.axGetPublicProperty(key));
 					result.push('<property id="' + key + '">' + entry + '</property>');
 				}
 				return '<object>' + result.join('') + '</object>';
@@ -258,7 +241,7 @@ export class ExternalInterface extends ASObject {
 		if (this.sec.AXArray.axIsInstanceOf(obj)) {
 			var parts: string[] = [];
 			const arr = obj.value;
-			for (var i = 0; i < arr.length; i++) {
+			for (let i = 0; i < arr.length; i++) {
 				parts.push(this.convertToJSString(arr[i]));
 			}
 			return '[' + parts.join(',') + ']';
@@ -272,7 +255,7 @@ export class ExternalInterface extends ASObject {
 		if (typeof obj === 'object' && obj !== null) {
 			var parts: string[] = [];
 			const keys = obj.axGetEnumerableKeys();
-			for (var i = 0; i < keys.length; i++) {
+			for (let i = 0; i < keys.length; i++) {
 				const key = keys[i];
 				parts.push(key + ':' + this.convertToJSString(obj.axGetPublicProperty(key)));
 			}

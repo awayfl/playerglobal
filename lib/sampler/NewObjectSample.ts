@@ -1,7 +1,8 @@
 import { Sample } from './Sample';
 
 /**
- * The NewObjectSample class represents objects that are created within a <codeph class="+ topic/ph pr-d/codeph ">getSamples()</codeph> stream.
+ * The NewObjectSample class represents objects that are created within a
+ * <codeph class="+ topic/ph pr-d/codeph ">getSamples()</codeph> stream.
  * For Flash Player debugger version only.
  */
 export class NewObjectSample extends Sample {

@@ -619,9 +619,13 @@ export class Stage extends DisplayObjectContainer {
 	 *
 	 *   When this property is set to a valid rectangle and the displayState property is set to full-screen mode,
 	 * the Flash runtime scales the specified area. The actual Stage size in pixels within ActionScript does not change.
-	 * The Flash runtime enforces a minimum limit for the size of the rectangle to accommodate the standard "Press Esc to exit full-screen mode" message.
-	 * This limit is usually around 260 by 30 pixels but can vary on platform and Flash runtime version.This property can only be set when the Flash runtime is not in full-screen mode.
-	 * To use this property correctly, set this property first, then set the displayState property to full-screen mode, as shown in the code examples.To enable scaling, set the fullScreenSourceRect property to a rectangle object:
+	 * The Flash runtime enforces a minimum limit for the size of the rectangle to accommodate the standard
+	 * "Press Esc to exit full-screen mode" message.
+	 * This limit is usually around 260 by 30 pixels but can vary on platform and Flash runtime version.
+	 * This property can only be set when the Flash runtime is not in full-screen mode.
+	 * To use this property correctly, set this property first,
+	 * then set the displayState property to full-screen mode, as shown in the code examples.To enable scaling,
+	 * set the fullScreenSourceRect property to a rectangle object:
 	 * <codeblock>
 	 *
 	 *   // valid, will enable hardware scaling
@@ -634,7 +638,8 @@ export class Stage extends DisplayObjectContainer {
 	 *   stage.fullScreenSourceRect = null;
 	 *
 	 *   </codeblock>
-	 * The end user also can select within Flash Player Display Settings to turn off hardware scaling, which is enabled by default.
+	 * The end user also can select within Flash Player Display Settings to turn off hardware scaling,
+	 * which is enabled by default.
 	 * For more information, see www.adobe.com/go/display_settings.
 	 */
 	public get fullScreenSourceRect (): Rectangle {

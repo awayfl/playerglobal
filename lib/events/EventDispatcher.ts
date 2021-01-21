@@ -8,7 +8,6 @@ import { assert } from '@awayjs/graphics';
 import { SecurityDomain } from '../SecurityDomain';
 
 import { MouseEvent } from '../events/MouseEvent';
-import { KeyboardEvent } from '../events/KeyboardEvent';
 /**
 	 * [broadcast event] Dispatched when the Flash Player or AIR application operating
 	 * loses system focus and is becoming inactive.
@@ -23,7 +22,7 @@ import { KeyboardEvent } from '../events/KeyboardEvent';
 
 export class EventDispatcher extends EventDispatcherBase {
 
-	public static eventsThatBubbleInAwayJS: string[]=[
+	public static eventsThatBubbleInAwayJS: string[] = [
 		MouseEvent.MOUSE_WHEEL,
 		MouseEvent.MOUSE_UP,
 		MouseEvent.MOUSE_OVER,
@@ -158,7 +157,8 @@ export class EventDispatcher extends EventDispatcherBase {
 			// this means that this is a event-type, that is not yet supported
 			// we do not need to register it on superclass
 			// for now we output a warning
-			//console.log("Warning - EventDispatcher:  trying to listen for unsupported event: : "+this.eventMappingDummys[type]);
+			//console.log("Warning - EventDispatcher:  trying to listen for unsupported event: :
+			//"+this.eventMappingDummys[type]);
 			return;
 		} else if (this.eventMapping.hasOwnProperty(type)) {
 
@@ -168,12 +168,10 @@ export class EventDispatcher extends EventDispatcherBase {
 			super.addEventListener(type, listener, useCapture, priority, useWeakReference);
 
 			// call the provided "addListener" function
-			this.eventMapping[type].addListener.call(this, this.eventMapping[type].adaptedType, this.eventMapping[type].callback, listener);
+			this.eventMapping[type].addListener.call(
+				this, this.eventMapping[type].adaptedType, this.eventMapping[type].callback, listener);
 			return;
-		}
-
-		//if(this.eventMappingExtern.hasOwnProperty(type)){
-		else {
+		} else {
 			// this is a external eventMapping
 			// this means that we do not need to create any mapping, and will manually dispatch the event
 			// we still need to register it on superclass, so it will work if we dispatch it manually
@@ -199,7 +197,8 @@ export class EventDispatcher extends EventDispatcherBase {
 		super.removeEventListener(type, listener);
 		if (this.eventMapping.hasOwnProperty(type)) {
 			// a mapping exists
-			this.eventMapping[type].removeListener.call(this, this.eventMapping[type].adaptedType, this.eventMapping[type].callback, listener);
+			this.eventMapping[type].removeListener.call(
+				this, this.eventMapping[type].adaptedType, this.eventMapping[type].callback, listener);
 			if (!this.hasEventListener(type)) {
 
 				if (Event.isBroadcastEventType(type)) {
@@ -224,65 +223,65 @@ export class BroadcastEventDispatchQueue {
 	}
 
 	constructor() {
-	  this.reset();
+		this.reset();
 	}
 
 	reset() {
-	  this._queues = {};
+		this._queues = {};
 	}
 
 	add(type: string, target: EventDispatcher) {
-	 // release || assert(Event.isBroadcastEventType(type), "Can only register broadcast events.");
-	  const queue = this._queues[type] || (this._queues[type] = []);
-	  if (queue.indexOf(target) >= 0) {
+		// release || assert(Event.isBroadcastEventType(type), "Can only register broadcast events.");
+		const queue = this._queues[type] || (this._queues[type] = []);
+		if (queue.indexOf(target) >= 0) {
 			return;
-	  }
-	  queue.push(target);
+		}
+		queue.push(target);
 	}
 
 	remove(type: string, target: EventDispatcher) {
-	  //release || assert (Event.isBroadcastEventType(type), "Can only unregister broadcast events.");
-	  const queue = this._queues[type];
-	  release || assert (queue, 'There should already be a queue for this.');
-	  const index = queue.indexOf(target);
-	  release || assert (index >= 0, 'Target should be somewhere in this queue.');
-	  queue[index] = null;
-	  release || assert (queue.indexOf(target) < 0, 'Target shouldn\'t be in this queue anymore.');
+		//release || assert (Event.isBroadcastEventType(type), "Can only unregister broadcast events.");
+		const queue = this._queues[type];
+		release || assert(queue, 'There should already be a queue for this.');
+		const index = queue.indexOf(target);
+		release || assert(index >= 0, 'Target should be somewhere in this queue.');
+		queue[index] = null;
+		release || assert(queue.indexOf(target) < 0, 'Target shouldn\'t be in this queue anymore.');
 	}
 
 	dispatchEvent(event: Event) {
-	  //release || assert (event.isBroadcastEvent(), "Cannot dispatch non-broadcast events.");
-	  const queue = this._queues[event._type];
-	  if (!queue) {
+		//release || assert (event.isBroadcastEvent(), "Cannot dispatch non-broadcast events.");
+		const queue = this._queues[event._type];
+		if (!queue) {
 			return;
-	  }
-	  /*
-	  if (!release && traceEventsOption.value) {
-		console.log('Broadcast event of type ' + event._type + ' to ' + queue.length +
-					' listeners');
-	  }*/
-	  let nullCount = 0;
-	  for (var i = 0; i < queue.length; i++) {
+		}
+		/*
+		if (!release && traceEventsOption.value) {
+		  console.log('Broadcast event of type ' + event._type + ' to ' + queue.length +
+					  ' listeners');
+		}*/
+		let nullCount = 0;
+		for (let i = 0; i < queue.length; i++) {
 			const target = queue[i];
 			if (target === null) {
-		  nullCount++;
+				nullCount++;
 			} else {
-		  target.dispatchEvent(event);
+				target.dispatchEvent(event);
 			}
-	  }
-	  // Compact the queue if there are too many holes in it.
-	  if (nullCount > 16 && nullCount > (queue.length >> 1)) {
+		}
+		// Compact the queue if there are too many holes in it.
+		if (nullCount > 16 && nullCount > (queue.length >> 1)) {
 			const compactedQueue = [];
-			for (var i = 0; i < queue.length; i++) {
-		  if (queue[i]) {
+			for (let i = 0; i < queue.length; i++) {
+				if (queue[i]) {
 					compactedQueue.push(queue[i]);
-		  }
+				}
 			}
 			this._queues[event.type] = compactedQueue;
-	  }
+		}
 	}
 
 	getQueueLength(type: string) {
-	  return this._queues[type] ? this._queues[type].length : 0;
+		return this._queues[type] ? this._queues[type].length : 0;
 	}
 }

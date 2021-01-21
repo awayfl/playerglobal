@@ -4,22 +4,7 @@ import { Point } from './Point';
 import { Vector3D } from './Vector3D';
 import { Matrix as AwayMatrix } from '@awayjs/core';
 import { SecurityDomain } from '../SecurityDomain';
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: Matrix
+
 export class Matrix extends ASObject {
 	private _adaptee: AwayMatrix;
 
@@ -136,7 +121,9 @@ export class Matrix extends ASObject {
    * @param ty The distance by which to translate each point along the <i>y</i>
    *           axis.
    */
-	constructor(aAdaptee: number | AwayMatrix = 1, b: number = 0, c: number = 0, d: number = 1, tx: number = 0, ty: number = 0) {
+	constructor(aAdaptee: number | AwayMatrix = 1, b: number = 0,
+		c: number = 0, d: number = 1,
+		tx: number = 0, ty: number = 0) {
 		super();
 
 		this._adaptee = (aAdaptee instanceof AwayMatrix) ? aAdaptee : new AwayMatrix(+aAdaptee, +b, +c, +d, +tx, +ty);
@@ -262,7 +249,8 @@ export class Matrix extends ASObject {
    *                 <i>y</i> axis. This value is offset by half of the
    *                 <code>height</code> parameter.
    */
-	public createGradientBox(width: number, height: number, rotation: number = 0, tx: number = 0, ty: number = 0): void {
+	public createGradientBox(width: number, height: number,
+		rotation: number = 0, tx: number = 0, ty: number = 0): void {
 		this._adaptee.createGradientBox(width, height, rotation, tx, ty);
 	}
 

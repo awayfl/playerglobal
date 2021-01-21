@@ -15,11 +15,10 @@ import {
 	Sprite as AwaySprite,
 	TextField as AwayTextField,
 	SceneImage2D,
-	FrameScriptManager,
-	ISceneGraphFactory
+	FrameScriptManager
 } from '@awayjs/scene';
 
-import { release, somewhatImplemented, SWFParser } from '@awayfl/swf-loader';
+import { SWFParser } from '@awayfl/swf-loader';
 
 import { Errors, ByteArray } from '@awayfl/avm2';
 

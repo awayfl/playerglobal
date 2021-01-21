@@ -1,4 +1,3 @@
-
 import { InteractiveObject } from '../display/InteractiveObject';
 import { Event } from './Event';
 
@@ -31,15 +30,22 @@ import { Event } from './Event';
  * the device (such as a finger on a touch screen).
  * When a user interacts with a device such as a mobile phone or tablet with a touch screen, the user typically
  * touches the screen with his or her fingers or a pointing device. You can develop applications that respond to
- * basic touch events (such as a single finger tap) with the TouchEvent class. Create event listeners using the event types defined in this class.
- * For user interaction with multiple points of contact (such as several fingers moving across a touch screen at the same time) use
- * the related GestureEvent, PressAndTapGestureEvent, and TransformGestureEvent classes. And, use the properties and methods of these classes
+ * basic touch events (such as a single finger tap) with the TouchEvent class.
+ * Create event listeners using the event types defined in this class.
+ * For user interaction with multiple points of contact
+ * (such as several fingers moving across a touch screen at the same time) use
+ * the related GestureEvent, PressAndTapGestureEvent, and TransformGestureEvent classes.
+ * And, use the properties and methods of these classes
  * to construct event handlers that respond to the user touching the device.
- * <p class="- topic/p ">Use the Multitouch class to determine the current environment's support for touch interaction, and to
- * manage the support of touch interaction if the current environment supports it.</p><p class="- topic/p "><b class="+ topic/ph hi-d/b ">Note:</b> When objects are nested on the display list, touch events target the deepest possible
+ * <p class="- topic/p ">Use the Multitouch class to determine the current environment's support for touch interaction,
+ * and to
+ * manage the support of touch interaction if the current environment supports it.</p>
+ * <p class="- topic/p "><b class="+ topic/ph hi-d/b ">Note:</b>
+ * When objects are nested on the display list, touch events target the deepest possible
  * nested object that is visible in the display list. This object is called the target node. To have a target node's
  * ancestor (an object containing the target node in the display list) receive notification of a touch event, use
- * <codeph class="+ topic/ph pr-d/codeph ">EventDispatcher.addEventListener()</codeph> on the ancestor node with the type parameter set to the specific
+ * <codeph class="+ topic/ph pr-d/codeph ">EventDispatcher.addEventListener()</codeph>
+ * on the ancestor node with the type parameter set to the specific
  * touch event you want to detect.</p>
  */
 export class TouchEvent extends Event {
@@ -54,88 +60,231 @@ export class TouchEvent extends Event {
 	/**
 	 * Defines the value of the type property of a TOUCH_BEGIN touch event object.
 	 *
-	 *   The dispatched TouchEvent object has the following properties:PropertyValuealtKeytrue if the Alt key is active (Windows or Linux).bubblestruecancelablefalse; there is no default behavior to cancel.commandKeytrue on the Mac if the Command key is active; false if it is inactive. Always false on Windows.controlKeytrue if the Ctrl or Control key is active; false if it is inactive.ctrlKeytrue on Windows or Linux if the Ctrl key is active. true on Mac if either the Ctrl key or the Command key is active. Otherwise, false.currentTargetThe object that is actively processing the Event
-	 * object with an event listener.eventPhaseThe current phase in the event flow.isRelatedObjectInaccessibletrue if the relatedObject property is set to null because of security sandbox rules.localXThe horizontal coordinate at which the event occurred relative to the containing sprite.localYThe vertical coordinate at which the event occurred relative to the containing sprite.pressureA value between 0.0 and 1.0 indicating force of the contact with the device. If the device does not support detecting the pressure, the value is 1.0.relatedObjectA reference to a display list object related to the event.shiftKeytrue if the Shift key is active; false if it is inactive.sizeXWidth of the contact area.sizeYHeight of the contact area.stageXThe horizontal coordinate at which the event occurred in global stage coordinates.stageYThe vertical coordinate at which the event occurred in global stage coordinates.targetThe InteractiveObject instance under the touching device.
+	 *   The dispatched TouchEvent object has the following properties:PropertyValuealtKeytrue
+	 * if the Alt key is active (Windows or Linux).bubblestruecancelablefalse;
+	 * there is no default behavior to cancel.commandKeytrue on the Mac if the Command key is active;
+	 * false if it is inactive. Always false on Windows.controlKeytrue if the Ctrl or Control key is active;
+	 * false if it is inactive.ctrlKeytrue on Windows or Linux if the Ctrl key is active.
+	 * true on Mac if either the Ctrl key or the Command key is active. Otherwise,
+	 * #false.currentTargetThe object that is actively processing the Event
+	 * object with an event listener.eventPhaseThe current phase in the event
+	 * flow.isRelatedObjectInaccessibletrue if the relatedObject property
+	 * is set to null because of security sandbox rules.localX
+	 * The horizontal coordinate at which the event occurred relative to the containing sprite.
+	 * localYThe vertical coordinate at which the event occurred relative to the containing sprite.pressure
+	 * A value between 0.0 and 1.0 indicating force of the contact with the device.
+	 * If the device does not support detecting the pressure, the value is 1.0.related
+	 * ObjectA reference to a display list object related to the event.shiftKey
+	 * true if the Shift key is active; false if it is inactive.sizeX
+	 * Width of the contact area.sizeYHeight of the contact area.stageX
+	 * The horizontal coordinate at which the event occurred in global stage coordinates.stageY
+	 * The vertical coordinate at which the event occurred in global stage coordinates.target
+	 * The InteractiveObject instance under the touching device.
 	 * The target is not always the object in the display list
 	 * that registered the event listener. Use the currentTarget
-	 * property to access the object in the display list that is currently processing the event.touchPointIDA unique identification number (as an int) assigned to the touch point.
+	 * property to access the object in the display list that is currently processing the event.touchPoint
+	 * IDA unique identification number (as an int) assigned to the touch point.
 	 */
 	public static TOUCH_BEGIN: string = 'touchBegin';
 
 	/**
 	 * Defines the value of the type property of a TOUCH_END touch event object.
 	 *
-	 *   The dispatched TouchEvent object has the following properties:PropertyValuealtKeytrue if the Alt key is active (Windows or Linux).bubblestruecancelablefalse; there is no default behavior to cancel.commandKeytrue on the Mac if the Command key is active; false if it is inactive. Always false on Windows.controlKeytrue if the Ctrl or Control key is active; false if it is inactive.ctrlKeytrue on Windows or Linux if the Ctrl key is active. true on Mac if either the Ctrl key or the Command key is active. Otherwise, false.currentTargetThe object that is actively processing the Event
-	 * object with an event listener.eventPhaseThe current phase in the event flow.isRelatedObjectInaccessibletrue if the relatedObject property is set to null because of security sandbox rules.localXThe horizontal coordinate at which the event occurred relative to the containing sprite.localYThe vertical coordinate at which the event occurred relative to the containing sprite.pressureA value between 0.0 and 1.0 indicating force of the contact with the device. If the device does not support detecting the pressure, the value is 1.0.relatedObjectA reference to a display list object related to the event.shiftKeytrue if the Shift key is active; false if it is inactive.sizeXWidth of the contact area.sizeYHeight of the contact area.stageXThe horizontal coordinate at which the event occurred in global stage coordinates.stageYThe vertical coordinate at which the event occurred in global stage coordinates.targetThe InteractiveObject instance under the touching device.
+	 *   The dispatched TouchEvent object has the following properties:PropertyValuealtKey
+	 * true if the Alt key is active (Windows or Linux).bubblestruecancelablefalse;
+	 * there is no default behavior to cancel.commandKeytrue on the Mac if the Command key is active;
+	 * false if it is inactive. Always false on Windows.controlKeytrue if the Ctrl or Control key is active;
+	 * false if it is inactive.ctrlKeytrue on Windows or Linux if the Ctrl key is active.
+	 * true on Mac if either the Ctrl key or the Command key is active. Otherwise, false.currentTarget
+	 * The object that is actively processing the Event
+	 * object with an event listener.eventPhaseThe current phase in the event flow.isRelatedObjectInaccessible
+	 * true if the relatedObject property is set to null because of security sandbox rules.localX
+	 * The horizontal coordinate at which the event occurred relative to the containing sprite.localY
+	 * The vertical coordinate at which the event occurred relative to the containing sprite.
+	 * pressureA value between 0.0 and 1.0 indicating force of the contact with the device.
+	 * If the device does not support detecting the pressure, the value is 1.0.related
+	 * ObjectA reference to a display list object related to the event.shiftKey
+	 * true if the Shift key is active; false if it is inactive.sizeX
+	 * Width of the contact area.sizeYHeight of the contact area.stageX
+	 * The horizontal coordinate at which the event occurred in global stage coordinates.stageY
+	 * The vertical coordinate at which the event occurred in global stage coordinates.
+	 * targetThe InteractiveObject instance under the touching device.
 	 * The target is not always the object in the display list
 	 * that registered the event listener. Use the currentTarget
-	 * property to access the object in the display list that is currently processing the event.touchPointIDA unique identification number (as an int) assigned to the touch point.
+	 * property to access the object in the display list that is currently processing the event.
+	 * touchPointIDA unique identification number (as an int) assigned to the touch point.
 	 */
 	public static TOUCH_END: string = 'touchEnd';
 
 	/**
 	 * Defines the value of the type property of a TOUCH_MOVE touch event object.
 	 *
-	 *   The dispatched TouchEvent object has the following properties:PropertyValuealtKeytrue if the Alt key is active (Windows or Linux).bubblestruecancelablefalse; there is no default behavior to cancel.commandKeytrue on the Mac if the Command key is active; false if it is inactive. Always false on Windows.controlKeytrue if the Ctrl or Control key is active; false if it is inactive.ctrlKeytrue on Windows or Linux if the Ctrl key is active. true on Mac if either the Ctrl key or the Command key is active. Otherwise, false.currentTargetThe object that is actively processing the Event
-	 * object with an event listener.eventPhaseThe current phase in the event flow.isRelatedObjectInaccessibletrue if the relatedObject property is set to null because of security sandbox rules.localXThe horizontal coordinate at which the event occurred relative to the containing sprite.localYThe vertical coordinate at which the event occurred relative to the containing sprite.pressureA value between 0.0 and 1.0 indicating force of the contact with the device. If the device does not support detecting the pressure, the value is 1.0.relatedObjectA reference to a display list object related to the event.shiftKeytrue if the Shift key is active; false if it is inactive.sizeXWidth of the contact area.sizeYHeight of the contact area.stageXThe horizontal coordinate at which the event occurred in global stage coordinates.stageYThe vertical coordinate at which the event occurred in global stage coordinates.targetThe InteractiveObject instance under the touching device.
+	 *   The dispatched TouchEvent object has the following properties:PropertyValue
+	 * altKeytrue if the Alt key is active (Windows or Linux).bubblestruecancelablefalse;
+	 * there is no default behavior to cancel.commandKeytrue on the Mac if the Command key is active;
+	 * false if it is inactive. Always false on Windows.controlKeytrue if the Ctrl or Control key is active;
+	 * false if it is inactive.ctrlKeytrue on Windows or Linux if the Ctrl key is active.
+	 * true on Mac if either the Ctrl key or the Command key is active. Otherwise, false.currentTarget
+	 * The object that is actively processing the Event
+	 * object with an event listener.eventPhaseThe current phase in the event flow.isRelatedObjectInaccessible
+	 * true if the relatedObject property is set to null because of security sandbox rules.localX
+	 * The horizontal coordinate at which the event occurred relative to the containing sprite.localY
+	 * The vertical coordinate at which the event occurred relative to the containing sprite.pressure
+	 * A value between 0.0 and 1.0 indicating force of the contact with the device.
+	 * If the device does not support detecting the pressure, the value is 1.0.related
+	 * ObjectA reference to a display list object related to the event.shiftKeytrue
+	 * if the Shift key is active; false if it is inactive.sizeXWidth of the contact area.sizeY
+	 * Height of the contact area.stageXThe horizontal coordinate
+	 * at which the event occurred in global stage coordinates.
+	 * stageYThe vertical coordinate at which the event occurred in global stage coordinates.
+	 * targetThe InteractiveObject instance under the touching device.
 	 * The target is not always the object in the display list
 	 * that registered the event listener. Use the currentTarget
-	 * property to access the object in the display list that is currently processing the event.touchPointIDA unique identification number (as an int) assigned to the touch point.
+	 * property to access the object in the display list that is currently processing the event.
+	 * touchPointIDA unique identification number (as an int) assigned to the touch point.
 	 */
 	public static TOUCH_MOVE: string = 'touchMove';
 
 	/**
 	 * Defines the value of the type property of a TOUCH_OUT touch event object.
 	 *
-	 *   The dispatched TouchEvent object has the following properties:PropertyValuealtKeytrue if the Alt key is active (Windows or Linux).bubblestruecancelablefalse; there is no default behavior to cancel.commandKeytrue on the Mac if the Command key is active; false if it is inactive. Always false on Windows.controlKeytrue if the Ctrl or Control key is active; false if it is inactive.ctrlKeytrue on Windows or Linux if the Ctrl key is active. true on Mac if either the Ctrl key or the Command key is active. Otherwise, false.currentTargetThe object that is actively processing the Event
-	 * object with an event listener.eventPhaseThe current phase in the event flow.isRelatedObjectInaccessibletrue if the relatedObject property is set to null because of security sandbox rules.localXThe horizontal coordinate at which the event occurred relative to the containing sprite.localYThe vertical coordinate at which the event occurred relative to the containing sprite.pressureA value between 0.0 and 1.0 indicating force of the contact with the device. If the device does not support detecting the pressure, the value is 1.0.relatedObjectA reference to a display list object related to the event.shiftKeytrue if the Shift key is active; false if it is inactive.sizeXWidth of the contact area.sizeYHeight of the contact area.stageXThe horizontal coordinate at which the event occurred in global stage coordinates.stageYThe vertical coordinate at which the event occurred in global stage coordinates.targetThe InteractiveObject instance under the touching device.
+	 *   The dispatched TouchEvent object has the following properties:
+	 * PropertyValuealtKeytrue if the Alt key is active (Windows or Linux).bubblestruecancelablefalse;
+	 * there is no default behavior to cancel.commandKeytrue on the Mac if the Command key is active;
+	 * false if it is inactive. Always false on Windows.controlKeytrue if the Ctrl or Control key is active;
+	 * false if it is inactive.ctrlKeytrue on Windows or Linux if the Ctrl key is active.
+	 * true on Mac if either the Ctrl key or the Command key is active. Otherwise, false.currentTarget
+	 * The object that is actively processing the Event
+	 * object with an event listener.eventPhaseThe current phase in the event flow.isRelatedObjectInaccessibletrue
+	 * if the relatedObject property is set to null because of security sandbox rules.localX
+	 * The horizontal coordinate at which the event occurred relative to the containing sprite.localY
+	 * The vertical coordinate at which the event occurred relative to the containing sprite.pressure
+	 * A value between 0.0 and 1.0 indicating force of the contact with the device.
+	 * If the device does not support detecting the pressure, the value is 1.0.relatedObject
+	 * A reference to a display list object related to the event.shiftKeytrue if the Shift key is active;
+	 * false if it is inactive.sizeXWidth of the contact area.sizeYHeight of the contact area.stageX
+	 * The horizontal coordinate at which the event occurred in global stage coordinates.stageY
+	 * The vertical coordinate at which the event occurred in global stage coordinates.target
+	 * The InteractiveObject instance under the touching device.
 	 * The target is not always the object in the display list
 	 * that registered the event listener. Use the currentTarget
-	 * property to access the object in the display list that is currently processing the event.touchPointIDA unique identification number (as an int) assigned to the touch point.
+	 * property to access the object in the display list that is currently processing the event.touchPoint
+	 * IDA unique identification number (as an int) assigned to the touch point.
 	 */
 	public static TOUCH_OUT: string = 'touchOut';
 
 	/**
 	 * Defines the value of the type property of a TOUCH_OVER touch event object.
 	 *
-	 *   The dispatched TouchEvent object has the following properties:PropertyValuealtKeytrue if the Alt key is active (Windows or Linux).bubblestruecancelablefalse; there is no default behavior to cancel.commandKeytrue on the Mac if the Command key is active; false if it is inactive. Always false on Windows.controlKeytrue if the Ctrl or Control key is active; false if it is inactive.ctrlKeytrue on Windows or Linux if the Ctrl key is active. true on Mac if either the Ctrl key or the Command key is active. Otherwise, false.currentTargetThe object that is actively processing the Event
-	 * object with an event listener.eventPhaseThe current phase in the event flow.isRelatedObjectInaccessibletrue if the relatedObject property is set to null because of security sandbox rules.localXThe horizontal coordinate at which the event occurred relative to the containing sprite.localYThe vertical coordinate at which the event occurred relative to the containing sprite.pressureA value between 0.0 and 1.0 indicating force of the contact with the device. If the device does not support detecting the pressure, the value is 1.0.relatedObjectA reference to a display list object related to the event.shiftKeytrue if the Shift key is active; false if it is inactive.sizeXWidth of the contact area.sizeYHeight of the contact area.stageXThe horizontal coordinate at which the event occurred in global stage coordinates.stageYThe vertical coordinate at which the event occurred in global stage coordinates.targetThe InteractiveObject instance under the touching device.
+	 *   The dispatched TouchEvent object has the following properties:PropertyValuealtKey
+	 * true if the Alt key is active (Windows or Linux).bubblestruecancelablefalse;
+	 * there is no default behavior to cancel.commandKeytrue on the Mac if the Command key is active;
+	 * false if it is inactive. Always false on Windows.controlKeytrue if the Ctrl or Control key is active; false
+	 * if it is inactive.ctrlKeytrue on Windows or Linux if the Ctrl key is active.
+	 * true on Mac if either the Ctrl key or the Command key is active. Otherwise,
+	 * false.currentTargetThe object that is actively processing the Event
+	 * object with an event listener.eventPhaseThe current phase in the event
+	 * flow.isRelatedObjectInaccessibletrue if the relatedObject property
+	 * is set to null because of security sandbox rules.
+	 * localXThe horizontal coordinate at which the event occurred relative to the containing sprite.localY
+	 * The vertical coordinate at which the event occurred relative to the containing sprite.pressure
+	 * A value between 0.0 and 1.0 indicating force of the contact with the device.
+	 * If the device does not support detecting the pressure, the value is 1.0.relatedObject
+	 * A reference to a display list object related to the event.shiftKeytrue
+	 * if the Shift key is active; false if it is inactive.sizeXWidth of the contact area.sizeY
+	 * Height of the contact area.stageXThe horizontal coordinate at which
+	 * the event occurred in global stage coordinates.stageYThe vertical coordinate
+	 * at which the event occurred in global stage coordinates.target
+	 * The InteractiveObject instance under the touching device.
 	 * The target is not always the object in the display list
 	 * that registered the event listener. Use the currentTarget
-	 * property to access the object in the display list that is currently processing the event.touchPointIDA unique identification number (as an int) assigned to the touch point.
+	 * property to access the object in the display list that is currently processing the event.
+	 * touchPointIDA unique identification number (as an int) assigned to the touch point.
 	 */
 	public static TOUCH_OVER: string = 'touchOver';
 
 	/**
 	 * Defines the value of the type property of a TOUCH_ROLL_OUT touch event object.
 	 *
-	 *   The dispatched TouchEvent object has the following properties:PropertyValuealtKeytrue if the Alt key is active (Windows or Linux).bubblestruecancelablefalse; there is no default behavior to cancel.commandKeytrue on the Mac if the Command key is active; false if it is inactive. Always false on Windows.controlKeytrue if the Ctrl or Control key is active; false if it is inactive.ctrlKeytrue on Windows or Linux if the Ctrl key is active. true on Mac if either the Ctrl key or the Command key is active. Otherwise, false.currentTargetThe object that is actively processing the Event
-	 * object with an event listener.eventPhaseThe current phase in the event flow.isRelatedObjectInaccessibletrue if the relatedObject property is set to null because of security sandbox rules.localXThe horizontal coordinate at which the event occurred relative to the containing sprite.localYThe vertical coordinate at which the event occurred relative to the containing sprite.pressureA value between 0.0 and 1.0 indicating force of the contact with the device. If the device does not support detecting the pressure, the value is 1.0.relatedObjectA reference to a display list object related to the event.shiftKeytrue if the Shift key is active; false if it is inactive.sizeXWidth of the contact area.sizeYHeight of the contact area.stageXThe horizontal coordinate at which the event occurred in global stage coordinates.stageYThe vertical coordinate at which the event occurred in global stage coordinates.targetThe InteractiveObject instance under the touching device.
+	 *   The dispatched TouchEvent object has the following properties:PropertyValuealtKeytrue
+	 * if the Alt key is active (Windows or Linux).bubblestruecancelablefalse; there is no default behavior to cancel.
+	 * commandKeytrue on the Mac if the Command key is active; false if it is inactive.
+	 * Always false on Windows.controlKeytrue if the Ctrl or Control key is active;
+	 * false if it is inactive.ctrlKeytrue on Windows or Linux if the Ctrl key is active.
+	 * true on Mac if either the Ctrl key or the Command key is active. Otherwise, false.currentTarget
+	 * The object that is actively processing the Event
+	 * object with an event listener.eventPhaseThe current phase in the event flow.isRelatedObjectInaccessibletrue
+	 * if the relatedObject property is set to null because of security sandbox rules.localX
+	 * The horizontal coordinate at which the event occurred relative to the containing sprite.localY
+	 * The vertical coordinate at which the event occurred relative to the containing sprite.pressure
+	 * A value between 0.0 and 1.0 indicating force of the contact with the device.
+	 * If the device does not support detecting the pressure, the value is 1.0.relatedObject
+	 * A reference to a display list object related to the event.shiftKeytrue if the Shift key is active;
+	 * false if it is inactive.sizeXWidth of the contact area.sizeYHeight of the contact area.stageX
+	 * The horizontal coordinate at which the event occurred in global stage coordinates.stageY
+	 * The vertical coordinate at which the event occurred in global stage coordinates.target
+	 * The InteractiveObject instance under the touching device.
 	 * The target is not always the object in the display list
 	 * that registered the event listener. Use the currentTarget
-	 * property to access the object in the display list that is currently processing the event.touchPointIDA unique identification number (as an int) assigned to the touch point.
+	 * property to access the object in the display list that is currently processing the event.touchPointID
+	 * A unique identification number (as an int) assigned to the touch point.
 	 */
 	public static TOUCH_ROLL_OUT: string = 'touchRollOut';
 
 	/**
 	 * Defines the value of the type property of a TOUCH_ROLL_OVER touch event object.
 	 *
-	 *   The dispatched TouchEvent object has the following properties:PropertyValuealtKeytrue if the Alt key is active (Windows or Linux).bubblestruecancelablefalse; there is no default behavior to cancel.commandKeytrue on the Mac if the Command key is active; false if it is inactive. Always false on Windows.controlKeytrue if the Ctrl or Control key is active; false if it is inactive.ctrlKeytrue on Windows or Linux if the Ctrl key is active. true on Mac if either the Ctrl key or the Command key is active. Otherwise, false.currentTargetThe object that is actively processing the Event
-	 * object with an event listener.eventPhaseThe current phase in the event flow.isRelatedObjectInaccessibletrue if the relatedObject property is set to null because of security sandbox rules.localXThe horizontal coordinate at which the event occurred relative to the containing sprite.localYThe vertical coordinate at which the event occurred relative to the containing sprite.pressureA value between 0.0 and 1.0 indicating force of the contact with the device. If the device does not support detecting the pressure, the value is 1.0.relatedObjectA reference to a display list object related to the event.shiftKeytrue if the Shift key is active; false if it is inactive.sizeXWidth of the contact area.sizeYHeight of the contact area.stageXThe horizontal coordinate at which the event occurred in global stage coordinates.stageYThe vertical coordinate at which the event occurred in global stage coordinates.targetThe InteractiveObject instance under the touching device.
+	 *   The dispatched TouchEvent object has the following properties:PropertyValuealtKey
+	 * true if the Alt key is active (Windows or Linux).bubblestruecancelablefalse;
+	 * #there is no default behavior to cancel.commandKeytrue on the Mac if the Command key is active;
+	 * false if it is inactive. Always false on Windows.controlKeytrue if the Ctrl or Control key is active;
+	 * false if it is inactive.ctrlKeytrue on Windows or Linux if the Ctrl key is active.
+	 * true on Mac if either the Ctrl key or the Command key is active. Otherwise, false.currentTarget
+	 * The object that is actively processing the Event
+	 * object with an event listener.eventPhaseThe current phase in the event flow.isRelatedObjectInaccessibletrue
+	 * if the relatedObject property is set to null because of security sandbox rules.localX
+	 * The horizontal coordinate at which the event occurred relative to the containing sprite.localY
+	 * The vertical coordinate at which the event occurred relative to the containing sprite.pressure
+	 * A value between 0.0 and 1.0 indicating force of the contact with the device.
+	 * If the device does not support detecting the pressure, the value is 1.0.relatedObject
+	 * A reference to a display list object related to the event.shiftKeytrue if the Shift key is active;
+	 * false if it is inactive.sizeXWidth of the contact area.sizeYHeight of the contact area.stageX
+	 * The horizontal coordinate at which the event occurred in global stage coordinates.stageY
+	 * The vertical coordinate at which the event occurred in global stage coordinates.target
+	 * The InteractiveObject instance under the touching device.
 	 * The target is not always the object in the display list
 	 * that registered the event listener. Use the currentTarget
-	 * property to access the object in the display list that is currently processing the event.touchPointIDA unique identification number (as an int) assigned to the touch point.
+	 * property to access the object in the display list that is currently processing the event.touchPointID
+	 * A unique identification number (as an int) assigned to the touch point.
 	 */
 	public static TOUCH_ROLL_OVER: string = 'touchRollOver';
 
 	/**
 	 * Defines the value of the type property of a TOUCH_TAP touch event object.
 	 *
-	 *   The dispatched TouchEvent object has the following properties:PropertyValuealtKeytrue if the Alt key is active (Windows or Linux).bubblestruecancelablefalse; there is no default behavior to cancel.commandKeytrue on the Mac if the Command key is active; false if it is inactive. Always false on Windows.controlKeytrue if the Ctrl or Control key is active; false if it is inactive.ctrlKeytrue on Windows or Linux if the Ctrl key is active. true on Mac if either the Ctrl key or the Command key is active. Otherwise, false.currentTargetThe object that is actively processing the Event
-	 * object with an event listener.eventPhaseThe current phase in the event flow.isRelatedObjectInaccessibletrue if the relatedObject property is set to null because of security sandbox rules.localXThe horizontal coordinate at which the event occurred relative to the containing sprite.localYThe vertical coordinate at which the event occurred relative to the containing sprite.pressureA value between 0.0 and 1.0 indicating force of the contact with the device. If the device does not support detecting the pressure, the value is 1.0.relatedObjectA reference to a display list object related to the event.shiftKeytrue if the Shift key is active; false if it is inactive.sizeXWidth of the contact area.sizeYHeight of the contact area.stageXThe horizontal coordinate at which the event occurred in global stage coordinates.stageYThe vertical coordinate at which the event occurred in global stage coordinates.targetThe InteractiveObject instance under the touching device.
+	 *   The dispatched TouchEvent object has the following properties:PropertyValuealtKeytrue
+	 * if the Alt key is active (Windows or Linux).bubblestruecancelablefalse;
+	 * there is no default behavior to cancel.commandKeytrue on the Mac if the Command key is active;
+	 * false if it is inactive. Always false on Windows.controlKeytrue if the Ctrl or Control key is active;
+	 * false if it is inactive.ctrlKeytrue on Windows or Linux if the Ctrl key is active.
+	 * true on Mac if either the Ctrl key or the Command key is active. Otherwise, false.currentTarget
+	 * The object that is actively processing the Event
+	 * object with an event listener.eventPhaseThe current phase in the event flow.isRelatedObjectInaccessibletrue
+	 * if the relatedObject property is set to null because of security sandbox rules.localX
+	 * The horizontal coordinate at which the event occurred relative to the containing sprite.localY
+	 * The vertical coordinate at which the event occurred relative to the containing sprite.
+	 * pressureA value between 0.0 and 1.0 indicating force of the contact with the device.
+	 * If the device does not support detecting the pressure,
+	 * the value is 1.0.relatedObjectA reference to a display list object related to the event.shiftKey
+	 * true if the Shift key is active; false if it is inactive.sizeXWidth of the contact area.sizeY
+	 * Height of the contact area.stageX
+	 * The horizontal coordinate at which the event occurred in global stage coordinates.
+	 * stageYThe vertical coordinate at which the event occurred in global stage coordinates.target
+	 * The InteractiveObject instance under the touching device.
 	 * The target is not always the object in the display list
 	 * that registered the event listener. Use the currentTarget
-	 * property to access the object in the display list that is currently processing the event.touchPointIDA unique identification number (as an int) assigned to the touch point.
+	 * property to access the object in the display list that is currently processing the event.touchPointID
+	 * A unique identification number (as an int) assigned to the touch point.
 	 */
 	public static TOUCH_TAP: string = 'touchTap';
 
@@ -256,7 +405,8 @@ export class TouchEvent extends Event {
 	}
 
 	/**
-	 * Returns a string that contains all the properties of the TouchEvent object. The string is in the following format:
+	 * Returns a string that contains all the properties of the TouchEvent object.
+	 * The string is in the following format:
 	 * [TouchEvent type=value bubbles=value cancelable=value ... ]
 	 * @return	A string that contains all the properties of the TouchEvent object.
 	 */
@@ -280,21 +430,31 @@ export class TouchEvent extends Event {
 	 * @param	sizeY	Height of the contact area.
 	 * @param	pressure	A value between 0.0 and 1.0 indicating force of the contact with the device.
 	 *   If the device does not support detecting the pressure, the value is 1.0.
-	 * @param	relatedObject	The complementary InteractiveObject instance that is affected by the event. For example, when a touchOut event occurs,
+	 * @param	relatedObject	The complementary InteractiveObject instance that is affected by the event.
+	 * For example, when a touchOut event occurs,
 	 *   relatedObject represents the display list object to which the pointing device now points.
-	 * @param	ctrlKey	On Windows or Linux, indicates whether the Ctrl key is activated. On Mac, indicates whether either the Ctrl key or the Command key is activated.
+	 * @param	ctrlKey	On Windows or Linux, indicates whether the Ctrl key is activated.
+	 * On Mac, indicates whether either the Ctrl key or the Command key is activated.
 	 * @param	altKey	Indicates whether the Alt key is activated (Windows or Linux only).
 	 * @param	shiftKey	Indicates whether the Shift key is activated.
-	 * @param	commandKey	(AIR only) Indicates whether the Command key is activated (Mac only). This parameter is for Adobe AIR only; do not set it for Flash Player content.
-	 * @param	controlKey	(AIR only) Indicates whether the Control or Ctrl key is activated. This parameter is for Adobe AIR only; do not set it for Flash Player content.
+	 * @param	commandKey	(AIR only) Indicates whether the Command key is activated (Mac only).
+	 * This parameter is for Adobe AIR only; do not set it for Flash Player content.
+	 * @param	controlKey	(AIR only) Indicates whether the Control or Ctrl key is activated.
+	 * This parameter is for Adobe AIR only; do not set it for Flash Player content.
 
 	 */
-	constructor (type: string, bubbles: boolean = true, cancelable: boolean = false, touchPointID: number = 0, isPrimaryTouchPoint: boolean = false, localX: number = NaN, localY: number = NaN, sizeX: number = NaN, sizeY: number = NaN, pressure: number = NaN, relatedObject: InteractiveObject = null, ctrlKey: boolean = false, altKey: boolean = false, shiftKey: boolean = false) {
+	constructor (type: string, bubbles: boolean = true, cancelable: boolean = false,
+		touchPointID: number = 0, isPrimaryTouchPoint: boolean = false,
+		localX: number = NaN, localY: number = NaN,
+		sizeX: number = NaN, sizeY: number = NaN,
+		pressure: number = NaN, relatedObject: InteractiveObject = null,
+		ctrlKey: boolean = false, altKey: boolean = false, shiftKey: boolean = false) {
 		super(type, bubbles, cancelable);
 	}
 
 	/**
-	 * Instructs Flash Player or Adobe AIR to render after processing of this event completes, if the display list has been modified.
+	 * Instructs Flash Player or Adobe AIR to render after processing of this event completes,
+	 * if the display list has been modified.
 	 */
 	public updateAfterEvent () {
 

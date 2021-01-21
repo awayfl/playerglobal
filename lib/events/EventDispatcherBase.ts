@@ -240,7 +240,8 @@ export class ListenerObject {
 		while (p > 0) {
 			p--;
 			//console.log("multi-priority mode next", p);
-			const listeners = this._listenersByPriority[p].listeners.length > 1 ? this._listenersByPriority[p].listeners.concat() : this._listenersByPriority[p].listeners;
+			const listeners = this._listenersByPriority[p].listeners.length > 1 ?
+				this._listenersByPriority[p].listeners.concat() : this._listenersByPriority[p].listeners;
 			const numListeners = listeners.length;
 			let i = 0;
 			//let len=events.length;

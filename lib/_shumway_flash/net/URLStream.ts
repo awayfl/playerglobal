@@ -1,31 +1,13 @@
-import { release, notImplemented } from '../../base/utilities/Debug';
-import { Errors } from '../../avm2/errors';
-import { ByteArray, IDataInput } from '../../avm2/natives/byteArray';
-import { EventDispatcher } from '../events/EventDispatcher';
-import { FileLoadingSession, FileLoadingService } from '../../base/utilities/FileLoadingService';
-import { axCoerceString } from '../../avm2/run/axCoerceString';
-import { URLRequest } from './URLRequest';
-import { ProgressEvent } from '../events/ProgressEvent';
-import { IOErrorEvent } from '../events/IOErrorEvent';
-import { Event } from '../events/Event';
+import { URLRequest } from '../../net/URLRequest';
+import { ProgressEvent } from '../../events/ProgressEvent';
+import { IOErrorEvent } from '../../events/IOErrorEvent';
+import { Event } from '../../events/Event';
 import { HTTPStatusEvent } from '../events/HTTPStatusEvent';
 import { URLRequestHeader } from './URLRequestHeader';
-
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+import { EventDispatcher } from '../../events/EventDispatcher';
+import { IDataInput } from '../../utils/IDataInput';
+import { axCoerceString, ByteArray, Errors } from '@awayfl/avm2';
+import { FileLoadingService, FileLoadingSession } from '@awayfl/swf-loader';
 export class URLStream extends EventDispatcher implements IDataInput {
 
 	// Called whenever the class is initialized.
@@ -77,7 +59,7 @@ export class URLStream extends EventDispatcher implements IDataInput {
 	}
 
 	get diskCacheEnabled(): boolean {
-		release || notImplemented('public flash.net.URLStream::get diskCacheEnabled'); return;
+		return false;
 		// return this._diskCacheEnabled;
 	}
 
@@ -98,7 +80,6 @@ export class URLStream extends EventDispatcher implements IDataInput {
 
 		const session = FileLoadingService.createSession();
 		const self = this;
-		const initStream = true;
 		session.onprogress = function (data, progressState) {
 			const readPosition = self._buffer.position;
 			self._buffer.position = self._writePosition;
@@ -114,7 +95,7 @@ export class URLStream extends EventDispatcher implements IDataInput {
 			self._connected = false;
 			self.dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR, false, false,
 				error));
-			const isXDomainError = typeof error === 'string' && error.indexOf('XDOMAIN') >= 0;
+			//const isXDomainError = typeof error === 'string' && error.indexOf('XDOMAIN') >= 0;
 			/*Telemetry.instance.reportTelemetry({topic: 'loadResource',
         resultType: isXDomainError ? Telemetry.LoadResource.StreamCrossdomain :
                                       Telemetry.LoadResource.StreamDenied});*/
@@ -151,7 +132,7 @@ export class URLStream extends EventDispatcher implements IDataInput {
 		this._session = session;
 	}
 
-	readBytes(bytes: ByteArray, offset: number /*uint*/ = 0, length: number /*uint*/ = 0): void {
+	public readBytes(bytes: ByteArray, offset: number /*uint*/ = 0, length: number /*uint*/ = 0): void {
 		offset = offset >>> 0; length = length >>> 0;
 		if (length < 0) {
 			this.sec.throwError('ArgumentError', Errors.InvalidArgumentError, 'length');
@@ -160,66 +141,66 @@ export class URLStream extends EventDispatcher implements IDataInput {
 		this._buffer.readBytes(bytes, offset, length);
 	}
 
-	readBoolean(): boolean {
-		release || notImplemented('public flash.net.URLStream::readBoolean'); return;
+	public readBoolean(): boolean {
+		return;
 	}
 
-	readByte(): number /*int*/ {
+	public readByte(): number /*int*/ {
 		return this._buffer.readByte();
 	}
 
-	readUnsignedByte(): number /*uint*/ {
-		release || notImplemented('public flash.net.URLStream::readUnsignedByte'); return;
+	public readUnsignedByte(): number /*uint*/ {
+		return;
 	}
 
-	readShort(): number /*int*/ {
-		release || notImplemented('public flash.net.URLStream::readShort'); return;
+	public readShort(): number /*int*/ {
+		return;
 	}
 
-	readUnsignedShort(): number /*uint*/ {
+	public readUnsignedShort(): number /*uint*/ {
 		return this._buffer.readUnsignedShort();
 	}
 
-	readUnsignedInt(): number /*uint*/ {
-		release || notImplemented('public flash.net.URLStream::readUnsignedInt'); return;
+	public readUnsignedInt(): number /*uint*/ {
+		return;
 	}
 
-	readInt(): number /*int*/ {
-		release || notImplemented('public flash.net.URLStream::readInt'); return;
+	public readInt(): number /*int*/ {
+		return;
 	}
 
-	readFloat(): number {
-		release || notImplemented('public flash.net.URLStream::readFloat'); return;
+	public readFloat(): number {
+		return;
 	}
 
-	readDouble(): number {
-		release || notImplemented('public flash.net.URLStream::readDouble'); return;
+	public readDouble(): number {
+		return;
 	}
 
-	readMultiByte(length: number /*uint*/, charSet: string): string {
+	public readMultiByte(length: number /*uint*/, charSet: string): string {
 		length = length >>> 0; charSet = axCoerceString(charSet);
-		release || notImplemented('public flash.net.URLStream::readMultiByte'); return;
+		return;
 	}
 
-	readUTF(): string {
+	public readUTF(): string {
 		return this._buffer.readUTF();
 	}
 
-	readUTFBytes(length: number /*uint*/): string {
+	public readUTFBytes(length: number /*uint*/): string {
 		return this._buffer.readUTFBytes(length);
 	}
 
-	close(): void {
+	public close(): void {
 		if (this._session) {
 			this._session.close();
 		}
 	}
 
-	readObject(): any {
-		release || notImplemented('public flash.net.URLStream::readObject'); return;
+	public readObject(): any {
+		return;
 	}
 
-	stop(): void {
-		release || notImplemented('public flash.net.URLStream::stop'); return;
+	public stop(): void {
+		return;
 	}
 }

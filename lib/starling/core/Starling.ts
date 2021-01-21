@@ -1,14 +1,9 @@
 import { EventDispatcher } from '../../events/EventDispatcher';
 import { Context3D } from '../../display3D/Context3D';
-//import {Juggler} from "../animation/Juggler";
-//import { Stage3D } from "../display3D/Stage3D"
 import { Stage } from '../display/Stage';
 import { DisplayObject } from '../display/DisplayObject';
-//import {TouchProcessor} from "../events/TouchProcessor";
 import { Rectangle } from '../../geom/Rectangle';
 import { Sprite } from '../display/Sprite';
-import { Event } from '../events/Event';
-//import { Program3D } from "../display3D/Program3D"
 import { ByteArray } from '../../utils/ByteArray';
 
 /// Dispatched when the display list is about to be rendered.
@@ -30,35 +25,48 @@ import { ByteArray } from '../../utils/ByteArray';
  * system that is very similar to that of conventional Flash, while leveraging modern GPUs
  * to speed up rendering.</p><p>The Starling class represents the link between the conventional Flash display tree and
  * the Starling display tree. To create a Starling-powered application, you have to create
- * an instance of the Starling class:</p><pre>var starling:Starling = new Starling(Game, stage);</pre><p>The first parameter has to be a Starling display object class, e.g. a subclass of
+ * an instance of the Starling class:</p><pre>var starling:Starling = new Starling(Game, stage);</pre><p>
+ * The first parameter has to be a Starling display object class, e.g. a subclass of
  * <codeph>starling.display.Sprite</codeph>. In the sample above, the class "Game" is the
  * application root. An instance of "Game" will be created as soon as Starling is initialized.
  * The second parameter is the conventional (Flash) stage object. Per default, Starling will
- * display its contents directly below the stage.</p><p>It is recommended to store the Starling instance as a member variable, to make sure
+ * display its contents directly below the stage.</p><p>It is recommended to store
+ * the Starling instance as a member variable, to make sure
  * that the Garbage Collector does not destroy it. After creating the Starling object, you
- * have to start it up like this:</p><pre>starling.start();</pre><p>It will now render the contents of the "Game" class in the frame rate that is set up for
- * the application (as defined in the Flash stage).</p><b>Context3D Profiles</b><p>Stage3D supports different rendering profiles, and Starling works with all of them. The
+ * have to start it up like this:</p><pre>starling.start();</pre><p>It will now render the contents of the "Game" class
+ * in the frame rate that is set up for
+ * the application (as defined in the Flash stage).</p><b>Context3D Profiles</b><p>
+ * Stage3D supports different rendering profiles, and Starling works with all of them. The
  * last parameter of the Starling constructor allows you to choose which profile you want.
- * The following profiles are available:</p><ul><li>BASELINE_CONSTRAINED: provides the broadest hardware reach. If you develop for the
- * browser, this is the profile you should test with.</li><li>BASELINE: recommend for any mobile application, as it allows Starling to use a more
+ * The following profiles are available:</p><ul><li>BASELINE_CONSTRAINED: provides the broadest hardware reach.
+ * If you develop for the
+ * browser, this is the profile you should test with.</li><li>BASELINE: recommend for any mobile application,
+ * as it allows Starling to use a more
  * memory efficient texture type (RectangleTextures). It also supports more complex
  * AGAL code.</li><li>BASELINE_EXTENDED: adds support for textures up to 4096x4096 pixels. This is
- * especially useful on mobile devices with very high resolutions.</li></ul><p>The recommendation is to deploy your app with the profile "auto" (which makes Starling
- * pick the best available of those three), but test it in all available profiles.</p><b>Accessing the Starling object</b><p>From within your application, you can access the current Starling object anytime
+ * especially useful on mobile devices with very high resolutions.</li></ul><p>The recommendation is to deploy
+ * your app with the profile "auto" (which makes Starling
+ * pick the best available of those three), but test it in all available profiles.</p><b>Accessing the Starling object
+ * </b><p>From within your application, you can access the current Starling object anytime
  * through the static method <codeph>Starling.current</codeph>. It will return the active Starling
- * instance (most applications will only have one Starling object, anyway).</p><b>Viewport</b><p>The area the Starling content is rendered into is, per default, the complete size of the
+ * instance (most applications will only have one Starling object, anyway).</p><b>Viewport</b><p>
+ * The area the Starling content is rendered into is, per default, the complete size of the
  * stage. You can, however, use the "viewPort" property to change it. This can be  useful
  * when you want to render only into a part of the screen, or if the player size changes. For
  * the latter, you can listen to the RESIZE-event dispatched by the Starling
- * stage.</p><b>Native overlay</b><p>Sometimes you will want to display native Flash content on top of Starling. That's what the
+ * stage.</p><b>Native overlay</b><p>Sometimes you will want to display native Flash content on top of Starling.
+ * That's what the
  * <codeph>nativeOverlay</codeph> property is for. It returns a Flash Sprite lying directly
- * on top of the Starling content. You can add conventional Flash objects to that overlay.</p><p>Beware, though, that conventional Flash content on top of 3D content can lead to
+ * on top of the Starling content. You can add conventional Flash objects to that overlay.</p><p>Beware, though,
+ * that conventional Flash content on top of 3D content can lead to
  * performance penalties on some (mobile) platforms. For that reason, always remove all child
  * objects from the overlay when you don't need them any longer. Starling will remove the
- * overlay from the display list when it's empty.</p><b>Multitouch</b><p>Starling supports multitouch input on devices that provide it. During development,
+ * overlay from the display list when it's empty.</p><b>Multitouch</b><p>Starling supports multitouch input on devices
+ * that provide it. During development,
  * where most of us are working with a conventional mouse and keyboard, Starling can simulate
  * multitouch events with the help of the "Shift" and "Ctrl" (Mac: "Cmd") keys. Activate
- * this feature by enabling the <codeph>simulateMultitouch</codeph> property.</p><b>Handling a lost render context</b><p>On some operating systems and under certain conditions (e.g. returning from system
+ * this feature by enabling the <codeph>simulateMultitouch</codeph> property.</p><b>Handling a lost render context</b>
+ * <p>On some operating systems and under certain conditions (e.g. returning from system
  * sleep), Starling's stage3D render context may be lost. Starling can recover from a lost
  * context if the class property "handleLostContext" is set to "true". Keep in mind, however,
  * that this comes at the price of increased memory consumption; Starling will cache textures
@@ -66,16 +74,22 @@ import { ByteArray } from '../../utils/ByteArray';
  * 'AssetManager' for your textures. It is smart enough to recreate a texture directly
  * from its origin.)</p><p>In case you want to react to a context loss, Starling dispatches an event with
  * the type "Event.CONTEXT3D_CREATE" when the context is restored. You can recreate any
- * invalid resources in a corresponding event listener.</p><b>Sharing a 3D Context</b><p>Per default, Starling handles the Stage3D context itself. If you want to combine
+ * invalid resources in a corresponding event listener.</p><b>Sharing a 3D Context</b><p>Per default,
+ * Starling handles the Stage3D context itself. If you want to combine
  * Starling with another Stage3D engine, however, this may not be what you want. In this case,
- * you can make use of the <codeph>shareContext</codeph> property:</p><ol><li>Manually create and configure a context3D object that both frameworks can work with
+ * you can make use of the <codeph>shareContext</codeph> property:</p><ol><li>Manually create
+ * and configure a context3D object that both frameworks can work with
  * (through <codeph>stage3D.requestContext3D</codeph> and
- * <codeph>context.configureBackBuffer</codeph>).</li><li>Initialize Starling with the stage3D instance that contains that configured context.
- * This will automatically enable <codeph>shareContext</codeph>.</li><li>Call <codeph>start()</codeph> on your Starling instance (as usual). This will make
- * Starling queue input events (keyboard/mouse/touch).</li><li>Create a game loop (e.g. using the native <codeph>ENTER_FRAME</codeph> event) and let it
+ * <codeph>context.configureBackBuffer</codeph>).</li><li>Initialize Starling with the stage3D instance that contains
+ * that configured context.
+ * This will automatically enable <codeph>shareContext</codeph>.</li><li>Call <codeph>start()</codeph>
+ * on your Starling instance (as usual). This will make
+ * Starling queue input events (keyboard/mouse/touch).</li><li>Create a game loop (e.g.
+ * using the native <codeph>ENTER_FRAME</codeph> event) and let it
  * call Starling's <codeph>nextFrame</codeph> as well as the equivalent method of the other
  * Stage3D engine. Surround those calls with <codeph>context.clear()</codeph> and
- * <codeph>context.present()</codeph>.</li></ol><p>The Starling wiki contains a <xref href="http://goo.gl/BsXzw">tutorial</xref> with more
+ * <codeph>context.present()</codeph>.</li></ol><p>The Starling wiki contains a
+ * <xref href="http://goo.gl/BsXzw">tutorial</xref> with more
  * information about this topic.</p>
  */
 export class Starling extends EventDispatcher {
@@ -226,7 +240,8 @@ export class Starling extends EventDispatcher {
 	 * consumption. That's because, by default, it will make Starling keep a copy of each
 	 * texture in memory.However, this downside can be avoided by using the "AssetManager" to load textures.
 	 * The AssetManager is smart enough to restore them directly from their sources. You can
-	 * also do this by setting up "root.onRestore" on your manually loaded textures.A context loss can happen on almost every platform. It's very common on Windows
+	 * also do this by setting up "root.onRestore" on your manually loaded textures.
+	 * A context loss can happen on almost every platform. It's very common on Windows
 	 * and Android, but rare on OS X and iOS (e.g. it may occur when opening up the camera
 	 * roll). It's recommended to always enable this property, while using the AssetManager
 	 * for texture loading.
@@ -318,7 +333,8 @@ export class Starling extends EventDispatcher {
 	 * Must be a subclass of 'starling.display.DisplayObject'.
 	 * If you passed null as first parameter to the Starling constructor,
 	 * you can use this property to set the root class at a later time. As soon as the class
-	 * is instantiated, Starling will dispatch a ROOT_CREATED event.Beware: you cannot change the root class once the root object has been
+	 * is instantiated, Starling will dispatch a ROOT_CREATED event.Beware:
+	 * you cannot change the root class once the root object has been
 	 * instantiated.
 	 */
 	public get rootClass (): any {
@@ -548,11 +564,14 @@ export class Starling extends EventDispatcher {
 	 * @param	renderMode	The Context3D render mode that should be requested.
 	 *   Use this parameter if you want to force "software" rendering.
 	 * @param	profile	The Context3D profile that should be requested.
-	 *   If you pass a profile String, this profile is enforced.Pass an Array of profiles to make Starling pick the first
-	 *   one that works (starting with the first array element).Pass the String "auto" to make Starling pick the best available
+	 *   If you pass a profile String, this profile is enforced.
+	 * Pass an Array of profiles to make Starling pick the first
+	 *   one that works (starting with the first array element).
+	 * Pass the String "auto" to make Starling pick the best available
 	 *   profile automatically.
 	 */
-	constructor (rootClass: any, stage: Stage, viewPort: Rectangle = null, stage3D: any = null, renderMode: string = 'auto', profile: any = 'baselineConstrained') {
+	constructor (rootClass: any, stage: Stage, viewPort: Rectangle = null,
+		stage3D: any = null, renderMode: string = 'auto', profile: any = 'baselineConstrained') {
 		//todo: any is Stage3D
 		super();
 	}

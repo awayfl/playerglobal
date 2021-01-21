@@ -1,24 +1,5 @@
-import { Event } from './Event';
 import { axCoerceString } from '@awayjs/graphics';
-import { release, somewhatImplemented } from '../../base/utilities/Debug';
-
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: GestureEvent
-
+import { Event } from '../../events/Event';
 export class GestureEvent extends Event {
 
 	static classInitializer: any = null;
@@ -66,12 +47,10 @@ export class GestureEvent extends Event {
 	}
 
 	get stageX(): number {
-		release || somewhatImplemented('public flash.events.GestureEvent::stageX');
 		return 0;
 	}
 
 	get stageY(): number {
-		release || somewhatImplemented('public flash.events.GestureEvent::stageY');
 		return 0;
 	}
 
@@ -107,9 +86,7 @@ export class GestureEvent extends Event {
 		this._phase = axCoerceString(value);
 	}
 
-	updateAfterEvent(): void {
-		release || somewhatImplemented('public flash.events.GestureEvent::updateAfterEvent');
-	}
+	updateAfterEvent(): void {}
 
 	NativeCtor(phase: string, localX: number, localY: number,
 		ctrlKey: boolean, altKey: boolean, shiftKey: boolean) {

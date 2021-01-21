@@ -1,24 +1,6 @@
 import { NumberUtilities, isNullOrUndefined } from '@awayfl/swf-loader';
 import { Rectangle } from '../geom/Rectangle';
 import { ASObject } from '@awayfl/avm2';
-
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: BitmapFilter
-
 export class BitmapFilter extends ASObject {
 
 	static axClass: typeof BitmapFilter;
@@ -33,9 +15,11 @@ export class BitmapFilter extends ASObject {
 	// blurX (or blurY) value, the step width is the amount of blurX
 	// that adds one pixel to the border width. I.e. for quality = 1,
 	// the border width increments at blurX = 2, 4, 6, ...
-	private static blurFilterStepWidths: number[] = [0.5, 1.05, 1.35, 1.55, 1.75, 1.9, 2, 2.1, 2.2, 2.3, 2.5, 3, 3, 3.5, 3.5];
+	private static blurFilterStepWidths: number[] = [
+		0.5, 1.05, 1.35, 1.55, 1.75, 1.9, 2, 2.1, 2.2, 2.3, 2.5, 3, 3, 3.5, 3.5];
 
-	static _updateBlurBounds(bounds: Rectangle, blurX: number, blurY: number, quality: number /*int*/, isBlurFilter: boolean = false) {
+	static _updateBlurBounds(bounds: Rectangle,
+		blurX: number, blurY: number, quality: number /*int*/, isBlurFilter: boolean = false) {
 		// Approximation of BitmapData.generateFilterRect()
 		const stepWidth: number = BitmapFilter.blurFilterStepWidths[quality - 1];
 		if (isBlurFilter) {
@@ -56,7 +40,7 @@ export class BitmapFilter extends ASObject {
 		bounds.inflate(bh, bv);
 	}
 
-	constructor () {
+	constructor() {
 		super();
 	}
 
@@ -83,9 +67,9 @@ export class BitmapFilter extends ASObject {
 
 export class GradientArrays {
 
-	static colors: any [];
-	static alphas: any [];
-	static ratios: any [];
+	static colors: any[];
+	static alphas: any[];
+	static ratios: any[];
 
 	// colors null or empty - all empty
 	// ratios empty - all empty
@@ -93,7 +77,7 @@ export class GradientArrays {
 	// ratios null and alphas != null - length: colors, alphas filled with 1, ratios set to 0
 	// ratios not empty and alphas null - length: min(colors,ratios), alphas set to 0
 	// ratios not empty and alphas != null - length: min(colors,ratios), alphas filled with 1
-	static sanitize(colors: any [], alphas: any [], ratios: any []) {
+	static sanitize(colors: any[], alphas: any[], ratios: any[]) {
 		if (isNullOrUndefined(colors) || colors.length === 0) {
 			this.colors = [];
 			this.alphas = [];
@@ -128,17 +112,19 @@ export class GradientArrays {
 		}
 	}
 
-	static sanitizeColors(colors: number [], maxLen: number = 16): number [] {
-		const arr: number [] = [];
+	static sanitizeColors(colors: number[], maxLen: number = 16): number[] {
+		const arr: number[] = [];
 		for (let i = 0, n = Math.min(colors.length, maxLen); i < n; i++) {
 			arr[i] = (colors[i] >>> 0) & 0xffffff;
 		}
 		return arr;
 	}
 
-	static sanitizeAlphas(alphas: number [], maxLen: number = 16, minLen: number = 0, value: number = 0): number [] {
-		const arr: number [] = [];
-		for (var i = 0, n = Math.min(alphas.length, maxLen); i < n; i++) {
+	static sanitizeAlphas(alphas: number[], maxLen: number = 16, minLen: number = 0, value: number = 0): number[] {
+		const arr: number[] = [];
+		let i;
+		const n = Math.min(alphas.length, maxLen);
+		for (i = 0; i < n; i++) {
 			arr[i] = NumberUtilities.clamp(+alphas[i], 0, 1);
 		}
 		while (i < minLen) {
@@ -147,9 +133,11 @@ export class GradientArrays {
 		return arr;
 	}
 
-	static sanitizeRatios(ratios: number [], maxLen: number = 16, minLen: number = 0, value: number = 0): number [] {
-		const arr: number [] = [];
-		for (var i = 0, n = Math.min(ratios.length, maxLen); i < n; i++) {
+	static sanitizeRatios(ratios: number[], maxLen: number = 16, minLen: number = 0, value: number = 0): number[] {
+		const arr: number[] = [];
+		let i;
+		const n = Math.min(ratios.length, maxLen);
+		for (i = 0; i < n; i++) {
 			arr[i] = NumberUtilities.clamp(+ratios[i], 0, 255);
 		}
 		while (i < minLen) {
@@ -158,8 +146,8 @@ export class GradientArrays {
 		return arr;
 	}
 
-	static initArray(len: number, value: number = 0): number [] {
-		const arr: number [] = Array(len);
+	static initArray(len: number, value: number = 0): number[] {
+		const arr: number[] = Array(len);
 		for (let i = 0; i < len; i++) {
 			arr[i] = value;
 		}

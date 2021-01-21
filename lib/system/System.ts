@@ -4,7 +4,8 @@ import { IME } from './IME';
 import { ASObject } from '@awayfl/avm2';
 
 /**
- * The System class contains properties related to local settings and operations. Among these are <ph class="- topic/ph ">
+ * The System class contains properties related to local settings and operations.
+ * Among these are <ph class="- topic/ph ">
  * settings for camers and microphones, operations with shared objects and</ph> the use of the Clipboard.
  *
  *   <p class="- topic/p ">Additional properties and methods are in other classes within the flash.system package:
@@ -41,9 +42,11 @@ export class System extends ASObject {
 	}
 
 	/**
-	 * The entire amount of memory (in bytes) used by an application. This is the amount of resident private memory for the entire process.
+	 * The entire amount of memory (in bytes) used by an application.
+	 * This is the amount of resident private memory for the entire process.
 	 *
-	 *   AIR developers should use this property to determine the entire memory consumption of an application.For Flash Player, this includes the memory used by the container application,
+	 *   AIR developers should use this property to determine the entire memory consumption of an application.
+	 * For Flash Player, this includes the memory used by the container application,
 	 * such as the web browser.
 	 */
 	public static get privateMemory (): number {
@@ -63,7 +66,8 @@ export class System extends ASObject {
 	 *   This property does not return all memory used by an Adobe AIR application or by
 	 * the application (such as a browser) containing Flash Player content. The browser or
 	 * operating system may consume other memory. The System.privateMemory property reflects all memory used by
-	 * an application.If the amount of memory allocated is greater than the maximum value for a uint object (uint.MAX_VALUE,
+	 * an application.If the amount of memory allocated is greater than the maximum value for a uint object
+	 * (uint.MAX_VALUE,
 	 * or 4,294,967,295), then this property is set to 0. The System.totalMemoryNumber property allows
 	 * larger values.
 	 */
@@ -77,7 +81,8 @@ export class System extends ASObject {
 	 * Flash Player or AIR.
 	 *
 	 *   This property is expressed as a Number, which allows higher values than the
-	 * System.totalMemory property, which is of type int.This property does not return all memory used by an Adobe AIR application or by
+	 * System.totalMemory property, which is of type int.This property does not return all memory used by an Adobe AIR
+	 * application or by
 	 * the application (such as a browser) containing Flash Player content. The browser or
 	 * operating system may consume other memory. The System.privateMemory property reflects all memory used by
 	 * an application.
@@ -97,9 +102,11 @@ export class System extends ASObject {
 	 *   Text that you load as an external file (using Loader.load(), the URLLoader class or
 	 * URLStream) must have been saved as Unicode in order for the application to recognize it
 	 * as Unicode. To encode external files as Unicode, save the files in an application that
-	 * supports Unicode, such as Notepad on Windows.If you load external text files that are not Unicode-encoded, set useCodePage to true.
+	 * supports Unicode, such as Notepad on Windows.If you load external text files that are not Unicode-encoded,
+	 * set useCodePage to true.
 	 * Add the following as the first line of code of the file that
-	 * is loading the data (for Flash Professional, add it to the first frame):System.useCodePage = true;When this code is present, the application interprets external text
+	 * is loading the data (for Flash Professional, add it to the first frame):System.useCodePage = true;
+	 * When this code is present, the application interprets external text
 	 * using the traditional code page of the operating system.
 	 * For example, this is generally CP1252 for an English Windows operating
 	 * system and Shift-JIS for a Japanese operating system.If you set useCodePage to true,
@@ -110,7 +117,8 @@ export class System extends ASObject {
 	 * the characters used in your external text file in order to display your text.
 	 * For example, if you load an external text file that contains Chinese characters,
 	 * those characters cannot display on a system that uses the CP1252 code page because
-	 * that code page does not include Chinese characters.To ensure that users on all platforms can view external text files used in your
+	 * that code page does not include Chinese characters.To ensure that users on all platforms
+	 * can view external text files used in your
 	 * application, you should encode all external text files as Unicode and leave
 	 * useCodePage set to false. This way, the application
 	 * (Flash Player 6 and later, or AIR) interprets the text as Unicode.
@@ -142,7 +150,8 @@ export class System extends ASObject {
 	/**
 	 * Closes Flash Player.
 	 *
-	 *   For the standalone Flash Player debugger version only.AIR applications should call the NativeApplication.exit() method to exit the application.
+	 *   For the standalone Flash Player debugger version only.AIR applications
+	 * should call the NativeApplication.exit() method to exit the application.
 	 * @param	code	A value to pass to the operating system. Typically, if
 	 *   the process exits normally, the value is 0.
 	 */
@@ -189,9 +198,11 @@ export class System extends ASObject {
 	 * context when called as a result of a user event (such as a keyboard or input device event handler).
 	 *
 	 *   This method is provided for SWF content running in Flash Player 9. It allows only adding
-	 * String content to the Clipboard.Flash Player 10 content and content in the application security sandbox in an AIR application can call
+	 * String content to the Clipboard.Flash Player 10 content and content in the application security sandbox
+	 * in an AIR application can call
 	 * the Clipboard.setData() method.
-	 * @param	string	A plain-text string of characters to put on the system Clipboard, replacing its current contents (if any).
+	 * @param	string	A plain-text string of characters to put on the system Clipboard,
+	 * replacing its current contents (if any).
 	 */
 	public static setClipboard (string: string) {
 		console.log('setClipboard not implemented yet in flash/System');

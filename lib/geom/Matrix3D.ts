@@ -6,22 +6,6 @@ import { Matrix3D as AwayMatrix3D } from '@awayjs/core';
 import { Float64Vector, GenericVector } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: Matrix3D
 /*
   * _matrix stores data by columns
   *  | 0  4  8  12 |
@@ -62,7 +46,7 @@ export class Matrix3D extends ASObject {
 	}
 
 	static interpolate(thisMat: Matrix3D, toMat: Matrix3D, percent: number): Matrix3D {
-		thisMat = thisMat; toMat = toMat; percent = +percent;
+		percent = +percent;
 		release || notImplemented('public flash.geom.Matrix3D::static interpolate'); return;
 	}
 
@@ -182,12 +166,11 @@ export class Matrix3D extends ASObject {
 	}
 
 	public pointAt(pos: Vector3D, at: Vector3D = null, up: Vector3D = null): void {
-		pos = pos; at = at; up = up;
 		release || notImplemented('public flash.geom.Matrix3D::pointAt'); return;
 	}
 
 	public interpolateTo(toMat: Matrix3D, percent: number): void {
-		toMat = toMat; percent = +percent;
+		percent = +percent;
 		release || notImplemented('public flash.geom.Matrix3D::interpolateTo'); return;
 	}
 
@@ -196,28 +179,28 @@ export class Matrix3D extends ASObject {
 	}
 
 	public copyRawDataTo(vector: Float64Vector, index: number /*uint*/ = 0, transpose: boolean = false): void {
-		vector = vector; index = index >>> 0; transpose = !!transpose;
+		index = index >>> 0; transpose = !!transpose;
 		const m: Float32Array = this._adaptee._rawData;
 		if (transpose) {
-			for (var i = 0, j = index | 0; i < 16; i++, j++) {
+			for (let i = 0, j = index | 0; i < 16; i++, j++) {
 				vector.axSetNumericProperty(j, m[transposeTransform[i]]);
 			}
 		} else {
-			for (var i = 0, j = index | 0; i < 16; i++, j++) {
+			for (let i = 0, j = index | 0; i < 16; i++, j++) {
 				vector.axSetNumericProperty(j, m[i]);
 			}
 		}
 	}
 
 	public copyRawDataFrom(vector: Float64Vector, index: number /*uint*/ = 0, transpose: boolean = false): void {
-		vector = vector; index = index >>> 0; transpose = !!transpose;
+		index = index >>> 0; transpose = !!transpose;
 		const m = this._adaptee._rawData;
 		if (transpose) {
-			for (var i = 0, j = index | 0; i < 16; i++, j++) {
+			for (let i = 0, j = index | 0; i < 16; i++, j++) {
 				m[transposeTransform[i]] = vector.axGetNumericProperty(j) || 0; // removing NaN
 			}
 		} else {
-			for (var i = 0, j = index | 0; i < 16; i++, j++) {
+			for (let i = 0, j = index | 0; i < 16; i++, j++) {
 				m[i] = vector.axGetNumericProperty(j) || 0; // removing NaN
 			}
 		}

@@ -1,25 +1,6 @@
-import { ASObject } from '../../avm2/nat';
-import { release, notImplemented } from '../../base/utilities/Debug';
-import { ByteArray } from '../../avm2/natives/byteArray';
-import { ASDate } from '../../avm2/natives/date';
+import { ASObject, ByteArray } from '@awayfl/avm2';
 import { X500DistinguishedName } from './X500DistinguishedName';
 
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: X509Certificate
 export class X509Certificate extends ASObject {
 
 	// Called whenever the class is initialized.
@@ -49,67 +30,58 @@ export class X509Certificate extends ASObject {
 	// _subjectUniqueID: string;
 	// _encoded: flash.utils.ByteArray;
 	get version(): number /*uint*/ {
-		release || notImplemented('public flash.security.X509Certificate::get version'); return;
+		return 0;
 		// return this._version;
 	}
 
 	get serialNumber(): string {
-		release || notImplemented('public flash.security.X509Certificate::get serialNumber'); return;
+		return '';
 		// return this._serialNumber;
 	}
 
 	get signatureAlgorithmOID(): string {
-		release || notImplemented('public flash.security.X509Certificate::get signatureAlgorithmOID'); return;
+		return '';
 		// return this._signatureAlgorithmOID;
 	}
 
 	get signatureAlgorithmParams(): ByteArray {
-		release || notImplemented('public flash.security.X509Certificate::get signatureAlgorithmParams'); return;
+		return null;
 		// return this._signatureAlgorithmParams;
 	}
 
 	get issuer(): X500DistinguishedName {
-		release || notImplemented('public flash.security.X509Certificate::get issuer'); return;
-		// return this._issuer;
+		return null;
 	}
 
 	get validNotBefore(): ASDate {
-		release || notImplemented('public flash.security.X509Certificate::get validNotBefore'); return;
-		// return this._validNotBefore;
+		return null;
 	}
 
 	get validNotAfter(): ASDate {
-		release || notImplemented('public flash.security.X509Certificate::get validNotAfter'); return;
-		// return this._validNotAfter;
+		return null;
 	}
 
 	get subject(): X500DistinguishedName {
-		release || notImplemented('public flash.security.X509Certificate::get subject'); return;
-		// return this._subject;
+		return null;
 	}
 
 	get subjectPublicKeyAlgorithmOID(): string {
-		release || notImplemented('public flash.security.X509Certificate::get subjectPublicKeyAlgorithmOID'); return;
-		// return this._subjectPublicKeyAlgorithmOID;
+		return '';
 	}
 
 	get subjectPublicKey(): string {
-		release || notImplemented('public flash.security.X509Certificate::get subjectPublicKey'); return;
-		// return this._subjectPublicKey;
+		return '';
 	}
 
 	get issuerUniqueID(): string {
-		release || notImplemented('public flash.security.X509Certificate::get issuerUniqueID'); return;
-		// return this._issuerUniqueID;
+		return '';
 	}
 
 	get subjectUniqueID(): string {
-		release || notImplemented('public flash.security.X509Certificate::get subjectUniqueID'); return;
-		// return this._subjectUniqueID;
+		return '';
 	}
 
 	get encoded(): ByteArray {
-		release || notImplemented('public flash.security.X509Certificate::get encoded'); return;
-		// return this._encoded;
+		return null;
 	}
 }

@@ -8,23 +8,6 @@ import { IDataInput } from '../utils/IDataInput';
 import { IDataOutput } from '../utils/IDataOutput';
 import { SecurityDomain } from '../SecurityDomain';
 
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: Rectangle
-
 export class Rectangle extends ASObject implements IExternalizable {
 	private _adaptee: AwayRectangle;
 
@@ -34,10 +17,10 @@ export class Rectangle extends ASObject implements IExternalizable {
 	static classInitializer: any = null;
 
 	// List of static symbols to link.
-	static classSymbols: string [] = null; // [];
+	static classSymbols: string[] = null; // [];
 
 	// List of instance symbols to link.
-	static instanceSymbols: string [] = null;
+	static instanceSymbols: string[] = null;
 
 	public get adaptee(): AwayRectangle {
 		return this._adaptee;
@@ -49,11 +32,11 @@ export class Rectangle extends ASObject implements IExternalizable {
 	 * <code>y</code>, and <code>width</code> properties.
 	 */
 	public get height(): number {
-		return   this._adaptee._rawData[3];
+		return this._adaptee._rawData[3];
 	}
 
 	public set height(value: number) {
-		  this._adaptee._rawData[3] = +value;
+		this._adaptee._rawData[3] = +value;
 	}
 
 	/**
@@ -62,11 +45,11 @@ export class Rectangle extends ASObject implements IExternalizable {
 	 * <code>y</code>, and <code>height</code> properties.
 	 */
 	public get width(): number {
-		return   this._adaptee._rawData[2];
+		return this._adaptee._rawData[2];
 	}
 
 	public set width(value: number) {
-		  this._adaptee._rawData[2] = +value;
+		this._adaptee._rawData[2] = +value;
 	}
 
 	/**
@@ -79,11 +62,11 @@ export class Rectangle extends ASObject implements IExternalizable {
 	 * <code>left</code> property.</p>
 	 */
 	public get x(): number {
-		return   this._adaptee._rawData[0];
+		return this._adaptee._rawData[0];
 	}
 
 	public set x(value: number) {
-		  this._adaptee._rawData[0] = +value;
+		this._adaptee._rawData[0] = +value;
 	}
 
 	/**
@@ -96,11 +79,11 @@ export class Rectangle extends ASObject implements IExternalizable {
 	 * <code>top</code> property.</p>
 	 */
 	public get y(): number {
-		return   this._adaptee._rawData[1];
+		return this._adaptee._rawData[1];
 	}
 
 	public set y(value: number) {
-		  this._adaptee._rawData[1] = +value;
+		this._adaptee._rawData[1] = +value;
 	}
 
 	/**
@@ -471,9 +454,9 @@ export class Rectangle extends ASObject implements IExternalizable {
 
 	public hashCode(): number {
 		let hash = 0;
-		hash += this.x * 20 | 0;      hash *= 37;
-		hash += this.y * 20 | 0;      hash *= 37;
-		hash += this.width * 20 | 0;  hash *= 37;
+		hash += this.x * 20 | 0; hash *= 37;
+		hash += this.y * 20 | 0; hash *= 37;
+		hash += this.width * 20 | 0; hash *= 37;
 		hash += this.height * 20 | 0;
 		return hash;
 	}

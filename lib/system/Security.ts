@@ -1,24 +1,6 @@
 
 import { ASArray, ASObject, axCoerceString } from '@awayfl/avm2';
 import { notImplemented, release, somewhatImplemented, FileLoadingService } from '@awayfl/swf-loader';
-
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: Security
-
 export class Security extends ASObject {
 
 	// Called whenever the class is initialized.
@@ -107,12 +89,10 @@ export class Security extends ASObject {
 	}
 
 	static duplicateSandboxBridgeInputArguments(toplevel: ASObject, args: ASArray): ASArray {
-		toplevel = toplevel; args = args;
 		release || notImplemented('public flash.system.Security::static duplicateSandboxBridgeInputArguments'); return;
 	}
 
 	static duplicateSandboxBridgeOutputArgument(toplevel: ASObject, arg: any): any {
-		toplevel = toplevel;
 		release || notImplemented('public flash.system.Security::static duplicateSandboxBridgeOutputArgument'); return;
 	}
 
