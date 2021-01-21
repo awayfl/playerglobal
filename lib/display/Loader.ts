@@ -299,7 +299,7 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 		} else if (asset.isAsset(Graphics)) {
 			// supress lint
 		} else {
-			console.log('loaded unhandled asset-type');
+			console.log('loaded unhandled asset-type:', asset.name);
 		}
 	}
 
@@ -641,6 +641,14 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 			return;
 		}
 
+		const u8: Uint8Array = (<any>bytes).bytes;
+
+		if (u8[0] === 0 && u8[1] === 0 && u8[2] === 0) {
+			console.warn('[Loader] Bytes buffer has empty magic number!');
+
+			return;
+		}
+
 		Loader.loaderQueue.push(() => {
 			// 80pro: todo
 			//this._isImage = (ext == "jpg" || ext == "png");
@@ -654,7 +662,7 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 			this._contentLoaderInfo.source = <any> bytes;
 
 			(<LoaderContainer> this._adaptee).loadData(
-				(<any>bytes).bytes,
+				u8,
 				null,
 				null,
 				new SWFParser(this._factory));
