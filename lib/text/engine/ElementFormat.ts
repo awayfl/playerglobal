@@ -2,7 +2,7 @@ import { ASObject, axCoerceString } from '@awayfl/avm2';
 import { FontDescription } from './FontDescription';
 import { FontMetrics } from './FontMetrics';
 import { TextFormat, TextFormatAlign } from '@awayjs/scene';
-import { FontLookUpMode } from '@awayjs/scene/dist/lib/text/FontLookUpMode';
+import { FontLookUpMode } from '@awayjs/scene';
 import { TextBaseline } from './TextBaseline';
 import { Debug } from '@awayjs/core';
 
