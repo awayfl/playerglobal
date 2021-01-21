@@ -78,7 +78,7 @@ export class XMLNode {
 	 * http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html.
 	 * The following table lists the values:4CDATA_SECTION_NODEInteger valueDefined
 	 * constant1ELEMENT_NODE3TEXT_NODE5ENTITY_REFERENCE_NODE7PROCESSING_INSTRUCTION_NODE9
-	 * DOCUMENT_NODE11DOCUMENT_FRAGMENT_NODEIn Flash Player, the built-in XMLNode class only supports 
+	 * DOCUMENT_NODE11DOCUMENT_FRAGMENT_NODEIn Flash Player, the built-in XMLNode class only supports
 	 * XMLNodeType.ELEMENT_NODE and
 	 * XMLNodeType.TEXT_NODE.
 	 */
