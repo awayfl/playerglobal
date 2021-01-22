@@ -5,7 +5,7 @@ import { Sprite as AwaySprite, DisplayObjectContainer as AwayDisplayObjectContai
 	MouseEvent } from '@awayjs/scene';
 import { DisplayObjectContainer } from './DisplayObjectContainer';
 import { DisplayObject } from './DisplayObject';
-import { Rectangle, Point, Debug, EventBase } from '@awayjs/core';
+import { Rectangle, Point, Debug } from '@awayjs/core';
 import { Graphics } from './Graphics';
 import { IVirtualSceneGraphItem } from './IVirtualSceneGraphItem';
 import { constructClassFromSymbol } from '@awayfl/avm2';
@@ -48,9 +48,8 @@ export class Sprite extends DisplayObjectContainer {
 	 */
 	constructor() {
 		super();
-		this.dragListener = this.dragListener.bind(this);
-		this.stopDrag = this.stopDrag.bind(this);
-
+		this.dragListenerDelegate = (event) => this.dragListener(event);
+		this.stopDragDelegate = (event) => this.stopDrag(event);
 		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics((<AwaySprite> this._adaptee).graphics);
 	}
 
@@ -543,7 +542,6 @@ export class Sprite extends DisplayObjectContainer {
 		}
 		Sprite.currentDraggedMC = this;
 		this._dragBounds = bounds;
-
 		if (!this.isDragging) {
 			this.isDragging = true;
 			this.startDragPoint =
@@ -562,7 +560,7 @@ export class Sprite extends DisplayObjectContainer {
 			avmStage.mousePicker.dragEntity = this.adaptee;
 			avmStage.mouseManager.startDragObject(
 				this.adaptee.getAbstraction<PickEntity>(avmStage.mousePicker.pickGroup).pickingCollision);
-			avmStage.view.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.dragListener);
+			avmStage.view.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.dragListenerDelegate);
 		}
 	}
 
@@ -587,8 +585,10 @@ export class Sprite extends DisplayObjectContainer {
 	private startDragPoint: Point = new Point();
 	private startDragMCPosition: Point = new Point();
 	private _dragBounds: any;
+	public dragListenerDelegate: (e) => void;
 
-	public dragListener(_e: EventBase) {
+	public dragListener(e) {
+		//console.log("drag", e);
 
 		if (this.adaptee.parent) {
 			const tmpPoint = this.adaptee.parent.transform.globalToLocal(
@@ -619,11 +619,7 @@ export class Sprite extends DisplayObjectContainer {
 	 * @param	bounds	Value relative to the coordinates of the Sprite's parent that specify a constranumber
 	 *   rectangle for the Sprite.
 	 */
-	public startTouchDrag(
-		_touchPonumberID: number,
-		_lockCenter: boolean = false,
-		_bounds: Rectangle = null) {
-
+	public startTouchDrag(touchPonumberID: number, lockCenter: boolean = false, bounds: Rectangle = null) {
 		// @todo
 		Debug.throwPIR('playerglobals/display/Sprite', 'startTouchDrag', '');
 	}
@@ -635,18 +631,17 @@ export class Sprite extends DisplayObjectContainer {
 	 * sprite becomes draggable. Only one sprite is draggable at a time.
 	 */
 
-	public stopDrag(_e: EventBase = null) {
-
+	public stopDragDelegate: (e) => void;
+	public stopDrag(e = null) {
 		if (Sprite.currentDraggedMC && Sprite.currentDraggedMC != this) {
 			Sprite.currentDraggedMC.stopDrag();
 		}
-
 		this.isDragging = false;
 		Sprite.currentDraggedMC = null;
 		const avmStage = AVMStage.instance();
 		avmStage.mousePicker.dragEntity = null;
 		avmStage.mouseManager.stopDragObject();
-		avmStage.view.stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.dragListener);
+		avmStage.view.stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.dragListenerDelegate);
 		//window.removeEventListener("mouseup", this.stopDragDelegate);
 		//window.removeEventListener("touchend", this.stopDragDelegate);
 	}
@@ -658,7 +653,7 @@ export class Sprite extends DisplayObjectContainer {
 	 * sprite becomes draggable. Only one sprite is draggable at a time.
 	 * @param	touchPonumberID	The numbereger assigned to the touch ponumber in the startTouchDrag method.
 	 */
-	public stopTouchDrag(_touchPonumberID: number) {
+	public stopTouchDrag(touchPonumberID: number) {
 		// @todo
 		Debug.throwPIR('playerglobals/display/Sprite', 'stopTouchDrag', '');
 	}
