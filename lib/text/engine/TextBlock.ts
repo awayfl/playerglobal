@@ -33,7 +33,7 @@ export interface ITextData {
 
 const noLogs = true;
 let textBlockIDs = 0;
-let textLinePool = [];
+const textLinePool = [];
 export class TextBlock extends ASObject {
 
 	static forceNativeConstructor: boolean = true;
@@ -187,8 +187,8 @@ export class TextBlock extends ASObject {
 		if (this._textJustifier && this._textJustifier.lineJustification != 'unjustified') {
 			console.warn('lineJustification is not unjustified', this._textJustifier.lineJustification);
 		}
-		if (this._textJustifier && (<any>this._textJustifier).letterSpacing != 0) {
-			console.warn('letterSpacing is not 0', (<any>this._textJustifier).letterSpacing);
+		if (this._textJustifier && (<any> this._textJustifier).letterSpacing != 0) {
+			console.warn('letterSpacing is not 0', (<any> this._textJustifier).letterSpacing);
 		}
 		if (this._baselineZero != TextBaseline.ROMAN) {
 			console.warn('_baselineZero is not "roman"', this._baselineZero);
@@ -334,7 +334,7 @@ export class TextBlock extends ASObject {
 				newText, newFormats, newFormatindices,
 				processedIdx, newCharCnt, newElementFormats);
 		} else {
-			textLine = new (<any>this.sec).flash.text.engine.TextLine(
+			textLine = new (<any> this.sec).flash.text.engine.TextLine(
 				previousLine,
 				width,
 				lineOffset,
@@ -356,7 +356,7 @@ export class TextBlock extends ASObject {
 		fitSomething?: boolean): TextLine {
 		// @todo
 		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'recreateTextLine', '');
-		return new (<any>this.sec).flash.text.engine.TextLine();
+		return new (<any> this.sec).flash.text.engine.TextLine();
 	}
 
 	public get textLineCreationResult(): string {
