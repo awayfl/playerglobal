@@ -100,6 +100,18 @@ export class Sprite extends DisplayObjectContainer {
 		}
 	}
 
+	public removeAllTimelineChilds(): void {
+		const adaptee: AwayMovieClip = <AwayMovieClip> this.adaptee;
+		for (const key in adaptee._sessionID_childs) {
+			const child = adaptee._sessionID_childs[key];
+
+			if (child) {
+				delete adaptee._sessionID_childs[key];
+				adaptee.removeChild(child);
+
+			}
+		}
+	}
 	/**
 	 * queue the mc for executing framescripts
 	 * this only queues the frame-index as a number,
