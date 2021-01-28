@@ -33,6 +33,7 @@ export interface ITextData {
 
 const noLogs = true;
 let textBlockIDs = 0;
+let textLinePool = [];
 export class TextBlock extends ASObject {
 
 	static forceNativeConstructor: boolean = true;
@@ -186,8 +187,8 @@ export class TextBlock extends ASObject {
 		if (this._textJustifier && this._textJustifier.lineJustification != 'unjustified') {
 			console.warn('lineJustification is not unjustified', this._textJustifier.lineJustification);
 		}
-		if (this._textJustifier && (<any> this._textJustifier).letterSpacing != 0) {
-			console.warn('letterSpacing is not 0', (<any> this._textJustifier).letterSpacing);
+		if (this._textJustifier && (<any>this._textJustifier).letterSpacing != 0) {
+			console.warn('letterSpacing is not 0', (<any>this._textJustifier).letterSpacing);
 		}
 		if (this._baselineZero != TextBaseline.ROMAN) {
 			console.warn('_baselineZero is not "roman"', this._baselineZero);
@@ -315,18 +316,37 @@ export class TextBlock extends ASObject {
 			newFormats[0] = defaultFormat;
 			newElementFormats[0] = defaultElementFormat;
 		}
-		const newTextLine: TextLine = new (<any> this.sec).flash.text.engine.TextLine(
-			previousLine,
-			width,
-			lineOffset,
-			fitSomething,
-			newText, newFormats, newFormatindices,
-			processedIdx, newCharCnt, newElementFormats);
+
+		let textLine: TextLine;
+		for (let c = 0; c < textLinePool.length; c++) {
+			if (!textLinePool[c].parent) {
+				textLine = textLinePool[c];
+				break;
+
+			}
+		}
+		if (textLine) {
+			textLine.reUseTextLine(
+				previousLine,
+				width,
+				lineOffset,
+				fitSomething,
+				newText, newFormats, newFormatindices,
+				processedIdx, newCharCnt, newElementFormats);
+		} else {
+			textLine = new (<any>this.sec).flash.text.engine.TextLine(
+				previousLine,
+				width,
+				lineOffset,
+				fitSomething,
+				newText, newFormats, newFormatindices,
+				processedIdx, newCharCnt, newElementFormats);
+		}
 
 		this._creationResult = result;
-		newTextLine.setTextBlock(this);
-		this._textLines.push(newTextLine);
-		return newTextLine;
+		textLine.setTextBlock(this);
+		this._textLines.push(textLine);
+		return textLine;
 	}
 
 	public recreateTextLine(textLine: TextLine,
@@ -336,7 +356,7 @@ export class TextBlock extends ASObject {
 		fitSomething?: boolean): TextLine {
 		// @todo
 		Debug.throwPIR('playerglobals/text/engine/TextBlock', 'recreateTextLine', '');
-		return new (<any> this.sec).flash.text.engine.TextLine();
+		return new (<any>this.sec).flash.text.engine.TextLine();
 	}
 
 	public get textLineCreationResult(): string {
@@ -482,7 +502,30 @@ export class TextBlock extends ASObject {
 
 	public releaseLines(firstLine: TextLine, lastLine: TextLine): void {
 		//console.warn('[TextBlock]  ' + this._id + '   - releaseLines not implemented');
-		this._textLines.length = 0;
+		if (this._textLines.length == 0)
+			return;
+		if (firstLine == this._textLines[0] && lastLine == this._textLines[this._textLines.length - 1]) {
+			if (textLinePool.length < 100) {
+				for (let i = 0; i < this._textLines.length; i++) {
+					if (textLinePool.indexOf(this._textLines[i]) <= 0)
+						textLinePool.push(this._textLines[i]);
+				}
+			}
+			this._textLines.length = 0;
+			return;
+		}
+		while (firstLine) {
+			const idx = this._textLines.indexOf(firstLine);
+			if (idx >= 0) {
+				this._textLines.splice(idx, 1);
+			}
+			if (textLinePool.indexOf(firstLine) <= 0)
+				textLinePool.push(firstLine);
+			if (firstLine != lastLine)
+				firstLine = firstLine.nextLine;
+			else
+				firstLine = null;
+		}
 	}
 
 	public dump(): string {

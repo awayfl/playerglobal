@@ -88,9 +88,27 @@ export class TextLine extends DisplayObjectContainer {
 		this._textBlockBeginIndex = textBlockBeginIndex;
 		this._specifiedWidth = this._width;
 
+		this._textfield = new TextField();
+		this.initTextline(elementsFormats);
+
+		noLogs || console.log('[TextLine] ' + this.adaptee.id + ' textfield:', this._textfield,
+			'\n		previousLine', previousLine,
+			'\n		width', width,
+			'\n		lineOffset', lineOffset,
+			'\n		fitSomething', fitSomething,
+			'\n		text', text,
+			'\n		formats', formats,
+			'\n		formatsIndices', formatsIndices,
+			'\n		textBlockBeginIndex', textBlockBeginIndex,
+			'\n		textLength', textLength,
+			'\n		_ascent', this._ascent,
+			'\n		_descent', this._descent,
+			'\n		newTextField.textWidth', this._textfield.textWidth);
+	}
+
+	public initTextline(elementsFormats: ElementFormat[]) {
 		this._ascent = 0;
 		this._descent = Number.POSITIVE_INFINITY;
-		this._textfield = new TextField();
 		this._textfield.multiline = false;
 		this._textfield.border = false;
 		this._textfield.wordWrap = false;
@@ -165,24 +183,41 @@ export class TextLine extends DisplayObjectContainer {
 		}*/
 
 		noLogs || console.log('[TextLine] ' + this.adaptee.id, '_rawText', this._rawText);
-		noLogs || console.log(' 	tf', this._textfield,
-			'\n		previousLine', previousLine,
-			'\n		width', width,
-			'\n		lineOffset', lineOffset,
-			'\n		fitSomething', fitSomething,
-			'\n		text', text,
-			'\n		formats', formats,
-			'\n		formatsIndices', formatsIndices,
-			'\n		textBlockBeginIndex', textBlockBeginIndex,
-			'\n		textLength', textLength,
-			'\n		_ascent', this._ascent,
-			'\n		_descent', this._descent,
-			'\n		newTextField.textWidth', this._textfield.textWidth);
 
 		this._validity = TextLineValidity.VALID;
 	}
 
 	public static MAX_LINE_WIDTH: number /*int*/ = 1000000;
+
+	public reUseTextLine(
+		previousLine: TextLine,
+		width: number,
+		lineOffset: number,
+		fitSomething: boolean,
+		text: string,
+		formats: TextFormat[],
+		formatsIndices: number[],
+		textBlockBeginIndex: number,
+		textLength: number,
+		elementsFormats: ElementFormat[]) {
+
+		this._previousLine = previousLine;
+		this._width = width;
+		this._textWidth = 0;
+		this._textHeight = 0;
+		this._lineOffset = lineOffset;
+		this._fitSomething = fitSomething;
+		this._rawText = text ? text : '';
+		this._textFormatsIndices = formatsIndices;
+		this._textFormats = formats;
+		this._textLength = textLength;
+		this._textBlockBeginIndex = textBlockBeginIndex;
+		this._specifiedWidth = this._width;
+
+		this._textfield.reset();
+		this._textfield.text = '';
+		this.initTextline(elementsFormats);
+	}
 
 	public getBaselinePosition(baseline: string): number {
 		noLogs || console.log('[TextLine] ' + this.adaptee.id + ' - getBaselinePosition', baseline);
