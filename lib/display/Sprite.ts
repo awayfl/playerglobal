@@ -112,6 +112,7 @@ export class Sprite extends DisplayObjectContainer {
 			}
 		}
 	}
+
 	/**
 	 * queue the mc for executing framescripts
 	 * this only queues the frame-index as a number,
