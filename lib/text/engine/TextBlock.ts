@@ -193,6 +193,8 @@ export class TextBlock extends ASObject {
 			console.warn('_baselineZero is not "roman"', this._baselineZero);
 		}
 
+		noLogs || console.log('[TextBlock]  ' + this._id + '   - text',
+			this._textData.text);
 		noLogs || console.log('[TextBlock]  ' + this._id + '   - createTextLine',
 			'\n		width', width,
 			'\n		previousLine', previousLine,
@@ -201,7 +203,7 @@ export class TextBlock extends ASObject {
 			'\n		processedIdx', this._textData.processedIdx);
 
 		const text = this._textData.text;
-		const processedIdx = this._textData.processedIdx;
+		let processedIdx = this._textData.processedIdx;
 		if (processedIdx > text.length) {
 			this._creationResult = TextLineCreationResult.COMPLETE;
 			noLogs || console.log('[TextBlock]  ' + this._id + '   - all textlines already complete',
@@ -224,7 +226,7 @@ export class TextBlock extends ASObject {
 		const newElementFormats = [];
 		const newFormatindices = [];
 		let result = TextLineCreationResult.EMERGENCY; // is valid if its a linebreak or at least one word that fits
-		let textWidth = 2;
+		let textWidth = 0;
 		let defaultFormat;
 		let defaultElementFormat;
 		loop1:
@@ -267,7 +269,7 @@ export class TextBlock extends ASObject {
 					this._textData.processedIdx = c;
 				}
 				textWidth += charWidths[c];
-				if (textWidth > width) {
+				if (textWidth > width - 2) {
 					noLogs || console.log('text is to wide', 'textWidth', textWidth,
 						'width', width, newText, result, text[c], newWord);
 					if (result == TextLineCreationResult.SUCCESS) {
@@ -285,8 +287,12 @@ export class TextBlock extends ASObject {
 					this._textData.processedIdx = c + 1;
 					break loop1;
 				}
-				if (!lineBreaks[c])
+				if (!lineBreaks[c]) {
 					newWord += text[c];
+				} else {
+					newWord += text[c];
+					processedIdx++;
+				}
 			}
 			newFormatindices[newFormatindices.length - 1] = newText.length + newWord.length - 1;
 		}
@@ -301,7 +307,7 @@ export class TextBlock extends ASObject {
 		noLogs || console.log('[TextBlock]  ' + this._id + '   - textline prepared',
 			this._textData.processedIdx, `"${newText}"`);
 		noLogs || console.log('[TextBlock]  ' + this._id + '   - all text length',
-			text.length, 'textline text length', processedIdx + newCharCnt);
+			text.length, 'newCharCnt', newCharCnt, 'processedIdx', processedIdx);
 
 		//this._textData.processedIdx = text.length + 1;
 
