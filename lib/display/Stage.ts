@@ -13,7 +13,7 @@ import { Rectangle } from '../geom/Rectangle';
 import { SecurityDomain } from '../SecurityDomain';
 import { OrphanManager } from '@awayfl/avm2';
 import { Loader as PlayerGlobalLoader } from './Loader';
-import { LoaderInfo } from './LoaderInfo';
+import { LoaderInfo, LoaderInfoCompleteQueue } from './LoaderInfo';
 import { Debug } from '@awayjs/core';
 
 /**
@@ -314,6 +314,8 @@ export class Stage extends DisplayObjectContainer {
 		// broadcast FRAME_CONSTRUCTED event to all objects
 		this._stage.dispatchStaticBroadCastEvent(Event.EXIT_FRAME);
 		FrameScriptManager.execute_queue();
+
+		LoaderInfoCompleteQueue.executeQueue();
 
 		if (this._sendEventRender) {
 			this._stage.dispatchStaticBroadCastEvent(Event.RENDER);

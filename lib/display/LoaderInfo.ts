@@ -13,6 +13,42 @@ import { SecurityDomain } from '../SecurityDomain';
 import { PickGroup } from '@awayjs/view';
 import { AVMStage } from '@awayfl/swf-loader';
 
+interface LoaderInfoCompleteQueueItem {
+	loaderInfo: LoaderInfo;
+	delayCnt: number;
+}
+export class LoaderInfoCompleteQueue {
+	private static _queue: LoaderInfoCompleteQueueItem[] = [];
+	public static DELAY: number = 2;
+	public static addQueue(LoaderInfo) {
+		this._queue.push({
+			loaderInfo:LoaderInfo,
+			delayCnt: this.DELAY
+		});
+	}
+
+	public static executeQueue() {
+		const queue = this._queue;
+		let i = queue.length;
+		let allDone: boolean = true;
+		while (i > 0) {
+			i--;
+			const loderInfoItem = queue[i];
+			loderInfoItem.delayCnt--;
+			if (loderInfoItem.delayCnt > 0) {
+				allDone = false;
+			} else if (loderInfoItem.delayCnt == 0) {
+				const newEvent = new (<SecurityDomain> loderInfoItem.loaderInfo.sec).flash.events.Event(Event.COMPLETE);
+				newEvent.currentTarget = loderInfoItem.loaderInfo;
+				loderInfoItem.loaderInfo.dispatchEvent(newEvent);
+
+			}
+
+		}
+		if (allDone)
+			queue.length = 0;
+	}
+}
 /**
  * The LoaderInfo export class provides information about a loaded SWF file or a
  * loaded image file(JPEG, GIF, or PNG). LoaderInfo objects are available for
@@ -222,9 +258,7 @@ export class LoaderInfo extends EventDispatcher {
 
 		this._url = event.url;
 
-		const newEvent = new (<SecurityDomain> this.sec).flash.events.Event(Event.COMPLETE);
-		newEvent.currentTarget = this;
-		this.dispatchEvent(newEvent);
+		LoaderInfoCompleteQueue.addQueue(this);
 	}
 
 	/**

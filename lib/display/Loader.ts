@@ -294,6 +294,7 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 				this._content.adaptee.reset();
 				FrameScriptManager.invalidAS3Constructors = true;
 				super.addChild(this._content);
+				FrameScriptManager.execute_as3_constructors_recursiv(<any> this._content.adaptee);
 				//this.addChild(this._loaderInfo.content = (<MovieClip>(<AwayMovieClip>asset).adapter));
 			}
 		} else if (asset.isAsset(Graphics)) {
