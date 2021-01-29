@@ -150,6 +150,7 @@ export class TextLine extends DisplayObjectContainer {
 				this._textfield.height = this._ascent - this._descent;
 			}
 		} else {
+			this._textfield.autoSize = TextFieldAutoSize.NONE;
 			this._ascent = (<any> defaultFormat).font_table.ascent;
 			this._descent = (<any> defaultFormat).font_table.descent;
 			const em_size = (<any> defaultFormat).font_table.get_font_em_size();
@@ -201,7 +202,12 @@ export class TextLine extends DisplayObjectContainer {
 		textLength: number,
 		elementsFormats: ElementFormat[]) {
 
+		this.adaptee.x = 0;
+		this.adaptee.y = 0;
 		this._previousLine = previousLine;
+		if (previousLine) {
+			previousLine.setNextLine(this);
+		}
 		this._width = width;
 		this._textWidth = 0;
 		this._textHeight = 0;
@@ -236,6 +242,11 @@ export class TextLine extends DisplayObjectContainer {
 	public setNextLine(value: TextLine) {
 		noLogs || console.log('[TextLine] ' + this.adaptee.id + ' - setNextLine',  value);
 		this._nextLine = value;
+	}
+
+	public setPreviousLine(value: TextLine) {
+		noLogs || console.log('[TextLine] ' + this.adaptee.id + ' - get previousLine',  this._previousLine);
+		this._previousLine = value;
 	}
 
 	public setTextBlock(value: TextBlock) {
@@ -285,7 +296,7 @@ export class TextLine extends DisplayObjectContainer {
 
 	public get descent(): number {
 		noLogs || console.log('[TextLine] ' + this.adaptee.id + ' - get descent',  this._descent);
-		return 0;//0.1 * this._descent;
+		return 0;//this._descent;
 	}
 
 	public get textHeight(): number {

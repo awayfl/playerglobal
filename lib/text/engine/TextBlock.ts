@@ -1,4 +1,4 @@
-import { ASObject } from '@awayfl/avm2';
+import { ASObject, Multiname } from '@awayfl/avm2';
 import { Debug } from '@awayjs/core';
 import { TextFormat } from '@awayjs/scene';
 import { ContentElement } from './ContentElement';
@@ -319,13 +319,17 @@ export class TextBlock extends ASObject {
 
 		let textLine: TextLine;
 		for (let c = 0; c < textLinePool.length; c++) {
-			if (!textLinePool[c].parent) {
+			if (!textLinePool[c].parent && textLinePool[c].free) {
 				textLine = textLinePool[c];
 				break;
 
 			}
 		}
 		if (textLine) {
+			textLine.setPreviousLine(null);
+			textLine.setNextLine(null);
+			textLine['$BguserData'] = null;
+			(<any> textLine).free = false;
 			textLine.reUseTextLine(
 				previousLine,
 				width,
@@ -507,6 +511,7 @@ export class TextBlock extends ASObject {
 		if (firstLine == this._textLines[0] && lastLine == this._textLines[this._textLines.length - 1]) {
 			if (textLinePool.length < 100) {
 				for (let i = 0; i < this._textLines.length; i++) {
+					(<any> this._textLines[i]).free = true;
 					if (textLinePool.indexOf(this._textLines[i]) <= 0)
 						textLinePool.push(this._textLines[i]);
 				}
@@ -519,6 +524,7 @@ export class TextBlock extends ASObject {
 			if (idx >= 0) {
 				this._textLines.splice(idx, 1);
 			}
+			(<any> firstLine).free = true;
 			if (textLinePool.indexOf(firstLine) <= 0)
 				textLinePool.push(firstLine);
 			if (firstLine != lastLine)
