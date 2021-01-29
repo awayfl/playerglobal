@@ -1202,7 +1202,12 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			return (<any> this);
 		if (this.adaptee.parent)
 			return (<DisplayObject> this.adaptee.parent.adapter).stage;
-		return null;
+
+		// @todo: hack/fix for satprof content:
+		// when swf is loaded via loader,
+		// we must execute contructor of loaded Scene, but Loader is not added to stage yet.
+		// if constructor tries to get stage, it errors if we not return a stage
+		return this.activeStage;
 	}
 
 	public set stage(value: Stage) {
