@@ -33,10 +33,32 @@ import { DisplayObject } from './display/DisplayObject';
 import { LoaderInfo } from './display/LoaderInfo';
 import { ILoader } from './ILoader';
 
+// alternate of using a `node path`
+function normalisePath (p: string) {
+	// maybe http:// or https:// etc, like file://
+	const methodIdx = p.indexOf('://');
+	const prepend = p[0] === '/' ? '/'  : '';
+	const parts = p.split(/[\\|/]/).filter(Boolean);
+
+	// when remove '//' from method / will be removed. Restore it
+	if (methodIdx > -1)
+		parts[0] += '/';
+
+	return prepend + parts.join('/');
+}
+
 function browserLoader(url: string, type: 'json' | 'arraybuffer'): Promise<any> {
-	return fetch(url)
-		.then((r) => type === 'json' ? r.json() : r.arrayBuffer())
-		.catch(e => { throw new Error('Unable to load ' + url + ': ' + e);});
+	return fetch(normalisePath(url))
+		.then((r) => {
+			if (!r.ok) {
+				throw `Ups: ${r.statusText}(${r.status})`;
+			}
+
+			return type === 'json' ? r.json() : r.arrayBuffer();
+		})
+		.catch(e => {
+			throw new Error('Unable to load: ' + url + ': ' + e);
+		});
 }
 
 export class PlayerGlobal implements IPlayerGlobal, ILoader {
