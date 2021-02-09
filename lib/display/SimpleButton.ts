@@ -324,17 +324,19 @@ export class SimpleButton extends MovieClip {
 
 		// step3: remove children that no longer exists
 
-		len = adaptee._children.length;
-		for (let i = 0; i < len; i++) {
+		for (let i = adaptee._children.length - 1; i >= 0; i--) {
 			if (newChildren.indexOf(adaptee._children[i]) < 0) {
-				adaptee._children[i]._setParent(null);
-				// todo call dispatch remove events
+				adaptee.removeChildAt(i);
 			}
 		}
-		adaptee._children = newChildren;
 
 		// step4: setup children that have been added between old frame and new frame (do not allow frame-scripts)
 
+		for (let i = 0; i < newChildren.length; i++) {
+			if (adaptee._children.indexOf(newChildren[i]) < 0) {
+				adaptee.addChildAt(newChildren[i], i);
+			}
+		}
 		adaptee.preventScript = true;
 		this.finalizeChildren(newChilds);
 		adaptee.preventScript = false;
@@ -353,11 +355,6 @@ export class SimpleButton extends MovieClip {
 		const len = children.length;
 		for (let i = 0; i < len; i++) {
 			const newChild = children[i];
-			if (newChild.adapter != newChild && (<any>newChild.adapter).deleteOwnProperties) {
-				(<any>newChild.adapter).deleteOwnProperties();
-			}
-			(<any>newChild).just_added_to_timeline = true;
-			newChild._setParent(<AwayDisplayObjectContainer> this.adaptee);
 			newChild.reset();
 		}
 	}

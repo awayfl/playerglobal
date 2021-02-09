@@ -328,7 +328,7 @@ export class Stage extends DisplayObjectContainer {
 	//---------------------------original as3 properties / methods:
 
 	public get mouseX (): number {
-		return AVMStage.instance().getLocalMouseX(this.adaptee) | 0;
+		return AVMStage.instance().getLocalMouseX(AVMStage.instance().pool.getNode(this.adaptee)) | 0;
 	}
 
 	/**
@@ -338,7 +338,7 @@ export class Stage extends DisplayObjectContainer {
 	 * non-rotated any.
 	 */
 	public get mouseY (): number {
-		return AVMStage.instance().getLocalMouseY(this.adaptee) | 0;
+		return AVMStage.instance().getLocalMouseY(AVMStage.instance().pool.getNode(this.adaptee)) | 0;
 	}
 
 	public set accessibilityImplementation (value: any) {

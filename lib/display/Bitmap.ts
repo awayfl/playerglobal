@@ -100,7 +100,7 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner {
 		}
 	}
 
-	protected mapAdaptee(adaptee: any) {
+	protected mapAdaptee(adaptee: AwayDisplayObject) {
 		let mappedAdapt = adaptee;
 		if (adaptee instanceof BitmapImage2D || adaptee instanceof SceneImage2D) {
 

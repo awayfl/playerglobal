@@ -11,7 +11,7 @@ import { IVirtualSceneGraphItem } from './IVirtualSceneGraphItem';
 import { constructClassFromSymbol } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 import { release, AVMStage } from '@awayfl/swf-loader';
-import { PickEntity } from '@awayjs/view';
+import { ContainerEvent, EntityNode, PickEntity } from '@awayjs/view';
 
 export class Sprite extends DisplayObjectContainer {
 
@@ -304,16 +304,19 @@ export class Sprite extends DisplayObjectContainer {
 
 		// step3: remove children that no longer exists
 
-		len = adaptee._children.length;
-		for (let i = 0; i < len; i++) {
+		for (let i = adaptee._children.length - 1; i >= 0; i--) {
 			if (newChildren.indexOf(adaptee._children[i]) < 0) {
-				adaptee._children[i]._setParent(null);
-				// todo dispatch remove events needed here ?
+				adaptee.removeChildAt(i);
 			}
 		}
-		adaptee._children = newChildren;
 
 		// step4: setup new children that have not been added on new frame (prevent frame-scripts)
+
+		for (let i = 0; i < newChildren.length; i++) {
+			if (adaptee._children.indexOf(newChildren[i]) < 0) {
+				adaptee.addChildAt(newChildren[i], i);
+			}
+		}
 		adaptee.preventScript = true;
 		this.finalizeChildren(newChilds);
 
@@ -330,11 +333,7 @@ export class Sprite extends DisplayObjectContainer {
 		const len = children.length;
 		for (let i = 0; i < len; i++) {
 			const newChild = children[i];
-			if (newChild.adapter != newChild && (<any>newChild.adapter).deleteOwnProperties) {
-				(<any>newChild.adapter).deleteOwnProperties();
-			}
 			(<any>newChild).just_added_to_timeline = true;
-			newChild._setParent(<AwayDisplayObjectContainer> this.adaptee);
 			newChild.reset();
 		}
 	}
@@ -558,7 +557,7 @@ export class Sprite extends DisplayObjectContainer {
 		if (!this.isDragging) {
 			this.isDragging = true;
 			this.startDragPoint =
-				this.adaptee.parent.transform.globalToLocal(new Point(this.stage.mouseX, this.stage.mouseY));
+			AVMStage.instance().pool.getNode(this._adaptee.parent).globalToLocal(new Point(this.stage.mouseX, this.stage.mouseY));
 			if (lockCenter) {
 				this.adaptee.x = this.startDragPoint.x;
 				this.adaptee.y = this.startDragPoint.y;
@@ -570,9 +569,12 @@ export class Sprite extends DisplayObjectContainer {
 			//window.addEventListener("mouseup", this.stopDragDelegate);
 			//window.addEventListener("touchend", this.stopDragDelegate);
 			const avmStage = AVMStage.instance();
-			avmStage.mousePicker.dragEntity = this.adaptee;
+			const dragEntity = avmStage.pool.getNode(this.adaptee);
+			avmStage.mousePicker.dragEntity = dragEntity;
 			avmStage.mouseManager.startDragObject(
-				this.adaptee.getAbstraction<PickEntity>(avmStage.mousePicker.pickGroup).pickingCollision);
+				this.adaptee
+					.getAbstraction<EntityNode>(dragEntity.partition)
+					.getAbstraction<PickEntity>(avmStage.mousePicker.pickGroup).pickingCollision);
 			avmStage.view.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.dragListenerDelegate);
 		}
 	}
@@ -604,7 +606,7 @@ export class Sprite extends DisplayObjectContainer {
 		//console.log("drag", e);
 
 		if (this.adaptee.parent) {
-			const tmpPoint = this.adaptee.parent.transform.globalToLocal(
+			const tmpPoint = AVMStage.instance().pool.getNode(this._adaptee.parent).globalToLocal(
 				new Point(this.stage.mouseX, this.stage.mouseY));
 
 			this.adaptee.x = this.startDragMCPosition.x + (tmpPoint.x - this.startDragPoint.x);

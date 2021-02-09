@@ -8,15 +8,14 @@ import { DisplayObject as AwayDisplayObject,
 import { LoaderInfo } from './LoaderInfo';
 import { DisplayObjectContainer } from './DisplayObjectContainer';
 import { Stage } from './Stage';
-import { PickGroup, BoundsPicker } from '@awayjs/view';
-import { SceneGraphPartition } from '@awayjs/scene';
+import { PickGroup, BoundsPicker, BasicPartition } from '@awayjs/view';
 import { constructClassFromSymbol, AXClass } from '@awayfl/avm2';
 import { Transform } from '../geom/Transform';
 import { Rectangle } from '../geom/Rectangle';
 import { Point } from '../geom/Point';
 import { Vector3D } from '../geom/Vector3D';
 import { SecurityDomain } from '../SecurityDomain';
-import { FilterType } from '@awayfl/swf-loader';
+import { AVMStage, FilterType } from '@awayfl/swf-loader';
 import { BitmapFilter } from '../filters/BitmapFilter';
 
 export class DisplayObject extends EventDispatcher implements IDisplayObjectAdapter {
@@ -273,10 +272,11 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		return new AwayDisplayObject();
 	}
 
-	protected mapAdaptee(adaptee: any) {
+	protected mapAdaptee(adaptee: AwayDisplayObject) {
 		if (adaptee) {
-			if (!adaptee.partition)
-				adaptee.partition = new SceneGraphPartition(adaptee);
+			// if (!adaptee.partition)
+			// 	adaptee.partition = new SceneGraphPartition(adaptee);
+			adaptee.partitionClass = BasicPartition;
 			adaptee.adapter = this;
 		}
 
@@ -746,7 +746,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			return (<TextField> this.adaptee).height;
 		}
 
-		if (!this._adaptee.partition) {
+		if (!AVMStage.instance().pool.getNode(this._adaptee).partition) {
 			console.warn('Trying to get Display.height on orphan child!');
 			return 100;
 		}
@@ -769,11 +769,11 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			return;
 		}
 
-		if (!this._adaptee.partition) {
+		if (!AVMStage.instance().pool.getNode(this._adaptee).partition) {
 			console.warn('Trying to set Display.height on orphan child!');
 			return;
 		}
-		PickGroup.getInstance(this._stage.view).getBoundsPicker(this.adaptee.partition).height = value;
+		PickGroup.getInstance(this._stage.view).getBoundsPicker(AVMStage.instance().pool.getNode(this._adaptee).partition).height = value;
 
 	}
 
@@ -856,7 +856,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * non-rotated Point.
 	 */
 	public get mouseX(): number {
-		return Math.floor(this.adaptee.transform.globalToLocal(
+		return Math.floor(AVMStage.instance().pool.getNode(this._adaptee).globalToLocal(
 			new AwayPoint(this._stage.mouseX, this._stage.mouseY)).x);
 	}
 
@@ -867,7 +867,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * non-rotated Point.
 	 */
 	public get mouseY(): number {
-		return Math.floor(this.adaptee.transform.globalToLocal(
+		return Math.floor(AVMStage.instance().pool.getNode(this._adaptee).globalToLocal(
 			new AwayPoint(this._stage.mouseX, this._stage.mouseY)).y);
 	}
 
@@ -1258,8 +1258,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * it cannot be clicked.
 	 */
 	public get visible(): boolean {
-		// return raw value to avoid prototype jumping and method execution
-		return (<any> this._adaptee)._explicitVisibility;
+		return this._adaptee.visible;
 	}
 
 	public set visible(value: boolean) {
@@ -1294,7 +1293,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			return (<TextField> this.adaptee).width;
 		}
 		//todo2019
-		if (!this.adaptee.partition) {
+		if (!AVMStage.instance().pool.getNode(this._adaptee).partition) {
 			console.warn('Trying to get Display.width on orphan child!');
 			return 100;
 
@@ -1308,7 +1307,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 	public set width(value: number) {
 
-		if (!this.adaptee.partition) {
+		if (!AVMStage.instance().pool.getNode(this._adaptee).partition) {
 			console.warn('Trying to set Display.width on orphan child!');
 			return;
 
@@ -1325,7 +1324,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			return;
 		}
 
-		PickGroup.getInstance(this._stage.view).getBoundsPicker(this.adaptee.partition).width = value;
+		PickGroup.getInstance(this._stage.view).getBoundsPicker(AVMStage.instance().pool.getNode(this._adaptee).partition).width = value;
 
 	}
 
@@ -1442,10 +1441,10 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		if	(!targetCoordinateSpace)
 			targetCoordinateSpace = this;
 		//if(!this._boundsPicker) {
-		this._boundsPicker = PickGroup.getInstance(this._stage.view).getBoundsPicker(this.adaptee.partition);
+		this._boundsPicker = PickGroup.getInstance(this._stage.view).getBoundsPicker(AVMStage.instance().pool.getNode(this._adaptee).partition);
 		//}
 
-		return this._boundsPicker.getBoxBounds(targetCoordinateSpace.adaptee, strokeFlag, true);
+		return this._boundsPicker.getBoxBounds(AVMStage.instance().pool.getNode(targetCoordinateSpace.adaptee), strokeFlag, true);
 	}
 
 	/**
@@ -1486,7 +1485,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * @return	A Point any with coordinates relative to the displayobject.
 	 */
 	public globalToLocal(point: Point): Point {
-		return new (<SecurityDomain> this.sec).flash.geom.Point(this.adaptee.transform.globalToLocal(point.adaptee));
+		return new (<SecurityDomain> this.sec).flash.geom.Point(AVMStage.instance().pool.getNode(this._adaptee).globalToLocal(point.adaptee));
 
 	}
 
@@ -1522,8 +1521,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	public hitTestObject(obj: DisplayObject): boolean {
 
 		return PickGroup.getInstance(this._stage.view).getBoundsPicker(
-			this.adaptee.partition).hitTestObject(
-			PickGroup.getInstance(this._stage.view).getBoundsPicker(obj.adaptee.partition));
+			AVMStage.instance().pool.getNode(this._adaptee).partition).hitTestObject(
+			PickGroup.getInstance(this._stage.view).getBoundsPicker(AVMStage.instance().pool.getNode(obj.adaptee).partition));
 
 	}
 
@@ -1542,7 +1541,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 */
 	public hitTestPoint(x: number, y: number, shapeFlag: boolean = false): boolean {
 		return PickGroup.getInstance(this._stage.view).getBoundsPicker(
-			this.adaptee.partition).hitTestPoint(x, y, shapeFlag);
+			AVMStage.instance().pool.getNode(this._adaptee).partition).hitTestPoint(x, y, shapeFlag);
 	}
 
 	protected _getObjectsUnderPointInternal(point: Point, children: DisplayObject[]) {
@@ -1592,6 +1591,6 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * @return	A Point any with coordinates relative to the Stage.
 	 */
 	public localToGlobal(point: Point): Point {
-		return new (<SecurityDomain> this.sec).flash.geom.Point(this.adaptee.transform.localToGlobal(point.adaptee));
+		return new (<SecurityDomain> this.sec).flash.geom.Point(AVMStage.instance().pool.getNode(this._adaptee).localToGlobal(point.adaptee));
 	}
 }
