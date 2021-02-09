@@ -132,6 +132,19 @@ export class SimpleButton extends MovieClip {
 			FrameScriptManager.add_script_to_queue_pass2(<AwayMovieClip> this.adaptee, frame_idx);
 	}
 
+	public removeAllTimelineChilds(): void {
+		const adaptee: AwayMovieClip = <AwayMovieClip> this.adaptee;
+		for (const key in adaptee._sessionID_childs) {
+			const child = adaptee._sessionID_childs[key];
+
+			if (child) {
+				delete adaptee._sessionID_childs[key];
+				adaptee.removeChild(child);
+
+			}
+		}
+	}
+
 	public constructFrame(timeline: Timeline, start_construct_idx: number,
 		target_keyframe_idx: number, jump_forward: boolean,
 		frame_idx: number, queue_pass2: boolean, queue_script: boolean) {
