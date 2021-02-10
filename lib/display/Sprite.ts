@@ -569,11 +569,11 @@ export class Sprite extends DisplayObjectContainer {
 			//window.addEventListener("mouseup", this.stopDragDelegate);
 			//window.addEventListener("touchend", this.stopDragDelegate);
 			const avmStage = AVMStage.instance();
-			const dragEntity = avmStage.pool.getNode(this.adaptee);
-			avmStage.mousePicker.dragEntity = dragEntity;
+			const dragNode = avmStage.pool.getNode(this.adaptee);
+			avmStage.mousePicker.dragNode = dragNode;
 			avmStage.mouseManager.startDragObject(
 				this.adaptee
-					.getAbstraction<EntityNode>(dragEntity.partition)
+					.getAbstraction<EntityNode>(dragNode.partition)
 					.getAbstraction<PickEntity>(avmStage.mousePicker.pickGroup).pickingCollision);
 			avmStage.view.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.dragListenerDelegate);
 		}
@@ -654,7 +654,7 @@ export class Sprite extends DisplayObjectContainer {
 		this.isDragging = false;
 		Sprite.currentDraggedMC = null;
 		const avmStage = AVMStage.instance();
-		avmStage.mousePicker.dragEntity = null;
+		avmStage.mousePicker.dragNode = null;
 		avmStage.mouseManager.stopDragObject();
 		avmStage.view.stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.dragListenerDelegate);
 		//window.removeEventListener("mouseup", this.stopDragDelegate);
