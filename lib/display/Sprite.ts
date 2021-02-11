@@ -312,11 +312,10 @@ export class Sprite extends DisplayObjectContainer {
 
 		// step4: setup new children that have not been added on new frame (prevent frame-scripts)
 
-		for (let i = 0; i < newChildren.length; i++) {
-			if (adaptee._children.indexOf(newChildren[i]) < 0) {
+		for (let i = 0; i < newChildren.length; i++)
+			if (!adaptee.contains(newChildren[i]))
 				adaptee.addChildAt(newChildren[i], i);
-			}
-		}
+
 		adaptee.preventScript = true;
 		this.finalizeChildren(newChilds);
 

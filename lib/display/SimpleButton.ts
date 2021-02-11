@@ -332,11 +332,10 @@ export class SimpleButton extends MovieClip {
 
 		// step4: setup children that have been added between old frame and new frame (do not allow frame-scripts)
 
-		for (let i = 0; i < newChildren.length; i++) {
-			if (adaptee._children.indexOf(newChildren[i]) < 0) {
+		for (let i = 0; i < newChildren.length; i++)
+			if (!adaptee.contains(newChildren[i]))
 				adaptee.addChildAt(newChildren[i], i);
-			}
-		}
+
 		adaptee.preventScript = true;
 		this.finalizeChildren(newChilds);
 		adaptee.preventScript = false;
