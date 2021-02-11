@@ -61,11 +61,10 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 */
 	constructor() {
 		super();
-		if (this.adaptee && (<AwayDisplayObjectContainer> this.adaptee)._children) {
-			const children = (<AwayDisplayObjectContainer> this.adaptee)._children;
-			for (let i: number = 0; i < children.length; i++) {
+		if (this.adaptee) {
+			for (let i: number = 0; i < (<AwayDisplayObjectContainer> this.adaptee).numChildren; i++) {
 
-				const mc = children[i];
+				const mc = (<AwayDisplayObjectContainer> this.adaptee).getChildAt(i);
 				const mcadapter = mc.adapter;
 				const constructorFunc = (<IDisplayObjectAdapter>mcadapter).executeConstructor;
 				if (constructorFunc) {
@@ -149,11 +148,9 @@ export class DisplayObjectContainer extends InteractiveObject {
 			StaticEvents.events[Event.ADDED_TO_STAGE].target = this;
 			this.dispatchEvent(StaticEvents.events[Event.ADDED_TO_STAGE]);
 		}
-		if ((<AwayDisplayObjectContainer> this._adaptee)) {
-			const children = (<AwayDisplayObjectContainer> this._adaptee)._children;
-			const len = children.length;
-			for (let i = 0;i < len; i++) {
-				const oneChild: AwayDisplayObject = children[i];
+		if (this._adaptee) {
+			for (let i = 0;i < (<AwayDisplayObjectContainer> this._adaptee).numChildren; i++) {
+				const oneChild: AwayDisplayObject = (<AwayDisplayObjectContainer> this._adaptee).getChildAt(i);
 				if (oneChild.adapter && (<any>oneChild.adapter).dispatchEventRecursive
 					&& !oneChild.hasDispatchedAddedToStage) {
 					oneChild.hasDispatchedAddedToStage = true;
@@ -172,11 +169,9 @@ export class DisplayObjectContainer extends InteractiveObject {
 			StaticEvents.events[Event.REMOVED_FROM_STAGE].target = this;
 			this.dispatchEvent(StaticEvents.events[Event.REMOVED_FROM_STAGE]);
 		}
-		if ((<AwayDisplayObjectContainer> this._adaptee)) {
-			const children = (<AwayDisplayObjectContainer> this._adaptee)._children;
-			const len = children.length;
-			for (let i = 0;i < len; i++) {
-				const oneChild: AwayDisplayObject = children[i];
+		if (this._adaptee) {
+			for (let i = 0;i < (<AwayDisplayObjectContainer> this._adaptee).numChildren; i++) {
+				const oneChild: AwayDisplayObject =  (<AwayDisplayObjectContainer> this._adaptee).getChildAt(i);
 				if (oneChild.adapter && (<any>oneChild.adapter).dispatchEventRecursive
 					&& oneChild.hasDispatchedAddedToStage) {
 					oneChild.hasDispatchedAddedToStage = false;
@@ -495,10 +490,9 @@ export class DisplayObjectContainer extends InteractiveObject {
 	}
 
 	protected _getObjectsUnderPointInternal(point: Point, children: DisplayObject[]) {
-		const numChildren: number = (<AwayDisplayObjectContainer> this._adaptee).numChildren;
 		let child: AwayDisplayObject;
-		for (let i: number = 0; i < numChildren; i++) {
-			child = (<AwayDisplayObjectContainer> this._adaptee)._children[i];
+		for (let i: number = 0; i < (<AwayDisplayObjectContainer> this._adaptee).numChildren; i++) {
+			child = (<AwayDisplayObjectContainer> this._adaptee).getChildAt(i);
 			if (child.visible) {
 
 				if (PickGroup.getInstance(this._stage.view)
@@ -611,7 +605,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 				- todo: throw as3 error when child is not child of this obj');
 		if (idx == index)
 			return;
-		if (index > (<AwayDisplayObjectContainer> this.adaptee)._children.length)
+		if (index > (<AwayDisplayObjectContainer> this._adaptee).numChildren)
 			throw ('[DisplayObjectContainer.setChildindex] - todo: throw as3 error when index is out of bounds');
 
 		(<AwayDisplayObjectContainer> this.adaptee).setChildIndex(child.adaptee, index);

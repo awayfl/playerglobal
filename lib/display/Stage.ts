@@ -289,8 +289,9 @@ export class Stage extends DisplayObjectContainer {
 		 * */
 
 		//	in FP, the first enterFrame after a swf-load is ignored:
-		if ((<any>(<AwayDisplayObjectContainer> this._stage.adaptee)._children[0]).firstFrameOnSWFStart) {
-			(<any>(<AwayDisplayObjectContainer> this._stage.adaptee)._children[0]).firstFrameOnSWFStart = false;
+		const child = (<AwayDisplayObjectContainer> this._stage.adaptee).getChildAt(0);
+		if ((<any>child).firstFrameOnSWFStart) {
+			(<any>child).firstFrameOnSWFStart = false;
 		} else {
 			this._stage.dispatchStaticBroadCastEvent(Event.ENTER_FRAME);
 			FrameScriptManager.execute_as3_constructors_enterFrame(<any> this._stage.adaptee);

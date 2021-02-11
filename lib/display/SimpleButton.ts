@@ -82,12 +82,11 @@ export class SimpleButton extends MovieClip {
 
 		child.reset();
 
-		const children = (<AwayDisplayObjectContainer> this.adaptee)._children;
-		const maxIndex = children.length - 1;
+		const maxIndex = (<AwayDisplayObjectContainer> this.adaptee).numChildren - 1;
 		let index = maxIndex + 1;
 		let scriptChildsOffset = 0;
 		for (let i = maxIndex; i >= 0; i--) {
-			const current = children[i];
+			const current = (<AwayDisplayObjectContainer> this.adaptee).getChildAt(i);
 			if (current._avmDepthID == -1) {
 				scriptChildsOffset++;
 			}
@@ -150,7 +149,7 @@ export class SimpleButton extends MovieClip {
 		frame_idx: number, queue_pass2: boolean, queue_script: boolean) {
 
 		const adaptee: AwayMovieClip = <AwayMovieClip> this.adaptee;
-		let len = adaptee._children.length;
+		let len = adaptee.numChildren;
 
 		let virtualSceneGraph = [];
 		const existingSessionIDs = {};
@@ -158,7 +157,7 @@ export class SimpleButton extends MovieClip {
 		for (let i = 0; i < len; i++) {
 			// collect the existing children into a virtual-scenegraph
 			// also collect existing session ids into a map
-			const child = adaptee._children[i];
+			const child = adaptee.getChildAt(i);
 			// if jumping forward, we continue from current frame, so we collect all objects
 			// if jumping back, we want to only collect script-children. timeline childs are ignored
 			if (jump_forward || child._sessionID == -1) {
@@ -324,8 +323,8 @@ export class SimpleButton extends MovieClip {
 
 		// step3: remove children that no longer exists
 
-		for (let i = adaptee._children.length - 1; i >= 0; i--) {
-			if (newChildren.indexOf(adaptee._children[i]) < 0) {
+		for (let i = adaptee.numChildren - 1; i >= 0; i--) {
+			if (newChildren.indexOf(adaptee.getChildAt(i)) < 0) {
 				adaptee.removeChildAt(i);
 			}
 		}
