@@ -12,6 +12,7 @@ import { constructClassFromSymbol } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 import { release, AVMStage } from '@awayfl/swf-loader';
 import { ContainerEvent, EntityNode, PickEntity } from '@awayjs/view';
+import { StageManager } from '@awayjs/stage';
 
 export class Sprite extends DisplayObjectContainer {
 
@@ -450,6 +451,27 @@ export class Sprite extends DisplayObjectContainer {
 
 		}
 		this._dropTarget = null;
+	}
+
+	protected get_CacheAsBitmapInternal(): boolean {
+		const adaptee = <AwaySprite> this.adaptee;
+		return adaptee.cacheAsBitmap;
+	}
+
+	protected set_CacheAsBitmapInternal(value: boolean) {
+		const adaptee = <AwaySprite> this.adaptee;
+
+		if (adaptee.cacheAsBitmap === value) {
+			return;
+		}
+
+		const box = this.getBoundsInternal(this);
+
+		if (value) {
+			adaptee.generateBitmapCache(box, StageManager.getInstance().getStageAt(0));
+		} else {
+			adaptee.dropBitmapCache();
+		}
 	}
 
 	/**
