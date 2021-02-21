@@ -607,22 +607,14 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	public get cacheAsBitmap(): boolean {
 		// @todo
 		Debug.throwPIR('playerglobals/display/DisplayObject', 'get cacheAsBitmap', '');
-		return this.get_CacheAsBitmapInternal();
+		return this.adaptee.cacheAsBitmap;
 	}
 
 	public set cacheAsBitmap(value: boolean) {
 		// @todo
 		Debug.throwPIR('playerglobals/display/DisplayObject', 'set cacheAsBitmap', '');
 
-		this.set_CacheAsBitmapInternal(value);
-	}
-
-	protected get_CacheAsBitmapInternal(): boolean {
-		return false;
-	}
-
-	protected set_CacheAsBitmapInternal(value: boolean) {
-
+		this.adaptee.cacheAsBitmap = value;
 	}
 
 	/**
