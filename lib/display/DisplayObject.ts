@@ -8,7 +8,7 @@ import { DisplayObject as AwayDisplayObject,
 import { LoaderInfo } from './LoaderInfo';
 import { DisplayObjectContainer } from './DisplayObjectContainer';
 import { Stage } from './Stage';
-import { PickGroup, BoundsPicker, BasicPartition, INode, ContainerNode } from '@awayjs/view';
+import { PickGroup, BoundsPicker, BasicPartition, ContainerNode } from '@awayjs/view';
 import { constructClassFromSymbol, AXClass } from '@awayfl/avm2';
 import { Transform } from '../geom/Transform';
 import { Rectangle } from '../geom/Rectangle';
