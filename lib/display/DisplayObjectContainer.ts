@@ -181,22 +181,6 @@ export class DisplayObjectContainer extends InteractiveObject {
 		}
 	}
 
-	private _tempSessionID: number=0;
-	private _tempAS3Depth: number=0;
-
-	public getChildForDraw(child: AwayDisplayObject): AwayDisplayObject {
-		this._tempSessionID = child._sessionID;
-		this._tempAS3Depth = child._avmDepthID;
-		child._setParent(null);
-		return child;
-	}
-
-	public returnChildAfterDraw(child: AwayDisplayObject) {
-		child._sessionID = this._tempSessionID;
-		child._avmDepthID = this._tempAS3Depth;
-		child._setParent(<AwayDisplayObjectContainer> this.adaptee);
-	}
-
 	//---------------------------original as3 properties / methods:
 
 	/**
