@@ -106,6 +106,8 @@ import { SoundChannel } from './media/SoundChannel';
 import { SoundTransform } from './media/SoundTransform';
 import { SoundMixer } from './media/SoundMixer';
 
+import { FileFilter } from './net/FileFilter';
+import { FileReference } from './net/FileReference';
 import { SharedObject } from './net/SharedObject';
 import { URLRequest } from './net/URLRequest';
 import { URLLoader } from './net/URLLoader';
@@ -471,8 +473,8 @@ export function initLink() {
 	//M('flash.media.VideoStreamSettings', VideoStreamSettings);
 
 	//M('flash.net.DatagramSocket', FileFilter);//AIR
-	//M('flash.net.FileFilter', FileFilter);
-	//M('flash.net.FileReference', FileReference);
+	M('flash.net.FileFilter', FileFilter);
+	M('flash.net.FileReference', FileReference);
 	//M('flash.net.FileReferenceList', FileReferenceList);
 	//M('flash.net.GroupSpecifier', GroupSpecifier);
 	//M('flash.net.InterfaceAddress', InterfaceAddress);
