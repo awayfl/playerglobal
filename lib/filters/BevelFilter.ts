@@ -72,12 +72,22 @@ export class BevelFilter extends BitmapFilter {
 		);
 	}
 
-	constructor(distance: number = 4, angle: number = 45,
-		highlightColor: number /*uint*/ = 16777215, highlightAlpha: number = 1,
-		shadowColor: number /*uint*/ = 0, shadowAlpha: number = 1, blurX: number = 4,
-		blurY: number = 4, strength: number = 1, quality: number /*int*/ = 1,
-		type: string = 'inner', knockout: boolean = false) {
+	constructor(
+		distance: number = 4,
+		angle: number = 45,
+		highlightColor: number /*uint*/ = 16777215,
+		highlightAlpha: number = 1,
+		shadowColor: number /*uint*/ = 0,
+		shadowAlpha: number = 1,
+		blurX: number = 4,
+		blurY: number = 4,
+		strength: number = 1,
+		quality: number /*int*/ = 1,
+		type: string = 'inner',
+		knockout: boolean = false
+	) {
 		super();
+
 		this.distance = distance;
 		this.angle = angle;
 		this.highlightColor = highlightColor;
@@ -105,6 +115,7 @@ export class BevelFilter extends BitmapFilter {
 		}
 	}
 
+	public readonly filterName = 'bevel';
 	// JS -> AS Bindings
 
 	// AS -> JS Bindings

@@ -11,6 +11,7 @@ import { SceneImage2D } from '@awayjs/scene';
 import { IBitmapDataOwner } from './IBitmapDataOwner';
 import { ASObject, ByteArray, Uint32Vector, GenericVector } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
+import { Bitmap } from './Bitmap';
 
 const ALER_TABLE: StringMap<boolean> = {};
 const ALERT_ONCE = (id: string, message: string) => {
@@ -195,9 +196,22 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		sourceRect: Rectangle,
 		destPoint: Point,
 		filter: BitmapFilter
-	): number {
-		Debug.throwPIR('playerglobals/display/BitmapData', 'applyFilter', '');
-		return 0;
+	): void {
+
+		//this.adaptee = this.adaptee.clone();
+
+		const owner = <Bitmap> this._owners[0];
+
+		// we clone a adaptee, need invalidate a adaptee of bitmap
+		//owner.bitmapData = null;
+		//owner.bitmapData = this;
+
+		if (this._adaptee.applyFilter(sourceBitmap.adaptee, sourceRect.adaptee, destPoint.adaptee, filter)) {
+			return;
+		}
+
+		Debug.throwPIR('playerglobals/display/BitmapData', 'applyFilter', filter.constructor.name);
+
 	}
 
 	public colorTransform(rect: Rectangle, colorTransform: ColorTransform) {

@@ -155,7 +155,7 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner {
 	}
 
 	public set bitmapData (value: BitmapData) {
-		if (this._bitmapData == value)
+		if (this._bitmapData == value && this._bitmapData.adaptee === value.adaptee)
 			return;
 
 		if (this._bitmapData)
