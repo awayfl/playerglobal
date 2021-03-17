@@ -1,9 +1,24 @@
-import { BitmapFilter } from './BitmapFilter';
+import { BitmapFilter, InterfaceOf } from './BitmapFilter';
 import { somewhatImplemented, release } from '@awayfl/swf-loader';
 import { axCoerceString } from '@awayfl/avm2';
 import { Point } from '../geom/Point';
 import { BitmapData } from '../display/BitmapData';
-export class DisplacementMapFilter extends BitmapFilter {
+
+type DisplacementMode = 'clamp' | 'wrap' | 'ignore' | 'color';
+interface IDisplacementFilter {
+	filterName: 'displacement';
+	mapBitmap: BitmapData;
+	mapPoint: Point;
+	componentX: ui8;
+	componentY: ui8;
+	scaleX: number;
+	scaleY: number;
+	mode: DisplacementMode;
+	color: ui32;
+	alpha: number;
+}
+
+export class DisplacementMapFilter extends BitmapFilter implements IDisplacementFilter {
 
 	static axClass: typeof DisplacementMapFilter;
 
@@ -32,7 +47,7 @@ export class DisplacementMapFilter extends BitmapFilter {
 
 	constructor (mapBitmap: BitmapData = null, mapPoint: Point = null,
 		componentX: number /*uint*/ = 0, componentY: number /*uint*/ = 0,
-		scaleX: number = 0, scaleY: number = 0, mode: string = 'wrap',
+		scaleX: number = 0, scaleY: number = 0, mode: 'clamp' | 'wrap' | 'ignore' | 'color' = 'wrap',
 		color: number /*uint*/ = 0, alpha: number = 0) {
 		super();
 		this.mapBitmap = mapBitmap;
@@ -46,6 +61,7 @@ export class DisplacementMapFilter extends BitmapFilter {
 		this.alpha = alpha;
 	}
 
+	readonly filterName: 'displacement';
 	// JS -> AS Bindings
 
 	// AS -> JS Bindings
@@ -56,7 +72,7 @@ export class DisplacementMapFilter extends BitmapFilter {
 	private _componentY: number /*uint*/;
 	private _scaleX: number;
 	private _scaleY: number;
-	private _mode: string;
+	private _mode: 'clamp' | 'wrap' | 'ignore' | 'color';
 	private _color: number /*uint*/;
 	private _alpha: number;
 
@@ -116,13 +132,13 @@ export class DisplacementMapFilter extends BitmapFilter {
 		this._scaleY = +value;
 	}
 
-	get mode(): string {
+	get mode() {
 		return this._mode;
 	}
 
-	set mode(value: string) {
+	set mode (value: DisplacementMode) {
 		release || somewhatImplemented('public flash.filters.DisplacementMapFilter::set mode');
-		this._mode = axCoerceString(value);
+		this._mode = <any>axCoerceString(value);
 	}
 
 	get color(): number /*uint*/ {
@@ -143,7 +159,7 @@ export class DisplacementMapFilter extends BitmapFilter {
 		this._alpha = +value;
 	}
 
-	clone(): BitmapFilter {
+	clone(): DisplacementMapFilter {
 		return new DisplacementMapFilter(
 			this._mapBitmap,
 			this._mapPoint,
@@ -155,5 +171,20 @@ export class DisplacementMapFilter extends BitmapFilter {
 			this._color,
 			this._alpha
 		);
+	}
+
+	toAwayObject(): InterfaceOf<IDisplacementFilter> {
+		return {
+			filterName: 'displacement',
+			mapBitmap: this._mapBitmap.adaptee,
+			mapPoint: this._mapPoint.adaptee,
+			componentX: this._componentX,
+			componentY: this._componentY,
+			scaleX: this._scaleX,
+			scaleY: this._scaleY,
+			mode: this._mode,
+			color: this._color,
+			alpha: this._alpha
+		};
 	}
 }

@@ -2,7 +2,6 @@ import { BitmapFilter, GradientArrays } from './BitmapFilter';
 import { BitmapFilterType } from './BitmapFilterType';
 import { NumberUtilities, isNullOrUndefined } from '@awayfl/swf-loader';
 import { ASArray, Errors, axCoerceString } from '@awayfl/avm2';
-import { Rectangle } from '../geom/Rectangle';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -90,19 +89,6 @@ export class GradientBevelFilter extends BitmapFilter {
 		this.quality = quality;
 		this.type = type;
 		this.knockout = knockout;
-	}
-
-	_updateFilterBounds(bounds: Rectangle) {
-		if (this.type !== BitmapFilterType.INNER) {
-			BitmapFilter._updateBlurBounds(bounds, this._blurX, this._blurY, this._quality);
-			if (this._distance !== 0) {
-				const a: number = this._angle * Math.PI / 180;
-				bounds.x += Math.floor(Math.cos(a) * this._distance);
-				bounds.y += Math.floor(Math.sin(a) * this._distance);
-				if (bounds.left > 0) { bounds.left = 0; }
-				if (bounds.top > 0) { bounds.top = 0; }
-			}
-		}
 	}
 
 	private _distance: number;

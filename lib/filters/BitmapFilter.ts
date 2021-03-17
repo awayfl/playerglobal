@@ -1,6 +1,16 @@
 import { NumberUtilities, isNullOrUndefined } from '@awayfl/swf-loader';
-import { Rectangle } from '../geom/Rectangle';
 import { ASObject } from '@awayfl/avm2';
+
+type NonFunctionPropertyNames<T> = {
+	[K in keyof T]: T[K] extends Function ? never : K;
+}[keyof T];
+
+type NonPrimitiveProperty<T> = {
+	[K in keyof T]: T[K] extends object ? any: T[K];
+};
+
+export type InterfaceOf<T> = NonPrimitiveProperty<Pick<T, NonFunctionPropertyNames<T>>>;
+
 export class BitmapFilter extends ASObject {
 
 	static axClass: typeof BitmapFilter;
@@ -8,58 +18,15 @@ export class BitmapFilter extends ASObject {
 	// Called whenever the class is initialized.
 	static classInitializer: any = null;
 
-	private static EPS: number = 0.000000001;
-
-	// Step widths for blur based filters, for quality values 1..15:
-	// If we plot the border width added by generateFilterRect for each
-	// blurX (or blurY) value, the step width is the amount of blurX
-	// that adds one pixel to the border width. I.e. for quality = 1,
-	// the border width increments at blurX = 2, 4, 6, ...
-	private static blurFilterStepWidths: number[] = [
-		0.5, 1.05, 1.35, 1.55, 1.75, 1.9, 2, 2.1, 2.2, 2.3, 2.5, 3, 3, 3.5, 3.5];
-
-	static _updateBlurBounds(bounds: Rectangle,
-		blurX: number, blurY: number, quality: number /*int*/, isBlurFilter: boolean = false) {
-		// Approximation of BitmapData.generateFilterRect()
-		const stepWidth: number = BitmapFilter.blurFilterStepWidths[quality - 1];
-		if (isBlurFilter) {
-			// BlurFilter behaves slightly different from other blur based filters:
-			// Given ascending blurX/blurY values, generateFilterRect with BlurFilter
-			// expands the source rect later than with i.e. GlowFilter. The difference
-			// appears to be stepWidth / 4 for all quality values.
-			const stepWidth4: number = stepWidth / 4;
-			blurX -= stepWidth4;
-			blurY -= stepWidth4;
-		}
-		// Calculate horizontal and vertical borders:
-		// blurX/blurY values <= 1 are always rounded up to 1,
-		// which means that generateFilterRect always expands the source rect,
-		// even when blurX/blurY is 0.
-		const bh: number = Math.ceil((blurX < 1 ? 1 : blurX) * stepWidth);
-		const bv: number = Math.ceil((blurY < 1 ? 1 : blurY) * stepWidth);
-		bounds.inflate(bh, bv);
-	}
-
 	constructor() {
 		super();
 	}
 
-	_updateFilterBounds(bounds: Rectangle) {
-		// ...
-	}
-
-	_serialize(message: any) {
-		// Overridden by subclasses
-		// -1: Filter not supported, no further serialization
-		// 0-7: Filter IDs according to SWF spec
-		message.writeInt(-1);
-	}
-
-	// JS -> AS Bindings
-
-	// AS -> JS Bindings
-
 	clone(): BitmapFilter {
+		return null;
+	}
+
+	toAwayObject(): InterfaceOf<any>  {
 		return null;
 	}
 

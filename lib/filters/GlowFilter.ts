@@ -1,5 +1,4 @@
 import { BitmapFilter } from './BitmapFilter';
-import { Rectangle } from '../geom/Rectangle';
 import { assert, release, NumberUtilities } from '@awayfl/swf-loader';
 
 /**
@@ -62,10 +61,6 @@ export class GlowFilter extends BitmapFilter {
 		this.quality = quality;
 		this.inner = inner;
 		this.knockout = knockout;
-	}
-
-	_updateFilterBounds(bounds: Rectangle) {
-		BitmapFilter._updateBlurBounds(bounds, this._blurX, this._blurY, this._quality);
 	}
 
 	// JS -> AS Bindings

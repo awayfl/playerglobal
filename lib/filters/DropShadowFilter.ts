@@ -1,5 +1,4 @@
 import { BitmapFilter } from './BitmapFilter';
-import { Rectangle } from '../geom/Rectangle';
 import { NumberUtilities, assert, release } from '@awayfl/swf-loader';
 
 /**
@@ -73,19 +72,6 @@ export class DropShadowFilter extends BitmapFilter {
 		this.inner = inner;
 		this.knockout = knockout;
 		this.hideObject = hideObject;
-	}
-
-	_updateFilterBounds(bounds: Rectangle) {
-		if (!this.inner) {
-			BitmapFilter._updateBlurBounds(bounds, this._blurX, this._blurY, this._quality);
-			if (this._distance !== 0) {
-				const a: number = this._angle * Math.PI / 180;
-				bounds.x += Math.floor(Math.cos(a) * this._distance);
-				bounds.y += Math.floor(Math.sin(a) * this._distance);
-				if (bounds.left > 0) { bounds.left = 0; }
-				if (bounds.top > 0) { bounds.top = 0; }
-			}
-		}
 	}
 
 	// JS -> AS Bindings

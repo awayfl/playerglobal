@@ -1,25 +1,7 @@
-import { BitmapFilter } from './BitmapFilter';
+import { BitmapFilter, InterfaceOf } from './BitmapFilter';
 import { assert, release, NumberUtilities } from '@awayfl/swf-loader';
 import { BitmapFilterType } from './BitmapFilterType';
-import { Rectangle } from '../geom/Rectangle';
 import { axCoerceString, Errors } from '@awayfl/avm2';
-
-/**
- * Copyright 2014 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-// Class: BevelFilter
 
 export class BevelFilter extends BitmapFilter {
 
@@ -100,19 +82,6 @@ export class BevelFilter extends BitmapFilter {
 		this.quality = quality;
 		this.type = type;
 		this.knockout = knockout;
-	}
-
-	_updateFilterBounds(bounds: Rectangle) {
-		if (this.type !== BitmapFilterType.INNER) {
-			BitmapFilter._updateBlurBounds(bounds, this._blurX, this._blurY, this._quality);
-			if (this._distance !== 0) {
-				const a: number = this._angle * Math.PI / 180;
-				bounds.x += Math.floor(Math.cos(a) * this._distance);
-				bounds.y += Math.floor(Math.sin(a) * this._distance);
-				if (bounds.left > 0) { bounds.left = 0; }
-				if (bounds.top > 0) { bounds.top = 0; }
-			}
-		}
 	}
 
 	public readonly filterName = 'bevel';
@@ -253,5 +222,9 @@ export class BevelFilter extends BitmapFilter {
 			this._type,
 			this._knockout
 		);
+	}
+
+	toAwayObject(): InterfaceOf<BevelFilter> {
+		return this;
 	}
 }
