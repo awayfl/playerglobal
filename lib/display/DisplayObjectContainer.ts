@@ -387,7 +387,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 		if (!child.adapter || child.adapter == child) {
 			// todo: this looks like it might cause trouble:
 			// it adds a Sprite-adapter to the child, regardsless what type the child really is
-			const sprite = child.adapter = new (<SecurityDomain> this.sec).flash.display.Sprite();
+			const sprite = child.adapter = new (<SecurityDomain> this.sec).flash.display.Shape();
 			sprite.adaptee = child;
 		}
 
