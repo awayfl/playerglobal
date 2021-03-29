@@ -1,7 +1,8 @@
 import { Billboard, DisplayObject as AwayDisplayObject, SceneImage2D } from '@awayjs/scene';
 import { DisplayObject } from './DisplayObject';
 import { BitmapData } from './BitmapData';
-import { ImageTexture2D, MethodMaterial } from '@awayjs/materials';
+import { ImageTexture2D } from '@awayjs/renderer';
+import { MethodMaterial } from '@awayjs/materials';
 
 import { IBitmapDataOwner } from './IBitmapDataOwner';
 import { BitmapImage2D } from '@awayjs/stage';

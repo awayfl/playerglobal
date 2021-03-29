@@ -605,16 +605,11 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * movie clip is translated (when its x and y position is changed).
 	 */
 	public get cacheAsBitmap(): boolean {
-		// @todo
-		Debug.throwPIR('playerglobals/display/DisplayObject', 'get cacheAsBitmap', '');
-		return false;
+		return this.adaptee.cacheAsBitmap;
 	}
 
 	public set cacheAsBitmap(value: boolean) {
-		// @todo
-		Debug.throwPIR('playerglobals/display/DisplayObject', 'set cacheAsBitmap', '');
-
-		//this.adaptee.cacheAsBitmap = value;
+		this.adaptee.cacheAsBitmap = value;
 	}
 
 	/**
