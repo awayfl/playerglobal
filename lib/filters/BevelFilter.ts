@@ -3,6 +3,21 @@ import { assert, release, NumberUtilities } from '@awayfl/swf-loader';
 import { BitmapFilterType } from './BitmapFilterType';
 import { axCoerceString, Errors } from '@awayfl/avm2';
 
+export interface IBevelFilter {
+	filterName: 'bevel',
+	distance: number;
+	angle: number;
+	highlightColor: number;
+	highlightAlpha: number;
+	shadowColor: number;
+	shadowAlpha: number;
+	blurX: number;
+	blurY: number;
+	strength: number;
+	quality: number;
+	type: string;
+	knockout: boolean;
+}
 export class BevelFilter extends BitmapFilter {
 
 	static axClass: typeof BevelFilter;
@@ -224,7 +239,7 @@ export class BevelFilter extends BitmapFilter {
 		);
 	}
 
-	toAwayObject(): InterfaceOf<BevelFilter> {
+	toAwayObject(): InterfaceOf<IBevelFilter> {
 		return this;
 	}
 }

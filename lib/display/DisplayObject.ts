@@ -716,6 +716,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			return;
 
 		this._filters = value;
+		//@ts-ignore
+		(<AwayDisplayObject> this._adaptee).filters = value.map((e) => e.toAwayObject());
 	}
 
 	/**

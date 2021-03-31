@@ -1,7 +1,8 @@
-import { BitmapFilter, GradientArrays } from './BitmapFilter';
+import { BitmapFilter, GradientArrays, InterfaceOf } from './BitmapFilter';
 import { BitmapFilterType } from './BitmapFilterType';
 import { NumberUtilities, isNullOrUndefined } from '@awayfl/swf-loader';
 import { ASArray, Errors, axCoerceString } from '@awayfl/avm2';
+import { BevelFilter, IBevelFilter } from './BevelFilter';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -216,6 +217,24 @@ export class GradientBevelFilter extends BitmapFilter {
 				this._type = BitmapFilterType.FULL;
 			}
 		}
+	}
+
+	toAwayObject(): InterfaceOf<IBevelFilter> {
+		return {
+			filterName: 'bevel',
+			distance: this._distance,
+			angle: this._angle,
+			blurX: this._blurX,
+			blurY: this._blurY,
+			strength: this._strength,
+			quality: this._quality,
+			type: this._type,
+			knockout: this._knockout,
+			shadowAlpha: this._alphas[this._alphas.length - 1],
+			shadowColor: this._colors[this._colors.length - 1],
+			highlightAlpha: this._alphas[0],
+			highlightColor: this._colors[0]
+		};
 	}
 
 	clone(): BitmapFilter {
