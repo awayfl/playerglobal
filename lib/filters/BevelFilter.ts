@@ -2,6 +2,7 @@ import { BitmapFilter, InterfaceOf } from './BitmapFilter';
 import { assert, release, NumberUtilities } from '@awayfl/swf-loader';
 import { BitmapFilterType } from './BitmapFilterType';
 import { axCoerceString, Errors } from '@awayfl/avm2';
+import { IFilter } from '@awayjs/scene';
 
 export interface IBevelFilter {
 	filterName: 'bevel',
@@ -31,7 +32,7 @@ export class BevelFilter extends BitmapFilter {
 	// List of instance symbols to link.
 	static instanceSymbols: string [] = null;
 
-	public static FromUntyped(obj: any) {
+	public static FromUntyped(obj: IFilter, sec) {
 		// obj.colors is an array of RGBA colors.
 		// Here it contains exactly two color objects (spec might state it differently):
 		//  - first maps to highlightColor and highlightAlpha;

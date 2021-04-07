@@ -1,6 +1,7 @@
 import { BitmapFilter } from './BitmapFilter';
 import { toNumber, isNullOrUndefined } from '@awayfl/swf-loader';
-import { Errors, ASArray } from '@awayfl/avm2';
+import { Errors, ASArray, AXSecurityDomain } from '@awayfl/avm2';
+import { IFilter } from '@awayjs/scene';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -25,7 +26,7 @@ export class ColorMatrixFilter extends BitmapFilter {
 
 	static classInitializer: any = null;
 
-	public static FromUntyped(obj: {matrix: number[]}) {
+	public static FromUntyped(obj: IFilter, _sec: AXSecurityDomain) {
 		const filter = Object.create(ColorMatrixFilter.axClass.tPrototype);
 		filter._matrix = obj.matrix;
 		return filter;

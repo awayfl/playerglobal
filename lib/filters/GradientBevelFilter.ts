@@ -1,8 +1,8 @@
 import { BitmapFilter, GradientArrays, InterfaceOf } from './BitmapFilter';
 import { BitmapFilterType } from './BitmapFilterType';
 import { NumberUtilities, isNullOrUndefined } from '@awayfl/swf-loader';
-import { ASArray, Errors, axCoerceString } from '@awayfl/avm2';
-import { BevelFilter, IBevelFilter } from './BevelFilter';
+import { ASArray, Errors, axCoerceString, AXSecurityDomain } from '@awayfl/avm2';
+import { IBevelFilter } from './BevelFilter';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -21,6 +21,13 @@ import { BevelFilter, IBevelFilter } from './BevelFilter';
  */
 // Class: GradientBevelFilter
 
+// eslint-disable-next-line max-len
+export interface IGradientBevelFilter extends Omit<IBevelFilter, 'shadowAlpha' | 'shadowColor' | 'highlightAlpha' | 'highlightColor' > {
+	colors: ui32[],
+	ratios: ui8[],
+	alphas: number[]
+}
+
 export class GradientBevelFilter extends BitmapFilter {
 
 	static axClass: typeof GradientBevelFilter;
@@ -34,7 +41,7 @@ export class GradientBevelFilter extends BitmapFilter {
 	// List of instance symbols to link.
 	static instanceSymbols: string [] = null;
 
-	public static FromUntyped(obj: any) {
+	public static FromUntyped(obj: any, sec: AXSecurityDomain) {
 		// obj.colors is an array of RGBA colors.
 		// The RGB and alpha parts must be separated into colors and alphas arrays.
 		const colors: number[] = [];
@@ -60,9 +67,9 @@ export class GradientBevelFilter extends BitmapFilter {
 			obj.distance,
 			angle,
 			// Boxing these is obviously not ideal, but everything else is just annoying.
-			this.sec.createArrayUnsafe(colors),
-			this.sec.createArrayUnsafe(alphas),
-			this.sec.createArrayUnsafe(obj.ratios),
+			sec.createArrayUnsafe(colors),
+			sec.createArrayUnsafe(alphas),
+			sec.createArrayUnsafe(obj.ratios),
 			obj.blurX,
 			obj.blurY,
 			obj.strength,
@@ -72,15 +79,29 @@ export class GradientBevelFilter extends BitmapFilter {
 		);
 	}
 
-	constructor(distance: number = 4, angle: number = 45, colors: ASArray = null,
-		alphas: ASArray = null, ratios: ASArray = null, blurX: number = 4, blurY: number = 4,
-		strength: number = 1, quality: number /*int*/ = 1, type: string = 'inner',
-		knockout: boolean = false) {
+	constructor(
+		distance: number = 4,
+		angle: number = 45,
+		colors: ASArray = null,
+		alphas: ASArray = null,
+		ratios: ASArray = null,
+		blurX: number = 4,
+		blurY: number = 4,
+		strength: number = 1,
+		quality: number /*int*/ = 1,
+		type: string = 'inner',
+		knockout: boolean = false
+	) {
 		super();
 		this.distance = distance;
 		this.angle = angle;
-		GradientArrays.sanitize(colors ? colors.value : null, alphas ? alphas.value : null,
-			ratios ? ratios.value : null);
+
+		GradientArrays.sanitize(
+			colors ? colors.value : null,
+			alphas ? alphas.value : null,
+			ratios ? ratios.value : null
+		);
+
 		this._colors = GradientArrays.colors;
 		this._alphas = GradientArrays.alphas;
 		this._ratios = GradientArrays.ratios;
@@ -219,7 +240,7 @@ export class GradientBevelFilter extends BitmapFilter {
 		}
 	}
 
-	toAwayObject(): InterfaceOf<IBevelFilter> {
+	toAwayObject(): InterfaceOf<IGradientBevelFilter> {
 		return {
 			filterName: 'bevel',
 			distance: this._distance,
@@ -230,10 +251,9 @@ export class GradientBevelFilter extends BitmapFilter {
 			quality: this._quality,
 			type: this._type,
 			knockout: this._knockout,
-			shadowAlpha: this._alphas[this._alphas.length - 1],
-			shadowColor: this._colors[this._colors.length - 1],
-			highlightAlpha: this._alphas[0],
-			highlightColor: this._colors[0]
+			colors: this._colors,
+			alphas: this._alphas,
+			ratios: this._ratios
 		};
 	}
 

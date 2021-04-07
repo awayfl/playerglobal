@@ -1018,7 +1018,7 @@ export class Stage extends DisplayObjectContainer {
 	public set blendMode (value: string) {}
 	public set cacheAsBitmap (value: boolean) {}
 	public set contextMenu (value: any) {}// todo: any is ContextMenu
-	public set filters (value: Array<any>) {}
+	public set filters (value: any) {}
 	public set focusRect (value: any) {}
 	public set mask (value: DisplayObject) {}
 	public set mouseChildren (value: boolean) {}

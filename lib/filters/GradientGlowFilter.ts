@@ -64,10 +64,19 @@ export class GradientGlowFilter extends BitmapFilter {
 		);
 	}
 
-	constructor(distance: number = 4, angle: number = 45, colors: ASArray = null,
-		alphas: ASArray = null, ratios: ASArray = null, blurX: number = 4, blurY: number = 4,
-		strength: number = 1, quality: number /*int*/ = 1, type: string = 'inner',
-		knockout: boolean = false) {
+	constructor(
+		distance: number = 4,
+		angle: number = 45,
+		colors: ASArray = null,
+		alphas: ASArray = null,
+		ratios: ASArray = null,
+		blurX: number = 4,
+		blurY: number = 4,
+		strength: number = 1,
+		quality: number /*int*/ = 1,
+		type: string = 'inner',
+		knockout: boolean = false
+	) {
 		super();
 		this.distance = distance;
 		this.angle = angle;

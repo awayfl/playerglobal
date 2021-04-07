@@ -9,15 +9,17 @@ import { LoaderInfo } from './LoaderInfo';
 import { DisplayObjectContainer } from './DisplayObjectContainer';
 import { Stage } from './Stage';
 import { PickGroup, BoundsPicker, BasicPartition, ContainerNode } from '@awayjs/view';
-import { constructClassFromSymbol, AXClass } from '@awayfl/avm2';
+import { constructClassFromSymbol, AXClass, ASArray } from '@awayfl/avm2';
 import { Transform } from '../geom/Transform';
 import { Rectangle } from '../geom/Rectangle';
 import { Point } from '../geom/Point';
 import { Vector3D } from '../geom/Vector3D';
 import { SecurityDomain } from '../SecurityDomain';
-import { AVMStage, FilterType } from '@awayfl/swf-loader';
+import { AVMStage } from '@awayfl/swf-loader';
+import { FilterBuilder } from '../filters/FilterBuilder';
 import { BitmapFilter } from '../filters/BitmapFilter';
 
+type gASArray<T> = ASArray & {value: T };
 export class DisplayObject extends EventDispatcher implements IDisplayObjectAdapter {
 	static axClass: typeof DisplayObject & AXClass;
 
@@ -32,7 +34,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	protected _visibilityByScript: boolean;
 
 	private _transform: Transform;
-	private _filters: BitmapFilter[];
+	private _filters: gASArray<BitmapFilter>;
 	private _boundsPicker: BoundsPicker;
 
 	// hack for TFL to return correct width / height for TextLine
@@ -81,71 +83,17 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	public updateFilters(newFilters: IFilter[]) {
-		if (!newFilters || newFilters.length == 0) {
-			this.filters = this.sec.createArrayUnsafe([]);
-			return;
-		}
-		let filter: IFilter;
-		const newASFilters: BitmapFilter[] = [];
-		newASFilters.length = newFilters.length;
-		for (let f = 0; f < newFilters.length; f++) {
-			filter = newFilters[f];
-			switch (filter.type) {
-				case FilterType.DROPSHADOW:
-					newASFilters[f] = new (<SecurityDomain> this.sec).flash.filters.DropShadowFilter(
-						filter.distance, filter.angle, filter.color, 1, filter.blurX, filter.blurY,
-						filter.strength, filter.quality, filter.inner, filter.knockout, filter.compositeSource);
-					break;
-				case FilterType.GLOW:
-					newASFilters[f] = new (<SecurityDomain> this.sec).flash.filters.GlowFilter(
-						filter.color, 1, filter.blurX, filter.blurY, filter.strength,
-						filter.quality, filter.inner, filter.knockout);
-					break;
-				case FilterType.BEVEL:
-					// todo: set argument "type" (currently stubbed with "")
-					newASFilters[f] = new (<SecurityDomain> this.sec).flash.filters.BevelFiler(
-						filter.distance, filter.angle, filter.colors[0], 1,
-						filter.colors[1], 1, filter.blurX, filter.blurY, filter.strength,
-						filter.quality, '', filter.knockout);
-					break;
-				case FilterType.GRADIENTGLOW: {
-					// todo: set argument "type" (currently stubbed with "")
-					const alphas = [];
-					filter.colors.forEach(value=>alphas.push(1));
-					newASFilters[f] = new (<SecurityDomain> this.sec).flash.filters.GradientGlowFilter(
-						filter.distance, filter.angle, this.sec.createArrayUnsafe(filter.colors),
-						this.sec.createArrayUnsafe(alphas), this.sec.createArrayUnsafe(filter.ratios),
-						filter.blurX, filter.blurY, filter.strength, filter.quality, '', filter.knockout
-					);
-					break;
-				}
-				case FilterType.GRADIENTBEVEL:
-					// todo: set argument "type" (currently stubbed with "")
-					newASFilters[f] = new (<SecurityDomain> this.sec).flash.filters.GradientBevelFilter(
-						filter.distance, filter.angle, this.sec.createArrayUnsafe(filter.colors),
-						this.sec.createArrayUnsafe([]), this.sec.createArrayUnsafe(filter.ratios),
-						filter.blurX, filter.blurY, filter.strength, filter.quality, '', filter.knockout
-					);
-					break;
-				case FilterType.BLUR:
-					newASFilters[f] = new (<SecurityDomain> this.sec).flash.filters.BlurFilter(
-						filter.blurX, filter.blurY, filter.quality);
-					break;
-				case FilterType.CONVOLUTION:
-					newASFilters[f] = new (<SecurityDomain> this.sec).flash.filters.ConvolutionFilter(
-						filter.matrixX, filter.matrixY, this.sec.createArrayUnsafe(filter.matrix),
-						filter.divisor, filter.bias, filter.preserveAlpha,
-						filter.clamp, filter.color, 1
-					);
-					break;
-				case FilterType.COLORMATRIX:
-					newASFilters[f] = new (<SecurityDomain> this.sec).flash.filters.ColorMatrixFilter(
-						this.sec.createArrayUnsafe(filter.matrix)
-					);
-					break;
+		const filters: BitmapFilter[] = [];
+
+		if (newFilters && newFilters.length) {
+			for (const filter of newFilters) {
+				const asFilter = FilterBuilder.FromUntyped(filter, this.sec);
+
+				asFilter && filters.push(asFilter);
 			}
 		}
-		this.filters = newASFilters;
+
+		this.filters = this.sec.createArrayUnsafe(filters);
 	}
 
 	protected _adaptee: AwayDisplayObject;
@@ -239,7 +187,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	constructor() {
 		super();
 
-		this._filters = this._filters || [];
+		this._filters = this._filters || this.sec.createArrayUnsafe([]);
 
 		this._blockedByScript = false;
 		this._ctBlockedByScript = false;
@@ -707,17 +655,17 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   data in the input data. See the ShaderInput.input
 	 *   property for more information.
 	 */
-	public get filters(): BitmapFilter[] {
+	public get filters(): gASArray<BitmapFilter> {
 		return this._filters;
 	}
 
-	public set filters(value: BitmapFilter[]) {
+	public set filters(value: gASArray<BitmapFilter>) {
 		if (this._filters == value)
 			return;
 
 		this._filters = value;
 		//@ts-ignore
-		(<AwayDisplayObject> this._adaptee).filters = value.map((e) => e.toAwayObject());
+		(<AwayDisplayObject> this._adaptee).filters = value.value.map((e) => e.toAwayObject());
 	}
 
 	/**
@@ -752,7 +700,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			return 100;
 		}
 
-		const box: Box = this.getBoundsInternal(this.parent || this._stage);
+		const box: Box = this.getBoundsInternal(this.parent || <any> this._stage);
 
 		return (box == null) ? 0 : box.height;
 	}
@@ -1300,7 +1248,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 		}
 
-		const box: Box = this.getBoundsInternal(this.parent || this._stage);
+		const box: Box = this.getBoundsInternal(this.parent || <any> this._stage);
 
 		return (box == null) ? 0 : box.width;
 
