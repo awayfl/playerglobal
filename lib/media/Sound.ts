@@ -6,7 +6,7 @@ import { SoundChannel } from './SoundChannel';
 import { SoundTransform } from './SoundTransform';
 import { ByteArray } from '../utils/ByteArray';
 import { ID3Info } from './ID3Info';
-import { WaveAudio } from '@awayjs/core';
+import { AssetLibrary, LoaderContext, WaveAudio, WaveAudioParser, URLRequest as URLRequestAway, AssetEvent, LoaderEvent, URLLoaderEvent, IAsset, Loader } from '@awayjs/core';
 import { SecurityDomain } from '../SecurityDomain';
 
 /**
@@ -74,8 +74,14 @@ import { SecurityDomain } from '../SecurityDomain';
  * <p class="- topic/p ">For more information related to security, see the Flash Player Developer Center Topic:
  * <xref href="http://www.adobe.com/go/devnet_security_en" scope="external" class="- topic/xref ">Security</xref>.</p>
  */
+
+
 export class Sound extends EventDispatcher {
 	private _adaptee: WaveAudio;
+	private _url: string;
+	private _loading: boolean;
+	private _playAfterLoad: boolean;
+	private _pendingPlayCommand: IPendingPlayCommand;
 	/**
 	 * Creates a new Sound object. If you pass a valid URLRequest object to the
 	 * Sound constructor, the constructor automatically calls the load() function
@@ -102,8 +108,63 @@ export class Sound extends EventDispatcher {
 	 */
 	constructor (stream: URLRequest = null, context: SoundLoaderContext = null) {
 		super();
-		//this.adaptee=this.adaptee;
-		//console.log("sound is not implemented yet in flash/Sound");
+		this._onAssetCompleteDelegate = (event: AssetEvent) => this.onAssetComplete(event);
+		this._onLoaderCompleteDelegate = (event: LoaderEvent) => this.onLoaderComplete(event);
+		this._onLoadErrorDelegate = (event: URLLoaderEvent) => this.onLoadError(event);
+		if (stream) {
+			this.loadWaveAudio(stream);
+		}
+	}
+
+	private loadWaveAudio(stream: URLRequest) {
+		this._url = stream.url;
+		this._loading = true;
+		AssetLibrary.removeEventListener(AssetEvent.ASSET_COMPLETE, this._onAssetCompleteDelegate);
+		AssetLibrary.removeEventListener(LoaderEvent.LOADER_COMPLETE, this._onLoaderCompleteDelegate);
+		AssetLibrary.removeEventListener(URLLoaderEvent.LOAD_ERROR, this._onLoadErrorDelegate);
+		AssetLibrary.addEventListener(AssetEvent.ASSET_COMPLETE, this._onAssetCompleteDelegate);
+		AssetLibrary.addEventListener(LoaderEvent.LOADER_COMPLETE, this._onLoaderCompleteDelegate);
+		AssetLibrary.addEventListener(URLLoaderEvent.LOAD_ERROR, this._onLoadErrorDelegate);
+		AssetLibrary.load(new URLRequestAway(this._url), new LoaderContext(), this._url, new WaveAudioParser());
+	}
+
+	private _onAssetCompleteDelegate: (event: AssetEvent) => void;
+
+	private onAssetComplete(event: AssetEvent): void {
+		const asset: IAsset = event.asset;
+		if (asset.isAsset(WaveAudio)) {
+			this._adaptee = <WaveAudio>asset;
+			this._loading = false;
+			if (this._pendingPlayCommand) {
+				this.play(this._pendingPlayCommand.startTime,
+					this._pendingPlayCommand.loops,
+					this._pendingPlayCommand.sndTransform);
+				this._playAfterLoad = false;
+			}
+			this._pendingPlayCommand = null;
+		}
+	}
+
+	private _onLoaderCompleteDelegate: (event: LoaderEvent) => void;
+
+	private onLoaderComplete(event: LoaderEvent): void {
+		if (event.url != this._url) {
+			return;
+		}
+		this._loading = false;
+		AssetLibrary.removeEventListener(AssetEvent.ASSET_COMPLETE, this._onAssetCompleteDelegate);
+		AssetLibrary.removeEventListener(LoaderEvent.LOADER_COMPLETE, this._onLoaderCompleteDelegate);
+		AssetLibrary.removeEventListener(URLLoaderEvent.LOAD_ERROR, this._onLoadErrorDelegate);
+	}
+
+	private _onLoadErrorDelegate: (event: URLLoaderEvent) => void;
+
+	private onLoadError(event: URLLoaderEvent): void {
+		AssetLibrary.removeEventListener(AssetEvent.ASSET_COMPLETE, this._onAssetCompleteDelegate);
+		AssetLibrary.removeEventListener(LoaderEvent.LOADER_COMPLETE, this._onLoaderCompleteDelegate);
+		AssetLibrary.removeEventListener(URLLoaderEvent.LOAD_ERROR, this._onLoadErrorDelegate);
+		console.log('load error in Sound', event);
+		this._loading = false;
 	}
 
 	public get adaptee(): WaveAudio {
@@ -257,8 +318,7 @@ export class Sound extends EventDispatcher {
 	 * @playerversion	Lite 4
 	 */
 	public get url (): string {
-		console.log('url not implemented yet in flash/Sound');
-		return '';
+		return this._url;
 	}
 
 	/**
@@ -362,7 +422,7 @@ export class Sound extends EventDispatcher {
 	 *   platform component).
 	 */
 	public load (stream: URLRequest, context: SoundLoaderContext = null) {
-		console.log('load not implemented yet in flash/Sound');
+		this.loadWaveAudio(stream);
 	}
 
 	public loadCompressedDataFromByteArray (bytes: ByteArray, bytesLength: number) {
@@ -409,11 +469,21 @@ export class Sound extends EventDispatcher {
 	 * @refpath
 	 */
 	public play (startTime: number = 0, loops: number = 0, sndTransform: SoundTransform = null): SoundChannel {
-		if (!this.adaptee) {
+		if (!this.adaptee && !this._loading) {
 			console.warn('[Sound#play]: no adaptee exists!');
 
-			// return empty SoundChannel to prevetn crash when adaptee is not exist
+			// return empty SoundChannel to prevent crash when adaptee is not exist
 			return new (<SecurityDomain> this.sec).flash.media.SoundChannel();
+		}
+
+		if (!this.adaptee && this._loading) {
+			this._pendingPlayCommand = {
+				startTime: startTime,
+				loops: loops,
+				sndTransform: sndTransform,
+				sndChannel: new (<SecurityDomain> this.sec).flash.media.SoundChannel()
+			};
+			return this._pendingPlayCommand.sndChannel;
 		}
 
 		if (sndTransform) {
@@ -427,7 +497,9 @@ export class Sound extends EventDispatcher {
 		this._adaptee.onSoundComplete = ()=>this.soundCompleteInternal();
 		this._adaptee.play(startTime, false);
 
-		const newSoundChannel: SoundChannel = new (<SecurityDomain> this.sec).flash.media.SoundChannel();
+		const newSoundChannel: SoundChannel = this._pendingPlayCommand ?
+			this._pendingPlayCommand.sndChannel :
+			new (<SecurityDomain> this.sec).flash.media.SoundChannel();
 		newSoundChannel._sound = this;
 
 		if (!sndTransform) {
@@ -442,4 +514,11 @@ export class Sound extends EventDispatcher {
 		this._adaptee.stop();
 	}
 
+}
+
+interface IPendingPlayCommand {
+	startTime: number,
+	loops: number,
+	sndTransform: SoundTransform,
+	sndChannel: SoundChannel
 }
