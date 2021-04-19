@@ -75,7 +75,6 @@ import { SecurityDomain } from '../SecurityDomain';
  * <xref href="http://www.adobe.com/go/devnet_security_en" scope="external" class="- topic/xref ">Security</xref>.</p>
  */
 
-
 export class Sound extends EventDispatcher {
 	private _adaptee: WaveAudio;
 	private _url: string;
