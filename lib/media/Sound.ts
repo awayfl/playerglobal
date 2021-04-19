@@ -1,12 +1,15 @@
 
 import { EventDispatcher } from '../events/EventDispatcher';
+import { Event } from '../events/Event';
+import { IOErrorEvent } from '../events/IOErrorEvent';
 import { URLRequest } from '../net/URLRequest';
 import { SoundLoaderContext } from './SoundLoaderContext';
 import { SoundChannel } from './SoundChannel';
 import { SoundTransform } from './SoundTransform';
 import { ByteArray } from '../utils/ByteArray';
 import { ID3Info } from './ID3Info';
-import { AssetLibrary, LoaderContext, WaveAudio, WaveAudioParser, URLRequest as URLRequestAway, AssetEvent, LoaderEvent, URLLoaderEvent, IAsset, Loader } from '@awayjs/core';
+import { AssetLibrary, LoaderContext, WaveAudio, WaveAudioParser,
+	URLRequest as URLRequestAway, AssetEvent, LoaderEvent, URLLoaderEvent, IAsset, Loader } from '@awayjs/core';
 import { SecurityDomain } from '../SecurityDomain';
 
 /**
@@ -81,6 +84,7 @@ export class Sound extends EventDispatcher {
 	private _loading: boolean;
 	private _playAfterLoad: boolean;
 	private _pendingPlayCommand: IPendingPlayCommand;
+	private _bytesLoaded: number;
 	/**
 	 * Creates a new Sound object. If you pass a valid URLRequest object to the
 	 * Sound constructor, the constructor automatically calls the load() function
@@ -107,6 +111,7 @@ export class Sound extends EventDispatcher {
 	 */
 	constructor (stream: URLRequest = null, context: SoundLoaderContext = null) {
 		super();
+		this._bytesLoaded = 0;
 		this._onAssetCompleteDelegate = (event: AssetEvent) => this.onAssetComplete(event);
 		this._onLoaderCompleteDelegate = (event: LoaderEvent) => this.onLoaderComplete(event);
 		this._onLoadErrorDelegate = (event: URLLoaderEvent) => this.onLoadError(event);
@@ -151,9 +156,11 @@ export class Sound extends EventDispatcher {
 			return;
 		}
 		this._loading = false;
+		this._bytesLoaded = 1000;
 		AssetLibrary.removeEventListener(AssetEvent.ASSET_COMPLETE, this._onAssetCompleteDelegate);
 		AssetLibrary.removeEventListener(LoaderEvent.LOADER_COMPLETE, this._onLoaderCompleteDelegate);
 		AssetLibrary.removeEventListener(URLLoaderEvent.LOAD_ERROR, this._onLoadErrorDelegate);
+		this.dispatchEvent(new (<SecurityDomain> this.sec).flash.events.Event(Event.COMPLETE));
 	}
 
 	private _onLoadErrorDelegate: (event: URLLoaderEvent) => void;
@@ -164,6 +171,7 @@ export class Sound extends EventDispatcher {
 		AssetLibrary.removeEventListener(URLLoaderEvent.LOAD_ERROR, this._onLoadErrorDelegate);
 		console.log('load error in Sound', event);
 		this._loading = false;
+		this.dispatchEvent(new (<SecurityDomain> this.sec).flash.events.IOErrorEvent(IOErrorEvent.ERROR));
 	}
 
 	public get adaptee(): WaveAudio {
@@ -183,8 +191,7 @@ export class Sound extends EventDispatcher {
 	 * @refpath
 	 */
 	public get bytesLoaded (): number {
-		console.log('bytesLoaded not implemented yet in flash/Sound');
-		return 0;
+		return this._bytesLoaded;
 	}
 
 	/**
@@ -195,8 +202,7 @@ export class Sound extends EventDispatcher {
 	 * @refpath
 	 */
 	public get bytesTotal (): number {
-		console.log('bytesTotal not implemented yet in flash/Sound');
-		return 0;
+		return 1000;
 	}
 
 	/**
@@ -289,6 +295,8 @@ export class Sound extends EventDispatcher {
 	 * @playerversion	Lite 4
 	 */
 	public get length (): number {
+		if (!this._adaptee)
+			return;
 		return this._adaptee.duration;
 	}
 
