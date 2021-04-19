@@ -20,6 +20,11 @@ import { IFilter } from '@awayjs/scene';
  */
 // Class: ColorMatrixFilter
 
+export interface IColorMatrix {
+	filterName: 'colorMatrix';
+	matrix: number[];
+}
+
 export class ColorMatrixFilter extends BitmapFilter {
 
 	static axClass: typeof ColorMatrixFilter;
@@ -27,9 +32,7 @@ export class ColorMatrixFilter extends BitmapFilter {
 	static classInitializer: any = null;
 
 	public static FromUntyped(obj: IFilter, _sec: AXSecurityDomain) {
-		const filter = Object.create(ColorMatrixFilter.axClass.tPrototype);
-		filter._matrix = obj.matrix;
-		return filter;
+		return new ColorMatrixFilter(_sec.createArrayUnsafe(obj.matrix));
 	}
 
 	constructor (matrix: ASArray = null) {
@@ -80,5 +83,12 @@ export class ColorMatrixFilter extends BitmapFilter {
 
 	clone(): BitmapFilter {
 		return new ColorMatrixFilter(this.matrix);
+	}
+
+	toAwayObject() {
+		return {
+			filterName: 'colorMatrix',
+			matrix: this._matrix
+		};
 	}
 }
