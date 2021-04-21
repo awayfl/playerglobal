@@ -96,6 +96,10 @@ export class ApplicationDomain extends ASObject {
 		return ApplicationDomain._currentDomain;
 	}
 
+	public static set currentDomain (value: ApplicationDomain) {
+		ApplicationDomain._currentDomain = value;
+	}
+
 	/**
 	 * Gets and sets the object on which domain-global memory operations
 	 * will operate within this ApplicationDomain.

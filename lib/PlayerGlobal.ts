@@ -32,6 +32,7 @@ import { Stage } from './display/Stage';
 import { DisplayObject } from './display/DisplayObject';
 import { LoaderInfo } from './display/LoaderInfo';
 import { ILoader } from './ILoader';
+import { SharedObject } from './net/SharedObject';
 
 // alternate of using a `node path`
 function normalisePath (p: string) {
@@ -75,6 +76,12 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 
 	public get content(): DisplayObject {
 		return this._content;
+	}
+
+	public dispose() {
+		console.log('dispose PlayerGlobal');
+		ApplicationDomain.currentDomain = null;
+		SharedObject._sharedObjects = {};
 	}
 
 	public createSecurityDomain(
