@@ -188,6 +188,7 @@ import { Mouse } from './ui/Mouse';
 import { MultitouchInputMode } from './ui/MultitouchInputMode';
 import { Multitouch } from './ui/Multitouch';
 import { Timer } from './utils/Timer';
+import { CompressionAlgorithm } from './utils/CompressionAlgorithm';
 import { XMLDocument, XMLNode, ASClass, registerNativeClass, registerNativeFunction } from '@awayfl/avm2';
 import { release } from '@awayfl/swf-loader';
 import { BlendMode } from '@awayjs/stage';
@@ -639,7 +640,7 @@ export function initLink() {
 	M('flash.ui.MultitouchInputMode', <any>MultitouchInputMode);
 
 	//M('flash.utils.ByteArray', ByteArray);
-	//M('flash.utils.CompressionAlgorithm', CompressionAlgorithm);
+	M('flash.utils.CompressionAlgorithm', CompressionAlgorithm);
 	//M('flash.utils.Dictionary', Dictionary);
 	//M('flash.utils.Endian', Endian);
 	M('flash.utils.Timer', Timer);
