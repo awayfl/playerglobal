@@ -173,12 +173,15 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner {
 				material.ambientMethod.texture = new ImageTexture2D();
 
 			material.style.image = this._bitmapData.adaptee;
+			material.alphaBlending = this._bitmapData.adaptee.transparent;
+			material.useColorTransform = true;// for any reason
 		} else {
 			if (material.ambientMethod.texture)
 				material.ambientMethod.texture = null;
 
 			material.style.image = null;
 			material.style.color = 0x0;
+			material.alphaBlending = false;
 		}
 
 		material.invalidateTextures();
