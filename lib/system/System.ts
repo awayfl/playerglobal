@@ -205,6 +205,19 @@ export class System extends ASObject {
 	 * replacing its current contents (if any).
 	 */
 	public static setClipboard (string: string) {
+
+		if (navigator.clipboard && navigator.clipboard.writeText) {
+			navigator.clipboard.writeText(string)
+				.then((_e) => {
+					console.log('[flash/System] Clipboard writed!');
+				})
+				.catch((e) => {
+					console.warn('[flash/System] Clipboard write rejected!', e);
+				});
+
+			return;
+		}
+
 		console.log('setClipboard not implemented yet in flash/System');
 	}
 
