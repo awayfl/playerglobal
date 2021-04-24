@@ -2,7 +2,13 @@ import { URLRequest } from './URLRequest';
 import { EventDispatcher } from '../events/EventDispatcher';
 import { ByteArray } from '../utils/ByteArray';
 import { FileFilter } from './FileFilter';
+import { ASObject } from '@awayfl/avm2';
+import { SecurityDomain } from '../SecurityDomain';
+import { Event } from '../events/Event';
+
 export class FileReference extends EventDispatcher {
+	public static forceNativeMethods = true;
+
 	private _creationDate: Date;
 	private _modificationDate: Date;
 	private _name: string;
@@ -107,8 +113,88 @@ export class FileReference extends EventDispatcher {
 	}
 
 	//Opens a dialog box that lets the user save a file to the local filesystem.
-	public save(data: any, defaultFileName: string = null) {
-		window.alert('AwayJS: flash.net.FileReference::save not implemented !');
+	public save(data: string | ASObject, _defaultFileName: string = null) {
+		if (this._useFileSystemSave(data, _defaultFileName)) {
+			return;
+		}
+	}
+
+	private _useFileSystemSave(data: any, name: string = ''): boolean {
+		const isString = typeof data === 'string';
+
+		// this is draft API
+		// https://web.dev/file-system-access/
+		const openDialog: (options: any) => Promise<any> = (<any>self).showSaveFilePicker;
+
+		if (!openDialog) {
+			console.warn('[flash/net/FileReference] FileSystem API not supported!');
+			return false;
+		}
+
+		if (!isString) {
+			console.warn('[FileReference] Non-string is not supported now!');
+			return;
+		}
+
+		const types = isString ?  [{
+			description: 'Text documents',
+			accept: {
+				'text/plain': ['.txt'],
+			},
+		}] : [];
+
+		const options = {
+			suggestedName: name || '',
+			types
+		};
+
+		openDialog(options)
+			.then((fileHandler) => {
+				this._sendSelectEvent();
+				return fileHandler.createWritable();
+			})
+			.then((stream) => {
+				return stream
+					.write(data)
+					.then(() => stream.close());
+			})
+			.then((_e)=>{
+				this._sendCompleteEvent();
+			})
+			.catch((e: DOMException) => {
+				if (e.code === 20 && e.message === 'The user aborted a request.') {
+					this._sendCancelEvent();
+					return;
+				}
+
+				console.warn('[flash/net/FileReference] FileSystem API Reject `showSaveFilePicker` requiest:', e);
+			});
+	}
+
+	private _sendCancelEvent() {
+		const event  = new (<SecurityDomain> this.sec).flash.events.Event(Event.CANCEL);
+
+		event.currentTarget = this;
+		event.target = this;
+
+		this.dispatchEvent(event);
+	}
+
+	private _sendCompleteEvent() {
+		const event  = new (<SecurityDomain> this.sec).flash.events.Event(Event.COMPLETE);
+		event.currentTarget = this;
+		event.target = this;
+
+		this.dispatchEvent(event);
+	}
+
+	private _sendSelectEvent() {
+		const event  = new (<SecurityDomain> this.sec).flash.events.Event(Event.SELECT);
+
+		event.currentTarget = this;
+		event.target = this;
+
+		this.dispatchEvent(event);
 	}
 
 	//Requests permission to access filesystem.
