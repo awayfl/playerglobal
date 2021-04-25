@@ -86,11 +86,10 @@ export class EventDispatcher extends EventDispatcherBase {
 	constructor(target: any = null) {
 		super(target);
 
-		this.eventMapping = {};
-		this.eventMappingDummys = {};
-		this.eventMappingExtern = {};
-
-		this.eventMappingInvert = {};//only needed in some cases, when we translate back from awayjs-type to flash-type
+		this.eventMapping || (this.eventMapping = {});
+		this.eventMappingDummys || (this.eventMappingDummys = {});
+		this.eventMappingExtern || (this.eventMappingExtern = {});
+		this.eventMappingInvert || (this.eventMappingInvert = {});
 
 		this._activateCallbackDelegate = (event: any) => this.activateCallback(event);
 		this.eventMapping[Event.ACTIVATE] = (<IEventMapper>{
@@ -147,10 +146,11 @@ export class EventDispatcher extends EventDispatcherBase {
 			BroadcastEventDispatchQueue.getInstance().add(type, this);
 		}
 
-		if (!this.eventMappingDummys) {
-			//throw("called addEventListener for object that wasnt init yet");
-			return;
-		}
+		this.eventMapping || (this.eventMapping = {});
+		this.eventMappingDummys || (this.eventMappingDummys = {});
+		this.eventMappingExtern || (this.eventMappingExtern = {});
+		this.eventMappingInvert || (this.eventMappingInvert = {});
+
 		if (this.eventMappingDummys.hasOwnProperty(type)) {
 
 			// this is a dummy eventMapping
@@ -190,10 +190,12 @@ export class EventDispatcher extends EventDispatcherBase {
 	 * @param {Function} listener function
 	 */
 	public removeEventListener(type: string, listener: (event: EventBase) => void): void {
-		if (!this.eventMappingDummys) {
-			console.log('todo: remove queued addEventListener');
-			return;
-		}
+
+		this.eventMapping || (this.eventMapping = {});
+		this.eventMappingDummys || (this.eventMappingDummys = {});
+		this.eventMappingExtern || (this.eventMappingExtern = {});
+		this.eventMappingInvert || (this.eventMappingInvert = {});
+
 		super.removeEventListener(type, listener);
 		if (this.eventMapping.hasOwnProperty(type)) {
 			// a mapping exists

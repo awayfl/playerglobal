@@ -10,7 +10,7 @@ import { ASObject, AXClass } from '@awayfl/avm2';
 export class EventDispatcherBase extends ASObject {
 	static axClass: typeof EventDispatcherBase & AXClass;
 
-	private _listenerObjects: Array<ListenerObject> = new Array<ListenerObject>();
+	private _listenerObjects: Array<ListenerObject>;
 	private _t: any;
 
 	public toString(): string {
@@ -20,6 +20,7 @@ export class EventDispatcherBase extends ASObject {
 	constructor(target: any = null) {
 		super();
 		this._t = target || this;
+		this._listenerObjects || (this._listenerObjects = []);
 	}
 
 	/**
@@ -33,8 +34,9 @@ export class EventDispatcherBase extends ASObject {
 		useCapture: boolean = false,
 		priority: number /*int*/ = 0,
 		useWeakReference: boolean = false): void {
-		if (!this._listenerObjects)
-			return;
+
+		this._listenerObjects || (this._listenerObjects = []);
+
 		let l: ListenerObject = this._listenerObjects[type];
 
 		if (l === undefined)
@@ -50,8 +52,8 @@ export class EventDispatcherBase extends ASObject {
 	 * @param {Function} Callback function
 	 */
 	public removeEventListener(type: string, listener: (event: EventBase) => void): void {
-		if (!this._listenerObjects)
-			return;
+
+		this._listenerObjects || (this._listenerObjects = []);
 
 		const l: ListenerObject = this._listenerObjects[type];
 
@@ -69,10 +71,8 @@ export class EventDispatcherBase extends ASObject {
 	 * @param {Event} Event to dispatch
 	 */
 	public dispatchEvent(event: EventBase): boolean {
-		if (!this._listenerObjects) {
-			//throw("dispatching event on object that wasnt init yet");
-			return;
-		}
+
+		this._listenerObjects || (this._listenerObjects = []);
 		const l: ListenerObject = this._listenerObjects[event.type];
 
 		if (l) {
