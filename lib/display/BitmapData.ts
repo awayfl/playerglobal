@@ -302,11 +302,17 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		firstPoint: Point,
 		firstAlphaThreshold: number,
 		secondObject: any,
-		secondBitmapPoint: Point = new (<SecurityDomain> this.sec).flash.geom.Point(0, 0),
+		secondBitmapPoint: Point,
 		secondAlphaThreshold: number = 0
 	): boolean {
 		Debug.throwPIR('playerglobals/display/BitmapData', 'hitTest', '');
-		return false;
+		return this._adaptee.hitTest(
+			firstPoint.adaptee,
+			firstAlphaThreshold,
+			secondObject?.adaptee,
+			secondBitmapPoint?.adaptee,
+			secondAlphaThreshold
+		);
 	}
 
 	public lock(): void {
