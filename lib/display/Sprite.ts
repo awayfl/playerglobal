@@ -339,11 +339,19 @@ export class Sprite extends DisplayObjectContainer {
 	//---------------------------stuff added to make it work:
 
 	public registerScriptObject(child: AwayDisplayObject): void {
+
 		if (child.adapter == child) {
 			release || console.log('warning: child registered for script that has no avms-adapter');
 			return;
 		}
+
 		if (child.name) {
+			if (child.name === 'mask') {
+				console.warn('[Sprite] Timeline child name is `mask`! Collision');
+				this._maskOverrideByScript = <any>child.adapter;
+				return;
+			}
+
 			this[child.name] = child._adapter ? child.adapter : child;
 
 			this.axSetPublicProperty(child.name, child.adapter);
@@ -366,11 +374,15 @@ export class Sprite extends DisplayObjectContainer {
 		if (!(<any> this)._symbol) {
 			throw ('_symbol not defined when cloning movieclip');
 		}
+
 		const clone = constructClassFromSymbol((<any> this)._symbol, (<any> this)._symbol.symbolClass);
 		const adaptee = new AwaySprite();
+
 		this.adaptee.copyTo(adaptee);
+
 		clone.adaptee = adaptee;
 		clone._stage = this.activeStage;
+
 		(<any>clone).executeConstructor = () => {
 			(<any>clone).axInitializer();
 			(<any> this).constructorHasRun = true;
@@ -390,6 +402,8 @@ export class Sprite extends DisplayObjectContainer {
 		targetTimeline.keyframe_durations = <any>[timeline.keyframe_durations[0]];
 		targetTimeline.keyframe_firstframes = [timeline.keyframe_firstframes[0]];
 		targetTimeline.keyframe_indices = [timeline.keyframe_indices[0]];
+
+		clone._maskOverrideByScript = this._maskOverrideByScript;
 
 		return clone;
 	}
