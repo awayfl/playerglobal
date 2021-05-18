@@ -19,7 +19,7 @@ export class Mouse extends ASObject {
 	/*
 	 [read-only] Indicates whether the computer or device displays a persistent cursor.
 	 */
-	public static  get supportsCursor(): boolean {
+	public static get supportsCursor(): boolean {
 		// @todo
 		Debug.throwPIR('playerglobals/ui/Mouse', 'static get supportsCursor', '');
 		return true;
@@ -28,7 +28,7 @@ export class Mouse extends ASObject {
 	/*
 	 [read-only] Indicates whether the current configuration supports native cursors.
 	 */
-	public static  get 	supportsNativeCursor(): boolean {
+	public static get supportsNativeCursor(): boolean {
 		// @todo
 		Debug.throwPIR('playerglobals/ui/Mouse', 'static get supportsNativeCursor', '');
 		return true;
@@ -38,16 +38,18 @@ export class Mouse extends ASObject {
 	 Hides the pointer.
 	 */
 	public static hide() {
+		this.sec.player.mouseManager.showCursor = false;
 		// @todo
-		Debug.throwPIR('playerglobals/ui/Mouse', 'static hide', '');
+		// Debug.throwPIR('playerglobals/ui/Mouse', 'static hide', '');
 	}
 
 	/*
 	 Displays the pointer.
 	 */
 	public static show() {
+		this.sec.player.mouseManager.showCursor = true;
 		// @todo
-		Debug.throwPIR('playerglobals/ui/Mouse', 'static show', '');
+		// Debug.throwPIR('playerglobals/ui/Mouse', 'static show', '');
 	}
 
 	/*

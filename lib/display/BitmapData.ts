@@ -9,7 +9,7 @@ import { IBitmapDrawable } from './IBitmapDrawable';
 import { SceneImage2D } from '@awayjs/scene';
 
 import { IBitmapDataOwner } from './IBitmapDataOwner';
-import { ASObject, ByteArray, Uint32Vector, GenericVector } from '@awayfl/avm2';
+import { ASObject, ByteArray, Uint32Vector, GenericVector, ASArray } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 
 const ALER_TABLE: StringMap<boolean> = {};
@@ -302,11 +302,17 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		firstPoint: Point,
 		firstAlphaThreshold: number,
 		secondObject: any,
-		secondBitmapPoint: Point = new (<SecurityDomain> this.sec).flash.geom.Point(0, 0),
+		secondBitmapPoint: Point,
 		secondAlphaThreshold: number = 0
 	): boolean {
 		Debug.throwPIR('playerglobals/display/BitmapData', 'hitTest', '');
-		return false;
+		return this._adaptee.hitTest(
+			firstPoint.adaptee,
+			firstAlphaThreshold,
+			secondObject?.adaptee,
+			secondBitmapPoint?.adaptee,
+			secondAlphaThreshold
+		);
 	}
 
 	public lock(): void {
@@ -358,9 +364,26 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		fractalNoise: boolean,
 		channelOptions: number,
 		grayScale: boolean,
-		offsets: any
+		offsets: ASArray = null
 	) {
-		Debug.throwPIR('playerglobals/display/BitmapData', 'perlinNoise', '');
+		const map_offsets: Array<number> = offsets ? [] : null;
+
+		if (offsets) {
+			const value = offsets.value;
+			const len = value.length;
+
+			// this is VERY strange, some games use [1, 1] and then push Point to offsets, map to [x, y, x, y]
+			for (let i = 0; i < len; i++) {
+				if (typeof value[i] === 'number') {
+					map_offsets.push(value[i]);
+				} else if (typeof value[i].x === 'number') {
+					map_offsets.push(value[i].x, value[i].y);
+				}
+			}
+		}
+		//@ts-ignore
+		this._adaptee.perlinNoise(baseX, baseY, numOctaves, randomSeed, stitch, fractalNoise, channelOptions, grayScale, map_offsets);
+		Debug.throwPIR('playerglobals/display/BitmapData', 'perlinNoise', 'Unsafe implementation, results not equal!');
 	}
 
 	public pixelDissolve(

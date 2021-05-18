@@ -9,7 +9,7 @@ import { LoaderInfo } from './LoaderInfo';
 import { DisplayObjectContainer } from './DisplayObjectContainer';
 import { Stage } from './Stage';
 import { PickGroup, BoundsPicker, BasicPartition, ContainerNode } from '@awayjs/view';
-import { constructClassFromSymbol, AXClass, ASArray } from '@awayfl/avm2';
+import { constructClassFromSymbol, AXClass, ASArray, ASObject } from '@awayfl/avm2';
 import { Transform } from '../geom/Transform';
 import { Rectangle } from '../geom/Rectangle';
 import { Point } from '../geom/Point';
@@ -765,7 +765,17 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * When the mask is assigned to a second displayobject, it is removed as the mask of the first
 	 * any, and that any's mask property becomes null.
 	 */
+
+	/**
+	 * Magic, timeline can assign a MC with name 'mask' but we should apply it as mask
+	 * NOT ASSIGN DEFAULT! Because this value settings before execute constructor
+	 */
+	protected _maskOverrideByScript: ASObject;
 	public get mask(): DisplayObject {
+		if (this._maskOverrideByScript) {
+			return <any> this._maskOverrideByScript;
+		}
+
 		if (this.adaptee.masks == null) {
 			return null;
 		}

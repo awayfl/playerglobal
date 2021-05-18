@@ -76,6 +76,7 @@ export class DropShadowFilter extends BitmapFilter {
 		this.hideObject = hideObject;
 	}
 
+	public readonly filterName = 'dropShadow'
 	// JS -> AS Bindings
 
 	// AS -> JS Bindings
@@ -178,6 +179,10 @@ export class DropShadowFilter extends BitmapFilter {
 
 	set strength(value: number) {
 		this._strength = NumberUtilities.clamp(+value, 0, 255);
+	}
+
+	toAwayObject() {
+		return this;
 	}
 
 	clone(): BitmapFilter {
