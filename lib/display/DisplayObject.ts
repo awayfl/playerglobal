@@ -1123,8 +1123,9 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * is rotated 90° and you scroll it left and right, the displayobject actually scrolls up and down.
 	 */
 	public get scrollRect(): Rectangle {
-		return new (<SecurityDomain> this.sec).flash.geom.Rectangle(this.adaptee.scrollRect);
-
+		if (this.adaptee.scrollRect)
+			return new (<SecurityDomain> this.sec).flash.geom.Rectangle(this.adaptee.scrollRect);
+		return null;
 	}
 
 	public set scrollRect(value: Rectangle) {
