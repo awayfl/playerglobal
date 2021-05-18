@@ -8,8 +8,18 @@ import { SoundChannel } from './SoundChannel';
 import { SoundTransform } from './SoundTransform';
 import { ByteArray } from '../utils/ByteArray';
 import { ID3Info } from './ID3Info';
-import { AssetLibrary, LoaderContext, WaveAudio, WaveAudioParser,
-	URLRequest as URLRequestAway, AssetEvent, LoaderEvent, URLLoaderEvent, IAsset, Loader } from '@awayjs/core';
+import {
+	AssetLibrary,
+	LoaderContext,
+	WaveAudio,
+	WaveAudioParser,
+	URLRequest as URLRequestAway,
+	AssetEvent,
+	LoaderEvent,
+	URLLoaderEvent,
+	IAsset
+} from '@awayjs/core';
+
 import { SecurityDomain } from '../SecurityDomain';
 
 /**
@@ -85,6 +95,7 @@ export class Sound extends EventDispatcher {
 	private _playAfterLoad: boolean;
 	private _pendingPlayCommand: IPendingPlayCommand;
 	private _bytesLoaded: number;
+	private _activeChannels: SoundChannel[] = [];
 	/**
 	 * Creates a new Sound object. If you pass a valid URLRequest object to the
 	 * Sound constructor, the constructor automatically calls the load() function
@@ -432,27 +443,40 @@ export class Sound extends EventDispatcher {
 		this.loadWaveAudio(stream);
 	}
 
-	public loadCompressedDataFromByteArray (bytes: ByteArray, bytesLength: number) {
+	public loadCompressedDataFromByteArray (_bytes: ByteArray, _bytesLength: number) {
 		console.log('loadCompressedDataFromByteArray not implemented yet in flash/Sound');
 	}
 
 	public loadPCMFromByteArray (
-		bytes: ByteArray, samples: number,
-		format: string = 'float', stereo: boolean = true, sampleRate: number = 44100) {
+		_bytes: ByteArray,
+		_samples: number,
+		_format: string = 'float',
+		_stereo: boolean = true,
+		_sampleRate: number = 44100) {
 		console.log('loadPCMFromByteArray not implemented yet in flash/Sound');
 	}
 
 	private _onCompleteCallback: Function;
-	private loopsToPlay: number=0;
+	private _loopsToPlay: number = 0;
+
 	private soundCompleteInternal() {
-		this.loopsToPlay--;
-		if (this.loopsToPlay > 0) {
+		this._loopsToPlay--;
+		if (this._loopsToPlay > 0) {
 			this.stop();
 			this.adaptee.play(0, false);
 		} else {
 			if (this._onCompleteCallback) {
 				this._onCompleteCallback();
 			}
+
+			// we should dispatch sound events to chanel, because some games use this
+			const complete = new (<SecurityDomain> this.sec).flash.events.Event(Event.SOUND_COMPLETE);
+
+			for (const channel of this._activeChannels) {
+				channel.dispatchEvent(complete);
+			}
+
+			this._activeChannels.length = 0;
 		}
 	}
 
@@ -490,6 +514,8 @@ export class Sound extends EventDispatcher {
 				sndTransform: sndTransform,
 				sndChannel: new (<SecurityDomain> this.sec).flash.media.SoundChannel()
 			};
+
+			this._activeChannels.push(this._pendingPlayCommand.sndChannel);
 			return this._pendingPlayCommand.sndChannel;
 		}
 
@@ -500,7 +526,7 @@ export class Sound extends EventDispatcher {
 
 		loops = isNaN(loops) || loops < 1 ? 1 : Math.floor(loops);
 
-		this.loopsToPlay = loops;
+		this._loopsToPlay = loops;
 		this._adaptee.onSoundComplete = ()=>this.soundCompleteInternal();
 		this._adaptee.play(startTime, false);
 
@@ -514,11 +540,17 @@ export class Sound extends EventDispatcher {
 		}
 
 		newSoundChannel.soundTransform = sndTransform;
+		this._activeChannels.push(newSoundChannel);
+
 		return newSoundChannel;
 	}
 
 	public stop (): void {
 		this._adaptee.stop();
+
+		if (this._loopsToPlay === 0) {
+			this._activeChannels.length = 0;
+		}
 	}
 
 }
