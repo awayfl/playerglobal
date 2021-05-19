@@ -770,19 +770,21 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * Magic, timeline can assign a MC with name 'mask' but we should apply it as mask
 	 * NOT ASSIGN DEFAULT! Because this value settings before execute constructor
 	 */
-	protected _maskOverrideByScript: ASObject;
 	public get mask(): DisplayObject {
-		if (this._maskOverrideByScript) {
-			return <any> this._maskOverrideByScript;
-		}
-
 		if (this.adaptee.masks == null) {
 			return null;
 		}
 		if (this.adaptee.masks.length == 0) {
 			return null;
 		}
-		return (<DisplayObject> this.adaptee.masks[0].adapter);
+		const numMasks: number = this.adaptee.masks.length;
+		for (let m: number = 0; m < numMasks; m++) {
+			const oldMask = this.adaptee.masks[m];
+			if (!oldMask.isTimelineMask) {
+				return (<DisplayObject> oldMask.adapter);
+			}
+		}
+		return null;
 	}
 
 	public set mask(value: DisplayObject) {
@@ -793,7 +795,27 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			this.adaptee.masks = null;
 			return;
 		}
+
+		if (value.adaptee.isTimelineMask) {
+			// @todo: we need a way to find all objects that use this timeline-mask,
+			// and set them to maskMode=false
+			value.adaptee.isTimelineMask = null;
+		}
 		value.adaptee.maskMode = true;
+
+		if (this.adaptee.masks) {
+			// there should only exists one non-timeline-mask in the masks-array
+			const numMasks: number = this.adaptee.masks.length;
+			for (let m: number = 0; m < numMasks; m++) {
+				const oldMask = this.adaptee.masks[m];
+				if (!oldMask.isTimelineMask) {
+					this.adaptee.masks[m] = value.adaptee;
+					return;
+				}
+			}
+			this.adaptee.masks.push(value.adaptee);
+			return;
+		}
 		this.adaptee.masks = [value.adaptee];
 	}
 

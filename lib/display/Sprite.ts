@@ -347,9 +347,23 @@ export class Sprite extends DisplayObjectContainer {
 
 		if (child.name) {
 			if (child.name === 'mask') {
-				console.warn('[Sprite] Timeline child name is `mask`! Collision');
-				this._maskOverrideByScript = <any>child.adapter;
-				return;
+				//console.warn('[Sprite] Timeline child name is `mask`! Collision');
+				if (this.adaptee.masks) {
+					// there should only exists one non-timeline-mask in the masks-array
+					const numMasks: number = this.adaptee.masks.length;
+					let hasNonTimelineMask: boolean = false;
+					for (let m: number = 0; m < numMasks; m++) {
+						const oldMask = this.adaptee.masks[m];
+						if (!oldMask.isTimelineMask) {
+							this.adaptee.masks[m] = child;
+							hasNonTimelineMask = true;
+						}
+					}
+					if (hasNonTimelineMask)
+						this.adaptee.masks.push(child);
+				} else {
+					this.adaptee.masks = [child];
+				}
 			}
 
 			this[child.name] = child._adapter ? child.adapter : child;
@@ -402,8 +416,6 @@ export class Sprite extends DisplayObjectContainer {
 		targetTimeline.keyframe_durations = <any>[timeline.keyframe_durations[0]];
 		targetTimeline.keyframe_firstframes = [timeline.keyframe_firstframes[0]];
 		targetTimeline.keyframe_indices = [timeline.keyframe_indices[0]];
-
-		clone._maskOverrideByScript = this._maskOverrideByScript;
 
 		return clone;
 	}
