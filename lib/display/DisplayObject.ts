@@ -9,7 +9,7 @@ import { LoaderInfo } from './LoaderInfo';
 import { DisplayObjectContainer } from './DisplayObjectContainer';
 import { Stage } from './Stage';
 import { PickGroup, BoundsPicker, BasicPartition, ContainerNode } from '@awayjs/view';
-import { constructClassFromSymbol, AXClass, ASArray, ASObject } from '@awayfl/avm2';
+import { constructClassFromSymbol, AXClass, ASArray } from '@awayfl/avm2';
 import { Transform } from '../geom/Transform';
 import { Rectangle } from '../geom/Rectangle';
 import { Point } from '../geom/Point';
@@ -514,7 +514,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   data in the input any. See the ShaderInput.input
 	 *   property for more information.
 	 */
-	public set blendShader(value: any) {
+	public set blendShader(_value: any) {
 		// @todo
 		Debug.throwPIR('playerglobals/display/DisplayObject', 'set blendShader', '');
 	}
@@ -771,52 +771,11 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * NOT ASSIGN DEFAULT! Because this value settings before execute constructor
 	 */
 	public get mask(): DisplayObject {
-		if (this.adaptee.masks == null) {
-			return null;
-		}
-		if (this.adaptee.masks.length == 0) {
-			return null;
-		}
-		const numMasks: number = this.adaptee.masks.length;
-		for (let m: number = 0; m < numMasks; m++) {
-			const oldMask = this.adaptee.masks[m];
-			if (!oldMask.isTimelineMask) {
-				return (<DisplayObject> oldMask.adapter);
-			}
-		}
-		return null;
+		return <DisplayObject> this.adaptee.scriptMask?.adapter || null;
 	}
 
 	public set mask(value: DisplayObject) {
-		if (value == null) {
-			if (this.adaptee.masks != null) {
-				this.adaptee.masks[0].maskMode = false;
-			}
-			this.adaptee.masks = null;
-			return;
-		}
-
-		if (value.adaptee.isTimelineMask) {
-			// @todo: we need a way to find all objects that use this timeline-mask,
-			// and set them to maskMode=false
-			value.adaptee.isTimelineMask = null;
-		}
-		value.adaptee.maskMode = true;
-
-		if (this.adaptee.masks) {
-			// there should only exists one non-timeline-mask in the masks-array
-			const numMasks: number = this.adaptee.masks.length;
-			for (let m: number = 0; m < numMasks; m++) {
-				const oldMask = this.adaptee.masks[m];
-				if (!oldMask.isTimelineMask) {
-					this.adaptee.masks[m] = value.adaptee;
-					return;
-				}
-			}
-			this.adaptee.masks.push(value.adaptee);
-			return;
-		}
-		this.adaptee.masks = [value.adaptee];
+		this.adaptee.scriptMask = value?.adaptee || null;
 	}
 
 	public get metaData(): any {
@@ -825,7 +784,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		return null;
 	}
 
-	public set metaData(data: any) {
+	public set metaData(_data: any) {
 		// @todo
 		Debug.throwPIR('playerglobals/display/DisplayObject', 'set metaData', '');
 	}
@@ -1426,7 +1385,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		this._boundsPicker = PickGroup.getInstance(this._stage.view).getBoundsPicker(this._node.partition);
 		//}
 
-		return this._boundsPicker.getBoxBounds(AVMStage.instance().pool.getNode(targetCoordinateSpace.adaptee), strokeFlag, true);
+		return this._boundsPicker
+			.getBoxBounds(AVMStage.instance().pool.getNode(targetCoordinateSpace.adaptee), strokeFlag, true);
 	}
 
 	/**
@@ -1504,7 +1464,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 		return PickGroup.getInstance(this._stage.view).getBoundsPicker(
 			this._node.partition).hitTestObject(
-			PickGroup.getInstance(this._stage.view).getBoundsPicker(AVMStage.instance().pool.getNode(obj.adaptee).partition));
+			PickGroup.getInstance(this._stage.view)
+				.getBoundsPicker(AVMStage.instance().pool.getNode(obj.adaptee).partition));
 
 	}
 
