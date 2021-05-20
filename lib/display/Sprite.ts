@@ -359,7 +359,10 @@ export class Sprite extends DisplayObjectContainer {
 	}
 
 	public unregisterScriptObject(child: AwayDisplayObject): void {
-		delete this[child.name];
+		if (this[child.name] == child.adapter) {
+			delete this[child.name];
+			this.axDeletePublicProperty(child.name);
+		}
 
 		if (child.isAsset(AwayMovieClip))
 			(<AwayMovieClip>child).removeButtonListeners();
