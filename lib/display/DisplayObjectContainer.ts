@@ -274,10 +274,16 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 */
 	public addChild (child: DisplayObject): DisplayObject {
 
+		// it can happen that we addChild a existing timeline-child
+		// in this case the timeline-child gets unregistered, and we need to register it again
+		const registerChild: boolean = (child.adaptee._sessionID >= 0 && (<any> this).registerScriptObject);
 		const dispatchAdded = !(child.adaptee.parent == this.adaptee);
 
 		(<AwayDisplayObjectContainer> this._adaptee).addChild((<DisplayObject>child).adaptee);
 
+		if (registerChild) {
+			(<any> this).registerScriptObject(child.adaptee);
+		}
 		if (dispatchAdded) {
 			child.dispatchStaticEvent(Event.ADDED, child);
 			if (this.adaptee.isOnDisplayList()) {
@@ -314,9 +320,17 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 *   the caller is a child (or grandchild etc.) of the child being added.
 	 */
 	public addChildAt (child: DisplayObject, index: number): DisplayObject {
+		// it can happen that we addChild a existing timeline-child
+		// in this case the timeline-child gets unregistered, and we need to register it again
+		const registerChild: boolean = (child.adaptee._sessionID >= 0 && (<any> this).registerScriptObject);
 		const dispatchAdded = !(child.adaptee.parent == this.adaptee);
 		// todo: this should be done much more efficient (in awayjs)
 		(<AwayDisplayObjectContainer> this.adaptee).addChildAt(child.adaptee, index);
+
+		if (registerChild) {
+			(<any> this).registerScriptObject(child.adaptee);
+		}
+
 		if (dispatchAdded) {
 			child.dispatchStaticEvent(Event.ADDED);
 			if (this.adaptee.isOnDisplayList()) {
