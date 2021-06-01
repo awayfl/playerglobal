@@ -1279,11 +1279,18 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 */
 	public get x(): number {
 		// return raw value to avoid prototype jumping and method execution
+		// for Textfields we must respect the scaled TextOffsetX property:
+		if ((<any> this._adaptee).textOffsetX)
+			return (<any> this._adaptee)._transform._matrix3D._rawData[12]
+				+ ((<any> this._adaptee).textOffsetX * (this.adaptee.scaleX));
 		return (<any> this._adaptee)._transform._matrix3D._rawData[12];
 	}
 
 	public set x(value: number) {
 		this._blockedByScript = true;
+		// for Textfields we must respect the scaled TextOffsetX property:
+		if ((<any> this._adaptee).textOffsetX)
+			value -= ((<any> this._adaptee).textOffsetX * (this.adaptee.scaleX));
 		this._adaptee.x = value;
 	}
 
@@ -1297,11 +1304,18 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 */
 	public get y(): number {
 		// return raw value to avoid prototype jumping and method execution
+		// for Textfields we must respect the scaled TextOffsetY property:
+		if ((<any> this._adaptee).textOffsetY)
+			return (<any> this._adaptee)._transform._matrix3D._rawData[13]
+				+ ((<any> this._adaptee).textOffsetY * (this.adaptee.scaleY));
 		return (<any> this._adaptee)._transform._matrix3D._rawData[13];
 	}
 
 	public set y(value: number) {
 		this._blockedByScript = true;
+		// for Textfields we must respect the scaled TextOffsetY property:
+		if ((<any> this._adaptee).textOffsetY)
+			value -= ((<any> this._adaptee).textOffsetY * (this.adaptee.scaleY));
 		this._adaptee.y = value;
 	}
 
