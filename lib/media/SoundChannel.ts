@@ -4,6 +4,7 @@ import { release } from '@awayfl/swf-loader';
 import { SecurityDomain } from '../SecurityDomain';
 import { Event } from '../events/Event';
 import { IAudioChannel } from '@awayjs/core';
+import { ISoundSource, SoundMixer } from './SoundMixer';
 
 /**
  * Dispatched when a sound has finished playing.
@@ -17,7 +18,7 @@ import { IAudioChannel } from '@awayjs/core';
  * properties for monitoring the amplitude (volume) of the channel, and a property for assigning a
  * SoundTransform object to the channel.
  */
-export class SoundChannel extends EventDispatcher {
+export class SoundChannel extends EventDispatcher implements ISoundSource {
 	// for AVM1:
 	public axCallPublicProperty(value1: any, value2: any): any {
 		return null;
@@ -51,8 +52,9 @@ export class SoundChannel extends EventDispatcher {
 		this._channel = channel;
 		this._loops = loops;
 		this._channel.onSoundComplete = this.soundCompleteInternal.bind(this);
-
 		this.soundTransform = transform;
+
+		SoundMixer._registerSoundSource(this);
 	}
 
 	/**
@@ -113,10 +115,15 @@ export class SoundChannel extends EventDispatcher {
 		this._loops--;
 
 		if (this._loops <= 0 || !this._channel.restart()) {
+			this._stopInternally();
 			// we should dispatch sound events to channel, because some games use this
 			const complete = new (<SecurityDomain> this.sec).flash.events.Event(Event.SOUND_COMPLETE);
 			this.dispatchEvent(complete);
 		}
+	}
+
+	private _stopInternally() {
+		SoundMixer._unregisterSoundSource(this);
 	}
 
 	/**
@@ -132,6 +139,20 @@ export class SoundChannel extends EventDispatcher {
 			return;
 		}
 
+		this._stopInternally();
 		this._channel.stop();
+	}
+
+	stopSound() {
+		this.stop();
+	}
+
+	updateSoundLevels(volume: number) {
+		if (!this._channel) {
+			return;
+		}
+
+		this._soundTransform.volume = volume;
+		this._channel.volume = volume;
 	}
 }

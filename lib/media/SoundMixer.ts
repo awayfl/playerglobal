@@ -1,6 +1,7 @@
 import { somewhatImplemented, release, notImplemented, isNullOrUndefined } from '@awayfl/swf-loader';
 import { ByteArray, axCoerceString, ASObject } from '@awayfl/avm2';
 import { SoundTransform } from './SoundTransform';
+import { MovieClip as AwayMovieClip } from '@awayjs/scene';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -96,10 +97,12 @@ export class SoundMixer extends ASObject {
 	}
 
 	static stopAll(): void {
-		SoundMixer._registeredSoundSources.forEach(function (channel) {
-			channel.stopSound();
-		});
+		SoundMixer._registeredSoundSources.forEach((e) => e.stopSound());
 		SoundMixer._registeredSoundSources = [];
+
+		if ((<any>AwayMovieClip).stopAllSounds) {
+			(<any>AwayMovieClip).stopAllSounds();
+		}
 	}
 
 	static computeSpectrum(outputArray: ByteArray, FFTMode: boolean = false, stretchFactor: number /*int*/ = 0): void {
