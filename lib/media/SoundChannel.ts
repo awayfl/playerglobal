@@ -1,6 +1,9 @@
 import { EventDispatcher } from '../events/EventDispatcher';
 import { SoundTransform } from './SoundTransform';
 import { release } from '@awayfl/swf-loader';
+import { SecurityDomain } from '../SecurityDomain';
+import { Event } from '../events/Event';
+import { IAudioChannel } from '@awayjs/core';
 
 /**
  * Dispatched when a sound has finished playing.
@@ -41,10 +44,15 @@ export class SoundChannel extends EventDispatcher {
 	}
 
 	private _soundTransform: SoundTransform;
-	public _sound: any;
+	private _channel: IAudioChannel;
+	private _loops: number = 0;
 
-	constructor() {
-		super();
+	/* internal */ init (channel: IAudioChannel, loops: number = 0, transform: SoundTransform) {
+		this._channel = channel;
+		this._loops = loops;
+		this._channel.onSoundComplete = this.soundCompleteInternal.bind(this);
+
+		this.soundTransform = transform;
 	}
 
 	/**
@@ -92,11 +100,23 @@ export class SoundChannel extends EventDispatcher {
 	}
 
 	public set soundTransform(value: SoundTransform) {
-		if (this._sound) {
-			this._sound.adaptee.volume = value.volume;
-			this._sound.adaptee.pan = value.pan;
+
+		if (this._channel) {
+			this._channel.volume = value.volume;
+			this._channel.pan = value.pan;
 		}
+
 		this._soundTransform = value;
+	}
+
+	private soundCompleteInternal() {
+		this._loops--;
+
+		if (this._loops <= 0 || !this._channel.restart()) {
+			// we should dispatch sound events to channel, because some games use this
+			const complete = new (<SecurityDomain> this.sec).flash.events.Event(Event.SOUND_COMPLETE);
+			this.dispatchEvent(complete);
+		}
 	}
 
 	/**
@@ -107,10 +127,11 @@ export class SoundChannel extends EventDispatcher {
 	 * @refpath
 	 */
 	public stop() {
-		if (!this._sound) {
+		if (!this._channel) {
 			release || console.log('SoundChannel.stop: No sound exists');
 			return;
 		}
-		this._sound.stop();
+
+		this._channel.stop();
 	}
 }

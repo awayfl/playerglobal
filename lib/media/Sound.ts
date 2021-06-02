@@ -17,7 +17,8 @@ import {
 	AssetEvent,
 	LoaderEvent,
 	URLLoaderEvent,
-	IAsset
+	IAsset,
+	IAudioChannel
 } from '@awayjs/core';
 
 import { SecurityDomain } from '../SecurityDomain';
@@ -95,7 +96,7 @@ export class Sound extends EventDispatcher {
 	private _playAfterLoad: boolean;
 	private _pendingPlayCommand: IPendingPlayCommand;
 	private _bytesLoaded: number;
-	private _activeChannels: SoundChannel[] = [];
+
 	/**
 	 * Creates a new Sound object. If you pass a valid URLRequest object to the
 	 * Sound constructor, the constructor automatically calls the load() function
@@ -456,30 +457,6 @@ export class Sound extends EventDispatcher {
 		console.log('loadPCMFromByteArray not implemented yet in flash/Sound');
 	}
 
-	private _onCompleteCallback: Function;
-	private _loopsToPlay: number = 0;
-
-	private soundCompleteInternal() {
-		this._loopsToPlay--;
-		if (this._loopsToPlay > 0) {
-			this.stop();
-			this.adaptee.play(0, false);
-		} else {
-			if (this._onCompleteCallback) {
-				this._onCompleteCallback();
-			}
-
-			// we should dispatch sound events to chanel, because some games use this
-			const complete = new (<SecurityDomain> this.sec).flash.events.Event(Event.SOUND_COMPLETE);
-
-			for (const channel of this._activeChannels) {
-				channel.dispatchEvent(complete);
-			}
-
-			this._activeChannels.length = 0;
-		}
-	}
-
 	/**
 	 * Generates a new SoundChannel object to play back the sound. This method
 	 * returns a SoundChannel object, which you access to stop the sound and to monitor volume.
@@ -515,42 +492,29 @@ export class Sound extends EventDispatcher {
 				sndChannel: new (<SecurityDomain> this.sec).flash.media.SoundChannel()
 			};
 
-			this._activeChannels.push(this._pendingPlayCommand.sndChannel);
 			return this._pendingPlayCommand.sndChannel;
-		}
-
-		if (sndTransform) {
-			this.adaptee.volume = sndTransform.volume;
-			this.adaptee.pan = sndTransform.pan;
 		}
 
 		loops = isNaN(loops) || loops < 1 ? 1 : Math.floor(loops);
 
-		this._loopsToPlay = loops;
-		this._adaptee.onSoundComplete = ()=>this.soundCompleteInternal();
-		this._adaptee.play(startTime, false);
-
+		const channel: IAudioChannel =  <any> this._adaptee.play(startTime, false);
 		const newSoundChannel: SoundChannel = this._pendingPlayCommand ?
 			this._pendingPlayCommand.sndChannel :
 			new (<SecurityDomain> this.sec).flash.media.SoundChannel();
-		newSoundChannel._sound = this;
 
-		if (!sndTransform) {
-			sndTransform = new (<SecurityDomain> this.sec).flash.media.SoundTransform();
-		}
+		sndTransform = sndTransform || new (<SecurityDomain> this.sec).flash.media.SoundTransform();
 
-		newSoundChannel.soundTransform = sndTransform;
-		this._activeChannels.push(newSoundChannel);
+		newSoundChannel.init(
+			channel,
+			loops,
+			sndTransform
+		);
 
 		return newSoundChannel;
 	}
 
-	public stop (): void {
+	/* internal */ stopAll (): void {
 		this._adaptee.stop();
-
-		if (this._loopsToPlay === 0) {
-			this._activeChannels.length = 0;
-		}
 	}
 
 }
