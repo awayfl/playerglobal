@@ -1,4 +1,4 @@
-import { BitmapFilter } from './BitmapFilter';
+import { BitmapFilter, InterfaceOf } from './BitmapFilter';
 import { assert, release, NumberUtilities } from '@awayfl/swf-loader';
 
 /**
@@ -19,6 +19,7 @@ import { assert, release, NumberUtilities } from '@awayfl/swf-loader';
 // Class: GlowFilter
 
 export class GlowFilter extends BitmapFilter {
+	public readonly filterName = 'glow';
 
 	static axClass: typeof GlowFilter;
 
@@ -138,6 +139,10 @@ export class GlowFilter extends BitmapFilter {
 
 	set strength(value: number) {
 		this._strength = NumberUtilities.clamp(+value, 0, 255);
+	}
+
+	public toAwayObject(): InterfaceOf<GlowFilter> {
+		return this;
 	}
 
 	clone(): BitmapFilter {
