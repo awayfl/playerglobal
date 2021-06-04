@@ -1,4 +1,4 @@
-import { ASObject, Errors, axCoerceString } from '@awayfl/avm2';
+import { ASObject, Errors, axCoerceString, Multiname } from '@awayfl/avm2';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -21,7 +21,6 @@ declare let escape;
 declare let unescape;
 
 export class URLVariables extends ASObject {
-
 	static classInitializer: any = null;
 	static classSymbols: string [] = null; // [];
 	static instanceSymbols: string [] = null;
@@ -33,6 +32,11 @@ export class URLVariables extends ASObject {
 	}
 
 	_ignoreDecodingErrors: boolean;
+
+	// class not has traits, and will crash
+	axSetProperty(mn: Multiname, value: any) {
+		this.axSetPublicProperty(mn, value);
+	}
 
 	decode(source: string): void {
 		source = axCoerceString(source);
