@@ -46,11 +46,9 @@ export class SoundChannel extends EventDispatcher implements ISoundSource {
 
 	private _soundTransform: SoundTransform;
 	private _channel: IAudioChannel;
-	private _loops: number = 0;
 
-	/* internal */ init (channel: IAudioChannel, loops: number = 0, transform: SoundTransform) {
+	/* internal */ init (channel: IAudioChannel, transform: SoundTransform) {
 		this._channel = channel;
-		this._loops = loops;
 		this._channel.onSoundComplete = this.soundCompleteInternal.bind(this);
 		this.soundTransform = transform;
 
@@ -112,14 +110,10 @@ export class SoundChannel extends EventDispatcher implements ISoundSource {
 	}
 
 	private soundCompleteInternal() {
-		this._loops--;
-
-		if (this._loops <= 0 || !this._channel.restart()) {
-			this._stopInternally();
-			// we should dispatch sound events to channel, because some games use this
-			const complete = new (<SecurityDomain> this.sec).flash.events.Event(Event.SOUND_COMPLETE);
-			this.dispatchEvent(complete);
-		}
+		this._stopInternally();
+		// we should dispatch sound events to channel, because some games use this
+		const complete = new (<SecurityDomain> this.sec).flash.events.Event(Event.SOUND_COMPLETE);
+		this.dispatchEvent(complete);
 	}
 
 	private _stopInternally() {
@@ -143,10 +137,12 @@ export class SoundChannel extends EventDispatcher implements ISoundSource {
 		this._channel.stop();
 	}
 
+	// for ISoundSource
 	stopSound() {
 		this.stop();
 	}
 
+	// for ISoundSource
 	updateSoundLevels(volume: number) {
 		if (!this._channel) {
 			return;

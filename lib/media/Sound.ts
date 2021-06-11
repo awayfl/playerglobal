@@ -497,7 +497,7 @@ export class Sound extends EventDispatcher {
 
 		loops = isNaN(loops) || loops < 1 ? 1 : Math.floor(loops);
 
-		const channel: IAudioChannel =  <any> this._adaptee.play(startTime, false);
+		const channel: IAudioChannel =  <any> this._adaptee.play(startTime, loops);
 		const newSoundChannel: SoundChannel = this._pendingPlayCommand ?
 			this._pendingPlayCommand.sndChannel :
 			new (<SecurityDomain> this.sec).flash.media.SoundChannel();
@@ -506,7 +506,6 @@ export class Sound extends EventDispatcher {
 
 		newSoundChannel.init(
 			channel,
-			loops,
 			sndTransform
 		);
 
