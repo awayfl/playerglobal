@@ -3,6 +3,7 @@ import { somewhatImplemented, release } from '@awayfl/swf-loader';
 import { axCoerceString } from '@awayfl/avm2';
 import { Point } from '../geom/Point';
 import { BitmapData } from '../display/BitmapData';
+import { SecurityDomain } from '../SecurityDomain';
 
 type DisplacementMode = 'clamp' | 'wrap' | 'ignore' | 'color';
 interface IDisplacementFilter {
@@ -31,8 +32,8 @@ export class DisplacementMapFilter extends BitmapFilter implements IDisplacement
 	// List of instance symbols to link.
 	static instanceSymbols: string [] = null;
 
-	public static FromUntyped(obj: any) {
-		return new DisplacementMapFilter(
+	public static FromUntyped(obj: any, sec: SecurityDomain) {
+		return new sec.flash.filters.DisplacementMapFilter(
 			obj.mapBitmap,
 			obj.mapPoint,
 			obj.componentX,

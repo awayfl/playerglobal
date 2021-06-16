@@ -106,7 +106,7 @@ export class SecurityDomain extends AXSecurityDomain {
 			ExternalInterface: ExternalInterface
 		},
 		filters: {
-			BevelFiler: BevelFilter,
+			BevelFilter: BevelFilter,
 			BitmapFilter: BitmapFilter,
 			BlurFilter: BlurFilter,
 			ColorMatrixFilter: ColorMatrixFilter,

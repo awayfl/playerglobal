@@ -1,5 +1,7 @@
 import { BitmapFilter, InterfaceOf } from './BitmapFilter';
 import { assert, release, NumberUtilities } from '@awayfl/swf-loader';
+import { AXSecurityDomain } from '@awayfl/avm2';
+import { SecurityDomain } from '../SecurityDomain';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -32,13 +34,14 @@ export class GlowFilter extends BitmapFilter {
 	// List of instance symbols to link.
 	static instanceSymbols: string [] = null;
 
-	public static FromUntyped(obj: any) {
+	public static FromUntyped(obj: any, sec: SecurityDomain) {
 		// obj.colors is an array of RGBA colors.
 		// Here it contains exactly one color object, which maps to color and alpha.
 		release || assert(obj.colors && obj.colors.length === 1, 'colors must be Array of length 1');
 		const color: number = obj.colors[0] >>> 8;
 		const alpha: number = (obj.colors[0] & 0xff) / 0xff;
-		return new GlowFilter(
+
+		return new sec.flash.filters.GlowFilter(
 			color,
 			alpha,
 			obj.blurX,

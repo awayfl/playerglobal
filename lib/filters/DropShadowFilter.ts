@@ -2,6 +2,7 @@ import { BitmapFilter } from './BitmapFilter';
 import { NumberUtilities, assert, release } from '@awayfl/swf-loader';
 import { IFilter } from '@awayjs/scene';
 import { AXSecurityDomain } from '@awayfl/avm2';
+import { SecurityDomain } from '../SecurityDomain';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -33,7 +34,7 @@ export class DropShadowFilter extends BitmapFilter {
 	// List of instance symbols to link.
 	static instanceSymbols: string [] = null;
 
-	public static FromUntyped(obj: IFilter, _sec: AXSecurityDomain) {
+	public static FromUntyped(obj: IFilter, sec: SecurityDomain) {
 		// obj.colors is an array of RGBA colors.
 		// Here it contains exactly one color object, which maps to color and alpha.
 		release || assert(obj.colors && obj.colors.length === 1, 'colors must be Array of length 1');
@@ -43,7 +44,7 @@ export class DropShadowFilter extends BitmapFilter {
 		const angle: number = obj.angle * 180 / Math.PI;
 		// obj.compositeSource maps to !hideObject
 		const hideObject: boolean = !obj.compositeSource;
-		return new DropShadowFilter(
+		return new sec.flash.filters.DropShadowFilter(
 			obj.distance,
 			angle,
 			color,

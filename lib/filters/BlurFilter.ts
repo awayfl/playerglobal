@@ -1,5 +1,6 @@
 import { BitmapFilter, InterfaceOf } from './BitmapFilter';
 import { NumberUtilities } from '@awayfl/swf-loader';
+import { SecurityDomain } from '../SecurityDomain';
 
 export class BlurFilter extends BitmapFilter {
 
@@ -14,8 +15,8 @@ export class BlurFilter extends BitmapFilter {
 	// List of instance symbols to link.
 	static instanceSymbols: string [] = null;
 
-	public static FromUntyped(obj: any) {
-		return new BlurFilter(obj.blurX, obj.blurY, obj.quality);
+	public static FromUntyped(obj: any, sec: SecurityDomain) {
+		return new sec.flash.filters.BlurFilter(obj.blurX, obj.blurY, obj.quality);
 	}
 
 	constructor (blurX: number = 4, blurY: number = 4, quality: number /*int*/ = 1) {

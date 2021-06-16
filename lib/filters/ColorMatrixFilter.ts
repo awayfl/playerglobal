@@ -2,6 +2,7 @@ import { BitmapFilter } from './BitmapFilter';
 import { toNumber, isNullOrUndefined } from '@awayfl/swf-loader';
 import { Errors, ASArray, AXSecurityDomain } from '@awayfl/avm2';
 import { IFilter } from '@awayjs/scene';
+import { SecurityDomain } from '../SecurityDomain';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -31,8 +32,8 @@ export class ColorMatrixFilter extends BitmapFilter {
 
 	static classInitializer: any = null;
 
-	public static FromUntyped(obj: IFilter, _sec: AXSecurityDomain) {
-		return new ColorMatrixFilter(_sec.createArrayUnsafe(obj.matrix));
+	public static FromUntyped(obj: IFilter, sec: SecurityDomain) {
+		return new sec.flash.filters.ColorMatrixFilter(sec.createArrayUnsafe(obj.matrix));
 	}
 
 	constructor (matrix: ASArray = null) {

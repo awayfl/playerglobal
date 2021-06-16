@@ -1,6 +1,7 @@
 import { BitmapFilter } from './BitmapFilter';
 import { NumberUtilities, isNullOrUndefined, toNumber } from '@awayfl/swf-loader';
 import { ASArray, Errors } from '@awayfl/avm2';
+import { SecurityDomain } from '../SecurityDomain';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -25,8 +26,8 @@ export class ConvolutionFilter extends BitmapFilter {
 
 	static classInitializer: any = null;
 
-	public static FromUntyped(obj: any) {
-		return new ConvolutionFilter(
+	public static FromUntyped(obj: any, sec: SecurityDomain) {
+		return new sec.flash.filters.ConvolutionFilter(
 			obj.matrixX,
 			obj.matrixY,
 			obj.matrix,

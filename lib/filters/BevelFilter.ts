@@ -3,6 +3,7 @@ import { assert, release, NumberUtilities } from '@awayfl/swf-loader';
 import { BitmapFilterType } from './BitmapFilterType';
 import { axCoerceString, Errors } from '@awayfl/avm2';
 import { IFilter } from '@awayjs/scene';
+import { SecurityDomain } from '../SecurityDomain';
 
 export interface IBevelFilter {
 	filterName: 'bevel',
@@ -32,7 +33,7 @@ export class BevelFilter extends BitmapFilter {
 	// List of instance symbols to link.
 	static instanceSymbols: string [] = null;
 
-	public static FromUntyped(obj: IFilter, sec) {
+	public static FromUntyped(obj: IFilter, sec: SecurityDomain) {
 		// obj.colors is an array of RGBA colors.
 		// Here it contains exactly two color objects (spec might state it differently):
 		//  - first maps to highlightColor and highlightAlpha;
@@ -54,7 +55,7 @@ export class BevelFilter extends BitmapFilter {
 		}
 		// obj.angle is represented in radians, the api needs degrees
 		const angle: number = obj.angle * 180 / Math.PI;
-		return new BevelFilter(
+		return new sec.flash.filters.BevelFilter(
 			obj.distance,
 			angle,
 			highlightColor,

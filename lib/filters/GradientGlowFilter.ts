@@ -2,6 +2,7 @@ import { BitmapFilter, GradientArrays } from './BitmapFilter';
 import { BitmapFilterType } from './BitmapFilterType';
 import { NumberUtilities, isNullOrUndefined } from '@awayfl/swf-loader';
 import { Errors, ASArray, axCoerceString } from '@awayfl/avm2';
+import { SecurityDomain } from '../SecurityDomain';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -26,7 +27,7 @@ export class GradientGlowFilter extends BitmapFilter {
 
 	static classInitializer: any = null;
 
-	public static FromUntyped(obj: any) {
+	public static FromUntyped(obj: any, sec: SecurityDomain) {
 		// obj.colors is an array of RGBA colors.
 		// The RGB and alpha parts must be separated into colors and alphas arrays.
 		const colors: number[] = [];
@@ -48,7 +49,7 @@ export class GradientGlowFilter extends BitmapFilter {
 		}
 		// obj.angle is represented in radians, the api needs degrees
 		const angle: number = obj.angle * 180 / Math.PI;
-		return new GradientGlowFilter(
+		return new sec.flash.filters.GradientGlowFilter(
 			obj.distance,
 			angle,
 			// Boxing these is obviously not ideal, but everything else is just annoying.
