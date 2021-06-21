@@ -1,7 +1,8 @@
 import { somewhatImplemented, release, notImplemented, isNullOrUndefined } from '@awayfl/swf-loader';
-import { ByteArray, axCoerceString, ASObject } from '@awayfl/avm2';
+import { ByteArray, ASObject } from '@awayfl/avm2';
 import { SoundTransform } from './SoundTransform';
 import { MovieClip as AwayMovieClip } from '@awayjs/scene';
+import { AudioManager } from '@awayjs/core';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -79,8 +80,7 @@ export class SoundMixer extends ASObject {
 		// return SoundMixer._audioPlaybackMode;
 	}
 
-	static set audioPlaybackMode(value: string) {
-		value = axCoerceString(value);
+	static set audioPlaybackMode(_value: string) {
 		release || notImplemented('public flash.media.SoundMixer::set audioPlaybackMode'); return;
 		// SoundMixer._audioPlaybackMode = value;
 	}
@@ -90,8 +90,7 @@ export class SoundMixer extends ASObject {
 		// return SoundMixer._useSpeakerphoneForVoice;
 	}
 
-	static set useSpeakerphoneForVoice(value: boolean) {
-		value = !!value;
+	static set useSpeakerphoneForVoice(_value: boolean) {
 		release || notImplemented('public flash.media.SoundMixer::set useSpeakerphoneForVoice'); return;
 		// SoundMixer._useSpeakerphoneForVoice = value;
 	}
@@ -105,8 +104,11 @@ export class SoundMixer extends ASObject {
 		}
 	}
 
-	static computeSpectrum(outputArray: ByteArray, FFTMode: boolean = false, stretchFactor: number /*int*/ = 0): void {
-		FFTMode = !!FFTMode; stretchFactor = stretchFactor | 0;
+	static computeSpectrum(
+		outputArray: ByteArray,
+		_FFTMode: boolean = false,
+		_stretchFactor: number /*int*/ = 0
+	): void {
 		release || somewhatImplemented('public flash.media.SoundMixer::static computeSpectrum');
 		const data = new Float32Array(1024);
 		for (let i = 0; i < 1024; i++) {
@@ -141,16 +143,12 @@ export class SoundMixer extends ASObject {
 		}
 	}
 
-	static _updateSoundSource(source: ISoundSource) {
-		let volume = source.soundTransform.volume;
+	static _updateAllSoundSources() {
+		let volume = SoundMixer._getMasterVolume();
 		if (SoundMixer._soundTransform) {
 			volume *= SoundMixer._soundTransform.volume;
 		}
-		volume *= SoundMixer._getMasterVolume();
-		source.updateSoundLevels(volume);
-	}
 
-	static _updateAllSoundSources() {
-		SoundMixer._registeredSoundSources.forEach(SoundMixer._updateSoundSource);
+		AudioManager.setVolume(volume, -1);
 	}
 }
