@@ -20,6 +20,8 @@ import { FilterBuilder } from '../filters/FilterBuilder';
 import { BitmapFilter } from '../filters/BitmapFilter';
 
 type gASArray<T> = ASArray & {value: T };
+const _v = new AwayPoint();
+
 export class DisplayObject extends EventDispatcher implements IDisplayObjectAdapter {
 	static axClass: typeof DisplayObject & AXClass;
 
@@ -796,8 +798,11 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * non-rotated Point.
 	 */
 	public get mouseX(): number {
-		return Math.floor(this._node.globalToLocal(
-			new AwayPoint(this._stage.mouseX, this._stage.mouseY)).x);
+		_v.setTo(this._stage.mouseX, this._stage.mouseY);
+
+		this._node.globalToLocal(_v, _v);
+
+		return Math.floor(_v.x);
 	}
 
 	/**
@@ -807,8 +812,11 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * non-rotated Point.
 	 */
 	public get mouseY(): number {
-		return Math.floor(this._node.globalToLocal(
-			new AwayPoint(this._stage.mouseX, this._stage.mouseY)).y);
+		_v.setTo(this._stage.mouseX, this._stage.mouseY);
+
+		this._node.globalToLocal(_v, _v);
+
+		return Math.floor(_v.y);
 	}
 
 	/**
