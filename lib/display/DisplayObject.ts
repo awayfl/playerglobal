@@ -704,13 +704,16 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 		const box: Box = this.getBoundsInternal(this.parent || <any> this._stage);
 
-		return (box == null) ? 0 : box.height;
+		return (box == null) ? 0 : Math.round(box.height * 20) / 20;
 	}
 
 	public set height(value: number) {
 
 		if (isNaN(value))
 			return;
+
+		// round to twips
+		value = Math.round(value * 20) / 20;
 
 		this._blockedByScript = true;
 
@@ -1250,7 +1253,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 		const box: Box = this.getBoundsInternal(this.parent || <any> this._stage);
 
-		return (box == null) ? 0 : box.width;
+		return (box == null) ? 0 : Math.round(box.width * 20) / 20;
 
 	}
 
@@ -1261,6 +1264,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			return;
 
 		}
+		// round to twips
+		value = Math.round(value * 20) / 20;
 
 		this._blockedByScript = true;
 		//todo2019
