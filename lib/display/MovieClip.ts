@@ -419,6 +419,27 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		(<any> this).constructorHasRun = true;
 	}
 
+	private getSceneOffset(scene: string): number {
+		if (!scene || this.root !== this) {
+			return 0;
+		}
+
+		const adaptee = <AwayMovieClip> this.adaptee;
+		const scenes = adaptee.scenes;
+
+		if (!scenes) {
+			return  0;
+		}
+
+		for (const sceneRecord of scenes) {
+			if (sceneRecord.name === scene) {
+				return  sceneRecord.offset;
+			}
+		}
+
+		return 0;
+	}
+
 	/**
 	 * Starts playing the SWF file at the specified frame.  This happens after all
 	 * remaining actions in the frame have finished executing.  To specify a scene
@@ -431,7 +452,6 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * @param	scene	The name of the scene to play. This parameter is optional.
 	 */
 	public gotoAndPlay(frame: any, scene: string = null, force: boolean = false) {
-
 		//console.log("MovieClip.current_script_scope", this, MovieClip.current_script_scope);
 		if (!force && MovieClip.current_script_scope == this) {
 			this.queuedNavigationAction = ()=>this.gotoAndPlay(frame, scene, true);
@@ -440,25 +460,31 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		if (frame == null)
 			return;
 
+		const adaptee = <AwayMovieClip> this.adaptee;
+		const offset = this.getSceneOffset(scene);
+
 		if (typeof frame === 'string') {
-			if ((<AwayMovieClip> this.adaptee).timeline._labels[frame] == null) {
+			if (adaptee.timeline._labels[frame] == null) {
 				frame = parseInt(frame);
+
 				if (!isNaN(frame)) {
-					(<AwayMovieClip> this.adaptee).currentFrameIndex = (<number>frame) - 1;
-					(<AwayMovieClip> this.adaptee).play();
+					adaptee.currentFrameIndex = (<number>frame) - 1 + offset;
+					adaptee.play();
 				}
+
 				return;
 			}
 		}
+
 		if (typeof frame === 'number' && frame <= 0) {
 			if (MovieClip.current_script_scope == this) {
 				return;
 			}
 			frame = 1;
 		}
-		this.play();
-		this._gotoFrame(frame);
 
+		this.play();
+		this._gotoFrame(frame + offset);
 	}
 
 	/**
@@ -487,29 +513,37 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			return;
 		}
 
+		const adaptee = <AwayMovieClip> this.adaptee;
+		const offset = this.getSceneOffset(scene);
+
 		if (typeof frame === 'string') {
-			if ((<AwayMovieClip> this.adaptee).timeline._labels[frame] == null) {
+			if (adaptee.timeline._labels[frame] == null) {
 				frame = parseInt(frame);
+
 				if (!isNaN(frame)) {
-					(<AwayMovieClip> this.adaptee).currentFrameIndex = (<number>frame) - 1;
-					(<AwayMovieClip> this.adaptee).stop();
+					adaptee.currentFrameIndex = (<number>frame) - 1 + offset;
+					adaptee.stop();
 				}
+
 				//	for FP>10 we should throw a error and stop the timeline
 				if ((<any> this.sec).swfVersion > 10) {
-					(<AwayMovieClip> this.adaptee).currentFrameIndex = 0;
+					adaptee.currentFrameIndex = 0;//offset;
 				}
+
 				this.stop();
 				return;
 			}
 		}
+
 		if (typeof frame === 'number' && frame <= 0) {
 			if (MovieClip.current_script_scope == this) {
 				return;
 			}
 			frame = 1;
 		}
+
 		this.stop();
-		this._gotoFrame(frame);
+		this._gotoFrame(frame + offset);
 	}
 
 	private _gotoFrame(frame: any): void {
