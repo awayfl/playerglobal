@@ -484,7 +484,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		}
 
 		this.play();
-		this._gotoFrame(frame + offset);
+		this._gotoFrame(frame, offset);
 	}
 
 	/**
@@ -543,18 +543,18 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		}
 
 		this.stop();
-		this._gotoFrame(frame + offset);
+		this._gotoFrame(frame, offset);
 	}
 
-	private _gotoFrame(frame: any): void {
+	private _gotoFrame(frame: any, offset = 0): void {
 		const oldFrame = this.currentFrame;
 
 		if (typeof frame === 'string') {
-			(<AwayMovieClip> this._adaptee).jumpToLabel(<string>frame);
+			(<AwayMovieClip> this._adaptee).jumpToLabel(<string>frame, offset);
 		} else if (typeof frame === 'number' && frame <= 0) {
 			console.warn('[playerglobal/MovieClip] - gotoFrame called with invalid frame-index');
 		} else {
-			(<AwayMovieClip> this._adaptee).currentFrameIndex = (<number>frame) - 1;
+			(<AwayMovieClip> this._adaptee).currentFrameIndex = (<number>frame) - 1 + offset;
 		}
 		if (this.currentFrame == oldFrame) {
 			return;
