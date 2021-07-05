@@ -253,7 +253,9 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * frame number in the current scene.
 	 */
 	public get currentFrame(): number {
-		return (<AwayMovieClip> this._adaptee).currentFrameIndex + 1;
+		const adaptee = (<any> this._adaptee);
+
+		return adaptee.currentFrameIndexRelative + 1;
 	}
 
 	/**
@@ -419,27 +421,6 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		(<any> this).constructorHasRun = true;
 	}
 
-	private getSceneOffset(scene: string): number {
-		if (!scene || this.root !== this) {
-			return 0;
-		}
-
-		const adaptee = <AwayMovieClip> this.adaptee;
-		const scenes = adaptee.scenes;
-
-		if (!scenes) {
-			return  0;
-		}
-
-		for (const sceneRecord of scenes) {
-			if (sceneRecord.name === scene) {
-				return  sceneRecord.offset;
-			}
-		}
-
-		return 0;
-	}
-
 	/**
 	 * Starts playing the SWF file at the specified frame.  This happens after all
 	 * remaining actions in the frame have finished executing.  To specify a scene
@@ -452,39 +433,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 * @param	scene	The name of the scene to play. This parameter is optional.
 	 */
 	public gotoAndPlay(frame: any, scene: string = null, force: boolean = false) {
-		//console.log("MovieClip.current_script_scope", this, MovieClip.current_script_scope);
-		if (!force && MovieClip.current_script_scope == this) {
-			this.queuedNavigationAction = ()=>this.gotoAndPlay(frame, scene, true);
-			return;
-		}
-		if (frame == null)
-			return;
-
-		const adaptee = <AwayMovieClip> this.adaptee;
-		const offset = this.getSceneOffset(scene);
-
-		if (typeof frame === 'string') {
-			if (adaptee.timeline._labels[frame] == null) {
-				frame = parseInt(frame);
-
-				if (!isNaN(frame)) {
-					adaptee.currentFrameIndex = (<number>frame) - 1 + offset;
-					adaptee.play();
-				}
-
-				return;
-			}
-		}
-
-		if (typeof frame === 'number' && frame <= 0) {
-			if (MovieClip.current_script_scope == this) {
-				return;
-			}
-			frame = 1;
-		}
-
-		this.play();
-		this._gotoFrame(frame, offset);
+		this._gotoInternal(frame, scene, force, false);
 	}
 
 	/**
@@ -501,36 +450,53 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	 *   not found in this movie clip.
 	 */
 	public gotoAndStop(frame: any, scene: string = null, force: boolean = false) {
+		this._gotoInternal(frame, scene, force, true);
+	}
 
-		//console.log("MovieClip.current_script_scope", this, MovieClip.current_script_scope);
+	private _gotoInternal(
+		frame: string | number,
+		scene: string = null,
+		force: boolean = false,
+		stop: boolean = false
+	) {
 		if (!force && MovieClip.current_script_scope == this) {
-			this.queuedNavigationAction = ()=>this.gotoAndStop(frame, scene, true);
+			this.queuedNavigationAction = () => this._gotoInternal(frame, scene, true, stop);
 			return;
 		}
+
 		// in FP for frame==null, we need to stop the mc
 		if (frame == null) {
-			this.stop();
+			stop && this.stop();
 			return;
 		}
 
 		const adaptee = <AwayMovieClip> this.adaptee;
-		const offset = this.getSceneOffset(scene);
+
+		scene = scene || (<any> adaptee).currentSceneName;
 
 		if (typeof frame === 'string') {
 			if (adaptee.timeline._labels[frame] == null) {
 				frame = parseInt(frame);
 
 				if (!isNaN(frame)) {
-					adaptee.currentFrameIndex = (<number>frame) - 1 + offset;
-					adaptee.stop();
+
+					(<any> adaptee).jumpToIndex(frame - 1, scene);
+					if (stop) {
+						adaptee.stop();
+					} else {
+						adaptee.play();
+					}
 				}
 
-				//	for FP>10 we should throw a error and stop the timeline
-				if ((<any> this.sec).swfVersion > 10) {
-					adaptee.currentFrameIndex = 0;//offset;
+				if (stop) {
+					//	for FP>10 we should throw a error and stop the timeline
+					if ((<any> this.sec).swfVersion > 10) {
+						adaptee.currentFrameIndex = 0;
+					}
+
+					this.stop();
 				}
 
-				this.stop();
 				return;
 			}
 		}
@@ -542,23 +508,33 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			frame = 1;
 		}
 
-		this.stop();
-		this._gotoFrame(frame, offset);
+		if (stop) {
+			this.stop();
+		} else {
+			this.play();
+		}
+
+		this._gotoFrame(frame, scene);
 	}
 
-	private _gotoFrame(frame: any, offset = 0): void {
-		const oldFrame = this.currentFrame;
+	private _gotoFrame(frame: string | number, scene: string = null): void {
+		const adaptee = <any> this._adaptee;
+
+		let navigated: boolean;
 
 		if (typeof frame === 'string') {
-			(<AwayMovieClip> this._adaptee).jumpToLabel(<string>frame, offset);
+			navigated = adaptee.jumpToLabel(frame);
 		} else if (typeof frame === 'number' && frame <= 0) {
 			console.warn('[playerglobal/MovieClip] - gotoFrame called with invalid frame-index');
+			navigated = true;
 		} else {
-			(<AwayMovieClip> this._adaptee).currentFrameIndex = (<number>frame) - 1 + offset;
+			navigated = adaptee.jumpToIndex(frame - 1, scene);
 		}
-		if (this.currentFrame == oldFrame) {
+
+		if (!navigated) {
 			return;
 		}
+
 		//console.log("_gotoFrame", this.name);
 		FrameScriptManager.execute_as3_constructors_recursiv(<any> this.adaptee);
 		FrameScriptManager.execute_as3_constructors_finish_scene(<any> this.root.adaptee);
@@ -580,7 +556,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			return;
 		}
 		(<AwayMovieClip> this._adaptee).stop();
-		++(<AwayMovieClip> this._adaptee).currentFrameIndex;
+		++(<any> this._adaptee).currentFrameIndexRelative;
 		FrameScriptManager.execute_as3_constructors_recursiv(<any> this.adaptee);
 		FrameScriptManager.execute_as3_constructors_finish_scene(<any> this.root.adaptee);
 		// only in FP10 and above we want to execute scripts immediatly here
@@ -620,9 +596,13 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			this.queuedNavigationAction = ()=>this.prevFrame(true);
 			return;
 		}
-		if ((<AwayMovieClip> this._adaptee).currentFrameIndex > 0) {
-			(<AwayMovieClip> this._adaptee).currentFrameIndex = (<AwayMovieClip> this._adaptee).currentFrameIndex - 1;
+
+		const adaptee = (<any> this._adaptee);
+
+		if (adaptee.currentFrameIndexRelative > 0) {
+			adaptee.currentFrameIndexRelative--;
 		}
+
 		FrameScriptManager.execute_as3_constructors_recursiv(<any> this.adaptee);
 		FrameScriptManager.execute_as3_constructors_finish_scene(<any> this.root.adaptee);
 		// only in FP10 and above we want to execute scripts immediatly here
