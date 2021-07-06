@@ -193,6 +193,7 @@ import { XMLDocument, XMLNode, ASClass, registerNativeClass, registerNativeFunct
 import { release } from '@awayfl/swf-loader';
 import { BlendMode } from '@awayjs/stage';
 import { GroupElement } from './text/engine/GroupElement';
+import { ByteArray } from '@awayfl/avm2';
 
 import { BaseTextLayoutImporter, Property } from './text/engine/NativehacksForTLF';
 
@@ -639,7 +640,7 @@ export function initLink() {
 	M('flash.ui.Multitouch', <any>Multitouch);
 	M('flash.ui.MultitouchInputMode', <any>MultitouchInputMode);
 
-	//M('flash.utils.ByteArray', ByteArray);
+	M('flash.utils.ByteArray', ByteArray);
 	M('flash.utils.CompressionAlgorithm', CompressionAlgorithm);
 	//M('flash.utils.Dictionary', Dictionary);
 	//M('flash.utils.Endian', Endian);
