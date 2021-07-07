@@ -28,7 +28,10 @@ export class Sprite extends DisplayObjectContainer {
 	}
 
 	public initAdapter(): void {}
+
 	private _graphics: Graphics;
+
+	protected _registeredChildNames: Array<string>;
 
 	/**
 	 * The Sprite class is a basic display list building block: a display list node that can display
@@ -48,9 +51,24 @@ export class Sprite extends DisplayObjectContainer {
 	 */
 	constructor() {
 		super();
+
 		this.dragListenerDelegate = (event) => this.dragListener(event);
 		this.stopDragDelegate = (event) => this.stopDrag(event);
 		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics((<AwaySprite> this._adaptee).graphics);
+	}
+
+	protected setChildIndexInternal(child: DisplayObject, index: number) {
+		// we should re-register child when swap indexes,
+		// because internally we call removeChildAt that unregister it
+		const isRegisteredChild = (
+			this._registeredChildNames &&
+			this._registeredChildNames.indexOf(child.name) > -1);
+
+		super.setChildIndexInternal(child, index);
+
+		if (isRegisteredChild) {
+			this.registerScriptObject(child.adaptee);
+		}
 	}
 
 	protected createAdaptee(): AwayDisplayObject {
@@ -345,16 +363,24 @@ export class Sprite extends DisplayObjectContainer {
 			return;
 		}
 
-		if (child.name) {
-			if (child.name === 'mask') {
-				// explicit scripted mask assignment
-				this.adaptee.scriptMask = child;
-				return;
-			}
+		if (!child.name) {
+			return;
+		}
 
-			this[child.name] = child._adapter ? child.adapter : child;
+		if (child.name === 'mask') {
+			// explicit scripted mask assignment
+			this.adaptee.scriptMask = child;
+			return;
+		}
 
-			this.axSetPublicProperty(child.name, child.adapter);
+		this[child.name] = child._adapter ? child.adapter : child;
+
+		this.axSetPublicProperty(child.name, child.adapter);
+
+		if (!this._registeredChildNames) {
+			this._registeredChildNames = [child.name];
+		} else if (this._registeredChildNames.indexOf(child.name) === -1) {
+			this._registeredChildNames.push(child.name);
 		}
 	}
 
@@ -362,6 +388,10 @@ export class Sprite extends DisplayObjectContainer {
 		if (this[child.name] == child.adapter) {
 			delete this[child.name];
 			this.axDeletePublicProperty(child.name);
+
+			if (this._registeredChildNames) {
+				this._registeredChildNames.splice(this._registeredChildNames.indexOf(child.name), 1);
+			}
 		}
 
 		if (child.isAsset(AwayMovieClip))
@@ -405,6 +435,12 @@ export class Sprite extends DisplayObjectContainer {
 		targetTimeline.keyframe_durations = <any>[timeline.keyframe_durations[0]];
 		targetTimeline.keyframe_firstframes = [timeline.keyframe_firstframes[0]];
 		targetTimeline.keyframe_indices = [timeline.keyframe_indices[0]];
+
+		if (this._registeredChildNames) {
+			for (const name of this._registeredChildNames) {
+				clone.registerScriptObject(this[name]);
+			}
+		}
 
 		return clone;
 	}

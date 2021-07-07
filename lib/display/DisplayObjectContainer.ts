@@ -597,6 +597,10 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 * @throws	ArgumentError Throws if the child parameter is not a child of this object.
 	 */
 	public setChildIndex (child: DisplayObject, index: number)  {
+		this.setChildIndexInternal(child, index);
+	}
+
+	protected setChildIndexInternal(child: DisplayObject, index: number) {
 		const idx = (<AwayDisplayObjectContainer> this.adaptee).getChildIndex(child.adaptee);
 		if (idx < 0)
 			throw ('[DisplayObjectContainer.setChildindex] \
