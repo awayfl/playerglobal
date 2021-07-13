@@ -742,7 +742,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * this.root.loaderInfo.addEventListener(Event.COMPLETE, func).
 	 */
 	public get loaderInfo(): LoaderInfo {
-		return this._loaderInfo;
+		return  this._loaderInfo || this.root?._loaderInfo;
 	}
 
 	public set loaderInfo(value: LoaderInfo) {
