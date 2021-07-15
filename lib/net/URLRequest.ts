@@ -25,6 +25,7 @@ export class URLRequest extends ASObject {
 	static axClass: typeof URLRequest;
 
 	private _adaptee: URLRequestAway;
+	private _data: ASObject;
 
 	constructor (url: string = null) {
 		super();
@@ -51,6 +52,7 @@ export class URLRequest extends ASObject {
 	get data(): ASObject {
 		const adapteeData = this._adaptee.data;
 		let returnData = this._adaptee.data;
+
 		if (adapteeData instanceof URLVariablesAway) {
 			returnData = new URLVariables();
 			for (const key in this._adaptee.data.variables) {
@@ -59,11 +61,24 @@ export class URLRequest extends ASObject {
 		} else if (typeof adapteeData === 'object') {
 			returnData = transformJSValueToAS(this.sec, adapteeData, true);
 		}
-		return returnData;
+
+		return this._data = returnData;
 	}
 
 	set data(value: ASObject) {
+		this._data = value;
+
+		this.mapToJSData();
+	}
+
+	/**
+	 * Query data for request, taht mapped onto JS, this is because we can't convert data to JS in assigment
+	 * data is object, and AS sometimes fill data after assigment
+	 */
+	mapToJSData(): any {
+		const value = this._data;
 		let jsValue;
+
 		if ((<any> this.sec).flash.net.URLVariables.axIsType(value)) {
 			jsValue = new URLVariablesAway();
 			for (const key in value) {
@@ -74,7 +89,9 @@ export class URLRequest extends ASObject {
 		} else {
 			jsValue = transformASValueToJS(this.sec, value, true);
 		}
+
 		this._adaptee.data = jsValue;
+		return jsValue;
 	}
 
 	get method(): string {

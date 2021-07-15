@@ -35,7 +35,7 @@ export class URLVariables extends ASObject {
 
 	// class not has traits, and will crash
 	axSetProperty(mn: Multiname, value: any) {
-		this.axSetPublicProperty(mn, value);
+		this[mn.getMangledName()] = value ;
 	}
 
 	decode(source: string): void {

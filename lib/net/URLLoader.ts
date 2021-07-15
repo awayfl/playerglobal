@@ -9,6 +9,7 @@ import { AXClass } from '@awayfl/avm2';
 import { URLRequest } from './URLRequest';
 import { SecurityDomain } from '../SecurityDomain';
 import { IRedirectRule, matchRedirect } from '@awayfl/swf-loader';
+import { URLLoaderDataFormat } from './URLLoaderDataFormat';
 
 export class URLLoader extends EventDispatcher {
 	static redirectRules: IRedirectRule[] = [];
@@ -18,6 +19,9 @@ export class URLLoader extends EventDispatcher {
 	//for AVM1:
 	public bytesLoaded: number;
 	public bytesTotal: number;
+
+	// AS bind, defined in trite
+	public $BgdataFormat: string;
 
 	constructor() {
 		super();
@@ -41,14 +45,36 @@ export class URLLoader extends EventDispatcher {
 			addListener:this.initListener,
 			removeListener:this.removeListener,
 			callback:this._loadErrorDelegate });
+
+		Object.defineProperty(this, '$Bgdata', {
+			get: this.getData.bind(this)
+		});
 	}
 
 	public close() {
 		console.log('not mimplemented: URLoader.close');
 	}
 
-	public get data(): any {
-		return this._adaptee.data;
+	// trait not have data as get/set, we should redefine it in constructor
+	public getData(): any {
+		const rawData = this._adaptee.data;
+
+		console.warn(this.$BgdataFormat);
+
+		switch (this.$BgdataFormat) {
+			case URLLoaderDataFormat.VARIABLES: {
+				return new (<SecurityDomain> this.sec).flash.net.URLVariables(rawData);
+			}
+			case URLLoaderDataFormat.BINARY: {
+				console.warn('[URLLoader] Binary not supported');
+				return null;
+			}
+
+			default: {
+				return rawData;
+			}
+
+		}
 	}
 
 	private initListener(type: string, callback: (event: any) => void): void {
@@ -98,6 +124,10 @@ export class URLLoader extends EventDispatcher {
 		} else {
 			console.log('[URL LOADER] start loading the url:', directUrl);
 		}
+
+		// remap AS to JS before real request,
+		// this is needed because some games fill data object after assigment
+		request.mapToJSData();
 
 		this._adaptee.load(request.adaptee);
 	}
