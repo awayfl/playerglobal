@@ -59,8 +59,6 @@ export class URLLoader extends EventDispatcher {
 	public getData(): any {
 		const rawData = this._adaptee.data;
 
-		console.warn(this.$BgdataFormat);
-
 		switch (this.$BgdataFormat) {
 			case URLLoaderDataFormat.VARIABLES: {
 				return new (<SecurityDomain> this.sec).flash.net.URLVariables(rawData);
