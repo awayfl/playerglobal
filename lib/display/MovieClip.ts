@@ -556,7 +556,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			return;
 		}
 		(<AwayMovieClip> this._adaptee).stop();
-		++(<any> this._adaptee).currentFrameIndexRelative;
+		++(<AwayMovieClip> this._adaptee).currentFrameIndex;
 		FrameScriptManager.execute_as3_constructors_recursiv(<any> this.adaptee);
 		FrameScriptManager.execute_as3_constructors_finish_scene(<any> this.root.adaptee);
 		// only in FP10 and above we want to execute scripts immediatly here
