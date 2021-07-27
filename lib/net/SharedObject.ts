@@ -4,6 +4,10 @@ import { axCoerceString, ObjectEncoding, AMF3, transformASValueToJS, transformJS
 import { ByteArray } from '../utils/ByteArray';
 import { SecurityDomain } from '../SecurityDomain';
 
+export const AWAY_SO_VERSION = 3;
+export const AWAY_SO_MAGIC = 'AWAY';
+export const AWAY_SO_HEADER_SIZE = AWAY_SO_MAGIC.length + 2; // magic, version, coma
+
 interface IStorage {
 	getItem(key: string): string;
 	setItem(key: string, value: string): void;
@@ -70,7 +74,7 @@ export class SharedObjectDebug {
 			const d = store._values[key];
 
 			if (d !== null) {
-				raw[key] = SharedObject.tryDecodeData(store._values[key]);
+				raw[key] = SharedObject.tryDecodeData(store._values[key]).data;
 				dec[key] = transformASValueToJS(USED_SEC, raw[key], true);
 			} else {
 				raw[key] = dec[key] = null;
@@ -123,14 +127,12 @@ window.addEventListener('blur', () => {
 
 let USED_SEC: any = undefined;
 export class SharedObject extends ASObject {
+	public awaySOVersion = 1; // legacy
 	private _data: ASObject;
 	private _object_name: string;
 
 	static axClass: typeof SharedObject;
-	static _sharedObjects: any = {};
-
-	//for AVM1:
-	//public fps: number;
+	static _sharedObjects: Record<string, SharedObject> = {};
 
 	constructor() {
 		super();
@@ -161,7 +163,13 @@ export class SharedObject extends ASObject {
 	public _objectEncoding;
 	private static _defaultObjectEncoding = ObjectEncoding.DEFAULT;
 
-	/* internal */ static tryDecodeData(data: string): any {
+	/* internal */ static tryDecodeData(data: string): {data: any, version: number} {
+		let version = 1;
+
+		if (data.indexOf(AWAY_SO_MAGIC) > -1) {
+			version = +data[AWAY_SO_HEADER_SIZE - 1];
+			data = data.substring(AWAY_SO_HEADER_SIZE);
+		}
 
 		const bytes = StringUtilities.decodeRestrictedBase64ToBytes(data);
 		const serializedData = new ByteArray(bytes.length);
@@ -169,7 +177,10 @@ export class SharedObject extends ASObject {
 
 		serializedData.setArrayBuffer(bytes.buffer);
 
-		return AMF3.read(<any>serializedData);
+		return {
+			data: AMF3.read(<any>serializedData),
+			version: version
+		};
 	}
 
 	/* internal */ static tryEncodeData(data: any): string {
@@ -178,7 +189,7 @@ export class SharedObject extends ASObject {
 
 		AMF3.write(<any>serializedData, data);
 
-		const bytes = new Uint8Array(serializedData.arraybytes);
+		const bytes = new Uint8Array(serializedData.arraybytes, 0, serializedData.length);
 
 		return StringUtilities.base64EncodeBytes(bytes);
 	}
@@ -189,16 +200,24 @@ export class SharedObject extends ASObject {
 		name = axCoerceString(name);
 		localPath = axCoerceString(localPath);
 		secure = !!secure;
+
 		const path = (localPath || '') + '/' + name;
+
 		if (SharedObject._sharedObjects[path]) {
 			return SharedObject._sharedObjects[path];
 		}
+
 		const encodedData = getSharedObjectStorage().getItem(path);
-		let data;
 		const encoding = this._defaultObjectEncoding;
+
+		let data;
+		let version = AWAY_SO_VERSION;
+
 		if (encodedData) {
 			try {
-				data = SharedObject.tryDecodeData(encodedData);
+				const res = SharedObject.tryDecodeData(encodedData);
+				data = res.data;
+				version = res.version;
 			} catch (e) {
 				warning('Error encountered while decoding LocalStorage entry. Resetting data.');
 			}
@@ -210,9 +229,12 @@ export class SharedObject extends ASObject {
 		}
 
 		const so: SharedObject = new (<SecurityDomain> this.sec).flash.net.SharedObject();
+
 		so._path = path;
 		so._objectEncoding = encoding;
 		so._data = data;
+		so.awaySOVersion = version;
+
 		SharedObject._sharedObjects[path] = so;
 		return so;
 	}
@@ -222,22 +244,14 @@ export class SharedObject extends ASObject {
 	}
 
 	public static closeAll() {
-		for (const so of SharedObject._sharedObjects) {
-			if (so) {
-				so.close();
+		for (const key in SharedObject._sharedObjects) {
+			if (SharedObject._sharedObjects[key]) {
+				SharedObject._sharedObjects[key].close();
 			}
 		}
 	}
 
 	public flush(minDiskSpace: number = 0): void {
-		/*if (typeof (Storage) !== "undefined") {
-			localStorage.setItem(this._object_name, JSON.stringify(this._data));
-		}
-		else {
-			console.log("no local storage available");
-
-		}*/
-
 		// Check if the object is empty. If it is, don't create a stored object if one doesn't exist.
 		let isEmpty = true;
 		for (const key in this._data) {
@@ -252,14 +266,11 @@ export class SharedObject extends ASObject {
 		}
 
 		USED_SEC = this.sec;
-		const encoded = SharedObject.tryEncodeData(this._data);
-		/*if (!release) {
-		  var decoded = StringUtilities.decodeRestrictedBase64ToBytes(encodedData);
-		  assert(decoded.byteLength === bytes.byteLength);
-		  for (var i = 0; i < decoded.byteLength; i++) {
-			assert(decoded[i] === bytes[i]);
-		  }
-		}*/
+		const encoded =
+			AWAY_SO_MAGIC +
+			AWAY_SO_VERSION.toFixed(0) + ',' +
+			SharedObject.tryEncodeData(this._data);
+
 		getSharedObjectStorage().setItem(this._path, encoded);
 	}
 
@@ -316,7 +327,6 @@ export class SharedObject extends ASObject {
 		// should run flush when close is requested
 		this.flush();
 		delete SharedObject._sharedObjects[this._path];
-		//notImplemented('public flash.net.SharedObject::close');
 	}
 
 	/**
