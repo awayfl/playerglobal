@@ -167,7 +167,7 @@ export class SharedObject extends ASObject {
 		let version = 1;
 
 		if (data.indexOf(AWAY_SO_MAGIC) > -1) {
-			version = +data[AWAY_SO_HEADER_SIZE - 1];
+			version = +data[AWAY_SO_MAGIC.length];
 			data = data.substring(AWAY_SO_HEADER_SIZE);
 		}
 
