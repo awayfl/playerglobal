@@ -5,7 +5,7 @@ import { IEventMapper } from '../events/IEventMapper';
 import { Event } from '../events/Event';
 import { ProgressEvent } from '../events/ProgressEvent';
 import { IOErrorEvent } from '../events/IOErrorEvent';
-import { AXClass } from '@awayfl/avm2';
+import { AXClass, ASObject } from '@awayfl/avm2';
 import { URLRequest } from './URLRequest';
 import { SecurityDomain } from '../SecurityDomain';
 import { IRedirectRule, matchRedirect } from '@awayfl/swf-loader';
@@ -13,12 +13,10 @@ import { URLLoaderDataFormat } from './URLLoaderDataFormat';
 
 export class URLLoader extends EventDispatcher {
 	static redirectRules: IRedirectRule[] = [];
-
 	static axClass: typeof URLLoader & AXClass;
+
 	private _adaptee: URLLoaderAway;
-	//for AVM1:
-	public bytesLoaded: number;
-	public bytesTotal: number;
+	private _dataIsNull: boolean = true;
 
 	// AS bind, defined in trite
 	public $BgdataFormat: string;
@@ -47,7 +45,8 @@ export class URLLoader extends EventDispatcher {
 			callback:this._loadErrorDelegate });
 
 		Object.defineProperty(this, '$Bgdata', {
-			get: this.getData.bind(this)
+			get: this.getData.bind(this),
+			set: this.setData.bind(this)
 		});
 	}
 
@@ -55,8 +54,15 @@ export class URLLoader extends EventDispatcher {
 		console.log('not mimplemented: URLoader.close');
 	}
 
+	public setData(v: ASObject): void {
+		this._dataIsNull = this._dataIsNull || v === null;
+	}
+
 	// trait not have data as get/set, we should redefine it in constructor
 	public getData(): any {
+		if (this._dataIsNull)
+			return null;
+
 		const rawData = this._adaptee.data;
 
 		switch (this.$BgdataFormat) {
@@ -89,6 +95,8 @@ export class URLLoader extends EventDispatcher {
 
 	private _loadErrorDelegate: (event: URLLoaderEvent) => void;
 	private loadErrorDelegate(event: URLLoaderEvent = null): void {
+		this._dataIsNull = false;
+
 		const newEvent: IOErrorEvent = new (<SecurityDomain> this.sec).flash.events.IOErrorEvent(IOErrorEvent.IO_ERROR);
 		newEvent.currentTarget = this;
 		this.dispatchEvent(newEvent);
@@ -96,6 +104,8 @@ export class URLLoader extends EventDispatcher {
 
 	private _progressCallbackDelegate: (event: URLLoaderEvent) => void;
 	private progressCallback(event: URLLoaderEvent = null): void {
+		this._dataIsNull = false;
+
 		const newEvent = new (<SecurityDomain> this.sec).flash.events.
 			ProgressEvent(ProgressEvent.PROGRESS, null, null, event.urlLoader.bytesLoaded, event.urlLoader.bytesTotal);
 
@@ -106,6 +116,8 @@ export class URLLoader extends EventDispatcher {
 	private _completeCallbackDelegate: (event: URLLoaderEvent) => void;
 
 	private completeCallback(event: URLLoaderEvent = null): void {
+		this._dataIsNull = false;
+
 		const newEvent: Event = new (<SecurityDomain> this.sec).flash.events.Event(Event.COMPLETE);
 		newEvent.currentTarget = this;
 		newEvent.target = this;
