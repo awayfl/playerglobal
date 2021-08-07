@@ -91,8 +91,9 @@ export class TextField extends InteractiveObject {
 	constructor () {
 		super();
 		(<AwayTextField> this.adaptee).autoSize = TextFieldAutoSize.NONE;
-		//(<AwayTextField> this._adaptee).width=100;//80pro!
-		// register all events for Textfield as dummys right now
+		// fucking FLASH constructor can be called after assignments a cloned props
+		// and mouseEnabled changed by DisplayObject to TRUE
+		(<AwayTextField> this.adaptee).mouseEnabled = (<AwayTextField> this.adaptee).selectable;
 
 		this.eventMappingDummys[TextEvent.TEXT_INPUT] = 'TextField:TextEvent.TEXT_INPUT';
 		this.eventMappingDummys[TextEvent.LINK] = 'TextField:TextEvent.LINK';
@@ -100,6 +101,7 @@ export class TextField extends InteractiveObject {
 		this.eventMappingDummys[Event.TEXT_INTERACTION_MODE_CHANGE] = 'TextField:Event.TEXT_INTERACTION_MODE_CHANGE';
 
 		this._textChangeCallbackDelegate = (event: TextfieldEvent) => this.textChangeCallback(event);
+
 		if ((<AwayTextField> this.adaptee).type == TextFieldType.INPUT) {
 			this.adaptee.addEventListener(TextfieldEvent.CHANGED, this._textChangeCallbackDelegate);
 		}
