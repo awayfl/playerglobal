@@ -538,8 +538,12 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		//console.log("_gotoFrame", this.name);
 		FrameScriptManager.execute_as3_constructors_recursiv(<any> this.adaptee);
 		FrameScriptManager.execute_as3_constructors_finish_scene(<any> this.root.adaptee);
+
+		// this is not true!
 		// only in FP10 and above we want to execute scripts immediatly here
-		if ((<any> this.sec).swfVersion > 9) {
+		// BUT ONLY ON SUB TIMELINES
+
+		if ((<any> this.sec).swfVersion > 9 && this !== MovieClip.current_script_scope) {
 			this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
 			FrameScriptManager.execute_queue();
 			this.dispatchStaticBroadCastEvent(Event.EXIT_FRAME);
