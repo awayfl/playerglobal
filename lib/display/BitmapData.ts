@@ -445,8 +445,8 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	public _removeOwner(owner: IBitmapDataOwner) {
 		const index: number = this._owners.indexOf(owner);
 
-		if (index != -1) this._owners.splice(index, 1);
-
-		if (!this._owners.length && this._adaptee) this._adaptee.clear();
+		if (index != -1) {
+			this._owners.splice(index, 1);
+		}
 	}
 }
