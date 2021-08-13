@@ -168,12 +168,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 
 		const newMC: MovieClip = constructClassFromSymbol(anyThis._symbol, anyThis._symbol.symbolClass);
 
-		// console.log("Base", anyThis._symbol, anyThis._symbol.symbolClass);
-
-		//console.log("clone", (<any>this)._symbol, (<any>this)._symbol.symbolClass);
 		const adaptee = new AwayMovieClip((<AwayMovieClip> this.adaptee).timeline);
-
-		//console.log("clone mc", newMC, adaptee, adaptee.id, (<any>this)._symbol, (<any>this)._symbol.symbolClass)
 		this.adaptee.copyTo(adaptee);
 
 		newMC.adaptee = adaptee;
@@ -185,53 +180,6 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			(<any>newMC).constructorHasRun = true;
 
 		};
-
-		if (adaptee.timeline) {
-
-			//console.log(adaptee.timeline);
-
-			// for Sprite and UIComponent, we want the timeline to only use frame 1
-
-			let foundUIComponent: boolean = false;
-			let symbolClass: any = (<any> this)._symbol.symbolClass;
-			while (symbolClass && !foundUIComponent) {
-				if (symbolClass.name?.name == 'UIComponent') {
-					foundUIComponent = true;
-				} else if (symbolClass.name?.name == 'MovieClip') {
-					symbolClass = null;
-				} else if (symbolClass.name?.name == 'Sprite') {
-					foundUIComponent = true;
-				} else if (symbolClass.superClass) {
-					symbolClass = symbolClass.superClass;
-				} else {
-					symbolClass = null;
-				}
-			}
-			// 	hack to BadIceCreamFont compiledClip:
-			//	the compiledClip "BadIcecreamFont" seem to behave different to other classes
-			//	it seem to always stick to frame 0,
-			//
-			//	DANGER!!!
-			//	MAY PRODUCE SIDE EFFECTS
-
-			const cn = anyThis._symbol.className;
-			const freezeOnFirstFrame = foundUIComponent || (cn && (
-				//anyThis._symbol.className == "BadIcecreamFont" ||
-				cn.includes('Font'))
-			);
-
-			if (freezeOnFirstFrame) {
-				const timeline = (<AwayMovieClip>adaptee).timeline;
-				const targetTimeline = timeline;
-
-				targetTimeline.frame_command_indices = <any>[timeline.frame_command_indices[0]];
-				targetTimeline.frame_recipe = <any>[timeline.frame_recipe[0]];
-				targetTimeline.keyframe_constructframes = [timeline.keyframe_constructframes[0]];
-				targetTimeline.keyframe_durations = <any>[timeline.keyframe_durations[0]];
-				targetTimeline.keyframe_firstframes = [timeline.keyframe_firstframes[0]];
-				targetTimeline.keyframe_indices = [timeline.keyframe_indices[0]];
-			}
-		}
 
 		return newMC;
 	}
