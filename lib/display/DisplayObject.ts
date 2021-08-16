@@ -25,6 +25,34 @@ const _v = new AwayPoint();
 export class DisplayObject extends EventDispatcher implements IDisplayObjectAdapter {
 	static axClass: typeof DisplayObject & AXClass;
 
+	static defineLazy(obj, name, value): boolean {
+		if (obj._adaptee) {
+			return false;
+		}
+
+		if (!obj.$lazyConstructProperty) {
+			obj.$lazyConstructProperty = {};
+		}
+
+		obj.$lazyConstructProperty[name] = value;
+
+		return true;
+	}
+
+	static applyLazy(obj) {
+		if (!obj.$lazyConstructProperty) {
+			return;
+		}
+
+		for (const prop in obj.$lazyConstructProperty) {
+			if (prop in obj) {
+				obj[prop] = obj.$lazyConstructProperty[prop];
+			}
+		}
+
+		obj.$lazyConstructProperty = null;
+	}
+
 	//for AVM1:
 	public _parent: any;
 	public _depth: number;
@@ -42,6 +70,12 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	// hack for TFL to return correct width / height for TextLine
 	public _forceWidth: number = 0;
 	public _forceHeight: number = 0;
+
+	/**
+	 * We can't apply props before call constructor, store value
+	 * @private
+	 */
+	private $lazyConstructProperty: Record<string, any> = {};
 
 	public toString(): string {
 		return `[object ${(<any> this).classInfo.instanceInfo.name.name}]`;
@@ -188,6 +222,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 	constructor() {
 		super();
+
+		DisplayObject.applyLazy(this);
 
 		this._filters = this._filters || this.sec.createArrayUnsafe([]);
 
@@ -1300,6 +1336,9 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	public set x(value: number) {
+		if (DisplayObject.defineLazy(this, 'x', value))
+			return;
+
 		this._blockedByScript = true;
 		// for Textfields we must respect the scaled TextOffsetX property:
 		if ((<any> this._adaptee).textOffsetX)
@@ -1325,6 +1364,9 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	public set y(value: number) {
+		if (DisplayObject.defineLazy(this, 'y', value))
+			return;
+
 		this._blockedByScript = true;
 		// for Textfields we must respect the scaled TextOffsetY property:
 		if ((<any> this._adaptee).textOffsetY)

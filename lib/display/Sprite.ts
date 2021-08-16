@@ -517,7 +517,7 @@ export class Sprite extends DisplayObjectContainer {
 	 * drawing commands can occur.
 	 */
 	public get graphics(): Graphics {
-		return this._graphics;
+		return this._graphics || (this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics(null));
 	}
 
 	/**
