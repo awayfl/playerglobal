@@ -70,14 +70,9 @@ export class SimpleButton extends MovieClip {
 	constructor (upState: DisplayObject = null,
 		overState: DisplayObject = null,
 		downState: DisplayObject = null,
-		hitTestState: DisplayObject = null
-	) {
+		hitTestState: DisplayObject = null) {
 		super();
 		(<AwayMovieClip> this._adaptee).addButtonListeners();
-	}
-
-	protected createAdaptee(): AwayDisplayObject {
-		return  new AwayMovieClip();
 	}
 
 	// todo: this methods are also defined on Sprite
