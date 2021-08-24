@@ -55,6 +55,15 @@ export class Sprite extends DisplayObjectContainer {
 		this.dragListenerDelegate = (event) => this.dragListener(event);
 		this.stopDragDelegate = (event) => this.stopDrag(event);
 		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics((<AwaySprite> this._adaptee).graphics);
+
+		// our prototype is not MC (MC extends Sprite and we MUST check this)
+		if (
+			!(<SecurityDomain> this.sec).flash.display.MovieClip.axIsType(this)
+			&& this.adaptee.isAsset(AwayMovieClip)
+		) {
+			// trap MC to sprite mode for timeline
+			(<AwayMovieClip> this.adaptee).transformToSprite();
+		}
 	}
 
 	protected setChildIndexInternal(child: DisplayObject, index: number) {
@@ -427,18 +436,21 @@ export class Sprite extends DisplayObjectContainer {
 
 		// in FP, a Sprite seem to always have only 1 frame:
 		const timeline = (<AwayMovieClip>adaptee).timeline;
-		const targetTimeline = timeline;
 
-		targetTimeline.frame_command_indices = <any>[timeline.frame_command_indices[0]];
-		targetTimeline.frame_recipe = <any>[timeline.frame_recipe[0]];
-		targetTimeline.keyframe_constructframes = [timeline.keyframe_constructframes[0]];
-		targetTimeline.keyframe_durations = <any>[timeline.keyframe_durations[0]];
-		targetTimeline.keyframe_firstframes = [timeline.keyframe_firstframes[0]];
-		targetTimeline.keyframe_indices = [timeline.keyframe_indices[0]];
+		if (timeline) {
+			const targetTimeline = timeline;
 
-		if (this._registeredChildNames) {
-			for (const name of this._registeredChildNames) {
-				clone.registerScriptObject(this[name]);
+			targetTimeline.frame_command_indices = <any>[timeline.frame_command_indices[0]];
+			targetTimeline.frame_recipe = <any>[timeline.frame_recipe[0]];
+			targetTimeline.keyframe_constructframes = [timeline.keyframe_constructframes[0]];
+			targetTimeline.keyframe_durations = <any>[timeline.keyframe_durations[0]];
+			targetTimeline.keyframe_firstframes = [timeline.keyframe_firstframes[0]];
+			targetTimeline.keyframe_indices = [timeline.keyframe_indices[0]];
+
+			if (this._registeredChildNames) {
+				for (const name of this._registeredChildNames) {
+					clone.registerScriptObject(this[name]);
+				}
 			}
 		}
 
