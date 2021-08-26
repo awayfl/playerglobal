@@ -45,11 +45,11 @@ export class Matrix extends ASObject {
    * when rotating or skewing an image.
    */
 	public get b(): number {
-		return this._adaptee.rawData[2];
+		return this._adaptee.rawData[1];
 	}
 
 	public set b(value: number) {
-		this._adaptee.rawData[2] = value;
+		this._adaptee.rawData[1] = value;
 	}
 
 	/**
@@ -57,11 +57,11 @@ export class Matrix extends ASObject {
    * when rotating or skewing an image.
    */
 	public get c(): number {
-		return this._adaptee.rawData[1];
+		return this._adaptee.rawData[2];
 	}
 
 	public set c(value: number) {
-		this._adaptee.rawData[1] = value;
+		this._adaptee.rawData[2] = value;
 	}
 
 	/**
