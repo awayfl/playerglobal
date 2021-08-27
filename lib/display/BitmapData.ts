@@ -63,16 +63,33 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public getVector(rect: Rectangle): Uint32Vector {
-		const buffer = this.adaptee.getPixels(rect.adaptee);
+		const u8 = this.adaptee.getPixels(rect.adaptee);
 		// construct small buffer
 		const vector = new this.sec.Uint32Vector(0, true);
+		const u32 = new Uint32Array(u8.buffer);
 
-		// replace a buffer for avoid copeing
+		// flash use ARGB view, we have ABGR and PMA
+		for (let i = 0; i < u32.length; i++) {
+			const a = u8[i * 4 + 3];
+			const r = u8[i * 4 + 0];
+			const g = u8[i * 4 + 1];
+			const b = u8[i * 4 + 2];
+
+			const factor = (a / 0xff) || 1;
+
+			u32[i] =
+					(a << 24) |
+					((r / factor) << 16) |
+					((g / factor) << 8) |
+					(b	/ factor);
+		}
+
+		// replace a buffer for avoid coping
 		//@ts-ignore
-		vector._buffer = new Uint32Array(buffer.buffer);
+		vector._buffer = u32;
 		// remap size
 		//@ts-ignore
-		vector._length = buffer.length / 4;
+		vector._length = u32.length;
 
 		return vector;
 	}
