@@ -632,10 +632,16 @@ export class Sprite extends DisplayObjectContainer {
 			const avmStage = AVMStage.instance();
 			const dragNode = avmStage.pool.getNode(this.adaptee);
 			avmStage.mousePicker.dragNode = dragNode;
-			avmStage.mouseManager.startDragObject(
-				this.adaptee
-					.getAbstraction<EntityNode>(dragNode.partition)
-					.getAbstraction<PickEntity>(avmStage.mousePicker.pickGroup).pickingCollision);
+
+			const collision = this.adaptee
+			.getAbstraction<EntityNode>(dragNode.partition)
+			.getAbstraction<PickEntity>(avmStage.mousePicker.pickGroup)
+			.pickingCollision;
+
+			// collision MUST has rootNode, otherwise will be drag bug
+			collision.rootNode = dragNode;
+
+			avmStage.mouseManager.startDragObject(collision);
 			avmStage.view.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.dragListenerDelegate);
 		}
 	}
