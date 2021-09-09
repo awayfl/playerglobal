@@ -634,9 +634,9 @@ export class Sprite extends DisplayObjectContainer {
 			avmStage.mousePicker.dragNode = dragNode;
 
 			const collision = this.adaptee
-			.getAbstraction<EntityNode>(dragNode.partition)
-			.getAbstraction<PickEntity>(avmStage.mousePicker.pickGroup)
-			.pickingCollision;
+				.getAbstraction<EntityNode>(dragNode.partition)
+				.getAbstraction<PickEntity>(avmStage.mousePicker.pickGroup)
+				.pickingCollision;
 
 			// collision MUST has rootNode, otherwise will be drag bug
 			collision.rootNode = dragNode;
