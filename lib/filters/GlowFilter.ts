@@ -149,7 +149,7 @@ export class GlowFilter extends BitmapFilter {
 	}
 
 	clone(): BitmapFilter {
-		return new GlowFilter(
+		return new (<SecurityDomain> this.sec).flash.filters.GlowFilter(
 			this._color,
 			this._alpha,
 			this._blurX,

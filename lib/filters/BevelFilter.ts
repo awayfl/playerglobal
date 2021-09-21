@@ -225,7 +225,7 @@ export class BevelFilter extends BitmapFilter {
 	}
 
 	clone(): BitmapFilter {
-		return new BevelFilter(
+		return new (<SecurityDomain> this.sec).flash.filters.BevelFilter(
 			this._distance,
 			this._angle,
 			this._highlightColor,

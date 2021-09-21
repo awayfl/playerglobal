@@ -172,7 +172,7 @@ export class ConvolutionFilter extends BitmapFilter {
 	}
 
 	clone(): BitmapFilter {
-		return new ConvolutionFilter(
+		return new (<SecurityDomain> this.sec).flash.filters.ConvolutionFilter(
 			this._matrixX,
 			this._matrixY,
 			this.matrix,

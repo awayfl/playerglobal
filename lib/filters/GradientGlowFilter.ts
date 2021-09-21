@@ -222,7 +222,7 @@ export class GradientGlowFilter extends BitmapFilter {
 	}
 
 	clone(): BitmapFilter {
-		return new GradientGlowFilter(
+		return new (<SecurityDomain> this.sec).flash.filters.GradientGlowFilter(
 			this._distance,
 			this._angle,
 			this.colors,

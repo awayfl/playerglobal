@@ -259,7 +259,7 @@ export class GradientBevelFilter extends BitmapFilter {
 	}
 
 	clone(): BitmapFilter {
-		return new GradientBevelFilter(
+		return new (<SecurityDomain> this.sec).flash.filters.GradientBevelFilter(
 			this._distance,
 			this._angle,
 			this.colors,

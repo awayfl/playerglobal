@@ -161,7 +161,7 @@ export class DisplacementMapFilter extends BitmapFilter implements IDisplacement
 	}
 
 	clone(): DisplacementMapFilter {
-		return new DisplacementMapFilter(
+		return new (<SecurityDomain> this.sec).flash.filters.DisplacementMapFilter(
 			this._mapBitmap,
 			this._mapPoint,
 			this._componentX,

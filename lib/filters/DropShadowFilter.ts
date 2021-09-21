@@ -187,7 +187,7 @@ export class DropShadowFilter extends BitmapFilter {
 	}
 
 	clone(): BitmapFilter {
-		return new DropShadowFilter(
+		return new (<SecurityDomain> this.sec).flash.filters.DropShadowFilter(
 			this._distance,
 			this._angle,
 			this._color,

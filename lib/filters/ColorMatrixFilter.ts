@@ -83,7 +83,8 @@ export class ColorMatrixFilter extends BitmapFilter {
 	}
 
 	clone(): BitmapFilter {
-		return new ColorMatrixFilter(this.matrix);
+		return new (<SecurityDomain> this.sec).flash.filters.ColorMatrixFilter(
+			this.sec.createArrayUnsafe(this._matrix));
 	}
 
 	toAwayObject() {

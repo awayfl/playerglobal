@@ -60,7 +60,7 @@ export class BlurFilter extends BitmapFilter {
 	}
 
 	clone(): BitmapFilter {
-		return new BlurFilter(this._blurX, this._blurY, this._quality);
+		return new (<SecurityDomain> this.sec).flash.filters.BlurFilter(this._blurX, this._blurY, this._quality);
 	}
 
 	toAwayObject(): InterfaceOf<BlurFilter> {
