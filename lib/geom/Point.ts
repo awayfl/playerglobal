@@ -4,6 +4,7 @@ import { Point as AwayPoint } from '@awayjs/core';
 import { SecurityDomain } from '../SecurityDomain';
 
 export class Point extends ASObject {
+	private _constructorCalled: boolean = true;
 	private _adaptee: AwayPoint;
 
 	// Called whenever the class is initialized.
@@ -23,6 +24,11 @@ export class Point extends ASObject {
    * The horizontal coordinate of the point. The default value is 0.
    */
 	public get x(): number {
+		if (!this._constructorCalled) {
+			console.warn('[Point] Read x before call constructor');
+			return 0;
+		}
+
 		return this._adaptee._rawData[0];
 	}
 
@@ -34,6 +40,11 @@ export class Point extends ASObject {
    * The vertical coordinate of the point. The default value is 0.
    */
 	public get y(): number {
+		if (!this._constructorCalled) {
+			console.warn('[Point] Read y before call constructor');
+			return 0;
+		}
+
 		return this._adaptee._rawData[1];
 	}
 
@@ -59,6 +70,7 @@ export class Point extends ASObject {
 		super();
 
 		this._adaptee = (xAdaptee instanceof AwayPoint) ? xAdaptee : new AwayPoint(+xAdaptee, +y);
+		this._constructorCalled = true;
 	}
 
 	/**
