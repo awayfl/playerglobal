@@ -498,6 +498,11 @@ export class Sound extends EventDispatcher {
 		loops = isNaN(loops) || loops < 1 ? 1 : Math.floor(loops);
 
 		const channel: IAudioChannel =  <any> this._adaptee.play(startTime, loops);
+
+		if (!channel) {
+			console.debug('[Sound] Sound channel missed, channel pool overflow for:', this._adaptee.id);
+		}
+
 		const newSoundChannel: SoundChannel = this._pendingPlayCommand ?
 			this._pendingPlayCommand.sndChannel :
 			new (<SecurityDomain> this.sec).flash.media.SoundChannel();

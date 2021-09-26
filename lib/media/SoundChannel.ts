@@ -47,8 +47,13 @@ export class SoundChannel extends EventDispatcher implements ISoundSource {
 	private _soundTransform: SoundTransform;
 	private _channel: IAudioChannel;
 
-	/* internal */ init (channel: IAudioChannel, transform: SoundTransform) {
+	/* internal */ init (channel: IAudioChannel | null, transform: SoundTransform) {
 		this._channel = channel;
+
+		if (!this._channel) {
+			return;
+		}
+
 		this._channel.onSoundComplete = this.soundCompleteInternal.bind(this);
 		this.soundTransform = transform;
 
