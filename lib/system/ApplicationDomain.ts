@@ -4,6 +4,7 @@ import { MovieClip as AwayMovieClip } from '@awayjs/scene';
 import { WaveAudio } from '@awayjs/core';
 import { Sound } from '../media/Sound';
 import { AXClass, ASObject, Multiname, AXApplicationDomain } from '@awayfl/avm2';
+import { SecurityDomain } from '../SecurityDomain';
 
 /**
  * The ApplicationDomain class is a container for discrete groups of class definitions.
@@ -34,8 +35,15 @@ export class ApplicationDomain extends ASObject {
 
 	private static _systemDomain: ApplicationDomain;
 	private static getSystemDomain(): ApplicationDomain {
-		if (ApplicationDomain._systemDomain == null)
-			ApplicationDomain._systemDomain = new ApplicationDomain(null, true);
+		if (ApplicationDomain._systemDomain == null) {
+			if (!ApplicationDomain._currentDomain) {
+				return null;
+			}
+
+			ApplicationDomain._systemDomain =
+				new (<SecurityDomain> this._currentDomain.sec).flash.system.ApplicationDomain(null, true);
+		}
+
 		return ApplicationDomain._systemDomain;
 	}
 
