@@ -354,6 +354,8 @@ export class InteractiveObject extends DisplayObject {
 	constructor() {
 		super();
 
+		this.adaptee.mouseEnabled = true;
+
 		// these events can not be mapped from awayjs: //todo (?)
 		this.eventMappingDummys[MouseEvent.RIGHT_MOUSE_UP] = 'InteractiveObject:MouseEvent.RIGHT_MOUSE_UP';
 		this.eventMappingDummys[MouseEvent.RIGHT_MOUSE_DOWN] = 'InteractiveObject:MouseEvent.RIGHT_MOUSE_DOWN';

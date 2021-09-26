@@ -234,7 +234,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		// adaptee might already be set !
 		this.adaptee = this.adaptee || this.createAdaptee();
 
-		this.adaptee.mouseEnabled = true;
+		// We should disable it and enable ONLY in interactiveObject
+		this.adaptee.mouseEnabled = false;
 
 		// needed, because `this.stage` must already be available when constructor of extending classes are executed
 		this._stage = this.activeStage;
