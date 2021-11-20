@@ -22,6 +22,21 @@ import { BitmapFilter } from '../filters/BitmapFilter';
 type gASArray<T> = ASArray & {value: T };
 const _v = new AwayPoint();
 
+/**
+ * AS not allow NaN and infinity as MC property value
+ * @param v
+ */
+const clampASValues = (v: number) => {
+	if (isNaN(v))
+		return 0;
+
+	if (v === Infinity || v === -Infinity) {
+		return  -107374182.4;
+	}
+
+	return  v;
+};
+
 export class DisplayObject extends EventDispatcher implements IDisplayObjectAdapter {
 	static axClass: typeof DisplayObject & AXClass;
 
@@ -745,9 +760,10 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	public set height(value: number) {
-
 		if (isNaN(value))
 			return;
+
+		value = clampASValues(value);
 
 		// round to twips
 		value = Math.round(value * 20) / 20;
@@ -1295,19 +1311,22 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	public set width(value: number) {
+		//todo2019
+		if (isNaN(value))
+			return;
+
+		value = clampASValues(value);
 
 		if (!this._node.partition) {
 			console.warn('Trying to set Display.width on orphan child!');
 			return;
 
 		}
+
 		// round to twips
 		value = Math.round(value * 20) / 20;
 
 		this._blockedByScript = true;
-		//todo2019
-		if (isNaN(value))
-			return;
 
 		// this should be done by overwriting the width-getter in TextField- but it doesnt work
 		if (this.adaptee.isAsset(TextField)) {
@@ -1337,6 +1356,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	public set x(value: number) {
+		value = clampASValues(value);
 		if (DisplayObject.defineLazy(this, 'x', value))
 			return;
 
@@ -1365,6 +1385,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	public set y(value: number) {
+		value = clampASValues(value);
+
 		if (DisplayObject.defineLazy(this, 'y', value))
 			return;
 
@@ -1396,6 +1418,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	public set z(value: number) {
+		value = clampASValues(value);
+
 		this._blockedByScript = true;
 		this._adaptee.z = value;
 	}
