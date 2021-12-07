@@ -591,11 +591,11 @@ export class Stage extends DisplayObjectContainer {
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
 	public get frameRate (): number {
-		return (<AVMStage> <unknown> this.adaptee).frameRate;
+		return AVMStage.instance().frameRate;
 	}
 
 	public set frameRate (value: number) {
-		(<AVMStage> <unknown> this.adaptee).frameRate = value;
+		AVMStage.instance().frameRate = value;
 	}
 
 	/**
