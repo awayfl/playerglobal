@@ -129,8 +129,8 @@ export class DisplayObjectContainer extends InteractiveObject {
 				obj.children[childname].object = oneChild.adapter;
 				obj.children[childname].text = (<AwayTextField>oneChild).text;
 				obj.children[childname].rectangle = 'x:' + oneChild.x + ', y:' + oneChild.y;
-				const box: Box = PickGroup.getInstance(this._stage.view)
-					.getBoundsPicker(AVMStage.instance().pool.getNode(oneChild).partition).getBoxBounds(AVMStage.instance().pool.getNode(oneChild));
+				const box: Box = PickGroup.getInstance()
+					.getBoundsPicker(AVMStage.instance().view.getNode(oneChild).partition).getBoxBounds(AVMStage.instance().view.getNode(oneChild));
 				obj.children[childname].width = (box == null) ? 0 : box.width;
 				obj.children[childname].height = (box == null) ? 0 : box.height;
 			}
@@ -465,7 +465,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 */
 	public getObjectsUnderPoint(point: Point): DisplayObject[] {
 
-		const raycastPicker = PickGroup.getInstance(this._stage.view).getRaycastPicker(AVMStage.instance().pool.getNode(this.adaptee).partition);
+		const raycastPicker = PickGroup.getInstance().getRaycastPicker(AVMStage.instance().view.getNode(this.adaptee).partition);
 
 		const awayChildren: IPartitionEntity[] =
 			raycastPicker.getObjectsUnderPoint(
@@ -493,8 +493,8 @@ export class DisplayObjectContainer extends InteractiveObject {
 			child = (<AwayDisplayObjectContainer> this._adaptee).getChildAt(i);
 			if (child.visible) {
 
-				if (PickGroup.getInstance(this._stage.view)
-					.getBoundsPicker(AVMStage.instance().pool.getNode(<AwayDisplayObject>child.adaptee).partition).hitTestPoint(point.x, point.y, true))
+				if (PickGroup.getInstance()
+					.getBoundsPicker(AVMStage.instance().view.getNode(<AwayDisplayObject>child.adaptee).partition).hitTestPoint(point.x, point.y, true))
 					children.push(<DisplayObject> child.adapter);
 
 				const adapt = (<DisplayObjectContainer> child.adapter);

@@ -1,7 +1,7 @@
 import { BitmapFilter, GradientArrays, InterfaceOf } from './BitmapFilter';
 import { BitmapFilterType } from './BitmapFilterType';
 import { NumberUtilities, isNullOrUndefined } from '@awayfl/swf-loader';
-import { ASArray, Errors, axCoerceString, AXSecurityDomain } from '@awayfl/avm2';
+import { ASArray, Errors, axCoerceString } from '@awayfl/avm2';
 import { IBevelFilter } from './BevelFilter';
 import { SecurityDomain } from '../SecurityDomain';
 

@@ -1,7 +1,6 @@
 import { BitmapFilter } from './BitmapFilter';
 import { NumberUtilities, assert, release } from '@awayfl/swf-loader';
 import { IFilter } from '@awayjs/scene';
-import { AXSecurityDomain } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 
 /**
