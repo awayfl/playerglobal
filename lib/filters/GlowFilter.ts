@@ -1,6 +1,5 @@
 import { BitmapFilter, InterfaceOf } from './BitmapFilter';
 import { assert, release, NumberUtilities } from '@awayfl/swf-loader';
-import { AXSecurityDomain } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 
 /**

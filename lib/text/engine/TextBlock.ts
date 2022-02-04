@@ -1,4 +1,4 @@
-import { ASObject, Multiname } from '@awayfl/avm2';
+import { ASObject } from '@awayfl/avm2';
 import { Debug } from '@awayjs/core';
 import { TextFormat } from '@awayjs/scene';
 import { ContentElement } from './ContentElement';

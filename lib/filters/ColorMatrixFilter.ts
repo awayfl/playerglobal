@@ -1,6 +1,6 @@
 import { BitmapFilter } from './BitmapFilter';
 import { toNumber, isNullOrUndefined } from '@awayfl/swf-loader';
-import { Errors, ASArray, AXSecurityDomain } from '@awayfl/avm2';
+import { Errors, ASArray } from '@awayfl/avm2';
 import { IFilter } from '@awayjs/scene';
 import { SecurityDomain } from '../SecurityDomain';
 

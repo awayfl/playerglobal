@@ -321,7 +321,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			this._adaptee.adapter = null;
 
 		this._adaptee = this.mapAdaptee(value);
-		this._node = AVMStage.instance().pool.getNode(this._adaptee);
+		this._node = AVMStage.instance().view.getNode(this._adaptee);
 	}
 
 	public initAdapter(): void {}
@@ -780,7 +780,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			console.warn('Trying to set Display.height on orphan child!');
 			return;
 		}
-		PickGroup.getInstance(this._stage.view).getBoundsPicker(this._node.partition).height = value;
+		PickGroup.getInstance().getBoundsPicker(this._node.partition).height = value;
 
 	}
 
@@ -1334,7 +1334,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			return;
 		}
 
-		PickGroup.getInstance(this._stage.view).getBoundsPicker(this._node.partition).width = value;
+		PickGroup.getInstance().getBoundsPicker(this._node.partition).width = value;
 
 	}
 
@@ -1476,11 +1476,11 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		if	(!targetCoordinateSpace)
 			targetCoordinateSpace = this;
 		//if(!this._boundsPicker) {
-		this._boundsPicker = PickGroup.getInstance(this._stage.view).getBoundsPicker(this._node.partition);
+		this._boundsPicker = PickGroup.getInstance().getBoundsPicker(this._node.partition);
 		//}
 
 		return this._boundsPicker
-			.getBoxBounds(AVMStage.instance().pool.getNode(targetCoordinateSpace.adaptee), strokeFlag, true);
+			.getBoxBounds(AVMStage.instance().view.getNode(targetCoordinateSpace.adaptee), strokeFlag, true);
 	}
 
 	/**
@@ -1556,10 +1556,10 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 */
 	public hitTestObject(obj: DisplayObject): boolean {
 
-		return PickGroup.getInstance(this._stage.view).getBoundsPicker(
+		return PickGroup.getInstance().getBoundsPicker(
 			this._node.partition).hitTestObject(
-			PickGroup.getInstance(this._stage.view)
-				.getBoundsPicker(AVMStage.instance().pool.getNode(obj.adaptee).partition));
+			PickGroup.getInstance()
+				.getBoundsPicker(AVMStage.instance().view.getNode(obj.adaptee).partition));
 
 	}
 
@@ -1577,7 +1577,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   false otherwise.
 	 */
 	public hitTestPoint(x: number, y: number, shapeFlag: boolean = false): boolean {
-		return PickGroup.getInstance(this._stage.view).getBoundsPicker(
+		return PickGroup.getInstance().getBoundsPicker(
 			this._node.partition).hitTestPoint(x, y, shapeFlag);
 	}
 
