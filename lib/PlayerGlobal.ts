@@ -7,7 +7,8 @@ import {
 	AXSecurityDomain,
 	Natives,
 } from '@awayfl/avm2';
-
+// @ts-ignore: can't find types
+import assembly from "@awayjs/assembly";
 import { release, assert, AVMStage, SWFFile } from '@awayfl/swf-loader';
 import { SecurityDomain } from './SecurityDomain';
 import { initLink } from './link';
@@ -125,7 +126,8 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 		const base = PlayerGlobal.builtinsBaseUrl;
 
 		const tasks = [
-			browserLoader(`${base}/builtin.abc`, 'arraybuffer')
+			browserLoader(`${base}/builtin.abc`, 'arraybuffer'),
+			assembly,
 		];
 
 		if (libraries & AVM2LoadLibrariesFlags.Playerglobal) {
@@ -136,7 +138,7 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 			);
 		}
 
-		return Promise.all(tasks).then(([builtins, pgByte, pgJson, avmplus]) => {
+		return Promise.all(tasks).then(([builtins, assembly, pgByte, pgJson, avmplus]) => {
 			const sec = new SecurityDomain();
 			const builtinABC = new ABCFile({
 				url: 'builtin.abc',
@@ -167,6 +169,8 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 			sec.system.loadAndExecuteABC(avmPlusABC);
 
 			this._constructStage(sec, swfFile);
+
+			(globalThis || window).__assembly = assembly.exports;
 
 			return new FlashSceneGraphFactory(sec);
 		});
