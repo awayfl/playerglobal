@@ -633,8 +633,10 @@ export class Sprite extends DisplayObjectContainer {
 			const dragNode = avmStage.view.getNode(this.adaptee);
 			avmStage.mousePicker.dragNode = dragNode;
 
-			const collision = this.adaptee
-				.getAbstraction<EntityNode>(dragNode.partition)
+			const dragEntity = this.adaptee.getAbstraction<EntityNode>(dragNode.partition);
+			dragEntity.setParent(dragNode);
+			
+			const collision = dragEntity
 				.getAbstraction<PickEntity>(avmStage.mousePicker.pickGroup)
 				.pickingCollision;
 
