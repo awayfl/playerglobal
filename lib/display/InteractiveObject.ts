@@ -1,13 +1,14 @@
 
 import { Debug, Rectangle } from '@awayjs/core';
 import { DisplayObject } from './DisplayObject';
-import { MouseEvent as MouseEventAway } from '@awayjs/scene';
+import { MouseEvent as MouseEventAway, FocusEvent as FocusEventAway } from '@awayjs/scene';
 import { MouseEvent } from '../events/MouseEvent';
 import { KeyboardEvent } from '../events/KeyboardEvent';
 
 import { IEventMapper } from '../events/IEventMapper';
 import { SecurityDomain } from '../SecurityDomain';
 import { AVMStage } from '@awayfl/swf-loader';
+import { FocusEvent } from '../events/FocusEvent';
 export class InteractiveObject extends DisplayObject {
 
 	private _keyDownListeners: Function[];
@@ -400,8 +401,6 @@ export class InteractiveObject extends DisplayObject {
 		 this.eventMappingDummys[TouchEvent.TOUCH_BEGIN]="TouchEvent.TOUCH_BEGIN";
 		 this.eventMappingDummys[FocusEvent.MOUSE_FOCUS_CHANGE]="FocusEvent.MOUSE_FOCUS_CHANGE";
 		 this.eventMappingDummys[FocusEvent.KEY_FOCUS_CHANGE]="FocusEvent.KEY_FOCUS_CHANGE";
-		 this.eventMappingDummys[FocusEvent.FOCUS_OUT]="FocusEvent.FOCUS_OUT";
-		 this.eventMappingDummys[FocusEvent.FOCUS_IN]="FocusEvent.FOCUS_IN";
 		 this.eventMappingDummys[Event.SELECT_ALL]="Event.SELECT_ALL";
 		 this.eventMappingDummys[Event.PASTE]="Event.PASTE";
 		 this.eventMappingDummys[Event.CUT]="Event.CUT";
@@ -510,6 +509,24 @@ export class InteractiveObject extends DisplayObject {
 			addListener: this.initMouseListener,
 			removeListener: this.removeMouseListener,
 			callback: this._mouseCallbackDelegate
+		});
+
+		this._focusCallbackDelegate = (event: FocusEventAway) => this.focusCallback(event);
+
+		this.eventMappingInvert[FocusEventAway.FOCUS_OUT] = FocusEvent.FOCUS_OUT;
+		this.eventMapping[FocusEvent.FOCUS_OUT] = (<IEventMapper>{
+			adaptedType: FocusEventAway.FOCUS_OUT,
+			addListener: this.initMouseListener,
+			removeListener: this.removeMouseListener,
+			callback: this._focusCallbackDelegate
+		});
+
+		this.eventMappingInvert[FocusEventAway.FOCUS_IN] = FocusEvent.FOCUS_IN;
+		this.eventMapping[FocusEvent.FOCUS_IN] = (<IEventMapper>{
+			adaptedType: FocusEventAway.FOCUS_IN,
+			addListener: this.initMouseListener,
+			removeListener: this.removeMouseListener,
+			callback: this._focusCallbackDelegate
 		});
 	}
 
@@ -648,6 +665,19 @@ export class InteractiveObject extends DisplayObject {
 	private mouseCallback(event: MouseEventAway): void {
 		const adaptedEvent: MouseEvent =
 			new (<SecurityDomain> this.sec).flash.events.MouseEvent(this.eventMappingInvert[event.type]);
+		adaptedEvent.fillFromAway(event);
+		adaptedEvent.target = this;
+		//adaptedEvent.currentTarget=this;
+
+		this.dispatchEvent(adaptedEvent, true);
+	}
+
+	// ---------- event mapping functions for FocusEvents:
+
+	private _focusCallbackDelegate: (event: FocusEventAway) => void;
+	private focusCallback(event: FocusEventAway): void {
+		const adaptedEvent: FocusEvent =
+			new (<SecurityDomain> this.sec).flash.events.FocusEvent(this.eventMappingInvert[event.type]);
 		adaptedEvent.fillFromAway(event);
 		adaptedEvent.target = this;
 		//adaptedEvent.currentTarget=this;

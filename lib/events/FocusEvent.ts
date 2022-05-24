@@ -1,3 +1,5 @@
+import { FocusEvent as FocusEventAway } from '@awayjs/scene';
+
 import { Event } from './Event';
 import { InteractiveObject } from '../display/InteractiveObject';
 export class FocusEvent extends Event {
@@ -6,6 +8,9 @@ export class FocusEvent extends Event {
 	public static FOCUS_OUT='focusOut';
 	public static KEY_FOCUS_CHANGE='keyFocusChange';
 	public static MOUSE_FOCUS_CHANGE='mouseFocusChange';
+
+	private adaptee: FocusEventAway;
+
 	/**
 	 * If true, the relatedObject property is set to null for
 	 * reasons related to security sandboxes.  If the nominal value of relatedObject is a reference to a
@@ -78,5 +83,15 @@ export class FocusEvent extends Event {
 	public toString(): string {
 		console.log('toString not implemented yet in flash/FocusEvent');
 		return '';
+	}
+
+	/* added to clone events from away to as3web. */
+	public fillFromAway (awayEvent: FocusEventAway) {
+		//console.log("cloneFromAway not implemented yet in flash/MouseEvent");
+
+		this.adaptee = awayEvent;
+		// todo: set targets correctly
+		this.target = awayEvent.target;
+		//this.currentTarget = awayEvent.currentTarget;
 	}
 }

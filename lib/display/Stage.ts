@@ -15,6 +15,7 @@ import { OrphanManager } from '@awayfl/avm2';
 import { Loader as PlayerGlobalLoader } from './Loader';
 import { LoaderInfo, LoaderInfoCompleteQueue } from './LoaderInfo';
 import { Debug } from '@awayjs/core';
+import { InteractiveObject } from './InteractiveObject';
 
 /**
  * Dispatched by the Stage object when the state of the stageVideos property changes.
@@ -562,15 +563,12 @@ export class Stage extends DisplayObjectContainer {
 	 * have access.
 	 * @throws	Error Throws an error if focus cannot be set to the target.
 	 */
-	public get focus (): any {
-		// @todo
-		Debug.throwPIR('playerglobals/display/Stage', 'get focus', '');
-		return null;
+	public get focus (): InteractiveObject {
+		return  <InteractiveObject> AVMStage.instance().mouseManager.getFocus().adapter;
 	}
 
-	public set focus (newFocus: any) {
-		// @todo
-		Debug.throwPIR('playerglobals/display/Stage', 'set focus', '');
+	public set focus (newFocus: InteractiveObject) {
+		AVMStage.instance().mouseManager.setFocus(newFocus.node);
 	}
 
 	/**

@@ -309,6 +309,10 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 	// --------------------- stuff needed because of implementing the existing IDisplayObjectAdapter
 
+	public get node(): ContainerNode {
+		return this._node;
+	}
+
 	public get adaptee(): AwayDisplayObject {
 		return this._adaptee;
 	}
