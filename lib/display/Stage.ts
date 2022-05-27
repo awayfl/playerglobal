@@ -568,7 +568,7 @@ export class Stage extends DisplayObjectContainer {
 	}
 
 	public set focus (newFocus: InteractiveObject) {
-		AVMStage.instance().mouseManager.setFocus(newFocus.node);
+		AVMStage.instance().mouseManager.setFocus(newFocus?.node);
 	}
 
 	/**
