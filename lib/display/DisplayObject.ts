@@ -1216,7 +1216,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		// when swf is loaded via loader,
 		// we must execute contructor of loaded Scene, but Loader is not added to stage yet.
 		// if constructor tries to get stage, it errors if we not return a stage
-		return this.activeStage;
+		return null;
 	}
 
 	public set stage(value: Stage) {
