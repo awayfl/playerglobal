@@ -666,8 +666,6 @@ export class InteractiveObject extends DisplayObject {
 		const adaptedEvent: MouseEvent =
 			new (<SecurityDomain> this.sec).flash.events.MouseEvent(this.eventMappingInvert[event.type]);
 		adaptedEvent.fillFromAway(event);
-		adaptedEvent.target = this;
-		//adaptedEvent.currentTarget=this;
 
 		this.dispatchEvent(adaptedEvent, true);
 	}

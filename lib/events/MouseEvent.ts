@@ -103,8 +103,8 @@ export class MouseEvent extends Event {
 
 		this.adaptee = awayEvent;
 		// todo: set targets correctly
-		this.target = awayEvent.target;
-		//this.currentTarget = awayEvent.currentTarget;
+		this.target = awayEvent.target.adapter;
+		this.currentTarget = awayEvent.currentTarget.adapter;
 
 		this.delta = awayEvent.delta;
 
