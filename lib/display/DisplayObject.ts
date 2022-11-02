@@ -279,7 +279,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		if (adaptee) {
 			// if (!adaptee.partition)
 			// 	adaptee.partition = new SceneGraphPartition(adaptee);
-			adaptee.partitionClass = BasicPartition;
+			//adaptee.partitionClass = BasicPartition;
 			adaptee.adapter = this;
 		}
 
