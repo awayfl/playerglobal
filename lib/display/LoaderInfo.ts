@@ -149,8 +149,6 @@ export class LoaderInfo extends EventDispatcher {
 	private _bytesTotal: number = 0;
 	private _url: string;
 
-	public static DefaultLocation: string = null;
-
 	private _source: ByteArray;
 	private _loader: ILoader;
 	private _container: AwayDisplayObject;
@@ -232,7 +230,7 @@ export class LoaderInfo extends EventDispatcher {
 		this._bytesLoaded = 0;
 		this._bytesTotal = this._source?.length || 0;
 
-		this._url = event.url;
+		this._url = new URL(event.url, window.location.href).href;
 	}
 
 	private _onLoadProgress(event: URLLoaderEvent): void {
@@ -256,7 +254,7 @@ export class LoaderInfo extends EventDispatcher {
 			this._bytesTotal = this._bytesLoaded = this._bytesTotal || 1; //avoid devide on 0
 		}
 
-		this._url = event.url;
+		this._url = new URL(event.url, window.location.href).href;
 
 		LoaderInfoCompleteQueue.addQueue(this);
 	}
@@ -507,7 +505,6 @@ export class LoaderInfo extends EventDispatcher {
 	 * file, this URL is the same as the SWF file's own URL.
 	 */
 	public get loaderURL(): string {
-		return LoaderInfo.DefaultLocation;
 		return this._loader.stage.getChildAt(0).loaderInfo.url;
 
 	}
@@ -661,8 +658,6 @@ export class LoaderInfo extends EventDispatcher {
 	 * see the `isURLInaccessible` property for details.
 	 */
 	public get url(): string {
-		if (LoaderInfo.DefaultLocation != null && typeof LoaderInfo.DefaultLocation !== 'undefined')
-			return LoaderInfo.DefaultLocation;
 		if (this._url.includes('?')) {
 			this._url = this._url.substr(0, this._url.indexOf('?'));
 		}
