@@ -174,7 +174,7 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 
 	private _constructStage(sec: SecurityDomain, file: SWFFile) {
 		this._contentLoaderInfo = new sec.flash.display.LoaderInfo(this, this._avmStage.root);
-		this._contentLoaderInfo.url = file.url;
+		this._contentLoaderInfo.url = new URL(file.url, window.location.href).href;
 		this._applicationDomain = new sec.flash.system.ApplicationDomain();
 
 		// not needs, because shuld be resolved from domain
