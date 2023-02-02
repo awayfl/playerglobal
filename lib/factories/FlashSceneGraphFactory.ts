@@ -100,6 +100,8 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 		if (symbol.className) {
 			symbolClass = this.appDomain.getClass(Multiname.FromFQNString(symbol.className, NamespaceType.Public));
 			(<any>symbolClass)._symbol = symbol;
+		} else if (symbol.isButton) {
+			symbolClass = this._sec.flash.display.SimpleButton.axClass
 		} else {
 			symbolClass = this._sec.flash.display.MovieClip.axClass;
 		}
@@ -107,7 +109,7 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 		symbol.symbolClass = symbolClass;
 
 		// create the root for the root-symbol
-		const asObj = constructClassFromSymbol(symbol, this._sec.flash.display.MovieClip.axClass);
+		const asObj = constructClassFromSymbol(symbol, symbol.symbolClass);
 
 		asObj.adaptee = new AwayMovieClip();
 		symbol.timeline = asObj.adaptee.timeline;

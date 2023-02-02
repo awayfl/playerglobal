@@ -2,10 +2,12 @@ import { DisplayObject } from './DisplayObject';
 import { SoundTransform } from '../media/SoundTransform';
 import { MovieClip } from './MovieClip';
 import { Timeline, DisplayObjectContainer as AwayDisplayObjectContainer,
-	DisplayObject as AwayDisplayObject, IDisplayObjectAdapter, FrameScriptManager } from '@awayjs/scene';
+	DisplayObject as AwayDisplayObject, IDisplayObjectAdapter, FrameScriptManager, IMovieClipAdapter } from '@awayjs/scene';
 import { MovieClip as AwayMovieClip } from '@awayjs/scene';
 import { IVirtualSceneGraphItem } from './IVirtualSceneGraphItem';
-import { Debug } from '@awayjs/core';
+import { AssetBase, Debug } from '@awayjs/core';
+import { InteractiveObject } from './InteractiveObject';
+import { constructClassFromSymbol } from '@awayfl/avm2';
 
 /**
  * The SimpleButton class lets you control all instances of button symbols in a SWF
@@ -58,7 +60,7 @@ import { Debug } from '@awayjs/core';
  * </ol><codeblock xml:space="preserve" class="+ topic/pre pr-d/codeblock ">
 
  */
-export class SimpleButton extends MovieClip {
+export class SimpleButton extends InteractiveObject {
 	/**
 	 * Creates a new SimpleButton instance. Any or all of the display objects that represent
 	 * the various button states can be set as parameters in the constructor.
@@ -143,7 +145,6 @@ export class SimpleButton extends MovieClip {
 			}
 		}
 	}
-
 	public constructFrame(timeline: Timeline, start_construct_idx: number,
 		target_keyframe_idx: number, jump_forward: boolean,
 		frame_idx: number, queue_pass2: boolean, queue_script: boolean) {
@@ -156,7 +157,6 @@ export class SimpleButton extends MovieClip {
 
 		for (let i = 0; i < len; i++) {
 			// collect the existing children into a virtual-scenegraph
-			// also collect existing session ids into a map
 			const child = adaptee.getChildAt(i);
 			// if jumping forward, we continue from current frame, so we collect all objects
 			// if jumping back, we want to only collect script-children. timeline childs are ignored
@@ -171,9 +171,6 @@ export class SimpleButton extends MovieClip {
 			if (child._sessionID != -1)
 				existingSessionIDs[child._sessionID] = child;
 		}
-		//for(var key in virtualSceneGraphAS2){
-		//console.log("existing childs=", key, virtualSceneGraphAS2[key]);
-		//}
 
 		let i: number;
 		let k: number;
@@ -329,7 +326,7 @@ export class SimpleButton extends MovieClip {
 			}
 		}
 
-		// step4: setup children that have been added between old frame and new frame (do not allow frame-scripts)
+		// step4: setup new children that have not been added on new frame (prevent frame-scripts)
 
 		for (let i = 0; i < newChildren.length; i++)
 			if (!adaptee.contains(newChildren[i]))
@@ -337,15 +334,13 @@ export class SimpleButton extends MovieClip {
 
 		adaptee.preventScript = true;
 		this.finalizeChildren(newChilds);
-		adaptee.preventScript = false;
 
 		// step5: queue frame-script for new frame
-
-		// if there is a framescript on this frame, we queue it now, so it sits after the initAdapter of the children
 		if (queue_script)
 			this.queueFrameScripts(timeline, frame_idx, !queue_pass2);
 
 		// step6: setup children that have been added on new frame (allow frame-scripts)
+		adaptee.preventScript = true;
 		this.finalizeChildren(newChildsOnTargetFrame);
 	}
 
@@ -362,6 +357,10 @@ export class SimpleButton extends MovieClip {
 	}
 
 	public unregisterScriptObject(child: any): void {
+	}
+	
+	public clearPropsDic() {
+		//this["$Bg__setPropDict"].map = new WeakMap();
 	}
 
 	/**
@@ -528,4 +527,29 @@ export class SimpleButton extends MovieClip {
 		Debug.throwPIR('playerglobals/display/SimpleButton', 'set useHandCursor', '');
 	}
 
+	
+	public clone(): SimpleButton {
+		const anyThis: AssetBase = <any> this;
+
+		if (!anyThis._symbol) {
+			throw ('_symbol not defined when cloning movieclip');
+		}
+
+		const clone: SimpleButton = constructClassFromSymbol(anyThis._symbol, anyThis._symbol.symbolClass);
+
+		const adaptee = new AwayMovieClip((<AwayMovieClip> this.adaptee).timeline);
+		this.adaptee.copyTo(adaptee);
+
+		clone.adaptee = adaptee;
+		clone._stage = this.activeStage;
+
+		(<any>clone).executeConstructor = () => {
+			//adaptee.timeline.resetScripts();
+			(<any>clone).axInitializer();
+			(<any>clone).constructorHasRun = true;
+
+		};
+
+		return clone;
+	}
 }
