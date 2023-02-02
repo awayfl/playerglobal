@@ -109,7 +109,10 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 		symbol.symbolClass = symbolClass;
 
 		// create the root for the root-symbol
-		const asObj = constructClassFromSymbol(symbol, symbol.symbolClass);
+		const rootSymbolClass = symbol.isButton
+			? this._sec.flash.display.SimpleButton.axClass
+			: this._sec.flash.display.MovieClip.axClass;
+		const asObj = constructClassFromSymbol(symbol, rootSymbolClass);
 
 		asObj.adaptee = new AwayMovieClip();
 		symbol.timeline = asObj.adaptee.timeline;
