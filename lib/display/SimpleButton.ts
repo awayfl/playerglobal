@@ -145,6 +145,7 @@ export class SimpleButton extends InteractiveObject {
 			}
 		}
 	}
+
 	public constructFrame(timeline: Timeline, start_construct_idx: number,
 		target_keyframe_idx: number, jump_forward: boolean,
 		frame_idx: number, queue_pass2: boolean, queue_script: boolean) {
@@ -358,7 +359,7 @@ export class SimpleButton extends InteractiveObject {
 
 	public unregisterScriptObject(child: any): void {
 	}
-	
+
 	public clearPropsDic() {
 		//this["$Bg__setPropDict"].map = new WeakMap();
 	}
@@ -527,7 +528,6 @@ export class SimpleButton extends InteractiveObject {
 		Debug.throwPIR('playerglobals/display/SimpleButton', 'set useHandCursor', '');
 	}
 
-	
 	public clone(): SimpleButton {
 		const anyThis: AssetBase = <any> this;
 

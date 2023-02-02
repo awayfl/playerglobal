@@ -101,7 +101,7 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 			symbolClass = this.appDomain.getClass(Multiname.FromFQNString(symbol.className, NamespaceType.Public));
 			(<any>symbolClass)._symbol = symbol;
 		} else if (symbol.isButton) {
-			symbolClass = this._sec.flash.display.SimpleButton.axClass
+			symbolClass = this._sec.flash.display.SimpleButton.axClass;
 		} else {
 			symbolClass = this._sec.flash.display.MovieClip.axClass;
 		}
