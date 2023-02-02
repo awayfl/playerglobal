@@ -21,7 +21,7 @@ const ALERT_ONCE = (id: string, message: string) => {
 
 export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapter {
 	private _adaptee: SceneImage2D;
-	private _owners: Array<IBitmapDataOwner> = new Array<IBitmapDataOwner>();
+	private _owners: IBitmapDataOwner[] = [];
 
 	// for AVM1:
 	public compare(other: BitmapData): boolean {
@@ -267,9 +267,11 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 
 	public dispose() {
 		// already disposed or not setted
-		if (!this._adaptee) {
+		if (!this._adaptee)
 			return;
-		}
+
+		//remove all owners
+		this._owners = [];
 
 		this._adaptee.dispose();
 		this._adaptee = null;
@@ -466,9 +468,8 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		if (index != -1) {
 			this._owners.splice(index, 1);
 
-			if (this._owners.length === 0) {
+			if (this._owners.length === 0)
 				this._adaptee.clear();
-			}
 		}
 	}
 }
