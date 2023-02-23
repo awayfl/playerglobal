@@ -198,7 +198,7 @@ export class TextFormat extends ASObject {
 	}
 
 	public set font(value: string) {
-		this.adaptee.font = <any>value;
+		this.adaptee.font_name = value;
 	}
 
 	constructor(

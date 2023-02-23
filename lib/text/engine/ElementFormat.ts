@@ -100,7 +100,7 @@ export class ElementFormat extends ASObject {
 		awayTextFormat.color = this._color;
 		awayTextFormat.fontLookUpMode = <FontLookUpMode>(this._fontDescription ?
 			this._fontDescription.fontLookup : FontLookUpMode.DEVICE);
-		awayTextFormat.font = <any> this._fontDescription?.fontName;
+		awayTextFormat.font_name = this._fontDescription?.fontName;
 		awayTextFormat.italic = this._fontDescription?.fontPosture == 'italic';
 		awayTextFormat.bold = this._fontDescription?.fontWeight == 'bold';
 		awayTextFormat.align = TextFormatAlign.LEFT;
