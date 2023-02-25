@@ -1,6 +1,6 @@
 import { MovieClip as AwayMovieClip,
 	DisplayObject as AwayDisplayObject,
-	IMovieClipAdapter,  FrameScriptManager } from '@awayjs/scene';
+	IMovieClipAdapter,  FrameScriptManager, Timeline } from '@awayjs/scene';
 import { Sprite } from './Sprite';
 import { AssetBase, Debug } from '@awayjs/core';
 import { constructClassFromSymbol } from '@awayfl/avm2';
@@ -125,7 +125,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	}
 
 	protected createAdaptee(): AwayDisplayObject {
-		const adaptee = AwayMovieClip.getNewMovieClip();
+		const adaptee = AwayMovieClip.getNewMovieClip(new Timeline(this.sec.player.factory));
 		adaptee.reset();
 		//console.log("createAdaptee AwayMovieClip");
 		//FrameScriptManager.execute_queue();

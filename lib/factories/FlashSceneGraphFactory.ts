@@ -1,17 +1,20 @@
 
-import { Image2D } from '@awayjs/stage';
+import { BitmapImage2D, Image2D } from '@awayjs/stage';
 import {
 	IFrameScript,
 	Timeline,
-	MovieClip as AwayMovieClip,
-	Sprite as AwaySprite,
+	MovieClip,
+	Sprite,
 	DisplayObjectContainer as AwayDisplayObjectContainer,
 	Billboard,
 	ISceneGraphFactory,
-	TextField as AwayTextField,
+	TextField,
 	PrefabBase,
+	MorphSprite,
+	DisplayObject,
+	FrameScriptManager,
 } from '@awayjs/scene';
-import { MaterialBase } from '@awayjs/materials';
+import { MaterialBase, MethodMaterial } from '@awayjs/materials';
 import { DefaultSceneGraphFactory } from '@awayjs/scene';
 import { SceneImage2D } from '@awayjs/scene';
 
@@ -28,6 +31,8 @@ import {
 } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 import { LoaderInfo } from '../display/LoaderInfo';
+import { BasicPartition } from '@awayjs/view';
+import { IAsset } from '@awayjs/core';
 
 export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements ISceneGraphFactory {
 	public imageStore: Object = {};
@@ -64,7 +69,7 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 		return null;
 	}
 
-	public createSprite(_prefab: PrefabBase = null, graphics: Graphics = null, symbol: any = null): AwaySprite {
+	public createSprite(_prefab: PrefabBase = null, graphics: Graphics = null, symbol: any = null): Sprite {
 		if (!symbol || !this._sec)
 			throw ('no symbol provided');
 		let symbolClass = null;
@@ -77,9 +82,9 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 		//Graphicsadapter.currentAwayGraphics=graphics;
 		// create the root for the root-symbol
 		const asObj = constructClassFromSymbol(symbol, symbolClass);
-		asObj.adaptee = new AwaySprite(graphics);
+		asObj.adaptee = new Sprite(graphics);
 		// manually call the axInitializer for now:
-		//asObj.axInitializer(AwaySprite.getNewSprite(new this._sec.flash.display.Graphics(graphics).adaptee));
+		//asObj.axInitializer(Sprite.getNewSprite(new this._sec.flash.display.Graphics(graphics).adaptee));
 
 		return asObj.adaptee;
 	}
@@ -92,7 +97,7 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 		this.appDomain.addBinarySymbol(symbol);
 	}
 
-	public createMovieClip(_timeline: Timeline = null, symbol: any = null): AwayMovieClip {
+	public createMovieClip(timeline: Timeline = null, symbol: any = null): MovieClip {
 		if (!symbol || !this._sec)
 			throw ('no symbol provided');
 
@@ -114,15 +119,15 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 			: this._sec.flash.display.MovieClip.axClass;
 		const asObj = constructClassFromSymbol(symbol, rootSymbolClass);
 
-		asObj.adaptee = new AwayMovieClip();
+		asObj.adaptee = new MovieClip(timeline || new Timeline(this));
 		symbol.timeline = asObj.adaptee.timeline;
 
-		//(<AwayMovieClip>asObj.adaptee).timeline.resetScripts();
+		//(<MovieClip>asObj.adaptee).timeline.resetScripts();
 		//(<any>asObj).axInitializer();
 		return asObj.adaptee;
 	}
 
-	public createTextField(symbol: any = null): AwayTextField {
+	public createTextField(symbol: any = null): TextField {
 		let symbolClass: AXClass = null;
 
 		if (symbol.className) {
@@ -158,7 +163,45 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 	}
 
 	createFrameScripts(_scripts: IFrameScript[], _frameIdx: number, _objName: string, _objID: number): IFrameScript[] {
-		console.warn('[FlashSceneGraphFactory] - createFrameScripts - should never be called');
-		return null;
+		return _scripts;
+	}
+
+	/**
+	 * Get a instance for a given SymbolID and assign a sessionID to it.
+	 * This is used by timeline to create children
+	 *
+	 * @param symbolID
+	 * @param sessionID
+	 */
+	public createChildInstanceForTimeline(timeline: Timeline, symbolID: number, sessionID: number): IAsset {
+
+		// if this was called we might have new constructors from timeline to process
+		FrameScriptManager.invalidAS3Constructors = true;
+
+		const asset: IAsset = this.awaySymbols[symbolID];
+		let clone: DisplayObject;
+		if (asset.isAsset(Graphics)) {
+			clone = Sprite.getNewSprite(<Graphics> asset);
+			clone.mouseEnabled = false;
+		} else if (asset.isAsset(Sprite)) {
+			clone = Sprite.getNewSprite((<Sprite> asset).graphics);
+			clone.mouseEnabled = false;
+		} else if (asset.isAsset(MorphSprite)) {
+			clone = MorphSprite.getNewMorphSprite((<MorphSprite> asset).graphics);
+			clone.mouseEnabled = false;
+		} else if (asset.isAsset(BitmapImage2D)) {
+			// enable blending for symbols, because if you place image directly on stage
+			// it not enable blend mode
+			const m = new MethodMaterial(<BitmapImage2D>asset);
+			m.alphaBlending = (<BitmapImage2D>asset).transparent;
+			clone = Billboard.getNewBillboard(m);
+			clone.mouseEnabled = false;
+		} else {
+			clone = (<any> asset.adapter).clone(false).adaptee;
+		}
+
+		clone.partitionClass = BasicPartition;
+		clone._sessionID = sessionID;
+		return clone;
 	}
 }
