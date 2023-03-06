@@ -12,7 +12,7 @@ import {
 import { DisplayObject } from './DisplayObject';
 import { InteractiveObject } from './InteractiveObject';
 import { Event } from '../events/Event';
-import { IPartitionEntity, PickGroup } from '@awayjs/view';
+import { IPartitionContainer, PickGroup } from '@awayjs/view';
 import { constructClassFromSymbol, Errors, OrphanManager } from '@awayfl/avm2';
 import { Point } from '../geom/Point';
 import { SecurityDomain } from '../SecurityDomain';
@@ -467,7 +467,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 
 		const raycastPicker = PickGroup.getInstance().getRaycastPicker(AVMStage.instance().view.getNode(this.adaptee).partition);
 
-		const awayChildren: IPartitionEntity[] =
+		const awayChildren: IPartitionContainer[] =
 			raycastPicker.getObjectsUnderPoint(
 				new Vector3D(0, 0, -1000),
 				new Vector3D(point.x, point.y, 1000));
