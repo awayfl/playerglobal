@@ -275,8 +275,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		this._transform = new (<SecurityDomain> this.sec).flash.geom.Transform(this.adaptee.transform);
 	}
 
-	private _onNodeClear(event: AssetEvent): void
-	{
+	private _onNodeClear(event: AssetEvent): void {
 		this._node.removeEventListener(AssetEvent.CLEAR, this._onNodeClearDelegate);
 		this._node = null;
 	}
