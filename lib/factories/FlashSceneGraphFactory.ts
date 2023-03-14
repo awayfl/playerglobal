@@ -181,13 +181,13 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 		const asset: IAsset = this.awaySymbols[symbolID];
 		let clone: DisplayObject;
 		if (asset.isAsset(Graphics)) {
-			clone = Sprite.getNewSprite(<Graphics> asset);
+			clone = Sprite.getNewSprite(<Graphics> asset.clone());//TODO: remove this clone() without the mem leak
 			clone.mouseEnabled = false;
 		} else if (asset.isAsset(Sprite)) {
 			clone = Sprite.getNewSprite((<Sprite> asset).graphics);
 			clone.mouseEnabled = false;
 		} else if (asset.isAsset(MorphSprite)) {
-			clone = MorphSprite.getNewMorphSprite((<MorphSprite> asset).graphics);
+			clone = MorphSprite.getNewMorphSprite((<MorphSprite> asset).graphics.clone());
 			clone.mouseEnabled = false;
 		} else if (asset.isAsset(BitmapImage2D)) {
 			// enable blending for symbols, because if you place image directly on stage
