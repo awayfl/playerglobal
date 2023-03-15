@@ -447,6 +447,14 @@ export class InteractiveObject extends DisplayObject {
 			callback: this._mouseCallbackDelegate
 		});
 
+		this.eventMappingInvert[MouseEventAway.MOUSE_UP_OUTSIDE] = MouseEvent.RELEASE_OUTSIDE;
+		this.eventMapping[MouseEvent.RELEASE_OUTSIDE] = (<IEventMapper>{
+			adaptedType: MouseEventAway.MOUSE_UP_OUTSIDE,
+			addListener: this.initMouseListener,
+			removeListener: this.removeMouseListener,
+			callback: this._mouseCallbackDelegate
+		});
+
 		this.eventMappingInvert[MouseEventAway.MOUSE_OVER] = MouseEvent.MOUSE_OVER;
 		this.eventMapping[MouseEvent.MOUSE_OVER] = (<IEventMapper>{
 			adaptedType: MouseEventAway.MOUSE_OVER,
