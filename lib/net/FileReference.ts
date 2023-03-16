@@ -120,7 +120,15 @@ export class FileReference extends EventDispatcher {
 	}
 
 	private _useFileSystemSave(data: any, name: string = ''): boolean {
+		const knownTypes = {
+			'.jpeg': {'mime': 'image/jpeg', 'description': 'JPEG images'},
+			'.jpg': {'mime': 'image/jpeg', 'description': 'JPEG images'},
+			'.txt': {'mime': 'text/plain', 'description': 'Text documents'},
+		}
+
 		const isString = typeof data === 'string';
+		const isByteArray = data.constructor.name === 'ByteArray';
+		const ext = name.slice(name.lastIndexOf('.'));
 
 		// this is draft API
 		// https://web.dev/file-system-access/
@@ -131,17 +139,24 @@ export class FileReference extends EventDispatcher {
 			return false;
 		}
 
-		if (!isString) {
-			console.warn('[FileReference] Non-string is not supported now!');
+		if (!isString && !isByteArray) {
+			console.warn('[FileReference] Save is only supported for String and ByteArray');
 			return;
 		}
 
-		const types = isString ?  [{
-			description: 'Text documents',
-			accept: {
-				'text/plain': ['.txt'],
-			},
-		}] : [];
+		let types: Object = [];
+		if (ext in knownTypes) {
+			const mime = knownTypes[ext]['mime'];
+			types[0] = {
+				description: knownTypes[ext]['description'],
+				accept: {[mime] : ext},
+			}
+		} else {
+			types[0] = {
+				description: '',
+				accept: {'application/octet-stream' : ext},
+			}
+		}
 
 		const options = {
 			suggestedName: name || '',
@@ -155,7 +170,7 @@ export class FileReference extends EventDispatcher {
 			})
 			.then((stream) => {
 				return stream
-					.write(data)
+					.write(isByteArray ? data.getBytes() : data)
 					.then(() => stream.close());
 			})
 			.then((_e)=>{
