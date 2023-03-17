@@ -7,7 +7,6 @@ import { SecurityDomain } from '../SecurityDomain';
 import { Event } from '../events/Event';
 import { Settings } from '../Settings';
 
-
 const USE_FILE_PICKER = ('showSaveFilePicker' in self) && Settings.ENABLE_FILE_PICKER;
 
 if (USE_FILE_PICKER) {
@@ -129,10 +128,10 @@ export class FileReference extends EventDispatcher {
 
 	private _useFileSystemSave(data: any, name: string = ''): boolean {
 		const knownTypes: {[key: string]: {mime: string, description: string}}  = {
-			'.jpeg': {'mime': 'image/jpeg', 'description': 'JPEG images'},
-			'.jpg': {'mime': 'image/jpeg', 'description': 'JPEG images'},
-			'.txt': {'mime': 'text/plain', 'description': 'Text documents'},
-		}
+			'.jpeg': { 'mime': 'image/jpeg', 'description': 'JPEG images' },
+			'.jpg': { 'mime': 'image/jpeg', 'description': 'JPEG images' },
+			'.txt': { 'mime': 'text/plain', 'description': 'Text documents' },
+		};
 
 		const isString = typeof data === 'string';
 		const isByteArray = data.constructor.name === 'ByteArray';
@@ -155,18 +154,18 @@ export class FileReference extends EventDispatcher {
 			return;
 		}
 
-		let types: FilePickerAcceptType[] = [];
+		const types: FilePickerAcceptType[] = [];
 		if (ext in knownTypes) {
 			const mime = knownTypes[ext].mime;
 			types[0] = {
 				description: knownTypes[ext].description,
-				accept: {[mime] : ext},
-			}
+				accept: { [mime] : ext },
+			};
 		} else {
 			types[0] = {
 				description: '',
-				accept: {'application/octet-stream' : ext},
-			}
+				accept: { 'application/octet-stream' : ext },
+			};
 		}
 
 		const options: SaveFilePickerOptions = {

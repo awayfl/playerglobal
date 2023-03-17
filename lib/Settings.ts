@@ -8,7 +8,7 @@ export interface IPlayerGlobalSettings {
 export const Settings: IPlayerGlobalSettings = ConfigManager.instance.addStore<any>('playerglobal',{
 
 	/**
-	 * @description Enable experimental File Picker 
+	 * @description Enable experimental File Picker
 	 */
 	ENABLE_FILE_PICKER: true,
 
