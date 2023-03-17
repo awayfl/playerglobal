@@ -102,9 +102,67 @@ export class FileReference extends EventDispatcher {
 		this._creationDate = value;
 	}
 
+	private static knownMimeTypes = {
+		'.jpeg': {'mime': 'image/jpeg', 'description': 'JPEG images'},
+		'.jpg': {'mime': 'image/jpeg', 'description': 'JPEG images'},
+		'.txt': {'mime': 'text/plain', 'description': 'Text documents'},
+	}
+
 	//Displays a file-browsing dialog box that lets the user select a file to upload.
 	public browse(typelist: FileFilter[]): boolean {
-		window.alert('AwayJS: flash.net.FileReference::browse not implemented !');
+		const knownTypes = FileReference.knownMimeTypes;
+		const openDialog: (options: OpenFilePickerOptions) => Promise<[FileSystemFileHandle]> = window.showOpenFilePicker;
+
+		if (!openDialog) {
+			console.warn('[flash/net/FileReference] FileSystem API not supported!');
+			return false;
+		}
+
+		let types = [];
+		for (let i = 0; i < typelist.length; i++) {
+			const filter = typelist[i];
+			const extension = filter.extension.slice(filter.extension.lastIndexOf('.'));
+			const mime = extension in knownTypes ? knownTypes[extension]['mime'] : 'application/unknown';
+			types.push({
+				description: filter.description,
+				accept: {[mime]: extension}
+			})
+		}
+
+		const options: OpenFilePickerOptions = {
+			types
+		};
+
+		openDialog(options)
+			.then((fileHandler) => {
+				this._sendSelectEvent();
+				return fileHandler[0].getFile();
+			})
+			.then((file) => {
+				this.modificationDate = new Date(file.lastModified);
+				this.name = file.name;
+				this.size = file.size;
+				this.type = file.type;
+
+				let extIndex = file.name.lastIndexOf('.');
+				this.extension = extIndex >= 0 ? file.name.slice(extIndex + 1) : null;
+
+				return file.arrayBuffer();
+			})
+			.then((buf)=>{
+				this.data = new ByteArray(buf.byteLength);
+				this.data.setArrayBuffer(buf);
+				this._sendCompleteEvent();
+			})
+			.catch((e: DOMException) => {
+				if (e.code === 20 && e.message === 'The user aborted a request.') {
+					this._sendCancelEvent();
+					return;
+				}
+
+				console.warn('[flash/net/FileReference] FileSystem API Reject `showOpenFilePicker` request:', e);
+			});
+
 		return true;
 	}
 
@@ -127,12 +185,7 @@ export class FileReference extends EventDispatcher {
 	}
 
 	private _useFileSystemSave(data: any, name: string = ''): boolean {
-		const knownTypes: {[key: string]: {mime: string, description: string}}  = {
-			'.jpeg': { 'mime': 'image/jpeg', 'description': 'JPEG images' },
-			'.jpg': { 'mime': 'image/jpeg', 'description': 'JPEG images' },
-			'.txt': { 'mime': 'text/plain', 'description': 'Text documents' },
-		};
-
+		const knownTypes = FileReference.knownMimeTypes;
 		const isString = typeof data === 'string';
 		const isByteArray = data.constructor.name === 'ByteArray';
 		const ext = name.slice(name.lastIndexOf('.'));
@@ -164,7 +217,7 @@ export class FileReference extends EventDispatcher {
 		} else {
 			types[0] = {
 				description: '',
-				accept: { 'application/octet-stream' : ext },
+				accept: { 'application/unknown' : ext },
 			};
 		}
 

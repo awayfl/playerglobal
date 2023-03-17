@@ -158,6 +158,11 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.9.tgz#97edc9037ea0c38585320b28964dde3b39e4660d"
   integrity sha512-qcUXuemtEu+E5wZSJHNxUXeCZhAfXKQ41D+duX+VYPde7xyEVZci+/oXKJL13tnRs9lR2pr4fod59GT6/X1/yQ==
 
+"@types/wicg-file-system-access@^2020.9.5":
+  version "2020.9.5"
+  resolved "https://registry.yarnpkg.com/@types/wicg-file-system-access/-/wicg-file-system-access-2020.9.5.tgz#4a0c8f3d1ed101525f329e86c978f7735404474f"
+  integrity sha512-UYK244awtmcUYQfs7FR8710MJcefL2WvkyHMjA8yJzxd1mo0Gfn88sRZ1Bls7hiUhA2w7ne1gpJ9T5g3G0wOyA==
+
 "@typescript-eslint/eslint-plugin@^4.4.1":
   version "4.29.1"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-4.29.1.tgz#808d206e2278e809292b5de752a91105da85860b"
