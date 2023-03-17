@@ -5,6 +5,14 @@ import { FileFilter } from './FileFilter';
 import { ASObject } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 import { Event } from '../events/Event';
+import { Settings } from '../Settings';
+
+
+const USE_FILE_PICKER = ('showSaveFilePicker' in self) && Settings.ENABLE_FILE_PICKER;
+
+if (USE_FILE_PICKER) {
+	console.debug('[FileReference] `showSaveFilePicker` used for save()');
+}
 
 export class FileReference extends EventDispatcher {
 	public static forceNativeMethods = true;
@@ -120,7 +128,7 @@ export class FileReference extends EventDispatcher {
 	}
 
 	private _useFileSystemSave(data: any, name: string = ''): boolean {
-		const knownTypes = {
+		const knownTypes: {[key: string]: {mime: string, description: string}}  = {
 			'.jpeg': {'mime': 'image/jpeg', 'description': 'JPEG images'},
 			'.jpg': {'mime': 'image/jpeg', 'description': 'JPEG images'},
 			'.txt': {'mime': 'text/plain', 'description': 'Text documents'},
@@ -130,9 +138,12 @@ export class FileReference extends EventDispatcher {
 		const isByteArray = data.constructor.name === 'ByteArray';
 		const ext = name.slice(name.lastIndexOf('.'));
 
+		if (!USE_FILE_PICKER)
+			return false;
+
 		// this is draft API
 		// https://web.dev/file-system-access/
-		const openDialog: (options: any) => Promise<any> = (<any>self).showSaveFilePicker;
+		const openDialog: (options?: SaveFilePickerOptions) => Promise<FileSystemFileHandle> = window.showSaveFilePicker;
 
 		if (!openDialog) {
 			console.warn('[flash/net/FileReference] FileSystem API not supported!');
@@ -144,11 +155,11 @@ export class FileReference extends EventDispatcher {
 			return;
 		}
 
-		let types: Object = [];
+		let types: FilePickerAcceptType[] = [];
 		if (ext in knownTypes) {
-			const mime = knownTypes[ext]['mime'];
+			const mime = knownTypes[ext].mime;
 			types[0] = {
-				description: knownTypes[ext]['description'],
+				description: knownTypes[ext].description,
 				accept: {[mime] : ext},
 			}
 		} else {
@@ -158,7 +169,7 @@ export class FileReference extends EventDispatcher {
 			}
 		}
 
-		const options = {
+		const options: SaveFilePickerOptions = {
 			suggestedName: name || '',
 			types
 		};
@@ -182,7 +193,7 @@ export class FileReference extends EventDispatcher {
 					return;
 				}
 
-				console.warn('[flash/net/FileReference] FileSystem API Reject `showSaveFilePicker` requiest:', e);
+				console.warn('[flash/net/FileReference] FileSystem API Reject `showSaveFilePicker` request:', e);
 			});
 	}
 
