@@ -103,9 +103,9 @@ export class FileReference extends EventDispatcher {
 	}
 
 	private static knownMimeTypes = {
-		'.jpeg': {'mime': 'image/jpeg', 'description': 'JPEG images'},
-		'.jpg': {'mime': 'image/jpeg', 'description': 'JPEG images'},
-		'.txt': {'mime': 'text/plain', 'description': 'Text documents'},
+		'.jpeg': { 'mime': 'image/jpeg', 'description': 'JPEG images' },
+		'.jpg': { 'mime': 'image/jpeg', 'description': 'JPEG images' },
+		'.txt': { 'mime': 'text/plain', 'description': 'Text documents' },
 	}
 
 	//Displays a file-browsing dialog box that lets the user select a file to upload.
@@ -118,15 +118,15 @@ export class FileReference extends EventDispatcher {
 			return false;
 		}
 
-		let types = [];
+		const types = [];
 		for (let i = 0; i < typelist.length; i++) {
 			const filter = typelist[i];
 			const extension = filter.extension.slice(filter.extension.lastIndexOf('.'));
 			const mime = extension in knownTypes ? knownTypes[extension]['mime'] : 'application/unknown';
 			types.push({
 				description: filter.description,
-				accept: {[mime]: extension}
-			})
+				accept: { [mime]: extension }
+			});
 		}
 
 		const options: OpenFilePickerOptions = {
@@ -144,7 +144,7 @@ export class FileReference extends EventDispatcher {
 				this.size = file.size;
 				this.type = file.type;
 
-				let extIndex = file.name.lastIndexOf('.');
+				const extIndex = file.name.lastIndexOf('.');
 				this.extension = extIndex >= 0 ? file.name.slice(extIndex + 1) : null;
 
 				return file.arrayBuffer();
