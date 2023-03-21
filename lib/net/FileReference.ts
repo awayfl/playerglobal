@@ -187,7 +187,7 @@ export class FileReference extends EventDispatcher {
 	private _useFileSystemSave(data: any, name: string = ''): boolean {
 		const knownTypes = FileReference.knownMimeTypes;
 		const isString = typeof data === 'string';
-		const isByteArray = data.constructor.name === 'ByteArray';
+		const isByteArray = data.getBytes !== undefined;
 		const ext = name.slice(name.lastIndexOf('.'));
 
 		if (!USE_FILE_PICKER)
