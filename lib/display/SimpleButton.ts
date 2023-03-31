@@ -288,8 +288,7 @@ export class SimpleButton extends InteractiveObject {
 						if (!(<IDisplayObjectAdapter> newChildren[i].adapter).isBlockedByScript()
 							&& !(<any>newChildren[i]).noTimelineUpdate) {
 							newChildren[i].transform.clearMatrix3D();
-							newChildren[i].masks = null;
-							newChildren[i].maskMode = false;
+							newChildren[i].updateTimelineMask(null);
 						}
 						if (!(<IDisplayObjectAdapter> newChildren[i].adapter).isVisibilityByScript()) {
 							newChildren[i].visible = true;
@@ -298,8 +297,7 @@ export class SimpleButton extends InteractiveObject {
 						newChildren[i].transform.clearColorTransform();
 						newChildren[i].transform.clearMatrix3D();
 						newChildren[i].visible = true;
-						newChildren[i].masks = null;
-						newChildren[i].maskMode = false;
+						newChildren[i].updateTimelineMask(null);
 					}
 				}
 			} else {
