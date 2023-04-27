@@ -230,7 +230,7 @@ export class LoaderInfo extends EventDispatcher {
 		this._bytesLoaded = 0;
 		this._bytesTotal = this._source?.length || 0;
 
-		this._url = new URL(event.url, window.location.href).href;
+		this._url = new URL(event.url, document.baseURI).href;
 	}
 
 	private _onLoadProgress(event: URLLoaderEvent): void {
@@ -254,7 +254,7 @@ export class LoaderInfo extends EventDispatcher {
 			this._bytesTotal = this._bytesLoaded = this._bytesTotal || 1; //avoid devide on 0
 		}
 
-		this._url = new URL(event.url, window.location.href).href;
+		this._url = new URL(event.url, document.baseURI).href;
 
 		LoaderInfoCompleteQueue.addQueue(this);
 	}
