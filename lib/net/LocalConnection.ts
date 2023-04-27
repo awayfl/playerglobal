@@ -49,7 +49,7 @@ export class LocalConnection extends EventDispatcher {
 		this._allowedSecureDomains = [];
 
 		// tsc contains a definition for URL that's non-constructible.
-		const url = new (<any>URL)(window.location.href /*getCurrentABC().env.url*/);
+		const url = new (<any>URL)(document.baseURI /*getCurrentABC().env.url*/);
 		this._domain = url.hostname;
 		this._secure = url.protocol === 'https:';
 	}
