@@ -60,12 +60,12 @@ export class GameInputDevice extends EventDispatcher {
 		// this._enabled = val;
 	}
 
-	public get id(): string {
-		// @todo
-		Debug.throwPIR('playerglobals/ui/GameInputDevice', 'get id', '');
-		return '';
-		// return this._id;
-	}
+	// public get id(): string {
+	// 	// @todo
+	// 	Debug.throwPIR('playerglobals/ui/GameInputDevice', 'get id', '');
+	// 	return '';
+	// 	// return this._id;
+	// }
 
 	public get name(): string {
 		// @todo
