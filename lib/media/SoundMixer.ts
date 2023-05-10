@@ -99,9 +99,7 @@ export class SoundMixer extends ASObject {
 		SoundMixer._registeredSoundSources.forEach((e) => e.stopSound());
 		SoundMixer._registeredSoundSources = [];
 
-		if ((<any>AwayMovieClip).stopAllSounds) {
-			(<any>AwayMovieClip).stopAllSounds();
-		}
+		AwayMovieClip.stopAllSounds();
 	}
 
 	static computeSpectrum(
