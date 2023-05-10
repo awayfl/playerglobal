@@ -220,7 +220,7 @@ declare global {
 	interface Window { WeakRef: typeof WeakRef}
 }
 
-const USE_WEAK = ('WeakRef' in self) && Settings.USE_WEAK_REF
+const USE_WEAK = ('WeakRef' in self) && Settings.USE_WEAK_REF;
 
 if (USE_WEAK) {
 	console.debug('[BroadcastEventDispatchQueue] `WeakRef` used for Broadcast Events!');
@@ -267,7 +267,7 @@ export class BroadcastEventDispatchQueue {
 			let target = queue[key];
 			if (USE_WEAK)
 				target = (<WeakRef<EventDispatcher>> target)?.deref();
-			
+
 			if (target) {
 				(<EventDispatcher> target).dispatchEvent(event);
 			} else {
