@@ -3,8 +3,9 @@ import { SoundTransform } from './SoundTransform';
 import { release } from '@awayfl/swf-loader';
 import { SecurityDomain } from '../SecurityDomain';
 import { Event } from '../events/Event';
-import { IAudioChannel } from '@awayjs/core';
+import { EventBase, IAudioChannel } from '@awayjs/core';
 import { ISoundSource, SoundMixer } from './SoundMixer';
+import { BaseAudioChannel } from '@awayjs/core/dist/lib/managers/BaseAudioChannel';
 
 /**
  * Dispatched when a sound has finished playing.
@@ -54,7 +55,8 @@ export class SoundChannel extends EventDispatcher implements ISoundSource {
 			return;
 		}
 
-		this._channel.onSoundComplete = this.soundCompleteInternal.bind(this);
+		this._channel.addEventListener(BaseAudioChannel.COMPLETE, this.soundCompleteInternal.bind(this));
+
 		this.soundTransform = transform;
 
 		SoundMixer._registerSoundSource(this);
@@ -114,7 +116,7 @@ export class SoundChannel extends EventDispatcher implements ISoundSource {
 		this._soundTransform = value;
 	}
 
-	private soundCompleteInternal() {
+	private soundCompleteInternal(event: EventBase) {
 		this._stopInternally();
 		// we should dispatch sound events to channel, because some games use this
 		const complete = new (<SecurityDomain> this.sec).flash.events.Event(Event.SOUND_COMPLETE);
