@@ -1,5 +1,6 @@
 //import { XML } from "../xml/XML";
 
+import { notImplemented } from '@awayfl/swf-loader';
 import { IME } from './IME';
 import { ASObject } from '@awayfl/avm2';
 
@@ -27,7 +28,7 @@ export class System extends ASObject {
 	 * Use this property to monitor garbage collection.
 	 */
 	public static get freeMemory (): number {
-		console.log('freeMemory not implemented yet in flash/System');
+		notImplemented('public flash.system.System::freeMemory');
 		return 0;
 	}
 
@@ -37,7 +38,7 @@ export class System extends ASObject {
 	 * addEventListener() on this instance.
 	 */
 	public static get ime (): IME {
-		console.log('ime not implemented yet in flash/System');
+		notImplemented('public flash.system.System::ime');
 		return null;
 	}
 
@@ -50,12 +51,12 @@ export class System extends ASObject {
 	 * such as the web browser.
 	 */
 	public static get privateMemory (): number {
-		console.log('privateMemory not implemented yet in flash/System');
+		notImplemented('public flash.system.System::privateMemory');
 		return 0;
 	}
 
 	public static get processCPUUsage (): number {
-		console.log('processCPUUsage not implemented yet in flash/System');
+		notImplemented('public flash.system.System::processCPUUsage');
 		return 0;
 	}
 
@@ -72,7 +73,7 @@ export class System extends ASObject {
 	 * larger values.
 	 */
 	public static get totalMemory (): number {
-		console.log('totalMemory not implemented yet in flash/System');
+		notImplemented('public flash.system.System::totalMemory');
 		return 0;
 	}
 
@@ -88,7 +89,7 @@ export class System extends ASObject {
 	 * an application.
 	 */
 	public static get totalMemoryNumber (): number {
-		console.log('totalMemoryNumber not implemented yet in flash/System');
+		notImplemented('public flash.system.System::totalMemoryNumber');
 		return 0;
 	}
 
@@ -124,16 +125,16 @@ export class System extends ASObject {
 	 * (Flash Player 6 and later, or AIR) interprets the text as Unicode.
 	 */
 	public static get useCodePage (): boolean {
-		console.log('useCodePage not implemented yet in flash/System');
+		notImplemented('public flash.system.System::useCodePage');
 		return false;
 	}
 
 	public static set useCodePage (value: boolean) {
-		console.log('useCodePage not implemented yet in flash/System');
+		notImplemented('public flash.system.System::useCodePage');
 	}
 
 	public static get vmVersion (): string {
-		console.log('vmVersion not implemented yet in flash/System');
+		notImplemented('public flash.system.System::vmVersion');
 		return '';
 	}
 
@@ -144,7 +145,7 @@ export class System extends ASObject {
 	 * @param	node	XML reference that should be made available for garbage collection.
 	 */
 	public static disposeXML (node: any/*XML*/) {
-		console.log('disposeXML not implemented yet in flash/System');
+		notImplemented('public flash.system.System::disposeXML');
 	}
 
 	/**
@@ -156,7 +157,7 @@ export class System extends ASObject {
 	 *   the process exits normally, the value is 0.
 	 */
 	public static exit (code: number) {
-		console.log('exit not implemented yet in flash/System');
+		notImplemented('public flash.system.System::exit');
 	}
 
 	/**
@@ -167,7 +168,7 @@ export class System extends ASObject {
 	 * (ADL) or, in an installed applcation, in content in the application security sandbox.
 	 */
 	public static gc () {
-		console.log('gc not implemented yet in flash/System');
+		notImplemented('public flash.system.System::gc');
 	}
 
 	/**
@@ -177,11 +178,11 @@ export class System extends ASObject {
 	 *   For the Flash Player debugger version or the AIR Debug Launcher (ADL) only.
 	 */
 	public static pause () {
-		console.log('pause not implemented yet in flash/System');
+		notImplemented('public flash.system.System::pause');
 	}
 
 	public static pauseForGCIfCollectionImminent (imminence: number = 0.75) {
-		console.log('pauseForGCIfCollectionImminent not implemented yet in flash/System');
+		notImplemented('public flash.system.System::pauseForGCIfCollectionImminent');
 	}
 
 	/**
@@ -190,7 +191,7 @@ export class System extends ASObject {
 	 *   For the Flash Player debugger version or the AIR Debug Launcher (ADL) only.
 	 */
 	public static resume () {
-		console.log('resume not implemented yet in flash/System');
+		notImplemented('public flash.system.System::resume');
 	}
 
 	/**
@@ -218,7 +219,7 @@ export class System extends ASObject {
 			return;
 		}
 
-		console.log('setClipboard not implemented yet in flash/System');
+		notImplemented('public flash.system.System::setClipboard');
 	}
 
 }
