@@ -152,7 +152,7 @@ export class Sound extends EventDispatcher {
 			this._adaptee = <WaveAudio>asset;
 			this._loading = false;
 			if (this._pendingPlayCommand) {
-				this.play(this._pendingPlayCommand.startTime,
+				this.play(this._pendingPlayCommand.startTime/1000,
 					this._pendingPlayCommand.loops,
 					this._pendingPlayCommand.sndTransform);
 				this._playAfterLoad = false;
@@ -497,7 +497,7 @@ export class Sound extends EventDispatcher {
 
 		loops = isNaN(loops) || loops < 1 ? 1 : Math.floor(loops);
 
-		const channel: IAudioChannel =  <any> this._adaptee.play(startTime, loops);
+		const channel: IAudioChannel =  <any> this._adaptee.play(startTime/1000, loops);
 
 		if (!channel) {
 			console.debug('[Sound] Sound channel missed, channel pool overflow for:', this._adaptee.id);
