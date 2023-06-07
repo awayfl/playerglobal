@@ -996,7 +996,13 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 	public set rotation(value: number) {
 		this._blockedByScript = true;
-		this.adaptee.rotationZ = isNaN(value) ? 0 : isFinite(value) ? value : -8;
+		let rot = isNaN(value) ? 0 : isFinite(value) ? value % 360 : -8;
+		if (rot < -180) {
+			rot += 360;
+		} else if (rot > 180) {
+			rot -= 360;
+		}
+		this.adaptee.rotationZ = rot;
 	}
 
 	/**
