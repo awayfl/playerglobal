@@ -51,7 +51,7 @@
     "@awayjs/scene": "^0.13.0",
     "@awayjs/stage": "^0.11.0",
     "@awayjs/view": "^0.6.0",
-    "tslib": "^1.9.0"
+    "tslib": "^2.3.0"
   },
   "devDependencies": {
     "@awayfl/avm2": "^0.2.0",
