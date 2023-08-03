@@ -1,5 +1,5 @@
 import { ASObject } from '@awayfl/avm2';
-import { MapObject, ObjectUtilities, release } from '@awayfl/swf-loader';
+import { MapObject, createMap, release } from '@awayfl/swf-loader';
 import { assert, axCoerceString } from '@awayjs/graphics';
 
 export class Event extends ASObject {
@@ -10,7 +10,7 @@ export class Event extends ASObject {
 
 	static classInitializer: any = function () {
 		const self: typeof Event = this;
-		self._instances = ObjectUtilities.createMap<Event>();
+		self._instances = createMap<Event>();
 	};
 
 	static getInstance(type: string, bubbles: boolean = false, cancelable: boolean = false): Event {
