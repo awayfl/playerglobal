@@ -216,10 +216,6 @@ export class EventDispatcher extends EventDispatcherBase {
 	}
 }
 
-declare global {
-	interface Window { WeakRef: typeof WeakRef}
-}
-
 const USE_WEAK = ('WeakRef' in self) && Settings.USE_WEAK_REF;
 
 if (USE_WEAK) {
