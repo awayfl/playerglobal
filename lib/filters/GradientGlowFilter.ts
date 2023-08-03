@@ -1,6 +1,6 @@
 import { BitmapFilter, GradientArrays } from './BitmapFilter';
 import { BitmapFilterType } from './BitmapFilterType';
-import { NumberUtilities, isNullOrUndefined } from '@awayfl/swf-loader';
+import { clamp, isNullOrUndefined } from '@awayfl/swf-loader';
 import { Errors, ASArray, axCoerceString } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 
@@ -169,7 +169,7 @@ export class GradientGlowFilter extends BitmapFilter {
 	}
 
 	set blurX(value: number) {
-		this._blurX = NumberUtilities.clamp(+value, 0, 255);
+		this._blurX = clamp(+value, 0, 255);
 	}
 
 	get blurY(): number {
@@ -177,7 +177,7 @@ export class GradientGlowFilter extends BitmapFilter {
 	}
 
 	set blurY(value: number) {
-		this._blurY = NumberUtilities.clamp(+value, 0, 255);
+		this._blurY = clamp(+value, 0, 255);
 	}
 
 	get knockout(): boolean {
@@ -193,7 +193,7 @@ export class GradientGlowFilter extends BitmapFilter {
 	}
 
 	set quality(value: number /*int*/) {
-		this._quality = NumberUtilities.clamp(value | 0, 0, 15);
+		this._quality = clamp(value | 0, 0, 15);
 	}
 
 	get strength(): number {
@@ -201,7 +201,7 @@ export class GradientGlowFilter extends BitmapFilter {
 	}
 
 	set strength(value: number) {
-		this._strength = NumberUtilities.clamp(+value, 0, 255);
+		this._strength = clamp(+value, 0, 255);
 	}
 
 	get type(): string {

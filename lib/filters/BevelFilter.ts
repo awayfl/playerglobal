@@ -1,5 +1,5 @@
 import { BitmapFilter, InterfaceOf } from './BitmapFilter';
-import { assert, release, NumberUtilities } from '@awayfl/swf-loader';
+import { assert, release, clamp } from '@awayfl/swf-loader';
 import { BitmapFilterType } from './BitmapFilterType';
 import { axCoerceString, Errors } from '@awayfl/avm2';
 import { IFilter } from '@awayjs/scene';
@@ -148,7 +148,7 @@ export class BevelFilter extends BitmapFilter {
 	}
 
 	set highlightAlpha(value: number) {
-		this._highlightAlpha = NumberUtilities.clamp(+value, 0, 1);
+		this._highlightAlpha = clamp(+value, 0, 1);
 	}
 
 	get shadowColor(): number /*uint*/ {
@@ -164,7 +164,7 @@ export class BevelFilter extends BitmapFilter {
 	}
 
 	set shadowAlpha(value: number) {
-		this._shadowAlpha = NumberUtilities.clamp(+value, 0, 1);
+		this._shadowAlpha = clamp(+value, 0, 1);
 	}
 
 	get blurX(): number {
@@ -172,7 +172,7 @@ export class BevelFilter extends BitmapFilter {
 	}
 
 	set blurX(value: number) {
-		this._blurX = NumberUtilities.clamp(+value, 0, 255);
+		this._blurX = clamp(+value, 0, 255);
 	}
 
 	get blurY(): number {
@@ -180,7 +180,7 @@ export class BevelFilter extends BitmapFilter {
 	}
 
 	set blurY(value: number) {
-		this._blurY = NumberUtilities.clamp(+value, 0, 255);
+		this._blurY = clamp(+value, 0, 255);
 	}
 
 	get knockout(): boolean {
@@ -196,7 +196,7 @@ export class BevelFilter extends BitmapFilter {
 	}
 
 	set quality(value: number /*int*/) {
-		this._quality = NumberUtilities.clamp(value | 0, 0, 15);
+		this._quality = clamp(value | 0, 0, 15);
 	}
 
 	get strength(): number {
@@ -204,7 +204,7 @@ export class BevelFilter extends BitmapFilter {
 	}
 
 	set strength(value: number) {
-		this._strength = NumberUtilities.clamp(+value, 0, 255);
+		this._strength = clamp(+value, 0, 255);
 	}
 
 	get type(): string {

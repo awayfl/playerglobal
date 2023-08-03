@@ -1,4 +1,4 @@
-import { NumberUtilities, isNullOrUndefined } from '@awayfl/swf-loader';
+import { clamp, isNullOrUndefined } from '@awayfl/swf-loader';
 import { ASObject } from '@awayfl/avm2';
 
 type NonFunctionPropertyNames<T> = {
@@ -92,7 +92,7 @@ export class GradientArrays {
 		let i;
 		const n = Math.min(alphas.length, maxLen);
 		for (i = 0; i < n; i++) {
-			arr[i] = NumberUtilities.clamp(+alphas[i], 0, 1);
+			arr[i] = clamp(+alphas[i], 0, 1);
 		}
 		while (i < minLen) {
 			arr[i++] = value;
@@ -105,7 +105,7 @@ export class GradientArrays {
 		let i;
 		const n = Math.min(ratios.length, maxLen);
 		for (i = 0; i < n; i++) {
-			arr[i] = NumberUtilities.clamp(+ratios[i], 0, 255);
+			arr[i] = clamp(+ratios[i], 0, 255);
 		}
 		while (i < minLen) {
 			arr[i++] = value;

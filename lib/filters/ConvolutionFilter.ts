@@ -1,5 +1,5 @@
 import { BitmapFilter } from './BitmapFilter';
-import { NumberUtilities, isNullOrUndefined, toNumber } from '@awayfl/swf-loader';
+import { clamp, isNullOrUndefined, toNumber } from '@awayfl/swf-loader';
 import { ASArray, Errors } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 
@@ -104,7 +104,7 @@ export class ConvolutionFilter extends BitmapFilter {
 	}
 
 	set matrixX(value: number) {
-		const mx: number = NumberUtilities.clamp(+value, 0, 15) | 0;
+		const mx: number = clamp(+value, 0, 15) | 0;
 		if (this._matrixX !== mx) {
 			this._matrixX = mx;
 			this._expandArray(this._matrix, mx * this._matrixY);
@@ -116,7 +116,7 @@ export class ConvolutionFilter extends BitmapFilter {
 	}
 
 	set matrixY(value: number) {
-		const my: number = NumberUtilities.clamp(+value, 0, 15) | 0;
+		const my: number = clamp(+value, 0, 15) | 0;
 		if (this._matrixY !== my) {
 			this._matrixY = my;
 			this._expandArray(this._matrix, my * this._matrixX);
@@ -168,7 +168,7 @@ export class ConvolutionFilter extends BitmapFilter {
 	}
 
 	set alpha(value: number) {
-		this._alpha = NumberUtilities.clamp(+value, 0, 1);
+		this._alpha = clamp(+value, 0, 1);
 	}
 
 	clone(): BitmapFilter {

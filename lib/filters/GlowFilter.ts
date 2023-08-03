@@ -1,5 +1,5 @@
 import { BitmapFilter, InterfaceOf } from './BitmapFilter';
-import { assert, release, NumberUtilities } from '@awayfl/swf-loader';
+import { assert, release, clamp } from '@awayfl/swf-loader';
 import { SecurityDomain } from '../SecurityDomain';
 
 /**
@@ -92,7 +92,7 @@ export class GlowFilter extends BitmapFilter {
 	}
 
 	set alpha(value: number) {
-		this._alpha = NumberUtilities.clamp(+value, 0, 1);
+		this._alpha = clamp(+value, 0, 1);
 	}
 
 	get blurX(): number {
@@ -100,7 +100,7 @@ export class GlowFilter extends BitmapFilter {
 	}
 
 	set blurX(value: number) {
-		this._blurX = NumberUtilities.clamp(+value, 0, 255);
+		this._blurX = clamp(+value, 0, 255);
 	}
 
 	get blurY(): number {
@@ -108,7 +108,7 @@ export class GlowFilter extends BitmapFilter {
 	}
 
 	set blurY(value: number) {
-		this._blurY = NumberUtilities.clamp(+value, 0, 255);
+		this._blurY = clamp(+value, 0, 255);
 	}
 
 	get inner(): boolean {
@@ -132,7 +132,7 @@ export class GlowFilter extends BitmapFilter {
 	}
 
 	set quality(value: number /*int*/) {
-		this._quality = NumberUtilities.clamp(value | 0, 0, 15);
+		this._quality = clamp(value | 0, 0, 15);
 	}
 
 	get strength(): number {
@@ -140,7 +140,7 @@ export class GlowFilter extends BitmapFilter {
 	}
 
 	set strength(value: number) {
-		this._strength = NumberUtilities.clamp(+value, 0, 255);
+		this._strength = clamp(+value, 0, 255);
 	}
 
 	public toAwayObject(): InterfaceOf<GlowFilter> {

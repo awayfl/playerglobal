@@ -1,6 +1,6 @@
 import { BitmapFilter, GradientArrays, InterfaceOf } from './BitmapFilter';
 import { BitmapFilterType } from './BitmapFilterType';
-import { NumberUtilities, isNullOrUndefined } from '@awayfl/swf-loader';
+import { clamp, isNullOrUndefined } from '@awayfl/swf-loader';
 import { ASArray, Errors, axCoerceString } from '@awayfl/avm2';
 import { IBevelFilter } from './BevelFilter';
 import { SecurityDomain } from '../SecurityDomain';
@@ -189,7 +189,7 @@ export class GradientBevelFilter extends BitmapFilter {
 	}
 
 	set blurX(value: number) {
-		this._blurX = NumberUtilities.clamp(+value, 0, 255);
+		this._blurX = clamp(+value, 0, 255);
 	}
 
 	get blurY(): number {
@@ -197,7 +197,7 @@ export class GradientBevelFilter extends BitmapFilter {
 	}
 
 	set blurY(value: number) {
-		this._blurY = NumberUtilities.clamp(+value, 0, 255);
+		this._blurY = clamp(+value, 0, 255);
 	}
 
 	get knockout(): boolean {
@@ -213,7 +213,7 @@ export class GradientBevelFilter extends BitmapFilter {
 	}
 
 	set quality(value: number /*int*/) {
-		this._quality = NumberUtilities.clamp(value | 0, 0, 15);
+		this._quality = clamp(value | 0, 0, 15);
 	}
 
 	get strength(): number {
@@ -221,7 +221,7 @@ export class GradientBevelFilter extends BitmapFilter {
 	}
 
 	set strength(value: number) {
-		this._strength = NumberUtilities.clamp(+value, 0, 255);
+		this._strength = clamp(+value, 0, 255);
 	}
 
 	get type(): string {

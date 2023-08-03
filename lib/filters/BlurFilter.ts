@@ -1,5 +1,5 @@
 import { BitmapFilter, InterfaceOf } from './BitmapFilter';
-import { NumberUtilities } from '@awayfl/swf-loader';
+import { clamp } from '@awayfl/swf-loader';
 import { SecurityDomain } from '../SecurityDomain';
 
 export class BlurFilter extends BitmapFilter {
@@ -40,7 +40,7 @@ export class BlurFilter extends BitmapFilter {
 	}
 
 	set blurX(value: number) {
-		this._blurX = NumberUtilities.clamp(+value, 0, 255);
+		this._blurX = clamp(+value, 0, 255);
 	}
 
 	get blurY(): number {
@@ -48,7 +48,7 @@ export class BlurFilter extends BitmapFilter {
 	}
 
 	set blurY(value: number) {
-		this._blurY = NumberUtilities.clamp(+value, 0, 255);
+		this._blurY = clamp(+value, 0, 255);
 	}
 
 	get quality(): number /*int*/ {
@@ -56,7 +56,7 @@ export class BlurFilter extends BitmapFilter {
 	}
 
 	set quality(value: number /*int*/) {
-		this._quality = NumberUtilities.clamp(value | 0, 0, 15);
+		this._quality = clamp(value | 0, 0, 15);
 	}
 
 	clone(): BitmapFilter {
