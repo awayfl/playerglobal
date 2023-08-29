@@ -568,7 +568,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 
 		if (endIndex >= (<AwayDisplayObjectContainer> this._adaptee).numChildren)
 			endIndex = (<AwayDisplayObjectContainer> this._adaptee).numChildren - 1;
-		
+
 		for (let i: number = endIndex - 1;i >= beginIndex; i--)
 			this.removeChildAt(i);
 	}
