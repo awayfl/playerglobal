@@ -337,6 +337,8 @@ export class DisplayObjectContainer extends InteractiveObject {
 				child.dispatch_ADDED_TO_STAGE(true);
 			}
 		}
+
+		OrphanManager.removeOrphan(child.adaptee);
 		return child;
 	}
 
@@ -531,7 +533,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 		} catch (e) {
 			throw (<SecurityDomain> this.sec).createError('ArgumentError', Errors.NotAChildError);
 		}
-
+		OrphanManager.addOrphan(child.adaptee);
 		return child;
 	}
 
@@ -555,16 +557,20 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 * @throws	RangeError Throws if the index does not exist in the child list.
 	 */
 	public removeChildAt (index: number): DisplayObject {
-		return (<DisplayObject>(<AwayDisplayObjectContainer> this._adaptee).removeChildAt(index).adapter);
+
+		const child = <DisplayObject>(<AwayDisplayObjectContainer> this._adaptee).removeChildAt(index).adapter;
+
+		OrphanManager.addOrphan(child.adaptee);
+		return child;
 	}
 
-	public removeChildren (beginIndex: number = 0, endIndex: number = 2147483647)  {
+	public removeChildren (beginIndex: number = 0, endIndex: number = 2147483647) {
 
-		if (endIndex >= (<AwayDisplayObjectContainer> this._adaptee).numChildren) {
+		if (endIndex >= (<AwayDisplayObjectContainer> this._adaptee).numChildren)
 			endIndex = (<AwayDisplayObjectContainer> this._adaptee).numChildren - 1;
-		}
-		(<AwayDisplayObjectContainer> this._adaptee).removeChildren(beginIndex, endIndex + 1);
-
+		
+		for (let i: number = endIndex - 1;i >= beginIndex; i--)
+			this.removeChildAt(i);
 	}
 
 	/**
