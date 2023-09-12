@@ -223,7 +223,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 			return;
 		}
 
-		Debug.throwPIR('playerglobals/display/BitmapData', 'applyFilter', filter.constructor.name);
+		Debug.throwPIR('playerglobals/display/BitmapData', 'applyFilter', filter.axClassName);
 
 	}
 
