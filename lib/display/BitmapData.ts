@@ -273,7 +273,9 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		//remove all owners
 		this._owners = [];
 
-		this._adaptee.dispose();
+		if (this._adaptee.canUnload) {
+			this._adaptee.dispose();
+		}
 		this._adaptee = null;
 	}
 
