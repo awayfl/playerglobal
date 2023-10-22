@@ -534,14 +534,10 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * the blendMode property is set to BlendMode.NORMAL. Not supported under GPU rendering.
 	 */
 	public get blendMode(): string {
-		// @todo
-		Debug.throwPIR('playerglobals/display/DisplayObject', 'get blendMode', '');
-		return '';
+		return <string> this._adaptee.blendMode;
 	}
 
 	public set blendMode(value: string) {
-		// @todo
-		Debug.throwPIR('playerglobals/display/DisplayObject', 'set blendMode', '');
 		this._adaptee.blendMode = value;
 	}
 
