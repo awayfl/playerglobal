@@ -112,7 +112,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public drawWithQuality(
-		source: IBitmapDrawable,
+		source: any,
 		matrix: Matrix = null,
 		colorTransform: ColorTransform = null,
 		blendMode: string = null,
@@ -120,8 +120,14 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		smoothing: boolean = false,
 		quality: string = null
 	): void {
-		// @todo
-		Debug.throwPIR('playerglobals/display/BitmapData', 'drawWithQuality', '');
+		this._adaptee.draw(
+			source.adaptee,
+			matrix?.adaptee,
+			colorTransform?.adaptee,
+			blendMode,
+			clipRect?.adaptee,
+			smoothing
+		);
 	}
 
 	constructor(width: number | SceneImage2D | BitmapImage2D,
@@ -285,15 +291,15 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		colorTransform: ColorTransform = null,
 		blendMode: any = '',
 		clipRect: Rectangle = null,
-		smooth: boolean = false
+		smoothing: boolean = false
 	) {
 		this._adaptee.draw(
 			source.adaptee,
-			matrix ? matrix.adaptee : null,
-			colorTransform ? colorTransform.adaptee : null,
+			matrix?.adaptee,
+			colorTransform?.adaptee,
 			blendMode,
-			clipRect ? (<any>clipRect).adaptee : null,
-			smooth
+			clipRect?.adaptee,
+			smoothing
 		);
 	}
 
