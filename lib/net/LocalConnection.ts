@@ -10,7 +10,7 @@ import {
 	Errors,
 	ByteArray
 } from '@awayfl/avm2';
-import { assert, release, warning } from '@awayfl/swf-loader';
+import { assert, notImplemented, release, warning } from '@awayfl/swf-loader';
 import { ErrorEvent } from '../events/ErrorEvent';
 
 /**
@@ -34,8 +34,6 @@ const LocalConnectionConnectResult = {} as any;
 
 const forbiddenNames = ['send', 'connect', 'close', 'allowDomain', 'allowInsecureDomain', 'client', 'domain'];
 Object.freeze(forbiddenNames);
-
-const notImpl = (from: Object, func: string) => console.warn(`[NOT IMPLEMENTED] ${from.constructor.name}#${func} yet!`);
 
 export class LocalConnection extends EventDispatcher {
 
@@ -81,12 +79,12 @@ export class LocalConnection extends EventDispatcher {
 
 		//LocalConnectionService.closeConnection(connectionName, this);
 
-		notImpl(this, 'close');
+		notImplemented('public flash.net.LocalConnection::close');
 	}
 
 	connect(connectionName: string): void {
 
-		notImpl(this, 'connect');
+		notImplemented('public flash.net.LocalConnection::connect');
 		return;
 
 		connectionName = axCoerceString(connectionName);
@@ -122,7 +120,7 @@ export class LocalConnection extends EventDispatcher {
 
 	send(connectionName: string, methodName: string, ...args): void {
 
-		notImpl(this, 'send');
+		notImplemented('public flash.net.LocalConnection::send');
 		return;
 
 		connectionName = axCoerceString(connectionName);
@@ -180,7 +178,7 @@ export class LocalConnection extends EventDispatcher {
 
 	private _allowDomains(domains: string[], secure: boolean) {
 
-		notImpl(this, '_allowDomains');
+		notImplemented('private flash.net.LocalConnection::_allowDomains');
 		return;
 
 		let result: string[] = [];
