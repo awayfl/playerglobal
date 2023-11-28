@@ -109,8 +109,8 @@ export class SoundChannel extends EventDispatcher implements ISoundSource {
 	public set soundTransform(value: SoundTransform) {
 
 		if (this._channel) {
-			this._channel.volume = value.volume;
-			this._channel.pan = value.pan;
+			this._channel.volume = (value.volume == null)? 0 : value.volume;
+			this._channel.pan = (value.pan == null)? 0 : value.pan;
 		}
 
 		this._soundTransform = value;
