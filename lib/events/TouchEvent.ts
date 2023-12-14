@@ -305,7 +305,6 @@ export class TouchEvent extends Event {
 
 	private _shiftKey: boolean;
 
-
 	/**
 	 * Indicates whether the Alt key is active (true) or inactive (false).
 	 * Supported for Windows and Linux operating systems only.
@@ -372,7 +371,7 @@ export class TouchEvent extends Event {
 	set localY(value: number) {
 		this._localY = (value * 20) | 0;
 	}
-	
+
 	/**
 	 * A value between 0.0 and 1.0 indicating force of the contact with the device.
 	 * If the device does not support detecting the pressure, the value is 1.0.
@@ -395,6 +394,7 @@ export class TouchEvent extends Event {
 	public set relatedObject (value: InteractiveObject) {
 
 	}
+
 	/**
 	 * Indicates whether the Shift key is active (true) or inactive
 	 * (false).
@@ -525,7 +525,6 @@ export class TouchEvent extends Event {
 
 		this._stageX = stagePoint.x;
 		this._stageY = stagePoint.y;
-		
 
 		//todo: translate more stuff from awayjs to as3
 
