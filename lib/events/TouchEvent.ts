@@ -1,5 +1,9 @@
+import { TouchEvent as TouchEventAway } from '@awayjs/scene';
 import { InteractiveObject } from '../display/InteractiveObject';
 import { Event } from './Event';
+import { DisplayObject } from '../display/DisplayObject';
+import { AVMStage } from '@awayfl/swf-loader';
+import { Point } from '@awayjs/core';
 
 /**
 /// @eventType	flash.events.TouchEvent.TOUCH_BEGIN
@@ -288,6 +292,20 @@ export class TouchEvent extends Event {
 	 */
 	public static TOUCH_TAP: string = 'touchTap';
 
+	private adaptee: TouchEventAway;
+
+	// AS -> JS Bindings
+	private _localX: number;
+	private _localY: number;
+	private _stageX: number;
+	private _stageY: number;
+
+	private _ctrlKey: boolean;
+	private _altKey: boolean;
+
+	private _shiftKey: boolean;
+
+
 	/**
 	 * Indicates whether the Alt key is active (true) or inactive (false).
 	 * Supported for Windows and Linux operating systems only.
@@ -295,15 +313,25 @@ export class TouchEvent extends Event {
 	 *   The Option key modifier on Macintosh system must be represented using this key modifier. So far, it seems
 	 *   only the Windows version is hooked up.
 	 */
-	public get altKey (): boolean {return false;}
-	public set altKey (value: boolean) {}
+	public get altKey(): boolean {
+		return this._altKey;
+	}
+
+	public set altKey(value: boolean) {
+		this._altKey = value;
+	}
 
 	/**
 	 * On Windows or Linux, indicates whether the Ctrl key is active (true) or inactive (false).
 	 * On Macintosh, indicates whether either the Control key or the Command key is activated.
 	 */
-	public get ctrlKey (): boolean {return false;}
-	public set ctrlKey (value: boolean) {}
+	public get ctrlKey(): boolean {
+		return this._ctrlKey;
+	}
+
+	public set ctrlKey(value: boolean) {
+		this._ctrlKey = value;
+	}
 
 	/**
 	 * Indicates whether the first point of contact is mapped to mouse events.
@@ -326,15 +354,25 @@ export class TouchEvent extends Event {
 	/**
 	 * The horizontal coordinate at which the event occurred relative to the containing sprite.
 	 */
-	public get localX (): number { return 0;}
-	public set localX (value: number) {}
+	get localX(): number {
+		return (this._localX / 20) | 0;
+	}
+
+	set localX(value: number) {
+		this._localX = (value * 20) | 0;
+	}
 
 	/**
 	 * The vertical coordinate at which the event occurred relative to the containing sprite.
 	 */
-	public get localY (): number { return 0;}
-	public set localY (value: number) {}
+	get localY(): number {
+		return (this._localY / 20) | 0;
+	}
 
+	set localY(value: number) {
+		this._localY = (value * 20) | 0;
+	}
+	
 	/**
 	 * A value between 0.0 and 1.0 indicating force of the contact with the device.
 	 * If the device does not support detecting the pressure, the value is 1.0.
@@ -357,13 +395,17 @@ export class TouchEvent extends Event {
 	public set relatedObject (value: InteractiveObject) {
 
 	}
-
 	/**
 	 * Indicates whether the Shift key is active (true) or inactive
 	 * (false).
 	 */
-	public get shiftKey (): boolean {return false;}
-	public set shiftKey (value: boolean) {}
+	public get shiftKey(): boolean {
+		return this._shiftKey;
+	}
+
+	public set shiftKey(value: boolean) {
+		this._shiftKey = value;
+	}
 
 	/**
 	 * Width of the contact area.
@@ -382,7 +424,9 @@ export class TouchEvent extends Event {
 	 * The horizontal coordinate at which the event occurred in global Stage coordinates.
 	 * This property is calculated when the localX property is set.
 	 */
-	public get stageX (): number { return 0;}
+	get stageX(): number {
+		return this._stageX;
+	}
 
 	/**
 	 * The vertical coordinate at which the event occurred in global Stage coordinates.
@@ -450,6 +494,12 @@ export class TouchEvent extends Event {
 		pressure: number = NaN, relatedObject: InteractiveObject = null,
 		ctrlKey: boolean = false, altKey: boolean = false, shiftKey: boolean = false) {
 		super(type, bubbles, cancelable);
+
+		this._localX = localX;
+		this._localY = localY;
+		this._ctrlKey = ctrlKey;
+		this._altKey = altKey;
+		this._shiftKey = shiftKey;
 	}
 
 	/**
@@ -457,6 +507,42 @@ export class TouchEvent extends Event {
 	 * if the display list has been modified.
 	 */
 	public updateAfterEvent () {
+
+	}
+
+	/* added to clone events from away to as3web. */
+	public fillFromAway (awayEvent: TouchEventAway) {
+		//console.log("cloneFromAway not implemented yet in flash/MouseEvent");
+
+		this.adaptee = awayEvent;
+		// todo: set targets correctly
+		this.target = awayEvent.target.adapter;
+		this.currentTarget = awayEvent.currentTarget.adapter;
+		this.ctrlKey = awayEvent.ctrlKey;
+		this.shiftKey = awayEvent.shiftKey;
+
+		const stagePoint = AVMStage.instance().unprojectPoint(new Point(awayEvent.screenX, awayEvent.screenY), (<DisplayObject> this.target).stage.adaptee);
+
+		this._stageX = stagePoint.x;
+		this._stageY = stagePoint.y;
+		
+
+		//todo: translate more stuff from awayjs to as3
+
+		//result.screenX = this.screenX;
+		//result.screenY = this.screenY;
+		/*
+		result.view = awayEvent.view;
+		result.entity = awayEvent.entity;
+		result.renderable = awayEvent.renderable;
+		result.material = awayEvent.material;
+		result.uv = awayEvent.uv;
+		result.position = awayEvent.position;
+		result.normal = awayEvent.normal;
+		result.elementIndex = awayEvent.elementIndex;
+*/
+		//result._iParentEvent = awayEvent;
+		//result._iAllowedToPropagate = awayEvent._iAllowedToPropagate;
 
 	}
 }

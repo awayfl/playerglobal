@@ -223,28 +223,28 @@ export class Stage extends DisplayObjectContainer {
 		window.removeEventListener('mouseleave', callback);
 	}
 
-	protected initMouseListener(type: string, callback: (event: MouseEventAway) => void, listener: Function): void {
-		if (!this._mouseListnersCallbacksByType[type]) {
+	protected initListener(type: string, callback: (event: MouseEventAway) => void, listener: Function): void {
+		if (!this._listnersCallbacksByType[type]) {
 			this.adaptee.addEventListener(type, callback);
 			AVMStage.instance().view.stage.addEventListener(type, callback);
-			this._mouseListnersCallbacksByType[type] = [listener];
+			this._listnersCallbacksByType[type] = [listener];
 			return;
 		}
-		this._mouseListnersCallbacksByType[type].push(listener);
+		this._listnersCallbacksByType[type].push(listener);
 
 	}
 
-	protected removeMouseListener(type: string, callback: (event: MouseEventAway) => void, listener: Function): void {
-		if (this._mouseListnersCallbacksByType[type]) {
-			const idx = this._mouseListnersCallbacksByType[type].indexOf(listener);
+	protected removeListener(type: string, callback: (event: MouseEventAway) => void, listener: Function): void {
+		if (this._listnersCallbacksByType[type]) {
+			const idx = this._listnersCallbacksByType[type].indexOf(listener);
 			if (idx != -1) {
-				if (this._mouseListnersCallbacksByType[type].length == 1) {
-					delete this._mouseListnersCallbacksByType[type];
+				if (this._listnersCallbacksByType[type].length == 1) {
+					delete this._listnersCallbacksByType[type];
 					this.adaptee.removeEventListener(type, callback);
 					AVMStage.instance().view.stage.removeEventListener(type, callback);
 					return;
 				}
-				this._mouseListnersCallbacksByType[type].splice(idx, 1);
+				this._listnersCallbacksByType[type].splice(idx, 1);
 			}
 		}
 	}

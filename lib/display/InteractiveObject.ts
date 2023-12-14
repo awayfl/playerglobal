@@ -1,8 +1,9 @@
 
 import { Debug, Rectangle } from '@awayjs/core';
 import { DisplayObject } from './DisplayObject';
-import { MouseEvent as MouseEventAway, FocusEvent as FocusEventAway } from '@awayjs/scene';
+import { MouseEvent as MouseEventAway, TouchEvent as TouchEventAway, FocusEvent as FocusEventAway } from '@awayjs/scene';
 import { MouseEvent } from '../events/MouseEvent';
+import { TouchEvent } from '../events/TouchEvent';
 import { KeyboardEvent } from '../events/KeyboardEvent';
 
 import { IEventMapper } from '../events/IEventMapper';
@@ -13,7 +14,7 @@ export class InteractiveObject extends DisplayObject {
 
 	private _keyDownListeners: Function[];
 	private _keyUpListeners: Function[];
-	protected _mouseListnersCallbacksByType: StringMap<Function[]> = {};
+	protected _listnersCallbacksByType: StringMap<Function[]> = {};
 	/** these should be able to get setup:
 
 	 // listen on key directly
@@ -426,6 +427,59 @@ export class InteractiveObject extends DisplayObject {
 			callback: this._keyDownCallbackDelegate
 		});
 
+		// TouchEvent events adapt to awayjs-TouchEvents. they listen on adapter:
+		// these mapping share the same callback, thats why we need the setup the eventMappingInvert to
+
+		this._touchCallbackDelegate = (event: TouchEventAway) => this.touchCallback(event);
+
+		this.eventMappingInvert[TouchEventAway.TOUCH_END] = TouchEvent.TOUCH_END;
+		this.eventMapping[TouchEvent.TOUCH_END] = (<IEventMapper>{
+			adaptedType: TouchEventAway.TOUCH_END,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
+			callback: this._touchCallbackDelegate
+		});
+
+		this.eventMappingInvert[TouchEventAway.TOUCH_OVER] = TouchEvent.TOUCH_OVER;
+		this.eventMapping[TouchEvent.TOUCH_OVER] = (<IEventMapper>{
+			adaptedType: TouchEventAway.TOUCH_OVER,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
+			callback: this._touchCallbackDelegate
+		});
+
+		this.eventMappingInvert[TouchEventAway.TOUCH_OUT] = TouchEvent.TOUCH_OUT;
+		this.eventMapping[TouchEvent.TOUCH_OUT] = (<IEventMapper>{
+			adaptedType: TouchEventAway.TOUCH_OUT,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
+			callback: this._touchCallbackDelegate
+		});
+
+		this.eventMappingInvert[TouchEventAway.TOUCH_MOVE] = TouchEvent.TOUCH_MOVE;
+		this.eventMapping[TouchEvent.TOUCH_MOVE] = (<IEventMapper>{
+			adaptedType: TouchEventAway.TOUCH_MOVE,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
+			callback: this._touchCallbackDelegate
+		});
+
+		this.eventMappingInvert[TouchEventAway.TOUCH_BEGIN] = TouchEvent.TOUCH_BEGIN;
+		this.eventMapping[TouchEvent.TOUCH_BEGIN] = (<IEventMapper>{
+			adaptedType: TouchEventAway.TOUCH_BEGIN,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
+			callback: this._touchCallbackDelegate
+		});
+
+		this.eventMappingInvert[TouchEventAway.TOUCH_TAP] = TouchEvent.TOUCH_TAP;
+		this.eventMapping[TouchEvent.TOUCH_TAP] = (<IEventMapper>{
+			adaptedType: TouchEventAway.TOUCH_TAP,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
+			callback: this._touchCallbackDelegate
+		});
+
 		// MouseEvent events adapt to awayjs-MouseEvents. they listen on adapter:
 		// these mapping share the same callback, thats why we need the setup the eventMappingInvert to
 
@@ -434,88 +488,88 @@ export class InteractiveObject extends DisplayObject {
 		this.eventMappingInvert[MouseEventAway.MOUSE_WHEEL] = MouseEvent.MOUSE_WHEEL;
 		this.eventMapping[MouseEvent.MOUSE_WHEEL] = (<IEventMapper>{
 			adaptedType: MouseEventAway.MOUSE_WHEEL,
-			addListener: this.initMouseListener,
-			removeListener: this.removeMouseListener,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
 			callback: this._mouseCallbackDelegate
 		});
 
 		this.eventMappingInvert[MouseEventAway.MOUSE_UP] = MouseEvent.MOUSE_UP;
 		this.eventMapping[MouseEvent.MOUSE_UP] = (<IEventMapper>{
 			adaptedType: MouseEventAway.MOUSE_UP,
-			addListener: this.initMouseListener,
-			removeListener: this.removeMouseListener,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
 			callback: this._mouseCallbackDelegate
 		});
 
 		this.eventMappingInvert[MouseEventAway.MOUSE_UP_OUTSIDE] = MouseEvent.RELEASE_OUTSIDE;
 		this.eventMapping[MouseEvent.RELEASE_OUTSIDE] = (<IEventMapper>{
 			adaptedType: MouseEventAway.MOUSE_UP_OUTSIDE,
-			addListener: this.initMouseListener,
-			removeListener: this.removeMouseListener,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
 			callback: this._mouseCallbackDelegate
 		});
 
 		this.eventMappingInvert[MouseEventAway.MOUSE_OVER] = MouseEvent.MOUSE_OVER;
 		this.eventMapping[MouseEvent.MOUSE_OVER] = (<IEventMapper>{
 			adaptedType: MouseEventAway.MOUSE_OVER,
-			addListener: this.initMouseListener,
-			removeListener: this.removeMouseListener,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
 			callback: this._mouseCallbackDelegate
 		});
 
 		this.eventMappingInvert[MouseEventAway.MOUSE_OUT] = MouseEvent.MOUSE_OUT;
 		this.eventMapping[MouseEvent.MOUSE_OUT] = (<IEventMapper>{
 			adaptedType: MouseEventAway.MOUSE_OUT,
-			addListener: this.initMouseListener,
-			removeListener: this.removeMouseListener,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
 			callback: this._mouseCallbackDelegate
 		});
 
 		this.eventMappingInvert[MouseEventAway.MOUSE_MOVE] = MouseEvent.MOUSE_MOVE;
 		this.eventMapping[MouseEvent.MOUSE_MOVE] = (<IEventMapper>{
 			adaptedType: MouseEventAway.MOUSE_MOVE,
-			addListener: this.initMouseListener,
-			removeListener: this.removeMouseListener,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
 			callback: this._mouseCallbackDelegate
 		});
 
 		this.eventMappingInvert[MouseEventAway.MOUSE_DOWN] = MouseEvent.MOUSE_DOWN;
 		this.eventMapping[MouseEvent.MOUSE_DOWN] = (<IEventMapper>{
 			adaptedType: MouseEventAway.MOUSE_DOWN,
-			addListener: this.initMouseListener,
-			removeListener: this.removeMouseListener,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
 			callback: this._mouseCallbackDelegate
 		});
 
 		this.eventMappingInvert[MouseEventAway.DOUBLE_CLICK] = MouseEvent.DOUBLE_CLICK;
 		this.eventMapping[MouseEvent.DOUBLE_CLICK] = (<IEventMapper>{
 			adaptedType: MouseEventAway.DOUBLE_CLICK,
-			addListener: this.initMouseListener,
-			removeListener: this.removeMouseListener,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
 			callback: this._mouseCallbackDelegate
 		});
 
 		this.eventMappingInvert[MouseEventAway.CLICK] = MouseEvent.CLICK;
 		this.eventMapping[MouseEvent.CLICK] = (<IEventMapper>{
 			adaptedType: MouseEventAway.CLICK,
-			addListener: this.initMouseListener,
-			removeListener: this.removeMouseListener,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
 			callback: this._mouseCallbackDelegate
 		});
 
 		this.eventMappingInvert[MouseEventAway.ROLL_OUT] = MouseEvent.ROLL_OUT;
 		this.eventMapping[MouseEvent.ROLL_OUT] = (<IEventMapper>{
 			adaptedType: MouseEventAway.ROLL_OUT,
-			addListener: this.initMouseListener,
-			removeListener: this.removeMouseListener,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
 			callback: this._mouseCallbackDelegate
 		});
 
 		this.eventMappingInvert[MouseEventAway.ROLL_OVER] = MouseEvent.ROLL_OVER;
 		this.eventMapping[MouseEvent.ROLL_OVER] = (<IEventMapper>{
 			adaptedType: MouseEventAway.ROLL_OVER,
-			addListener: this.initMouseListener,
-			removeListener: this.removeMouseListener,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
 			callback: this._mouseCallbackDelegate
 		});
 
@@ -524,16 +578,16 @@ export class InteractiveObject extends DisplayObject {
 		this.eventMappingInvert[FocusEventAway.FOCUS_OUT] = FocusEvent.FOCUS_OUT;
 		this.eventMapping[FocusEvent.FOCUS_OUT] = (<IEventMapper>{
 			adaptedType: FocusEventAway.FOCUS_OUT,
-			addListener: this.initMouseListener,
-			removeListener: this.removeMouseListener,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
 			callback: this._focusCallbackDelegate
 		});
 
 		this.eventMappingInvert[FocusEventAway.FOCUS_IN] = FocusEvent.FOCUS_IN;
 		this.eventMapping[FocusEvent.FOCUS_IN] = (<IEventMapper>{
 			adaptedType: FocusEventAway.FOCUS_IN,
-			addListener: this.initMouseListener,
-			removeListener: this.removeMouseListener,
+			addListener: this.initListener,
+			removeListener: this.removeListener,
 			callback: this._focusCallbackDelegate
 		});
 	}
@@ -643,28 +697,28 @@ export class InteractiveObject extends DisplayObject {
 		return false;
 	}
 
-	// ---------- event mapping functions for MouseEvents:
+	// ---------- event mapping functions for TouchEvents / MouseEvents:
 
-	protected initMouseListener(type: string, callback: (event: MouseEventAway) => void, listener: Function): void {
-		if (!this._mouseListnersCallbacksByType[type]) {
+	protected initListener(type: string, callback: (event: MouseEventAway | TouchEventAway | FocusEventAway) => void, listener: Function): void {
+		if (!this._listnersCallbacksByType[type]) {
 			this.adaptee.addEventListener(type, callback);
-			this._mouseListnersCallbacksByType[type] = [listener];
+			this._listnersCallbacksByType[type] = [listener];
 			return;
 		}
-		this._mouseListnersCallbacksByType[type].push(listener);
+		this._listnersCallbacksByType[type].push(listener);
 
 	}
 
-	protected removeMouseListener(type: string, callback: (event: MouseEventAway) => void, listener: Function): void {
-		if (this._mouseListnersCallbacksByType[type]) {
-			const idx = this._mouseListnersCallbacksByType[type].indexOf(listener);
+	protected removeListener(type: string, callback: (event: MouseEventAway | TouchEventAway | FocusEventAway) => void, listener: Function): void {
+		if (this._listnersCallbacksByType[type]) {
+			const idx = this._listnersCallbacksByType[type].indexOf(listener);
 			if (idx != -1) {
-				if (this._mouseListnersCallbacksByType[type].length == 1) {
-					delete this._mouseListnersCallbacksByType[type];
+				if (this._listnersCallbacksByType[type].length == 1) {
+					delete this._listnersCallbacksByType[type];
 					this.adaptee.removeEventListener(type, callback);
 					return;
 				}
-				this._mouseListnersCallbacksByType[type].splice(idx, 1);
+				this._listnersCallbacksByType[type].splice(idx, 1);
 			}
 		}
 	}
@@ -673,6 +727,15 @@ export class InteractiveObject extends DisplayObject {
 	private mouseCallback(event: MouseEventAway): void {
 		const adaptedEvent: MouseEvent =
 			new (<SecurityDomain> this.sec).flash.events.MouseEvent(this.eventMappingInvert[event.type]);
+		adaptedEvent.fillFromAway(event);
+
+		this.dispatchEvent(adaptedEvent, true);
+	}
+
+	private _touchCallbackDelegate: (event: TouchEventAway) => void;
+	private touchCallback(event: TouchEventAway): void {
+		const adaptedEvent: TouchEvent =
+			new (<SecurityDomain> this.sec).flash.events.TouchEvent(this.eventMappingInvert[event.type]);
 		adaptedEvent.fillFromAway(event);
 
 		this.dispatchEvent(adaptedEvent, true);

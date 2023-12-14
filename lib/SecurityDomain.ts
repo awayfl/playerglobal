@@ -29,6 +29,7 @@ import { Point } from './geom/Point';
 import { Event } from './events/Event';
 import { KeyboardEvent } from './events/KeyboardEvent';
 import { MouseEvent } from './events/MouseEvent';
+import { TouchEvent } from './events/TouchEvent';
 import { ProgressEvent } from './events/ProgressEvent';
 import { Rectangle } from './geom/Rectangle';
 import { Matrix } from './geom/Matrix';
@@ -100,6 +101,7 @@ export class SecurityDomain extends AXSecurityDomain {
 			FocusEvent: FocusEvent,
 			KeyboardEvent: KeyboardEvent,
 			MouseEvent: MouseEvent,
+			TouchEvent: TouchEvent,
 			ProgressEvent: ProgressEvent,
 			IOErrorEvent: IOErrorEvent,
 			TimerEvent:TimerEvent,
