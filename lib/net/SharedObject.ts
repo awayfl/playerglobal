@@ -342,8 +342,7 @@ export class SharedObject extends ASObject {
 	}
 
 	public get size(): number {
-		notImplemented('public flash.net.SharedObject::get size');
-		return;
+		return getSharedObjectStorage().getItem(this._path)?.length || 0;
 	}
 
 	public set fps(updatesPerSecond: number) {
