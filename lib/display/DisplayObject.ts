@@ -95,7 +95,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	private $lazyConstructProperty: Record<string, any> = {};
 
 	public toString(): string {
-		return `[object ${(<any> this).classInfo.instanceInfo.name.name}]`;
+		return `[object ${(<any> this).classInfo.instanceInfo.multiname.name}]`;
 	}
 
 	public applySymbol() {
