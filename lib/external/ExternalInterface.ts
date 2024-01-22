@@ -1,4 +1,4 @@
-import { MapObject, ExternalInterfaceService } from '@awayfl/swf-loader';
+import { ExternalInterfaceService } from '@awayfl/swf-loader';
 import { ASObject, ASXML, Errors, AXFunction, axCoerceString,
 	AXXMLClass, AXObject, NamespaceType, Multiname } from '@awayfl/avm2';
 export class ExternalInterface extends ASObject {
@@ -12,7 +12,7 @@ export class ExternalInterface extends ASObject {
 	static $BgmarshallExceptions: boolean;
 
 	private static initialized: boolean = false;
-	private static registeredCallbacks: MapObject<Function> = Object.create(null);
+	private static registeredCallbacks: Record<string, Function> = {};
 
 	static ensureInitialized(): void {
 		if (!this.available) {

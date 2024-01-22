@@ -1,16 +1,16 @@
 import { ASObject } from '@awayfl/avm2';
-import { MapObject, createMap, release } from '@awayfl/swf-loader';
+import { release } from '@awayfl/swf-loader';
 import { assert, axCoerceString } from '@awayjs/graphics';
 
 export class Event extends ASObject {
 
 	static axClass: typeof Event;
 
-	static _instances: MapObject<Event>;
+	static _instances: Record<string, Event>;
 
 	static classInitializer: any = function () {
 		const self: typeof Event = this;
-		self._instances = createMap<Event>();
+		self._instances = {};
 	};
 
 	static getInstance(type: string, bubbles: boolean = false, cancelable: boolean = false): Event {

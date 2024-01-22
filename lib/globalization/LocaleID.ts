@@ -21,7 +21,7 @@ export abstract class LastOperationStatus {
 }
 
 export class LocaleID extends ASObject {
-	static axClass: typeof LocaleID & AXClass;
+	static axClass: typeof LocaleID;
 
 	public readonly DEFAULT: string = 'i-default';
 
