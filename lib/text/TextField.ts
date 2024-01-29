@@ -356,7 +356,7 @@ export class TextField extends InteractiveObject {
 	 * @throws	Error This method cannot be used on a text field with a style sheet.
 	 */
 	public get defaultTextFormat (): TextFormat {
-		const tf: AwayTexFormat = (<AwayTextField> this._adaptee).textFormat;
+		const tf: AwayTexFormat = (<AwayTextField> this._adaptee).newTextFormat;
 		if (tf.adapter || tf.adapter === tf.adaptee) {
 			tf.adapter = new (<any> this.sec).flash.text.TextFormat();
 			tf.adapter.adaptee = tf;
