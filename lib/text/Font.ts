@@ -16,7 +16,7 @@ export class Font extends ASObject {
 	constructor() {
 		super();
 		this.isAVMFont = true;
-		if (this.axClassName != "Font") {
+		if (this.axClassName != 'Font') {
 			this._adaptee = DefaultFontManager.getFont(this.axClassName);
 		}
 	}
