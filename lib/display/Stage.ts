@@ -564,7 +564,7 @@ export class Stage extends DisplayObjectContainer {
 	 * @throws	Error Throws an error if focus cannot be set to the target.
 	 */
 	public get focus (): InteractiveObject {
-		return  <InteractiveObject> AVMStage.instance().mouseManager.getFocus().adapter;
+		return  <InteractiveObject> AVMStage.instance().mouseManager.getFocus()?.container.adapter;
 	}
 
 	public set focus (newFocus: InteractiveObject) {
