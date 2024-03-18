@@ -1,6 +1,6 @@
 
 import { Graphics as AwayGraphics } from '@awayjs/graphics';
-import { ASObject } from '@awayfl/avm2';
+import { ASObject, Float64Vector, Int32Vector } from '@awayfl/avm2';
 import { Debug, IAssetAdapter } from '@awayjs/core';
 
 import { ASArray, GenericVector, AXClass } from '@awayfl/avm2';
@@ -162,13 +162,13 @@ export class Graphics extends ASObject implements IAssetAdapter {
 		this.adaptee.copyFrom(sourceGraphics.adaptee);
 	}
 
-	public drawPath(commands: GenericVector, data: GenericVector, winding: string = 'evenOdd'): void {
-		// @todo
-		Debug.throwPIR('playerglobals/display/Graphics', 'drawPath', '');
+	public drawPath(commands: Int32Vector, data: Float64Vector, winding: string = 'evenOdd'): void {
+		//@ts-ignore
+		this.adaptee.drawPath(commands._buffer.slice(0, commands.length), data._buffer.slice(0, data.length), winding);
 	}
 
-	public drawTriangles(vertices: GenericVector, indices: GenericVector = null,
-		uvtData: GenericVector = null, culling: string = 'none'): void {
+	public drawTriangles(vertices: Float64Vector, indices: Int32Vector = null,
+		uvtData: Int32Vector = null, culling: string = 'none'): void {
 		// @todo
 		Debug.throwPIR('playerglobals/display/Graphics', 'drawTriangles', '');
 	}
