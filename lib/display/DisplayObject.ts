@@ -1600,10 +1600,6 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			this.node.partition).hitTestPoint(x, y, shapeFlag);
 	}
 
-	protected _getObjectsUnderPointInternal(point: Point, children: DisplayObject[]) {
-		//nothing to do here
-	}
-
 	/**
 	 * Converts a three-dimensional point of the three-dimensional display
 	 * any's (local) coordinates to a two-dimensional point in the Stage (global) coordinates.

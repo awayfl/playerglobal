@@ -489,26 +489,6 @@ export class DisplayObjectContainer extends InteractiveObject {
 		return avm2Children;
 	}
 
-	protected _getObjectsUnderPointInternal(point: Point, children: DisplayObject[]) {
-		let child: AwayDisplayObject;
-		for (let i: number = 0; i < (<AwayDisplayObjectContainer> this._adaptee).numChildren; i++) {
-			child = (<AwayDisplayObjectContainer> this._adaptee).getChildAt(i);
-			if (child.visible) {
-
-				if (PickGroup.getInstance()
-					.getBoundsPicker(AVMStage.instance().view.getNode(<AwayDisplayObject>child.adaptee).partition).hitTestPoint(point.x, point.y, true))
-					children.push(<DisplayObject> child.adapter);
-
-				const adapt = (<DisplayObjectContainer> child.adapter);
-				if (typeof adapt._getObjectsUnderPointInternal !== 'function') {
-					//debugger;
-				} else {
-					adapt._getObjectsUnderPointInternal(point, children);
-				}
-			}
-		}
-	}
-
 	/**
 	 * Removes the specified child DisplayObject instance from the child list of the DisplayObjectContainer instance.
 	 * The parent property of the removed child is set to null
