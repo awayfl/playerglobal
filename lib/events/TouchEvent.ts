@@ -4,6 +4,7 @@ import { Event } from './Event';
 import { DisplayObject } from '../display/DisplayObject';
 import { AVMStage } from '@awayfl/swf-loader';
 import { Point } from '@awayjs/core';
+import { SecurityDomain } from '../SecurityDomain';
 
 /**
 /// @eventType	flash.events.TouchEvent.TOUCH_BEGIN
@@ -516,8 +517,8 @@ export class TouchEvent extends Event {
 
 		this.adaptee = awayEvent;
 		// todo: set targets correctly
-		this.target = awayEvent.target.adapter;
-		this.currentTarget = awayEvent.currentTarget.adapter;
+		this.target = awayEvent.target.adapter || (<SecurityDomain> this.sec).flash.display.DisplayObject.axClass._activeStage;
+		this.currentTarget = awayEvent.currentTarget.adapter || (<SecurityDomain> this.sec).flash.display.DisplayObject.axClass._activeStage;
 		this.ctrlKey = awayEvent.ctrlKey;
 		this.shiftKey = awayEvent.shiftKey;
 

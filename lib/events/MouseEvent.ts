@@ -4,6 +4,7 @@ import { notImplemented } from '@awayfl/swf-loader';
 import { InteractiveObject } from '../display/InteractiveObject';
 import { Point } from '../geom/Point';
 import { DisplayObject } from '../display/DisplayObject';
+import { SecurityDomain } from '../SecurityDomain';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -102,9 +103,9 @@ export class MouseEvent extends Event {
 		//console.log("cloneFromAway not implemented yet in flash/MouseEvent");
 
 		this.adaptee = awayEvent;
-		// todo: set targets correctly
-		this.target = awayEvent.target.adapter;
-		this.currentTarget = awayEvent.currentTarget.adapter;
+
+		this.target = awayEvent.target.adapter || (<SecurityDomain> this.sec).flash.display.DisplayObject.axClass._activeStage;
+		this.currentTarget = awayEvent.currentTarget.adapter || (<SecurityDomain> this.sec).flash.display.DisplayObject.axClass._activeStage;
 
 		this.delta = awayEvent.delta;
 
