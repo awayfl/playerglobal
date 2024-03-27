@@ -230,7 +230,7 @@ export class ListenerObject {
 			let i = 0;
 			for (i = 0; i < numListeners; i++) {
 				if (listeners[i])
-					listeners[i](event);
+					listeners[i].call(listeners[i], event);
 			}
 			return;
 		}
@@ -248,7 +248,7 @@ export class ListenerObject {
 			//console.log("events", len);
 			for (i = 0; i < numListeners; i++) {
 				if (listeners[i])
-					listeners[i](event);
+					listeners[i].call(listeners[i], event);
 			}
 		}
 		if (this._listenersByPriority.length == 1) {
