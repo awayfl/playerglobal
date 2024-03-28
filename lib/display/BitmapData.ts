@@ -367,8 +367,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public noise(randomSeed: number, low: number, high: number, channelOptions: number, grayScale: boolean) {
-		throw new Error('[BitmapData] Noise not implemented, very important for games!');
-		Debug.throwPIR('playerglobals/display/BitmapData', 'noise', '');
+		this._adaptee.noise(randomSeed, low, high, channelOptions, grayScale);
 	}
 
 	public paletteMap(
