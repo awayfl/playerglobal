@@ -16,9 +16,9 @@ export class BitmapDataChannel extends ASObject {
 	}
 
 	// JS -> AS Bindings
-	public static ALPHA: string = 'auto';
-	public static BLUE: string = '4:4:4';
-	public static GREEN: string = '4:2:2';
-	public static RED: string = '4:2:0';
+	public static ALPHA: number /*uint*/ = 8;
+	public static BLUE: number /*uint*/ = 4;
+	public static GREEN: number /*uint*/ = 2;
+	public static RED: number /*uint*/ = 1;
 
 }

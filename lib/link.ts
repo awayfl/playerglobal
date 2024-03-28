@@ -9,6 +9,7 @@ import { ClipboardFormats } from './desktop/ClipboardFormats';
 
 import { Bitmap } from './display/Bitmap';
 import { BitmapData } from './display/BitmapData';
+import { BitmapDataChannel } from './display/BitmapDataChannel';
 //import { ColorCorrection } from './display/ColorCorrection';
 import { DisplayObject } from './display/DisplayObject';
 import { DisplayObjectContainer } from './display/DisplayObjectContainer';
@@ -224,7 +225,7 @@ export function initLink() {
 	//M('flash.display.AVM1Movie', AVM1Movie);
 	M('flash.display.Bitmap', Bitmap);
 	M('flash.display.BitmapData', BitmapData);
-	//M('flash.display.BitmapDataChannel', BitmapDataChannel);
+	M('flash.display.BitmapDataChannel', BitmapDataChannel);
 	//M('flash.display.BitmapEncodingColorSpace', BitmapEncodingColorSpace);
 	M('flash.display.BlendMode', <any>BlendMode);
 	//M('flash.display.CapsStyle', CapsStyle);
