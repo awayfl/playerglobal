@@ -10,10 +10,12 @@ import { IEventMapper } from '../events/IEventMapper';
 import { SecurityDomain } from '../SecurityDomain';
 import { AVMStage } from '@awayfl/swf-loader';
 import { FocusEvent } from '../events/FocusEvent';
+import { ContextMenu } from '../ui/ContextMenu';
 export class InteractiveObject extends DisplayObject {
 
 	private _keyDownListeners: Function[];
 	private _keyUpListeners: Function[];
+	private _contextMenu: ContextMenu;
 	protected _listnersCallbacksByType: StringMap<Function[]> = {};
 	/** these should be able to get setup:
 
@@ -786,15 +788,12 @@ export class InteractiveObject extends DisplayObject {
 	 * For TextField objects, selecting these commands (or their keyboard equivalents) does not generate clear,
 	 * copy, cut, paste, or selectAll events.
 	 */
-	public get contextMenu(): any {
-		// @todo
-		Debug.throwPIR('playerglobals/display/InteractiveObject', 'get contextMenu', '');
-		return null;
+	public get contextMenu(): ContextMenu {
+		return this._contextMenu;
 	}
 
-	public set contextMenu(cm: any) {
-		// @todo
-		Debug.throwPIR('playerglobals/display/InteractiveObject', 'set contextMenu', '');
+	public set contextMenu(value: ContextMenu) {
+		this._contextMenu = value;
 	}
 
 	/**

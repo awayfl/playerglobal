@@ -28,7 +28,6 @@ export class TextLine extends DisplayObjectContainer {
 	private _tabChildren: boolean;
 	private _tabEnabled: boolean;
 	private _tabIndex: number /*int*/;
-	private _contextMenu: ContextMenu;
 	private _textBlock: TextBlock;
 	private _hasGraphicElement: boolean;
 	private _hasTabs: boolean;
