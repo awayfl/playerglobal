@@ -70,11 +70,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 	private _onNodeClearDelegate: (event: AssetEvent) => void;
 
-	//for AVM1:
-	public _parent: any;
-	public _depth: number;
-
 	protected _loaderInfo: LoaderInfo;
+	protected _isStage: boolean;
 	public _blockedByScript: boolean;
 	public _ctBlockedByScript: boolean;
 	//public protoTypeChanged:boolean;
@@ -969,13 +966,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * root property is set.
 	 */
 	public get root(): DisplayObject {
-		//console.log("root not implemented yet in flash/DisplayObject");
-		const root = this._stage.getChildAt(0);
-		if (!root) {
-			console.log('DisplayObject: could not get root');
-			return null;
-		}
-		return root;
+		return this.adaptee.isAVMScene? this : (<DisplayObject> this.adaptee.parent?.adapter)?.root;
 	}
 
 	/**
@@ -1222,21 +1213,13 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		// because abc code does not know there exists a "get stage" on stage.
 		// also checking by "this instanceof Stage" does not work due to circular dependencies
 		// "_isAVMStage" is a workaround which should only ever return true if "this" is a Stage object
-		if ((<any> this)._isAVMStage)
-			return (<any> this);
-		if (this.adaptee.parent)
-			return (<DisplayObject> this.adaptee.parent.adapter).stage;
+		return this._isStage? (<any> this) : (<DisplayObject> this.adaptee.parent?.adapter)?.stage
 
 		// @todo: hack/fix for satprof content:
 		// when swf is loaded via loader,
 		// we must execute contructor of loaded Scene, but Loader is not added to stage yet.
 		// if constructor tries to get stage, it errors if we not return a stage
 		return null;
-	}
-
-	public set stage(value: Stage) {
-		this._stage = value;
-
 	}
 
 	/**
@@ -1267,7 +1250,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 */
 	public get transform(): Transform {
 		this._ctBlockedByScript = true;
-		return this._transform = new (<SecurityDomain> this.sec).flash.geom.Transform(this.adaptee.transform);
+		return this._transform
+				|| (this._transform = new (<SecurityDomain> this.sec).flash.geom.Transform(this.adaptee.transform));
 
 	}
 

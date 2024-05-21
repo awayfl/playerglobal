@@ -155,12 +155,12 @@ export class Stage extends DisplayObjectContainer {
 
 	private _stage3Ds: AwayStage[];
 
-	private _isAVMStage: boolean = true;
-
 	private _sendEventRender: boolean;
 
 	constructor() {
 		super();
+
+		this._isStage = true;
 
 		this._stage3Ds = [];
 
