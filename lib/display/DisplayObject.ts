@@ -966,7 +966,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * root property is set.
 	 */
 	public get root(): DisplayObject {
-		return this.adaptee.isAVMScene? this : (<DisplayObject> this.adaptee.parent?.adapter)?.root;
+		return this.adaptee.isAVMScene ? this : (<DisplayObject> this.adaptee.parent?.adapter)?.root;
 	}
 
 	/**
@@ -1213,7 +1213,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		// because abc code does not know there exists a "get stage" on stage.
 		// also checking by "this instanceof Stage" does not work due to circular dependencies
 		// "_isAVMStage" is a workaround which should only ever return true if "this" is a Stage object
-		return this._isStage? (<any> this) : (<DisplayObject> this.adaptee.parent?.adapter)?.stage
+		return this._isStage ? (<any> this) : (<DisplayObject> this.adaptee.parent?.adapter)?.stage;
 
 		// @todo: hack/fix for satprof content:
 		// when swf is loaded via loader,
