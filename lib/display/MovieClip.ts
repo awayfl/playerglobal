@@ -485,7 +485,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 
 		//console.log("_gotoFrame", this.name);
 		FrameScriptManager.execute_as3_constructors_recursiv(<any> this.adaptee);
-		FrameScriptManager.execute_as3_constructors_finish_scene(<any> this.root.adaptee);
+		//FrameScriptManager.execute_as3_constructors_finish_scene(<any> this.root.adaptee);
 
 		// this is not true!
 		// only in FP10 and above we want to execute scripts immediatly here
@@ -510,7 +510,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		(<AwayMovieClip> this._adaptee).stop();
 		++(<AwayMovieClip> this._adaptee).currentFrameIndex;
 		FrameScriptManager.execute_as3_constructors_recursiv(<any> this.adaptee);
-		FrameScriptManager.execute_as3_constructors_finish_scene(<any> this.root.adaptee);
+		//FrameScriptManager.execute_as3_constructors_finish_scene(<any> this.root.adaptee);
 		// only in FP10 and above we want to execute scripts immediatly here
 		if ((<any> this.sec).swfVersion > 9) {
 			this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
@@ -556,7 +556,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		}
 
 		FrameScriptManager.execute_as3_constructors_recursiv(<any> this.adaptee);
-		FrameScriptManager.execute_as3_constructors_finish_scene(<any> this.root.adaptee);
+		//FrameScriptManager.execute_as3_constructors_finish_scene(<any> this.root.adaptee);
 		// only in FP10 and above we want to execute scripts immediatly here
 		if ((<any> this.sec).swfVersion > 9) {
 			this.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
