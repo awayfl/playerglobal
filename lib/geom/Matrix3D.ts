@@ -97,10 +97,14 @@ export class Matrix3D extends ASObject {
 	}
 
 	public decompose(orientationStyle: string = 'eulerAngles'): GenericVector {
-		this._adaptee.decompose(orientationStyle);
+		const array = this._adaptee.decompose(axCoerceString(orientationStyle));
 
-		orientationStyle = axCoerceString(orientationStyle);
-		release || notImplemented('public flash.geom.Matrix3D::decompose'); return;
+		const v = new (<SecurityDomain> this.sec).ObjectVector(4, true);
+
+		for (var i = 0; i < 4; i++)
+			v.axSetNumericProperty(i, new (<SecurityDomain> this.sec).flash.geom.Vector3D(array[i]));
+
+		return v;
 	}
 
 	public recompose(components: Float64Vector, orientationStyle: string = 'eulerAngles'): boolean {
