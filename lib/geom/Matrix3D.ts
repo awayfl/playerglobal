@@ -101,7 +101,7 @@ export class Matrix3D extends ASObject {
 
 		const v = new (<SecurityDomain> this.sec).ObjectVector(4, true);
 
-		for (var i = 0; i < 4; i++)
+		for (let i = 0; i < 4; i++)
 			v.axSetNumericProperty(i, new (<SecurityDomain> this.sec).flash.geom.Vector3D(array[i]));
 
 		return v;
