@@ -122,7 +122,7 @@ window.addEventListener('unload', () => {
 	SharedObject.closeAll();
 });
 window.addEventListener('blur', () => {
-	SharedObject.closeAll();
+	SharedObject.flushAll();
 });
 
 let USED_SEC: any = undefined;
@@ -247,6 +247,14 @@ export class SharedObject extends ASObject {
 		for (const key in SharedObject._sharedObjects) {
 			if (SharedObject._sharedObjects[key]) {
 				SharedObject._sharedObjects[key].close();
+			}
+		}
+	}
+
+	public static flushAll() {
+		for (const key in SharedObject._sharedObjects) {
+			if (SharedObject._sharedObjects[key]) {
+				SharedObject._sharedObjects[key].flush();
 			}
 		}
 	}
