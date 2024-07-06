@@ -247,9 +247,6 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		this._ctBlockedByScript = false;
 		this._visibilityByScript = false;
 
-		// adaptee might already be set !
-		this.adaptee = this.adaptee || this.createAdaptee();
-
 		// We should disable it and enable ONLY in interactiveObject
 		this.adaptee.mouseEnabled = false;
 
@@ -325,7 +322,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	public get adaptee(): AwayDisplayObject {
-		return this._adaptee;
+		return this._adaptee || (this.adaptee = this.createAdaptee());
 	}
 
 	public set adaptee(value: AwayDisplayObject) {
