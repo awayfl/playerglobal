@@ -495,8 +495,8 @@ export class Sound extends EventDispatcher {
 			return this._pendingPlayCommand.sndChannel;
 		}
 
-		startTime = isNaN(startTime)? 0 : Math.floor(startTime);
-		loops = isNaN(loops)? 0 : loops < 1 ? 1 : Math.floor(loops);
+		startTime = isNaN(startTime) ? 0 : Math.floor(startTime);
+		loops = isNaN(loops) ? 0 : loops < 1 ? 1 : Math.floor(loops);
 
 		const channel: IAudioChannel =  <any> this._adaptee.play(startTime / 1000, loops);
 

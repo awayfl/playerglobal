@@ -289,12 +289,11 @@ export class Stage extends DisplayObjectContainer {
 		 * 		- dispatch RENDER (only if stage.invalidate was called)
 		 * */
 
-				
 		OrphanManager.updateOrphans();
 
 		// run all queued framescripts
 		FrameScriptManager.execute_queue();
-		
+
 		//	advance the stage - this updates the timeline
 		//	objects get removed, created and updated - framescripts get queued
 		this._stage.adaptee.advanceFrame();
