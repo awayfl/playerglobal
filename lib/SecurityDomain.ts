@@ -97,6 +97,9 @@ export class SecurityDomain extends AXSecurityDomain {
 			Shape: Shape,
 			FrameLabel: FrameLabel
 		},
+		display3d: {
+			// TODO: Add display3d stuff
+		},
 		events: {
 			EventDispatcher: EventDispatcher,
 			Event: Event,
