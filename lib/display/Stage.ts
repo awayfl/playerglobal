@@ -163,8 +163,8 @@ export class Stage extends DisplayObjectContainer {
 		this._isStage = true;
 
 		this._stage3Ds = [];
-		for (let i:number=0; i < 8; i++) {
-			this.stage3Ds.push(new Stage3D)
+		for (let i: number = 0; i < 8; i++) {
+			this.stage3Ds.push(new Stage3D);
 		}
 
 		// resize event listens on window
