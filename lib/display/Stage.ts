@@ -6,7 +6,7 @@ import { DisplayObjectContainer } from './DisplayObjectContainer';
 import { DisplayObject } from './DisplayObject';
 import { FrameScriptManager } from '@awayjs/scene';
 import { View } from '@awayjs/view';
-import { Stage as AwayStage } from '@awayjs/stage';
+import { Stage3D } from './Stage3D';
 import { DisplayObjectContainer as AwayDisplayObjectContainer, MouseEvent as MouseEventAway } from '@awayjs/scene';
 import { Transform } from '../geom/Transform';
 import { Rectangle } from '../geom/Rectangle';
@@ -153,7 +153,7 @@ import { InteractiveObject } from './InteractiveObject';
 
 export class Stage extends DisplayObjectContainer {
 
-	private _stage3Ds: AwayStage[];
+	private _stage3Ds: Array<Stage3D>;
 
 	private _sendEventRender: boolean;
 
@@ -163,6 +163,9 @@ export class Stage extends DisplayObjectContainer {
 		this._isStage = true;
 
 		this._stage3Ds = [];
+		for (let i:number=0; i < 8; i++) {
+			this.stage3Ds.push(new Stage3D)
+		}
 
 		// resize event listens on window
 		this._resizeCallbackDelegate = (event: any) => this.resizeCallback(event);
@@ -808,7 +811,7 @@ export class Stage extends DisplayObjectContainer {
 
 	}
 
-	public get stage3Ds (): AwayStage[] {
+	public get stage3Ds (): Stage3D[] {
 		// @todo
 		Debug.throwPIR('playerglobals/display/Stage', 'get stage3Ds', '');
 		return this._stage3Ds;

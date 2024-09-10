@@ -25,6 +25,7 @@ import { Shape } from './display/Shape';
 import { SimpleButton } from './display/SimpleButton';
 import { Sprite } from './display/Sprite';
 import { Stage } from './display/Stage';
+import { Stage3D } from './display/Stage3D';
 
 import { EOFError } from './errors/EOFError';
 import { IllegalOperationError } from './errors/IllegalOperationError';
@@ -283,7 +284,7 @@ export function initLink() {
 	//M('flash.display.SpreadMethod', SpreadMethod);
 	M('flash.display.Sprite', Sprite);
 	M('flash.display.Stage', Stage);
-	//M('flash.display.Stage3D', Stage3D);
+	M('flash.display.Stage3D', Stage3D);
 	//M('flash.display.StageAlign', StageAlign);
 	//M('flash.display.StageAspectRatio', StageAspectRatio);//AIR
 	//M('flash.display.StageDisplayState', StageDisplayState);
@@ -291,8 +292,7 @@ export function initLink() {
 	//M('flash.display.StageScaleMode', StageScaleMode);
 	//M('flash.display.TriangleCulling', TriangleCulling);
 
-	// flash.display3D
-	// flash.display3D.textures
+	// TODO: Add display3d stuff
 
 	//M('flash.errors.DRMManagerError', DRMManagerError);//AIR
 	M('flash.errors.EOFError', EOFError);
