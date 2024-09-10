@@ -1,1 +1,4 @@
-export { ContextGLProgramType as Context3DProgramType } from '@awayjs/stage';
+export enum Context3DProgramType{
+    FRAGMENT = "fragment",
+    VERTEX = "vertex"
+}
