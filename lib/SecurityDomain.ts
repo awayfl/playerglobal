@@ -18,7 +18,6 @@ import { DisplayObject } from './display/DisplayObject';
 import { DisplayObjectContainer } from './display/DisplayObjectContainer';
 import { Stage } from './display/Stage';
 import { Stage3D } from './display/Stage3D';
-// TODO: Add display3d stuff
 import { Loader } from './display/Loader';
 import { LoaderInfo } from './display/LoaderInfo';
 import { MovieClip } from './display/MovieClip';
@@ -86,6 +85,7 @@ export class SecurityDomain extends AXSecurityDomain {
 			DisplayObject: DisplayObject,
 			DisplayObjectContainer: DisplayObjectContainer,
 			Stage: Stage,
+			Stage3D: Stage3D,
 			Loader: Loader,
 			LoaderInfo: LoaderInfo,
 			MovieClip: MovieClip,
