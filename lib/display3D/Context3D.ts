@@ -77,6 +77,8 @@ export class Context3D extends EventDispatcher {
 			case Context3DVertexBufferFormat.FLOAT_4:
 				var awayFormat = ContextGLVertexBufferFormat.FLOAT_4;
 				break;
+            default:
+                break;
 		}
 		this._adaptee.context.setVertexBufferAt(index, buffer._adaptee, bufferOffset, awayFormat);
 	}

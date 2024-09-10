@@ -37,10 +37,10 @@ export class Stage3D extends EventDispatcher {
 				this._adaptee.requestContext(forceSoftware, ContextGLProfile.BASELINE);
 				break;
 			case Context3DProfile.BASELINE_CONSTRAINED:
-				this._adaptee.requestContext(forceSoftware, ContextGLProfile.BASELINE);
+				this._adaptee.requestContext(forceSoftware, ContextGLProfile.BASELINE_CONSTRAINED);
 				break;
 			case Context3DProfile.BASELINE_EXTENDED:
-				this._adaptee.requestContext(forceSoftware, ContextGLProfile.BASELINE);
+				this._adaptee.requestContext(forceSoftware, ContextGLProfile.BASELINE_EXTENDED);
 				break;
 			case Context3DProfile.STANDARD:
 				console.log('Unsupported Context3D Profile \'standard\' Requested');
@@ -51,6 +51,8 @@ export class Stage3D extends EventDispatcher {
 			case Context3DProfile.STANDARD_EXTENDED:
 				console.log('Unsupported Context3D Profile \'standard_extended\' Requested');
 				break;
+            default:
+                 break;
 
 		}
 		super.dispatchEvent(new Event(Event.CONTEXT3D_CREATE));
