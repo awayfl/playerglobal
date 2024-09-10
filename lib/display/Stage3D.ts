@@ -1,6 +1,7 @@
 import { ContextGLProfile, ContextMode, Stage as AwayStage, Stage, StageManager } from "@awayjs/stage";
 import { EventDispatcher } from "../events/EventDispatcher";
 import { Context3D } from "../display3D/Context3D";
+import { Event } from '../events/Event';
 import { Context3DProfile } from "../display3D/Context3DProfile";
 import { AVMStage } from "@awayfl/swf-loader";
 
@@ -22,6 +23,10 @@ export class Stage3D extends EventDispatcher {
 		this._adapteeStage3Ds[this._adapteeStage3Ds.length] = StageManager.getInstance().getFreeStage()
 		console.log("Created Stage3D " + (this._adapteeStage3Ds.length-1))
 
+    }
+
+    public get context3D():Context3D {
+        return this._context3D
     }
 
     public requestContext3D(context3DRenderMode:String = "auto", profile:String = "baseline"):void
@@ -49,6 +54,6 @@ export class Stage3D extends EventDispatcher {
                 break;
 
         }
-        
+        super.dispatchEvent(new Event(Event.CONTEXT3D_CREATE))
     }
 }
