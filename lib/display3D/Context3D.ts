@@ -1,5 +1,6 @@
-import { ContextGLDrawMode, ContextGLVertexBufferFormat, Stage as AwayStage, StageEvent } from '@awayjs/stage';
+import { ContextGLDrawMode, ContextGLProgramType, ContextGLVertexBufferFormat, ContextWebGL, ProgramWebGL, Stage as AwayStage, StageEvent } from '@awayjs/stage';
 import { EventDispatcher } from '../events/EventDispatcher';
+import { Context3DProgramType } from '../display3D/Context3DProgramType';
 import { Context3DVertexBufferFormat } from '../display3D/Context3DVertexBufferFormat';
 import { IndexBuffer3D } from '../display3D/IndexBuffer3D';
 import { VertexBuffer3D } from '../display3D/VertexBuffer3D';
@@ -8,15 +9,18 @@ import { Matrix3D } from '../geom/Matrix3D';
 
 export class Context3D extends EventDispatcher {
 	private _adaptee: AwayStage
+    private _gl: WebGLRenderingContext | WebGL2RenderingContext
+    private _program:Program3D
 
 	constructor(awayStage: AwayStage, profile) {
 		super();
-		awayStage.addEventListener(StageEvent.CONTEXT_CREATED,
-			function() {
-				this._adaptee = awayStage;
-			}
-		);
+		awayStage.addEventListener(StageEvent.CONTEXT_CREATED, this.onAwayContextCreated);
 	}
+
+    private onAwayContextCreated(e: StageEvent) {
+        this._adaptee = e.target;
+        this._gl = (this._adaptee.context as ContextWebGL)._gl;
+    }
 
 	public clear(red: number = 0.0, green: number = 0.0, blue: number = 0.0, alpha: number = 1.0, depth: number = 1.0, stencil: number = 0, mask: number = 0xffffffff): void {
 		console.log('Mask: ' + mask);
@@ -53,11 +57,25 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public setProgram(program: Program3D): void {
+        this._program = program;
 		this._adaptee.context.setProgram(program._adaptee);
 	}
 
 	public setProgramConstantsFromMatrix(programType: string, firstRegister: number, matrix: Matrix3D, transposedMatrix: boolean = false): void {
-		//TODO: Figure out how to use ContextGL's setProgramConstantsFromArray with a Matrix3D
+		switch(programType){
+            case Context3DProgramType.FRAGMENT:
+                var awayProgramType = ContextGLProgramType.FRAGMENT;
+                break;
+            case Context3DProgramType.VERTEX:
+                var awayProgramType = ContextGLProgramType.VERTEX;
+                break;
+            default:
+                break;
+        }
+        var programWebGL:ProgramWebGL = this._program._adaptee as ProgramWebGL;
+        var matrixRawData:Float32Array
+        matrix.adaptee.copyRawDataTo(matrixRawData, 0, false)
+        programWebGL.uniformMatrix4fv(awayProgramType, transposedMatrix, matrixRawData)
 	}
 
 	public setVertexBufferAt(index: number, buffer: VertexBuffer3D, bufferOffset: number = 0, format: String = 'float4'): void {
