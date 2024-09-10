@@ -153,7 +153,7 @@ import { InteractiveObject } from './InteractiveObject';
 
 export class Stage extends DisplayObjectContainer {
 
-	private _stage3Ds: Array<Stage3D>;
+	private _stage3Ds: Stage3D[];
 
 	private _sendEventRender: boolean;
 
