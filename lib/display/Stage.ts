@@ -163,7 +163,7 @@ export class Stage extends DisplayObjectContainer {
 		this._isStage = true;
 
 		this._stage3Ds = [];
-		for (let i: number = 0; i < 8; i++) {
+		for (let i: number = 0; i < StageManager.getInstance().numSlotsFree; i++) {
 			this.stage3Ds.push(new Stage3D);
 		}
 
