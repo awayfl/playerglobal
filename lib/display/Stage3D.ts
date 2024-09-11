@@ -1,7 +1,6 @@
 import { ContextGLProfile, ContextMode, Stage as AwayStage, Stage, StageManager } from '@awayjs/stage';
 import { EventDispatcher } from '../events/EventDispatcher';
 import { Context3D } from '../display3D/Context3D';
-import { Event } from '../events/Event';
 import { Context3DProfile } from '../display3D/Context3DProfile';
 import { AVMStage } from '@awayfl/swf-loader';
 
@@ -27,7 +26,7 @@ export class Stage3D extends EventDispatcher {
 	}
 
 	public requestContext3D(context3DRenderMode: String = 'auto', profile: String = 'baseline'): void {
-		this._context3D = new Context3D(this._adaptee, profile);
+		this._context3D = new Context3D(this, this._adaptee, profile);
 		const forceSoftware: boolean = (context3DRenderMode == 'auto');
 		switch (profile) {
 			case Context3DProfile.BASELINE:
@@ -52,7 +51,5 @@ export class Stage3D extends EventDispatcher {
 				break;
 
 		}
-
-		this.dispatchEvent(new Event(Event.CONTEXT3D_CREATE));
 	}
 }

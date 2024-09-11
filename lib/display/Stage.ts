@@ -17,6 +17,7 @@ import { LoaderInfo, LoaderInfoCompleteQueue } from './LoaderInfo';
 import { Debug } from '@awayjs/core';
 import { InteractiveObject } from './InteractiveObject';
 import { StageManager } from '@awayjs/stage';
+import { GenericVector } from '@awayfl/avm2';
 
 /**
  * Dispatched by the Stage object when the state of the stageVideos property changes.
@@ -154,7 +155,7 @@ import { StageManager } from '@awayjs/stage';
 
 export class Stage extends DisplayObjectContainer {
 
-	private _stage3Ds: Stage3D[];
+	private _stage3Ds: GenericVector;
 
 	private _sendEventRender: boolean;
 
@@ -163,10 +164,7 @@ export class Stage extends DisplayObjectContainer {
 
 		this._isStage = true;
 
-		this._stage3Ds = [];
-		for (let i: number = 0; i < StageManager.getInstance().numSlotsFree; i++) {
-			this.stage3Ds.push(new Stage3D);
-		}
+		this._stage3Ds = new (<SecurityDomain> this.sec).ObjectVector(StageManager.getInstance().numSlotsFree, true);
 
 		// resize event listens on window
 		this._resizeCallbackDelegate = (event: any) => this.resizeCallback(event);
@@ -190,6 +188,11 @@ export class Stage extends DisplayObjectContainer {
 		// befor constructors of Sprite or MovieClips are processed
 		(<SecurityDomain> this.sec).flash.display.DisplayObject.axClass._activeStage = this;
 		this._stage = this;
+
+		for (let i: number = 0; i < StageManager.getInstance().numSlotsFree; i++) {
+			this._stage3Ds.axSetNumericProperty(i, new (<SecurityDomain> this.sec).flash.display.Stage3D());
+			//this.stage3Ds[i] = new Stage3D;
+		}
 
 		this._resizeCallbackDelegate(null);
 
@@ -812,7 +815,7 @@ export class Stage extends DisplayObjectContainer {
 
 	}
 
-	public get stage3Ds (): Stage3D[] {
+	public get stage3Ds (): GenericVector {
 		// @todo
 		Debug.throwPIR('playerglobals/display/Stage', 'get stage3Ds', '');
 		return this._stage3Ds;

@@ -298,6 +298,7 @@ export function initLink() {
 	M('flash.display.Sprite', Sprite);
 	M('flash.display.Stage', Stage);
 	M('flash.display.Stage3D', Stage3D);
+
 	//M('flash.display.StageAlign', StageAlign);
 	//M('flash.display.StageAspectRatio', StageAspectRatio);//AIR
 	//M('flash.display.StageDisplayState', StageDisplayState);
@@ -306,6 +307,7 @@ export function initLink() {
 	//M('flash.display.TriangleCulling', TriangleCulling);
 
 	// TODO: Add display3d stuff
+	
 	M('flash.display3D.Context3D', Context3D);
 	M('flash.display3D.Context3DClearMask', <any>Context3DClearMask);
 	M('flash.display3D.Context3DProfile', <any>Context3DProfile);
