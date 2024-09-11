@@ -55,6 +55,9 @@ export class Stage3D extends EventDispatcher {
                  break;
 
 		}
-		super.dispatchEvent(new Event(Event.CONTEXT3D_CREATE));
+	}
+
+	public dispatchEvent(event):boolean {
+		return super.dispatchEvent(event);
 	}
 }

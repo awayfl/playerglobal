@@ -4,9 +4,10 @@ import { IContextGL, IProgram } from '@awayjs/stage';
 import { ByteArray } from '../utils/ByteArray';
 
 export class Program3D extends ASObject {
-	static classInitializer = null;
-
-	static axClass: typeof Program3D;
+	
+	static classInitializer: any = null;
+	static classSymbols: string [] = null; // [];
+	static instanceSymbols: string [] = null;
 
 	public _adaptee: IProgram
 
