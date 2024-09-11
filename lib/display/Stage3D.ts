@@ -17,9 +17,6 @@ export class Stage3D extends EventDispatcher {
 	constructor() {
 		super();
 
-		console.log('numSlotsTotal: ' + StageManager.getInstance().numSlotsTotal);
-		console.log('numSlotsUsed: ' + StageManager.getInstance().numSlotsUsed);
-		console.log('numSlotsFree: ' + StageManager.getInstance().numSlotsFree);
 		this._adapteeStage3Ds[this._adapteeStage3Ds.length] = StageManager.getInstance().getFreeStage();
 		console.log('Created Stage3D ' + (this._adapteeStage3Ds.length - 1));
 
@@ -51,13 +48,11 @@ export class Stage3D extends EventDispatcher {
 			case Context3DProfile.STANDARD_EXTENDED:
 				console.log('Unsupported Context3D Profile \'standard_extended\' Requested');
 				break;
-            default:
-                 break;
+			default:
+				break;
 
 		}
-	}
 
-	public dispatchEvent(event):boolean {
-		return super.dispatchEvent(event);
+		this.dispatchEvent(new Event(Event.CONTEXT3D_CREATE));
 	}
 }

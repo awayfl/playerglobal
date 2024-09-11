@@ -16,6 +16,7 @@ import { Loader as PlayerGlobalLoader } from './Loader';
 import { LoaderInfo, LoaderInfoCompleteQueue } from './LoaderInfo';
 import { Debug } from '@awayjs/core';
 import { InteractiveObject } from './InteractiveObject';
+import { StageManager } from '@awayjs/stage';
 
 /**
  * Dispatched by the Stage object when the state of the stageVideos property changes.

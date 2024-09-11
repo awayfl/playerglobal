@@ -1,7 +1,7 @@
-export enum Context3DVertexBufferFormat{
-	BYTES_4 = 'bytes4',
-	FLOAT_1 = 'float1',
-	FLOAT_2 = 'float2',
-	FLOAT_3 = 'float3',
-	FLOAT_4 = 'float4'
+export class Context3DVertexBufferFormat {
+	public static BYTES_4: string = 'bytes4';
+	public static FLOAT_1: string = 'float1';
+	public static FLOAT_2: string = 'float2';
+	public static FLOAT_3: string = 'float3';
+	public static FLOAT_4: string = 'float4';
 }

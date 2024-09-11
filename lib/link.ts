@@ -27,6 +27,16 @@ import { Sprite } from './display/Sprite';
 import { Stage } from './display/Stage';
 import { Stage3D } from './display/Stage3D';
 
+import { Context3D } from './display3D/Context3D';
+import { Context3DClearMask } from './display3D/Context3DClearMask';
+import { Context3DProfile } from './display3D/Context3DProfile';
+import { Context3DProgramType } from './display3D/Context3DProgramType';
+import { Context3DRenderMode } from './display3D/Context3DRenderMode';
+import { Context3DVertexBufferFormat } from './display3D/Context3DVertexBufferFormat';
+import { IndexBuffer3D } from './display3D/IndexBuffer3D';
+import { Program3D } from './display3D/Program3D';
+import { VertexBuffer3D } from './display3D/VertexBuffer3D';
+
 import { EOFError } from './errors/EOFError';
 import { IllegalOperationError } from './errors/IllegalOperationError';
 import { InvalidSWFError } from './errors/InvalidSWFError';
@@ -293,6 +303,15 @@ export function initLink() {
 	//M('flash.display.TriangleCulling', TriangleCulling);
 
 	// TODO: Add display3d stuff
+	M('flash.display3D.Context3D', Context3D);
+	M('flash.display3D.Context3DClearMask', <any>Context3DClearMask);
+	M('flash.display3D.Context3DProfile', <any>Context3DProfile);
+	M('flash.display3D.Context3DProgramType', <any>Context3DProgramType);
+	M('flash.display3D.Context3DRenderMode', <any>Context3DRenderMode);
+	M('flash.display3D.Context3DVertexBufferFormat', <any>Context3DVertexBufferFormat);
+	M('flash.display3D.IndexBuffer3D', IndexBuffer3D);
+	M('flash.display3D.Program3D', Program3D);
+	M('flash.display3D.VertexBuffer3D', VertexBuffer3D);
 
 	//M('flash.errors.DRMManagerError', DRMManagerError);//AIR
 	M('flash.errors.EOFError', EOFError);
