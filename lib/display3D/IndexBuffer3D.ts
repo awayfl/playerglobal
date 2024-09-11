@@ -2,6 +2,9 @@ import { ASObject, Uint32Vector } from '@awayfl/avm2';
 import { IContextGL, IIndexBuffer } from '@awayjs/stage';
 
 export class IndexBuffer3D extends ASObject {
+	static classInitializer: any = null;
+	static classSymbols: string [] = null; // [];
+	static instanceSymbols: string [] = null;
 
 	public _adaptee: IIndexBuffer
 

@@ -6,22 +6,28 @@ import { IndexBuffer3D } from '../display3D/IndexBuffer3D';
 import { VertexBuffer3D } from '../display3D/VertexBuffer3D';
 import { Program3D } from '../display3D/Program3D';
 import { Matrix3D } from '../geom/Matrix3D';
+import { Stage3D } from '../display/Stage3D';
+import { Event } from '../events/Event';
+import { SecurityDomain } from '../SecurityDomain';
 
 export class Context3D extends EventDispatcher {
-
 	private _adaptee: AwayStage
 	private _gl: WebGLRenderingContext | WebGL2RenderingContext
 	private _program: Program3D
+	private _stage3D: Stage3D
 
-	constructor(awayStage: AwayStage, profile) {
+	constructor(stage3D: Stage3D, awayStage: AwayStage, profile) {
 		super();
 		awayStage.addEventListener(StageEvent.CONTEXT_CREATED, this.onAwayContextCreated);
+		this._stage3D = stage3D
 	}
 
 	private onAwayContextCreated(e: StageEvent) {
 		this._adaptee = e.stage;
-		e.target;
+		this._adaptee.removeEventListener(StageEvent.CONTEXT_CREATED, this.onAwayContextCreated);
 		this._gl = (this._adaptee.context as ContextWebGL)._gl;
+		this._stage3D.dispatchEvent(new (<SecurityDomain> this.sec).flash.events.Event(Event.CONTEXT3D_CREATE))
+		
 	}
 
 	public clear(red: number = 0.0, green: number = 0.0, blue: number = 0.0, alpha: number = 1.0, depth: number = 1.0, stencil: number = 0, mask: number = 0xffffffff): void {
