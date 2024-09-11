@@ -164,7 +164,11 @@ export class Stage extends DisplayObjectContainer {
 
 		this._isStage = true;
 
-		this._stage3Ds = new (<SecurityDomain> this.sec).ObjectVector(StageManager.getInstance().numSlotsFree, true);
+		this._stage3Ds = new (<SecurityDomain> this.sec).ObjectVector();
+		for (let i: number = 0; i < StageManager.getInstance().numSlotsFree; i++) {
+			this._stage3Ds.axSetNumericProperty(i, new (<SecurityDomain> this.sec).flash.display.Stage3D());
+			//this.stage3Ds[i] = new Stage3D;
+		}
 
 		// resize event listens on window
 		this._resizeCallbackDelegate = (event: any) => this.resizeCallback(event);
@@ -188,11 +192,6 @@ export class Stage extends DisplayObjectContainer {
 		// befor constructors of Sprite or MovieClips are processed
 		(<SecurityDomain> this.sec).flash.display.DisplayObject.axClass._activeStage = this;
 		this._stage = this;
-
-		for (let i: number = 0; i < StageManager.getInstance().numSlotsFree; i++) {
-			this._stage3Ds.axSetNumericProperty(i, new (<SecurityDomain> this.sec).flash.display.Stage3D());
-			//this.stage3Ds[i] = new Stage3D;
-		}
 
 		this._resizeCallbackDelegate(null);
 

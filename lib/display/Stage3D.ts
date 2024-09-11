@@ -3,8 +3,11 @@ import { EventDispatcher } from '../events/EventDispatcher';
 import { Context3D } from '../display3D/Context3D';
 import { Context3DProfile } from '../display3D/Context3DProfile';
 import { AVMStage } from '@awayfl/swf-loader';
+import { AXClass } from '@awayfl/avm2';
 
 export class Stage3D extends EventDispatcher {
+	static axClass: typeof Stage3D & AXClass;
+	static classInitializer: any = null;
 	private _context3D: Context3D
 	private _visible: Boolean
 	private _x: number

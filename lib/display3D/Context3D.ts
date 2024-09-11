@@ -26,7 +26,7 @@ export class Context3D extends EventDispatcher {
 		this._adaptee = e.stage;
 		this._adaptee.removeEventListener(StageEvent.CONTEXT_CREATED, this.onAwayContextCreated);
 		this._gl = (this._adaptee.context as ContextWebGL)._gl;
-		this._stage3D.dispatchEvent(new (<SecurityDomain> this.sec).flash.events.Event(Event.CONTEXT3D_CREATE))
+		this._stage3D.dispatchEvent(new Event(Event.CONTEXT3D_CREATE))
 		
 	}
 
