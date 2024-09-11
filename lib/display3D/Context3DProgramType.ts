@@ -1,4 +1,4 @@
-export enum Context3DProgramType{
-	FRAGMENT = 'fragment',
-	VERTEX = 'vertex'
+export class Context3DProgramType {
+	public static FRAGMENT: string = 'fragment';
+	public static VERTEX = 'vertex';
 }
