@@ -8,18 +8,24 @@ import { Program3D } from '../display3D/Program3D';
 import { Matrix3D } from '../geom/Matrix3D';
 
 export class Context3D extends EventDispatcher {
+
+	static classInitializer: any = null;
+	static classSymbols: string [] = null; // [];
+	static instanceSymbols: string [] = null;
+
 	private _adaptee: AwayStage
     private _gl: WebGLRenderingContext | WebGL2RenderingContext
     private _program:Program3D
 
 	constructor(awayStage: AwayStage, profile) {
 		super();
-		awayStage.addEventListener(StageEvent.CONTEXT_CREATED, this.onAwayContextCreated);
+		awayStage.addEventListener(StageEvent.CONTEXT_RECREATED, this.onAwayContextCreated);
 	}
 
     private onAwayContextCreated(e: StageEvent) {
-        this._adaptee = e.target;
+        this._adaptee = e.stage;
         this._gl = (this._adaptee.context as ContextWebGL)._gl;
+		this._adaptee.dispatchEvent(new Event(Event.CONTEXT3D_CREATE));
     }
 
 	public clear(red: number = 0.0, green: number = 0.0, blue: number = 0.0, alpha: number = 1.0, depth: number = 1.0, stencil: number = 0, mask: number = 0xffffffff): void {
