@@ -1,4 +1,4 @@
-import { ContextGLDrawMode, ContextGLProgramType, ContextGLVertexBufferFormat, ContextWebGL, ProgramWebGL, Stage as AwayStage, StageEvent } from '@awayjs/stage';
+import { ContextGLDrawMode, ContextGLProfile, ContextGLProgramType, ContextGLVertexBufferFormat, ContextMode, ContextWebGL, ProgramWebGL, Stage as AwayStage, Stage, StageEvent, StageManager } from '@awayjs/stage';
 import { EventDispatcher } from '../events/EventDispatcher';
 import { Context3DProgramType } from '../display3D/Context3DProgramType';
 import { Context3DVertexBufferFormat } from '../display3D/Context3DVertexBufferFormat';
@@ -8,25 +8,57 @@ import { Program3D } from '../display3D/Program3D';
 import { Matrix3D } from '../geom/Matrix3D';
 import { Stage3D } from '../display/Stage3D';
 import { Event } from '../events/Event';
+import { AVMStage } from '@awayfl/swf-loader';
+import { EventBase } from '@awayjs/core';
 import { SecurityDomain } from '../SecurityDomain';
 
 export class Context3D extends EventDispatcher {
 	private _adaptee: AwayStage
 	private _gl: WebGLRenderingContext | WebGL2RenderingContext
 	private _program: Program3D
-	private _stage3D: Stage3D
+	private _stage3D:Stage3D
 
-	constructor(stage3D: Stage3D, awayStage: AwayStage, profile) {
+	constructor(id:number, renderMode:string = 'auto', profile:string = 'baseline', stage3D:Stage3D) {
 		super();
-		awayStage.addEventListener(StageEvent.CONTEXT_CREATED, this.onAwayContextCreated);
+		console.log("Context3D Init")
 		this._stage3D = stage3D
+		console.log(stage3D)
+		var forceSoftware: boolean = (renderMode == 'auto');
+		var awayContextProfile:ContextGLProfile = this.getAwayProfile(profile)
+		console.log("Context3D Config: ", "id: ", id+1, " forceSoftware: ", forceSoftware, " profile: ", awayContextProfile)
+		this._adaptee = AVMStage.instance().stage3Ds[id+1]
+		this._adaptee.addEventListener(StageEvent.CONTEXT_RECREATED, this.onAwayContextCreated);
+		this._adaptee.requestContext(forceSoftware, awayContextProfile)
+	}
+
+	private getAwayProfile(context3DProfile:string):ContextGLProfile {
+		switch (context3DProfile) {
+			case 'baseline':
+				return ContextGLProfile.BASELINE;
+			case 'baseline_constrained':
+				return ContextGLProfile.BASELINE_CONSTRAINED;
+			case 'baseline_extended':
+				return ContextGLProfile.BASELINE_EXTENDED;
+			case 'standard':
+				console.log('Unsupported Context3D Profile \'standard\' Requested');
+				return
+			case 'standard_constrained':
+				console.log('Unsupported Context3D Profile \'standard_constrained\' Requested');
+				return
+			case 'standard_extended':
+				console.log('Unsupported Context3D Profile \'standard_extended\' Requested');
+				return
+			default:
+				return ContextGLProfile.BASELINE;
+		}
 	}
 
 	private onAwayContextCreated(e: StageEvent) {
-		this._adaptee = e.stage;
-		this._adaptee.removeEventListener(StageEvent.CONTEXT_CREATED, this.onAwayContextCreated);
+		console.log(e.stage);
+		this._adaptee = e.stage
 		this._gl = (this._adaptee.context as ContextWebGL)._gl;
-		this._stage3D.dispatchEvent(new Event(Event.CONTEXT3D_CREATE))
+		super.dispatchEvent(new Event(Event.CONTEXT3D_CREATE))
+		console.log(super.hasEventListener(Event.CONTEXT3D_CREATE))
 		
 	}
 
@@ -107,6 +139,24 @@ export class Context3D extends EventDispatcher {
 				break;
 		}
 		this._adaptee.context.setVertexBufferAt(index, buffer._adaptee, bufferOffset, awayFormat);
+	}
+
+	public dispatchEvent(event: EventBase, comesFromAway: boolean = false): boolean {
+		(<any>event).currentTarget = this;
+		if (event.type == 'enterFrame') {//} || event.type=="scroll"){
+			(<any>event).target = this;
+		}
+		const returnVal = super.dispatchEvent(event);
+
+		// workaround for now.
+		// mousevents already bubble up the scenegraph in MouseMangager
+		// for all other events, we want to bubble them up here:
+		if (!comesFromAway && EventDispatcher.eventsThatBubbleInAwayJS.indexOf(event.type) == -1) {
+			if ((<any> this).adaptee && (<any> this).adaptee.parent) {
+				(<any> this).adaptee.parent.adapter.dispatchEvent(event);
+			}
+		}
+		return returnVal;
 	}
 
 }
