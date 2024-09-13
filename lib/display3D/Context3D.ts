@@ -77,16 +77,14 @@ export class Context3D extends EventDispatcher {
 
 	public configureBackBuffer(width: number, height: number, antiAlias: number, enableDepthAndStencil: boolean = true, wantsBestResolution: Boolean = false, wantsBestResolutionOnBrowserZoom: Boolean = false): void {
 		this._adaptee.configureBackBuffer(width, height, antiAlias, enableDepthAndStencil);
-		console.log('configureBackBuffer')
 	}
 
 	public clear(red: number = 0.0, green: number = 0.0, blue: number = 0.0, alpha: number = 1.0, depth: number = 1.0, stencil: number = 0, mask: number = 0xffffffff): void {
-		console.log('clear');
 		this._adaptee.clear(red, green, blue, alpha, depth, stencil, mask);
 	}
 
 	public drawTriangles(indexBuffer: IndexBuffer3D, firstIndex: number = 0, numTriangles: number = -1): void {
-		console.log("drawTriangles")
+		this._adaptee.context.drawIndices(ContextGLDrawMode.TRIANGLES, indexBuffer._adaptee, firstIndex, numTriangles)
 		if (numTriangles != -1) {
 			var numIndices = numTriangles;
 		} else {
@@ -96,12 +94,10 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public present(): void {
-		console.log('present')
 		this._adaptee.present();
 	}
 
 	public setProgram(program: Program3D): void {
-		console.log('setProgram')
 		this._program = program;
 		this._adaptee.context.setProgram(program._adaptee);
 	}
@@ -111,7 +107,6 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public setProgramConstantsFromMatrix(programType: string, firstRegister: number, matrix: Matrix3D, transposedMatrix: boolean = false): void {
-		console.log('setProgramConstantsFromMatrix')
 		let awayProgramType:ContextGLProgramType
 		switch (programType) {
 			case Context3DProgramType.FRAGMENT:
@@ -134,7 +129,6 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public setVertexBufferAt(index: number, buffer: VertexBuffer3D, bufferOffset: number = 0, format: String = 'float4'): void {
-		console.log("setVertexBufferAt")
 		switch (format) {
 			case Context3DVertexBufferFormat.BYTES_4:
 				var awayFormat = ContextGLVertexBufferFormat.BYTE_4;
@@ -191,7 +185,6 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public createIndexBuffer(numIndices: number, bufferUsage: string = 'staticDraw'): IndexBuffer3D {
-		console.log("createIndexBuffer")
 		return new (this.sec as SecurityDomain).flash.display3D.IndexBuffer3D(this, numIndices);
 	}
 
@@ -204,7 +197,6 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public createProgram(): Program3D {
-		console.log("createProgram")
 		return new (this.sec as SecurityDomain).flash.display3D.Program3D(this);
 	}
 
