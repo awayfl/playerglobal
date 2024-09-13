@@ -75,7 +75,7 @@ export class Context3D extends EventDispatcher {
 		Debug.notImplemented('public flash.display3D.Context3D::dispose'); return;
 	}
 
-	public configureBackBuffer(width: number, height: number, antiAlias: number, enableDepthAndStencil: boolean = true, wantsBestResolution: Boolean = false, wantsBestResolutionOnBrowserZoom: Boolean = false): void {
+	public configureBackBuffer(width: number, height: number, antiAlias: number, enableDepthAndStencil: boolean = true, wantsBestResolution: boolean = false, wantsBestResolutionOnBrowserZoom: boolean = false): void {
 		this._adaptee.configureBackBuffer(width, height, antiAlias, enableDepthAndStencil);
 	}
 
@@ -84,13 +84,7 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public drawTriangles(indexBuffer: IndexBuffer3D, firstIndex: number = 0, numTriangles: number = -1): void {
-		this._adaptee.context.drawIndices(ContextGLDrawMode.TRIANGLES, indexBuffer._adaptee, firstIndex, numTriangles)
-		if (numTriangles != -1) {
-			var numIndices = numTriangles;
-		} else {
-			var numIndices = numTriangles * 3;
-		}
-		this._adaptee.context.drawIndices(ContextGLDrawMode.TRIANGLES, indexBuffer._adaptee, firstIndex, numIndices);
+		this._adaptee.context.drawIndices(ContextGLDrawMode.TRIANGLES, indexBuffer._adaptee, firstIndex, numTriangles*3)
 	}
 
 	public present(): void {
@@ -128,7 +122,7 @@ export class Context3D extends EventDispatcher {
 		Debug.notImplemented('public flash.display3D.Context3D::setProgramConstantsFromByteArray'); return;
 	}
 
-	public setVertexBufferAt(index: number, buffer: VertexBuffer3D, bufferOffset: number = 0, format: String = 'float4'): void {
+	public setVertexBufferAt(index: number, buffer: VertexBuffer3D, bufferOffset: number = 0, format: string = 'float4'): void {
 		switch (format) {
 			case Context3DVertexBufferFormat.BYTES_4:
 				var awayFormat = ContextGLVertexBufferFormat.BYTE_4;
