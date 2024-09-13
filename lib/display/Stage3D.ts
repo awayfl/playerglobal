@@ -4,12 +4,12 @@ import { Context3D } from '../display3D/Context3D';
 import { Context3DProfile } from '../display3D/Context3DProfile';
 import { AVMStage, Debug } from '@awayfl/swf-loader';
 import { Bytecode } from '@awayfl/avm2/lib/Bytecode';
-import { Multiname } from '@awayfl/avm2';
+import { AXClass, Multiname } from '@awayfl/avm2';
 import { Event } from '../events/Event';
 import { SecurityDomain } from '../SecurityDomain';
 
-
 export class Stage3D extends EventDispatcher {
+	static axClass: typeof Stage3D & AXClass;
 	// Called whenever the class is initialized.
 	public static classInitializer: any = null;
 
@@ -22,12 +22,18 @@ export class Stage3D extends EventDispatcher {
 	private _visible: boolean
 	private _x: number
 	private _y: number
-	private instance: number
+	private _id: number
+	private _adaptee:AwayStage
 
-	constructor() {
-		// This is never called, what's going on???
-		super();
-		console.log("Stage3D constructor called")
+	constructor(i) {
+		super()
+		console.log("Stage3D Constructor")
+		this._adaptee = AVMStage.instance().stage3Ds[i];
+		this._id = i
+	}
+
+	public get adaptee(): AwayStage{
+		return this._adaptee
 	}
 
 	public get x(): number {
@@ -56,21 +62,44 @@ export class Stage3D extends EventDispatcher {
 	}
 
 	public set visible(value: boolean) {
-		this._visible = value
+		this._visible = value;
 		Debug.notImplemented('[playerglobal/display/Stage3D] - set visible not implemented');
 	}
 
-	public get context3D():Context3D {
-		return this._context3D
+	public get context3D(): Context3D {
+		return this._context3D;
 	}
 
 	public requestContext3D(context3DRenderMode: string = 'auto', profile: string = 'baseline'): void {
-		console.log("Request Context")
-		this._context3D = new Context3D(0, context3DRenderMode, profile ?? 'baseline' , this);
-		this._context3D.addEventListener(Event.CONTEXT3D_CREATE, this.onContextCreated)
-	}
-
-	public onContextCreated(e:Event=null){
-		super.dispatchEvent(new Event(Event.CONTEXT3D_CREATE))
+		console.log('Request Context');
+		this._context3D = new (this.sec as SecurityDomain).flash.display3D.Context3D(0, this, profile, context3DRenderMode );
+		const forceSoftware: boolean = (context3DRenderMode == 'auto');
+		var awayContextProfile:ContextGLProfile
+		switch (profile) {
+			case 'baseline':
+				awayContextProfile = ContextGLProfile.BASELINE;
+				break;
+			case 'baseline_constrained':
+				awayContextProfile = ContextGLProfile.BASELINE_CONSTRAINED;
+				break;
+			case 'baseline_extended':
+				awayContextProfile = ContextGLProfile.BASELINE_EXTENDED;
+				break;
+			case 'standard':
+				console.log('Unsupported Context3D Profile \'standard\' Requested');
+				break;
+			case 'standard_constrained':
+				console.log('Unsupported Context3D Profile \'standard_constrained\' Requested');
+				break;
+			case 'standard_extended':
+				console.log('Unsupported Context3D Profile \'standard_extended\' Requested');
+				break;
+			default:
+				awayContextProfile = ContextGLProfile.BASELINE;
+				break;
+		}
+		console.log('Context3D Config: ', 'id: ', 0, ' forceSoftware: ', forceSoftware, ' profile: ', awayContextProfile);
+		this._adaptee.requestContext(forceSoftware, awayContextProfile);
+		super.dispatchEvent(new (this.sec as SecurityDomain).flash.events.Event(Event.CONTEXT3D_CREATE));
 	}
 }

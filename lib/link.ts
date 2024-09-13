@@ -304,7 +304,7 @@ export function initLink() {
 	//M('flash.display.TriangleCulling', TriangleCulling);
 
 	// TODO: Add display3d stuff
-	
+
 	M('flash.display3D.Context3D', Context3D);
 	M('flash.display3D.Context3DClearMask', <any>Context3DClearMask);
 	M('flash.display3D.Context3DProfile', <any>Context3DProfile);

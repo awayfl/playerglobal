@@ -80,7 +80,6 @@ import { IndexBuffer3D } from './display3D/IndexBuffer3D';
 import { Program3D } from './display3D/Program3D';
 import { VertexBuffer3D } from './display3D/VertexBuffer3D';
 
-
 export class Mouse {}
 
 export class SecurityDomain extends AXSecurityDomain {
@@ -102,7 +101,7 @@ export class SecurityDomain extends AXSecurityDomain {
 			Shape: Shape,
 			FrameLabel: FrameLabel
 		},
-		display3d: {
+		display3D: {
 			Context3D: Context3D,
 			IndexBuffer3D: IndexBuffer3D,
 			Program3D: Program3D,
