@@ -1,23 +1,36 @@
-import { ASObject, Float64Vector } from '@awayfl/avm2';
+import { ASObject, AXClass, Float64Vector } from '@awayfl/avm2';
+import { Debug } from '@awayfl/swf-loader';
+import { ByteArray } from '../utils/ByteArray'
 import { IContextGL, IVertexBuffer, VertexBufferWebGL } from '@awayjs/stage';
+import { Context3D } from './Context3D';
 
 export class VertexBuffer3D extends ASObject {
+	static axClass: typeof VertexBuffer3D & AXClass;
 	static classInitializer: any = null;
 	static classSymbols: string [] = null; // [];
 	static instanceSymbols: string [] = null;
-
 	public _adaptee: IVertexBuffer
-
-	constructor(context: IContextGL, numVertices, dataPerVertex) {
-		super();
-		this._adaptee = context.createVertexBuffer(numVertices, dataPerVertex);
+	
+	constructor(context3D: Context3D, numVertices, dataPerVertex) {
+		super()
+		this._adaptee = context3D.adaptee.context.createVertexBuffer(numVertices, dataPerVertex);
 	}
 
+
 	public uploadFromVector(data: Float64Vector, startVertex: number, numVertices) {
-		const dataFloat32Array: Float32Array = new Float32Array(data.length);
-        for(var i:number = 0; i < data.length; i++) {
-            data[i] = dataFloat32Array[i];
-        }
+		let dataFloat32Array: Float32Array = new Float32Array(data.length);
+		for (let i: number = 0; i < data.length; i++) {
+			dataFloat32Array[i] = data.axGetNumericProperty(i);
+		}
+		console.log(dataFloat32Array)
 		this._adaptee.uploadFromArray(dataFloat32Array, startVertex, numVertices);
+	}
+
+	public uploadFromByteArray(data: ByteArray, byteArrayOffset: number /*int*/, startVertex: number /*int*/, numVertices: number /*int*/): void {
+		Debug.notImplemented('public flash.display3D.VertexBuffer3D::uploadFromByteArray'); return;
+	}
+
+	public dispose(): void {
+		this._adaptee.dispose();
 	}
 }

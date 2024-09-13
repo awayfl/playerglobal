@@ -1,89 +1,92 @@
-import { ContextGLDrawMode, ContextGLProfile, ContextGLProgramType, ContextGLVertexBufferFormat, ContextMode, ContextWebGL, ProgramWebGL, Stage as AwayStage, Stage, StageEvent, StageManager } from '@awayjs/stage';
-import { EventDispatcher } from '../events/EventDispatcher';
+import { ContextGLDrawMode, ContextGLProfile, ContextGLProgramType, ContextGLVertexBufferFormat, 
+		 ContextWebGL, ProgramWebGL, Stage as AwayStage, StageEvent } from '@awayjs/stage';
+import { BitmapData } from '../display/BitmapData';
+import { Stage3D } from '../display/Stage3D';
 import { Context3DProgramType } from '../display3D/Context3DProgramType';
 import { Context3DVertexBufferFormat } from '../display3D/Context3DVertexBufferFormat';
 import { IndexBuffer3D } from '../display3D/IndexBuffer3D';
-import { VertexBuffer3D } from '../display3D/VertexBuffer3D';
 import { Program3D } from '../display3D/Program3D';
+import { VertexBuffer3D } from '../display3D/VertexBuffer3D';
+import { EventDispatcher } from '../events/EventDispatcher';
 import { Matrix3D } from '../geom/Matrix3D';
-import { Stage3D } from '../display/Stage3D';
-import { Event } from '../events/Event';
-import { AVMStage } from '@awayfl/swf-loader';
-import { EventBase } from '@awayjs/core';
+import { Rectangle } from '../geom/Rectangle';
+import { ByteArray } from '../utils/ByteArray';
+
+import { AXClass, Float64Vector } from '@awayfl/avm2';
+import { AVMStage, Debug } from '@awayfl/swf-loader';
 import { SecurityDomain } from '../SecurityDomain';
 
 export class Context3D extends EventDispatcher {
+	// Called whenever the class is initialized.
+	public static classInitializer: any = null;
+
+	// List of static symbols to link.
+	public static classSymbols: string[] = null; // [];
+
+	// List of instance symbols to link.
+	public static instanceSymbols: string[] = null; // [];
 	private _adaptee: AwayStage
+	private _renderMode: string
+	private _profile: string
 	private _gl: WebGLRenderingContext | WebGL2RenderingContext
 	private _program: Program3D
-	private _stage3D:Stage3D
+	private _stage3D: Stage3D
 
-	constructor(id:number, renderMode:string = 'auto', profile:string = 'baseline', stage3D:Stage3D) {
-		super();
-		console.log("Context3D Init")
+	constructor(id: number, stage3D: Stage3D, renderMode: string = 'auto', profile: string = 'baseline') {
+		super()
+		console.log('Context3D Create');
+		this._renderMode = renderMode
+		this._profile = profile
 		this._stage3D = stage3D
-		console.log(stage3D)
-		var forceSoftware: boolean = (renderMode == 'auto');
-		var awayContextProfile:ContextGLProfile = this.getAwayProfile(profile)
-		console.log("Context3D Config: ", "id: ", id+1, " forceSoftware: ", forceSoftware, " profile: ", awayContextProfile)
-		this._adaptee = AVMStage.instance().stage3Ds[id+1]
-		this._adaptee.addEventListener(StageEvent.CONTEXT_RECREATED, this.onAwayContextCreated);
-		this._adaptee.requestContext(forceSoftware, awayContextProfile)
+		this._adaptee = stage3D.adaptee
+		console.log(stage3D);
 	}
 
-	private getAwayProfile(context3DProfile:string):ContextGLProfile {
-		switch (context3DProfile) {
-			case 'baseline':
-				return ContextGLProfile.BASELINE;
-			case 'baseline_constrained':
-				return ContextGLProfile.BASELINE_CONSTRAINED;
-			case 'baseline_extended':
-				return ContextGLProfile.BASELINE_EXTENDED;
-			case 'standard':
-				console.log('Unsupported Context3D Profile \'standard\' Requested');
-				return
-			case 'standard_constrained':
-				console.log('Unsupported Context3D Profile \'standard_constrained\' Requested');
-				return
-			case 'standard_extended':
-				console.log('Unsupported Context3D Profile \'standard_extended\' Requested');
-				return
-			default:
-				return ContextGLProfile.BASELINE;
-		}
+	public get adaptee():AwayStage {
+		return this._adaptee
 	}
 
-	private onAwayContextCreated(e: StageEvent) {
+	private _onAwayContextCreatedDelegate(e: StageEvent): void {
 		console.log(e.stage);
-		this._adaptee = e.stage
+		this._adaptee = e.stage;
 		this._gl = (this._adaptee.context as ContextWebGL)._gl;
-		super.dispatchEvent(new Event(Event.CONTEXT3D_CREATE))
-		console.log(super.hasEventListener(Event.CONTEXT3D_CREATE))
-		
+		//this._stage3D.dispatchEvent(new (this.sec as SecurityDomain).flash.events.Event(Event.CONTEXT3D_CREATE))
+		console.log('Context Created');
+
 	}
 
-	public clear(red: number = 0.0, green: number = 0.0, blue: number = 0.0, alpha: number = 1.0, depth: number = 1.0, stencil: number = 0, mask: number = 0xffffffff): void {
-		console.log('Mask: ' + mask);
-		this._adaptee.clear(red, green, blue, alpha, depth, stencil, mask);
+	public get driverInfo(): string {
+		Debug.notImplemented('public flash.display3D.Context3D::get driverInfo'); return;
+		// return this._driverInfo;
+	}
+
+	public get enableErrorChecking(): boolean {
+		Debug.notImplemented('public flash.display3D.Context3D::get enableErrorChecking'); return;
+		// return this._enableErrorChecking;
+	}
+
+	public set enableErrorChecking(toggle: boolean) {
+		toggle = !!toggle;
+		Debug.notImplemented('public flash.display3D.Context3D::set enableErrorChecking'); return;
+		// this._enableErrorChecking = toggle;
+	}
+
+	public dispose(): void {
+		Debug.notImplemented('public flash.display3D.Context3D::dispose'); return;
 	}
 
 	public configureBackBuffer(width: number, height: number, antiAlias: number, enableDepthAndStencil: boolean = true, wantsBestResolution: Boolean = false, wantsBestResolutionOnBrowserZoom: Boolean = false): void {
 		this._adaptee.configureBackBuffer(width, height, antiAlias, enableDepthAndStencil);
+		console.log('configureBackBuffer')
 	}
 
-	public createIndexBuffer(numIndices: number, bufferUsage: string = 'staticDraw'): IndexBuffer3D {
-		return new IndexBuffer3D(this._adaptee.context, numIndices);
-	}
-
-	public createProgram(): Program3D {
-		return new Program3D(this._adaptee.context);
-	}
-
-	public createVertexBuffer(numVertices: number, data32PerVertex: number, bufferUsage: string = 'staticDraw'): VertexBuffer3D {
-		return new VertexBuffer3D(this._adaptee.context, numVertices, data32PerVertex);
+	public clear(red: number = 0.0, green: number = 0.0, blue: number = 0.0, alpha: number = 1.0, depth: number = 1.0, stencil: number = 0, mask: number = 0xffffffff): void {
+		console.log('clear');
+		this._adaptee.clear(red, green, blue, alpha, depth, stencil, mask);
 	}
 
 	public drawTriangles(indexBuffer: IndexBuffer3D, firstIndex: number = 0, numTriangles: number = -1): void {
+		console.log("drawTriangles")
 		if (numTriangles != -1) {
 			var numIndices = numTriangles;
 		} else {
@@ -93,32 +96,45 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public present(): void {
+		console.log('present')
 		this._adaptee.present();
 	}
 
 	public setProgram(program: Program3D): void {
+		console.log('setProgram')
 		this._program = program;
 		this._adaptee.context.setProgram(program._adaptee);
 	}
 
+	public setProgramConstantsFromVector(programType: string, firstRegister: number /*int*/, data: Float64Vector, numRegisters: number /*int*/ = -1): void {
+		Debug.notImplemented('public flash.display3D.Context3D::setProgramConstantsFromVector'); return;
+	}
+
 	public setProgramConstantsFromMatrix(programType: string, firstRegister: number, matrix: Matrix3D, transposedMatrix: boolean = false): void {
+		console.log('setProgramConstantsFromMatrix')
+		let awayProgramType:ContextGLProgramType
 		switch (programType) {
 			case Context3DProgramType.FRAGMENT:
-				var awayProgramType = ContextGLProgramType.FRAGMENT;
+				awayProgramType = ContextGLProgramType.FRAGMENT;
 				break;
 			case Context3DProgramType.VERTEX:
-				var awayProgramType = ContextGLProgramType.VERTEX;
+				awayProgramType = ContextGLProgramType.VERTEX;
 				break;
 			default:
 				break;
 		}
 		const programWebGL: ProgramWebGL = this._program._adaptee as ProgramWebGL;
-		let matrixRawData: Float32Array;
+		let matrixRawData: Float32Array = new Float32Array();
 		matrix.adaptee.copyRawDataTo(matrixRawData, 0, false);
 		programWebGL.uniformMatrix4fv(awayProgramType, transposedMatrix, matrixRawData);
 	}
 
+	public setProgramConstantsFromByteArray(programType: string, firstRegister: number /*int*/, numRegisters: number /*int*/, data: ByteArray, byteArrayOffset: number /*uint*/): void {
+		Debug.notImplemented('public flash.display3D.Context3D::setProgramConstantsFromByteArray'); return;
+	}
+
 	public setVertexBufferAt(index: number, buffer: VertexBuffer3D, bufferOffset: number = 0, format: String = 'float4'): void {
+		console.log("setVertexBufferAt")
 		switch (format) {
 			case Context3DVertexBufferFormat.BYTES_4:
 				var awayFormat = ContextGLVertexBufferFormat.BYTE_4;
@@ -141,22 +157,71 @@ export class Context3D extends EventDispatcher {
 		this._adaptee.context.setVertexBufferAt(index, buffer._adaptee, bufferOffset, awayFormat);
 	}
 
-	public dispatchEvent(event: EventBase, comesFromAway: boolean = false): boolean {
-		(<any>event).currentTarget = this;
-		if (event.type == 'enterFrame') {//} || event.type=="scroll"){
-			(<any>event).target = this;
-		}
-		const returnVal = super.dispatchEvent(event);
+	public setBlendFactors(sourceFactor: string, destinationFactor: string): void {
+		Debug.notImplemented('public flash.display3D.Context3D::setBlendFactors'); return;
+	}
 
-		// workaround for now.
-		// mousevents already bubble up the scenegraph in MouseMangager
-		// for all other events, we want to bubble them up here:
-		if (!comesFromAway && EventDispatcher.eventsThatBubbleInAwayJS.indexOf(event.type) == -1) {
-			if ((<any> this).adaptee && (<any> this).adaptee.parent) {
-				(<any> this).adaptee.parent.adapter.dispatchEvent(event);
-			}
-		}
-		return returnVal;
+	public setColorMask(red: boolean, green: boolean, blue: boolean, alpha: boolean): void {
+		Debug.notImplemented('public flash.display3D.Context3D::setColorMask'); return;
+	}
+
+	public setDepthTest(fdepthMask: boolean, passCompareMode: string): void {
+		Debug.notImplemented('public flash.display3D.Context3D::setDepthTest'); return;
+	}
+
+	public setCulling(triangleFaceToCull: string): void {
+		Debug.notImplemented('public flash.display3D.Context3D::setCulling'); return;
+	}
+
+	public setStencilActions(triangleFace: string = 'frontAndBack', compareMode: string = 'always', actionOnBothPass: string = 'keep', actionOnDepthFail: string = 'keep', actionOnDepthPassStencilFail: string = 'keep'): void {
+		Debug.notImplemented('public flash.display3D.Context3D::setStencilActions'); return;
+	}
+
+	public setStencilReferenceValue(referenceValue: number /*uint*/, readMask: number /*uint*/ = 255, writeMask: number /*uint*/ = 255): void {
+		Debug.notImplemented('public flash.display3D.Context3D::setStencilReferenceValue'); return;
+	}
+
+	public setScissorRectangle(rectangle: Rectangle): void {
+		Debug.notImplemented('public flash.display3D.Context3D::setScissorRectangle'); return;
+	}
+
+	public createVertexBuffer(numVertices: number, data32PerVertex: number, bufferUsage: string = 'staticDraw'): VertexBuffer3D {
+		console.log("createVertexBuffer")
+		return new (this.sec as SecurityDomain).flash.display3D.VertexBuffer3D(this, numVertices, data32PerVertex);
+	}
+
+	public createIndexBuffer(numIndices: number, bufferUsage: string = 'staticDraw'): IndexBuffer3D {
+		console.log("createIndexBuffer")
+		return new (this.sec as SecurityDomain).flash.display3D.IndexBuffer3D(this, numIndices);
+	}
+
+	public createTexture(width: number /*int*/, height: number /*int*/, format: string, optimizeForRenderToTexture: boolean, streamingLevels: number /*int*/ = 0): any {
+		Debug.notImplemented('public flash.display3D.Context3D::createTexture'); return;
+	}
+
+	public createCubeTexture(size: number /*int*/, format: string, optimizeForRenderToTexture: boolean, streamingLevels: number /*int*/ = 0): any /*CubeTexture*/ {
+		Debug.notImplemented('public flash.display3D.Context3D::createCubeTexture'); return;
+	}
+
+	public createProgram(): Program3D {
+		console.log("createProgram")
+		return new (this.sec as SecurityDomain).flash.display3D.Program3D(this);
+	}
+
+	public drawToBitmapData(destination: BitmapData): void {
+		Debug.notImplemented('public flash.display3D.Context3D::drawToBitmapData'); return;
+	}
+
+	public setRenderToTextureInternal(textureTextureBase, targetType: number /*int*/, enableDepthAndStencil: boolean, antiAlias: number /*int*/, surfaceSelector: number /*int*/): void {
+		Debug.notImplemented('public flash.display3D.Context3D::setRenderToTextureInternal'); return;
+	}
+
+	public setTextureInternal(sampler: number /*int*/, textureTexture): void {
+		Debug.notImplemented('public flash.display3D.Context3D::setTextureInternal'); return;
+	}
+
+	public setCubeTextureInternal(sampler: number /*int*/, textureCubeTexture): void {
+		Debug.notImplemented('public flash.display3D.Context3D::setCubeTextureInternal'); return;
 	}
 
 }

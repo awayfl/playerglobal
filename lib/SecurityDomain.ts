@@ -104,7 +104,7 @@ export class SecurityDomain extends AXSecurityDomain {
 			Shape: Shape,
 			FrameLabel: FrameLabel
 		},
-		display3d: {
+		display3D: {
 			Context3D: Context3D,
 			IndexBuffer3D: IndexBuffer3D,
 			Program3D: Program3D,

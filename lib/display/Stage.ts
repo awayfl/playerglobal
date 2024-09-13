@@ -165,8 +165,8 @@ export class Stage extends DisplayObjectContainer {
 		this._isStage = true;
 
 		this._stage3Ds = new (<SecurityDomain> this.sec).ObjectVector();
-		for (var i: number = 0; i < 4; i++) {
-			this._stage3Ds.axSetNumericProperty(i, new (<SecurityDomain> this.sec).flash.display.Stage3D());
+		for (let i: number = 0; i < AVMStage.instance().stage3Ds.length; i++) {
+			this._stage3Ds.axSetNumericProperty(i, new (<SecurityDomain> this.sec).flash.display.Stage3D(i));
 		}
 
 		// resize event listens on window
