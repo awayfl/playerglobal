@@ -22,10 +22,6 @@ export class Program3D extends ASObject {
 	}
 
 	public upload(vertexProgram: ByteArray, fragmentProgram: ByteArray): void {
-		var awayVertexProgram:AwayByteArray = new ByteArray()
-		var awayFragmentProgram:AwayByteArray = new ByteArray()
-		vertexProgram.writeByteArray(awayVertexProgram)
-		fragmentProgram.writeByteArray(awayFragmentProgram)
-		this._adaptee.upload(awayVertexProgram, awayFragmentProgram);
+		this._adaptee.upload(vertexProgram, fragmentProgram);
 	}
 }
