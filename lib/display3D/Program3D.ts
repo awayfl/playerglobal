@@ -11,9 +11,11 @@ export class Program3D extends ASObject {
 	static instanceSymbols: string [] = null;
 
 	public _adaptee: IProgram
+	private _context: IContextGL
 
 	constructor(context3D: Context3D) {
 		super();
+		this._context = context3D.adaptee.context
 		this._adaptee = context3D.adaptee.context.createProgram();
 	}
 
@@ -23,5 +25,6 @@ export class Program3D extends ASObject {
 
 	public upload(vertexProgram: ByteArray, fragmentProgram: ByteArray): void {
 		this._adaptee.upload(vertexProgram, fragmentProgram);
+		this._context.setProgram(this._adaptee)
 	}
 }
