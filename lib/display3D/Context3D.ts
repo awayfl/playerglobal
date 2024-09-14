@@ -46,14 +46,14 @@ export class Context3D extends EventDispatcher {
 		return this._adaptee
 	}
 
-	private _onAwayContextCreatedDelegate(e: StageEvent): void {
+	/*private _onAwayContextCreatedDelegate(e: StageEvent): void {
 		console.log(e.stage);
 		this._adaptee = e.stage;
 		this._gl = (this._adaptee.context as ContextWebGL)._gl;
 		//this._stage3D.dispatchEvent(new (this.sec as SecurityDomain).flash.events.Event(Event.CONTEXT3D_CREATE))
 		console.log('Context Created');
 
-	}
+	}*/
 
 	public get driverInfo(): string {
 		Debug.notImplemented('public flash.display3D.Context3D::get driverInfo'); return;
@@ -84,7 +84,8 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public drawTriangles(indexBuffer: IndexBuffer3D, firstIndex: number = 0, numTriangles: number = -1): void {
-		this._adaptee.context.drawIndices(ContextGLDrawMode.TRIANGLES, indexBuffer._adaptee, firstIndex, numTriangles*3)
+		// @todo: This is not working
+		this._adaptee.context.drawIndices(ContextGLDrawMode.TRIANGLES, indexBuffer._adaptee, firstIndex, (numTriangles == -1) ? -1 : (numTriangles * 3))
 	}
 
 	public present(): void {
@@ -92,8 +93,8 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public setProgram(program: Program3D): void {
-		this._program = program;
 		this._adaptee.context.setProgram(program._adaptee);
+		this._program = program;
 	}
 
 	public setProgramConstantsFromVector(programType: string, firstRegister: number /*int*/, data: Float64Vector, numRegisters: number /*int*/ = -1): void {
@@ -113,9 +114,7 @@ export class Context3D extends EventDispatcher {
 				break;
 		}
 		const programWebGL: ProgramWebGL = this._program._adaptee as ProgramWebGL;
-		let matrixRawData: Float32Array = new Float32Array();
-		matrix.adaptee.copyRawDataTo(matrixRawData, 0, false);
-		programWebGL.uniformMatrix4fv(awayProgramType, transposedMatrix, matrixRawData);
+		programWebGL.uniformMatrix4fv(awayProgramType, transposedMatrix, matrix.adaptee._rawData);
 	}
 
 	public setProgramConstantsFromByteArray(programType: string, firstRegister: number /*int*/, numRegisters: number /*int*/, data: ByteArray, byteArrayOffset: number /*uint*/): void {
@@ -123,21 +122,22 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public setVertexBufferAt(index: number, buffer: VertexBuffer3D, bufferOffset: number = 0, format: string = 'float4'): void {
+		let awayFormat:number
 		switch (format) {
 			case Context3DVertexBufferFormat.BYTES_4:
-				var awayFormat = ContextGLVertexBufferFormat.BYTE_4;
+				awayFormat = ContextGLVertexBufferFormat.BYTE_4;
 				break;
 			case Context3DVertexBufferFormat.FLOAT_1:
-				var awayFormat = ContextGLVertexBufferFormat.FLOAT_1;
+				awayFormat = ContextGLVertexBufferFormat.FLOAT_1;
 				break;
 			case Context3DVertexBufferFormat.FLOAT_2:
-				var awayFormat = ContextGLVertexBufferFormat.FLOAT_2;
+				awayFormat = ContextGLVertexBufferFormat.FLOAT_2;
 				break;
 			case Context3DVertexBufferFormat.FLOAT_3:
-				var awayFormat = ContextGLVertexBufferFormat.FLOAT_3;
+				awayFormat = ContextGLVertexBufferFormat.FLOAT_3;
 				break;
 			case Context3DVertexBufferFormat.FLOAT_4:
-				var awayFormat = ContextGLVertexBufferFormat.FLOAT_4;
+				awayFormat = ContextGLVertexBufferFormat.FLOAT_4;
 				break;
 			default:
 				break;
