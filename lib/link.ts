@@ -37,6 +37,10 @@ import { IndexBuffer3D } from './display3D/IndexBuffer3D';
 import { Program3D } from './display3D/Program3D';
 import { VertexBuffer3D } from './display3D/VertexBuffer3D';
 
+import { CubeTexture } from './display3D/textures/CubeTexture';
+import { Texture } from './display3D/textures/Texture';
+import { TextureBase } from './display3D/textures/TextureBase';
+
 import { EOFError } from './errors/EOFError';
 import { IllegalOperationError } from './errors/IllegalOperationError';
 import { InvalidSWFError } from './errors/InvalidSWFError';
@@ -61,8 +65,8 @@ import { AsyncErrorEvent } from './events/AsyncErrorEvent';
 import { ContextMenuEvent } from './events/ContextMenuEvent';
 import { DataEvent } from './events/DataEvent';
 import { ErrorEvent } from './events/ErrorEvent';
-import { EventDispatcher } from './events/EventDispatcher';
 import { Event } from './events/Event';
+import { EventDispatcher } from './events/EventDispatcher';
 import { EventPhase } from './events/EventPhase';
 import { FocusEvent } from './events/FocusEvent';
 import { FullScreenEvent } from './events/FullScreenEvent';
@@ -115,39 +119,39 @@ import { NumberFormatter } from './globalization/NumberFormatter';
 
 import { Sound } from './media/Sound';
 import { SoundChannel } from './media/SoundChannel';
-import { SoundTransform } from './media/SoundTransform';
 import { SoundMixer } from './media/SoundMixer';
+import { SoundTransform } from './media/SoundTransform';
 
 import { FileFilter } from './net/FileFilter';
 import { FileReference } from './net/FileReference';
-import { SharedObject } from './net/SharedObject';
-import { URLRequest } from './net/URLRequest';
-import { URLLoader } from './net/URLLoader';
-import { URLVariables } from './net/URLVariables';
 import { LocalConnection } from './net/LocalConnection';
+import { SharedObject } from './net/SharedObject';
+import { URLLoader } from './net/URLLoader';
+import { URLRequest } from './net/URLRequest';
+import { URLVariables } from './net/URLVariables';
 
-import { SecurityDomain } from './system/SecurityDomain';
+import { ApplicationDomain } from './system/ApplicationDomain';
 import { Capabilities } from './system/Capabilities';
 import { fscommand } from './system/FSCommand';
-import { Security } from './system/Security';
 import { LoaderContext } from './system/LoaderContext';
-import { ApplicationDomain } from './system/ApplicationDomain';
+import { Security } from './system/Security';
+import { SecurityDomain } from './system/SecurityDomain';
 import { System } from './system/System';
 
+import { CSMSettings } from './text/CSMSettings';
 import { Font } from './text/Font';
+import { FontType } from './text/FontType';
+import { StaticText } from './text/StaticText';
 import { StyleSheet } from './text/StyleSheet';
+import { TextColorType } from './text/TextColorType';
+import { TextDisplayMode } from './text/TextDisplayMode';
+import { TextExtent } from './text/TextExtent';
 import { TextField } from './text/TextField';
 import { TextFormat } from './text/TextFormat';
-import { TextRun } from './text/TextRun';
-import { StaticText } from './text/StaticText';
-import { TextRenderer } from './text/TextRenderer';
 import { TextFormatDisplay } from './text/TextFormatDisplay';
-import { TextExtent } from './text/TextExtent';
-import { TextDisplayMode } from './text/TextDisplayMode';
-import { TextColorType } from './text/TextColorType';
-import { FontType } from './text/FontType';
-import { CSMSettings } from './text/CSMSettings';
 import { TextLineMetrics } from './text/TextLineMetrics';
+import { TextRenderer } from './text/TextRenderer';
+import { TextRun } from './text/TextRun';
 import { TextSnapshot } from './text/TextSnapshot';
 
 import { CompositionAttributeRange } from './text/ime/CompositionAttributeRange';
@@ -185,27 +189,26 @@ import { TextLineValidity } from './text/engine/TextLineValidity';
 import { TextRotation } from './text/engine/TextRotation';
 import { TypographicCase } from './text/engine/TypographicCase';
 
-import { Keyboard } from './ui/Keyboard';
+import { ASClass, ByteArray, registerNativeClass, registerNativeFunction, XMLDocument, XMLNode } from '@awayfl/avm2';
+import { release } from '@awayfl/swf-loader';
+import { BlendMode } from '@awayjs/stage';
+import { GroupElement } from './text/engine/GroupElement';
 import { ContextMenu } from './ui/ContextMenu';
-import { ContextMenuItem } from './ui/ContextMenuItem';
 import { ContextMenuBuiltInItems } from './ui/ContextMenuBuiltInItems';
 import { ContextMenuClipboardItems } from './ui/ContextMenuClipboardItems';
+import { ContextMenuItem } from './ui/ContextMenuItem';
 import { GameInput } from './ui/GameInput';
 import { GameInputControl } from './ui/GameInputControl';
 import { GameInputControlType } from './ui/GameInputControlType';
 import { GameInputDevice } from './ui/GameInputDevice';
 import { GameInputFinger } from './ui/GameInputFinger';
 import { GameInputHand } from './ui/GameInputHand';
+import { Keyboard } from './ui/Keyboard';
 import { Mouse } from './ui/Mouse';
-import { MultitouchInputMode } from './ui/MultitouchInputMode';
 import { Multitouch } from './ui/Multitouch';
-import { Timer } from './utils/Timer';
+import { MultitouchInputMode } from './ui/MultitouchInputMode';
 import { CompressionAlgorithm } from './utils/CompressionAlgorithm';
-import { XMLDocument, XMLNode, ASClass, registerNativeClass, registerNativeFunction } from '@awayfl/avm2';
-import { release } from '@awayfl/swf-loader';
-import { BlendMode } from '@awayjs/stage';
-import { GroupElement } from './text/engine/GroupElement';
-import { ByteArray } from '@awayfl/avm2';
+import { Timer } from './utils/Timer';
 
 import { BaseTextLayoutImporter, Property } from './text/engine/NativehacksForTLF';
 
@@ -314,6 +317,10 @@ export function initLink() {
 	M('flash.display3D.IndexBuffer3D', IndexBuffer3D);
 	M('flash.display3D.Program3D', Program3D);
 	M('flash.display3D.VertexBuffer3D', VertexBuffer3D);
+
+	M('flash.display3D.textures.TextureBase', <any>TextureBase);
+	M('flash.display3D.textures.Texture', <any>Texture);
+	M('flash.display3D.textures.CubeTexture', <any>CubeTexture);
 
 	//M('flash.errors.DRMManagerError', DRMManagerError);//AIR
 	M('flash.errors.EOFError', EOFError);

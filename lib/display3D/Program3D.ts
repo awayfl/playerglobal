@@ -1,6 +1,5 @@
 import { ASObject, AXClass } from '@awayfl/avm2';
-import { ByteArray  as AwayByteArray } from '@awayjs/core';
-import { IContextGL, IProgram, ProgramWebGL } from '@awayjs/stage';
+import { IContextGL, IProgram } from '@awayjs/stage';
 import { ByteArray } from '../utils/ByteArray';
 import { Context3D } from './Context3D';
 
