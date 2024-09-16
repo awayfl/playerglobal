@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import { ASObject } from "@awayfl/avm2";
+
 // Class: Context3DStencilAction
-module Shumway.AVMX.AS.flash.display3D {
-	import notImplemented = Shumway.Debug.notImplemented;
-	import axCoerceString = Shumway.AVMX.axCoerceString;
-	export class Context3DStencilAction extends ASObject {
+export class Context3DStencilAction extends ASObject {
 
 		// Called whenever the class is initialized.
 		static classInitializer: any = null;
-
-		// List of static symbols to link.
-		static classSymbols: string [] = null; // [];
-
-		// List of instance symbols to link.
-		static instanceSymbols: string [] = null; // [];
 
 		constructor () {
 			super();
@@ -45,4 +39,3 @@ module Shumway.AVMX.AS.flash.display3D {
 		// AS -> JS Bindings
 
 	}
-}
