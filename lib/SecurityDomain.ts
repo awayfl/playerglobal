@@ -79,6 +79,9 @@ import { Context3D } from './display3D/Context3D';
 import { IndexBuffer3D } from './display3D/IndexBuffer3D';
 import { Program3D } from './display3D/Program3D';
 import { VertexBuffer3D } from './display3D/VertexBuffer3D';
+import { TextureBase } from './display3D/textures/TextureBase';
+import { Texture } from './display3D/textures/Texture';
+import { CubeTexture } from './display3D/textures/CubeTexture';
 
 export class Mouse {}
 
@@ -105,7 +108,12 @@ export class SecurityDomain extends AXSecurityDomain {
 			Context3D: Context3D,
 			IndexBuffer3D: IndexBuffer3D,
 			Program3D: Program3D,
-			VertexBuffer3D: VertexBuffer3D
+			VertexBuffer3D: VertexBuffer3D,
+			textures: { 
+				TextureBase: TextureBase,
+				Texture: Texture,
+				CubeTexture: CubeTexture,
+			}
 		},
 		events: {
 			EventDispatcher: EventDispatcher,

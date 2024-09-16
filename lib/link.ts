@@ -28,10 +28,15 @@ import { Stage } from './display/Stage';
 import { Stage3D } from './display/Stage3D';
 
 import { Context3D } from './display3D/Context3D';
+import { Context3DBlendFactor } from './display3D/Context3DBlendFactor';
 import { Context3DClearMask } from './display3D/Context3DClearMask';
+import { Context3DCompareMode } from './display3D/Context3DCompareMode';
 import { Context3DProfile } from './display3D/Context3DProfile';
 import { Context3DProgramType } from './display3D/Context3DProgramType';
 import { Context3DRenderMode } from './display3D/Context3DRenderMode';
+import { Context3DStencilAction } from './display3D/Context3DStencilAction';
+import { Context3DTextureFormat } from './display3D/Context3DTextureFormat';
+import { Context3DTriangleFace } from './display3D/Context3DTriangleFace';
 import { Context3DVertexBufferFormat } from './display3D/Context3DVertexBufferFormat';
 import { IndexBuffer3D } from './display3D/IndexBuffer3D';
 import { Program3D } from './display3D/Program3D';
@@ -309,18 +314,23 @@ export function initLink() {
 	// TODO: Add display3d stuff
 
 	M('flash.display3D.Context3D', Context3D);
-	M('flash.display3D.Context3DClearMask', <any>Context3DClearMask);
-	M('flash.display3D.Context3DProfile', <any>Context3DProfile);
-	M('flash.display3D.Context3DProgramType', <any>Context3DProgramType);
-	M('flash.display3D.Context3DRenderMode', <any>Context3DRenderMode);
-	M('flash.display3D.Context3DVertexBufferFormat', <any>Context3DVertexBufferFormat);
+	M('flash.display3D.Context3DBlendFactor', Context3DBlendFactor);
+	M('flash.display3D.Context3DClearMask', Context3DClearMask);
+	M('flash.display3D.Context3DCompareMode', Context3DCompareMode);
+	M('flash.display3D.Context3DProfile', Context3DProfile);
+	M('flash.display3D.Context3DProgramType', Context3DProgramType);
+	M('flash.display3D.Context3DRenderMode', Context3DRenderMode);
+	M('flash.display3D.Context3DStencilAction', Context3DStencilAction);
+	M('flash.display3D.Context3DTextureFormat', Context3DTextureFormat);
+	M('flash.display3D.Context3DTriangleFace', Context3DTriangleFace);
+	M('flash.display3D.Context3DVertexBufferFormat', Context3DVertexBufferFormat);
 	M('flash.display3D.IndexBuffer3D', IndexBuffer3D);
 	M('flash.display3D.Program3D', Program3D);
 	M('flash.display3D.VertexBuffer3D', VertexBuffer3D);
 
-	M('flash.display3D.textures.TextureBase', <any>TextureBase);
-	M('flash.display3D.textures.Texture', <any>Texture);
-	M('flash.display3D.textures.CubeTexture', <any>CubeTexture);
+	M('flash.display3D.textures.TextureBase', TextureBase);
+	M('flash.display3D.textures.Texture', Texture);
+	M('flash.display3D.textures.CubeTexture', CubeTexture);
 
 	//M('flash.errors.DRMManagerError', DRMManagerError);//AIR
 	M('flash.errors.EOFError', EOFError);

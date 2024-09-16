@@ -15,7 +15,7 @@
  */
 
 import { Debug } from '@awayfl/swf-loader';
-import { EventDispatcher } from '@awayjs/core';
+import { EventDispatcher } from '../../events/EventDispatcher';
 
 export class TextureBase extends EventDispatcher {
 

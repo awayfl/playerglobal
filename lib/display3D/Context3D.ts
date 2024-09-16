@@ -113,7 +113,9 @@ export class Context3D extends EventDispatcher {
 				break;
 		}
 		const programWebGL: ProgramWebGL = this._program._adaptee as ProgramWebGL;
-		programWebGL.uniformMatrix4fv(awayProgramType, transposedMatrix, matrix.adaptee._rawData);
+		// @todo: uniformMatrix4fv isn't working for some reason?
+		//programWebGL.uniformMatrix4fv(awayProgramType, transposedMatrix, matrix.adaptee._rawData);
+		programWebGL.uniform4fv(awayProgramType, matrix.adaptee._rawData);
 	}
 
 	public setProgramConstantsFromByteArray(programType: string, firstRegister: number /*int*/, numRegisters: number /*int*/, data: ByteArray, byteArrayOffset: number /*uint*/): void {
