@@ -1,11 +1,8 @@
-import { ContextGLProfile, ContextMode, Stage as AwayStage, Stage, StageManager } from '@awayjs/stage';
-import { EventDispatcher } from '../events/EventDispatcher';
-import { Context3D } from '../display3D/Context3D';
-import { Context3DProfile } from '../display3D/Context3DProfile';
 import { AVMStage, Debug } from '@awayfl/swf-loader';
-import { Bytecode } from '@awayfl/avm2/lib/Bytecode';
-import { AXClass, Multiname } from '@awayfl/avm2';
+import { ContextGLProfile, Stage as AwayStage } from '@awayjs/stage';
+import { Context3D } from '../display3D/Context3D';
 import { Event } from '../events/Event';
+import { EventDispatcher } from '../events/EventDispatcher';
 import { SecurityDomain } from '../SecurityDomain';
 
 export class Stage3D extends EventDispatcher {

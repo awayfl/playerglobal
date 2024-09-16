@@ -1,7 +1,7 @@
 import { ASObject, AXClass, Float64Vector } from '@awayfl/avm2';
 import { Debug } from '@awayfl/swf-loader';
+import { IVertexBuffer } from '@awayjs/stage';
 import { ByteArray } from '../utils/ByteArray';
-import { IContextGL, IVertexBuffer, VertexBufferWebGL } from '@awayjs/stage';
 import { Context3D } from './Context3D';
 
 export class VertexBuffer3D extends ASObject {

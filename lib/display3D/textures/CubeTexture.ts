@@ -15,15 +15,16 @@
  */
 // Class: CubeTexture
 import { Debug } from '@awayfl/swf-loader';
-import { ByteArray } from './../../utils/ByteArray';
 import { BitmapData } from './../../display/BitmapData';
+import { ByteArray } from './../../utils/ByteArray';
 import { TextureBase } from './TextureBase';
+
 export class CubeTexture extends TextureBase {
 
 	// Called whenever the class is initialized.
 	static classInitializer: any = null;
 
-	constructor () {
+	constructor() {
 		super();
 	}
 

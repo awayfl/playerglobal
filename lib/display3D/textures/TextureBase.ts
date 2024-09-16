@@ -26,7 +26,7 @@ export class TextureBase extends EventDispatcher {
 		super();
 	}
 
-	dispose(): void {
-		Debug.notImplemented('public flash.display3D.textures.TextureBase::dispose'); return;
+	public dispose(): void {
+		Debug.notImplemented('public flash.display3D.textures.TextureBase::dispose')
 	}
 }

@@ -1,5 +1,4 @@
-import { ContextGLDrawMode, ContextGLProfile, ContextGLProgramType, ContextGLVertexBufferFormat,
-		 ContextWebGL, IndexBufferWebGL, ProgramWebGL, Stage as AwayStage, StageEvent } from '@awayjs/stage';
+import { ContextGLDrawMode, ContextGLProgramType, ContextGLVertexBufferFormat, ProgramWebGL, Stage as AwayStage } from '@awayjs/stage';
 import { BitmapData } from '../display/BitmapData';
 import { Stage3D } from '../display/Stage3D';
 import { Context3DProgramType } from '../display3D/Context3DProgramType';
@@ -12,8 +11,8 @@ import { Matrix3D } from '../geom/Matrix3D';
 import { Rectangle } from '../geom/Rectangle';
 import { ByteArray } from '../utils/ByteArray';
 
-import { AXClass, Float64Vector } from '@awayfl/avm2';
-import { AVMStage, Debug } from '@awayfl/swf-loader';
+import { Float64Vector } from '@awayfl/avm2';
+import { Debug } from '@awayfl/swf-loader';
 import { SecurityDomain } from '../SecurityDomain';
 
 export class Context3D extends EventDispatcher {

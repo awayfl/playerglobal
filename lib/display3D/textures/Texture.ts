@@ -1,31 +1,30 @@
-import { TextureBase } from '@awayjs/renderer';
+import { Debug } from '@awayfl/swf-loader';
+import { TextureWebGL } from '@awayjs/stage';
 import { BitmapData } from './../../display/BitmapData';
 import { ByteArray } from './../../utils/ByteArray';
+import { TextureBase } from './TextureBase';
 export class Texture extends TextureBase {
+	public _adaptee: TextureWebGL;
 
-	// todo. can probably route directly to awayjs class
-
-	public static fromBitmapData(bitmapData: BitmapData): Texture {
-		console.warn('[playerglobal/display3D/Texture] - fromBitmapData not implemented');
-		return;
-	}
-
-	constructor () {
+	constructor() {
 		super()
+		Debug.notImplemented('public flash.display3D.textures.Texture::Texture'); return;
+		
+		
 	}
 
 	public uploadCompressedTextureFromByteArray (data: ByteArray, byteArrayOffset: number, async: boolean = false) {
-		console.warn('[playerglobal/display3D/Texture] - uploadCompressedTextureFromByteArray not implemented');
+		Debug.notImplemented('public flash.display3D.textures.Texture::uploadCompressedTextureFromByteArray');
 
 	}
 
 	public uploadFromBitmapData (source: BitmapData, miplevel: number = 0) {
-		console.warn('[playerglobal/display3D/Texture] - uploadFromBitmapData not implemented');
+		Debug.notImplemented('public flash.display3D.textures.Texture::uploadFromBitmapData');
 
 	}
 
 	public uploadFromByteArray (data: ByteArray, byteArrayOffset: number, miplevel: number = 0) {
-		console.warn('[playerglobal/display3D/Texture] - uploadFromByteArray not implemented');
+		Debug.notImplemented('public flash.display3D.textures.Texture::uploadFromByteArray');
 
 	}
 }

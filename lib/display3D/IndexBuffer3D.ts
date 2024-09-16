@@ -1,7 +1,7 @@
 import { ASObject, AXClass, Uint32Vector } from '@awayfl/avm2';
 import { Debug } from '@awayfl/swf-loader';
+import { IIndexBuffer } from '@awayjs/stage';
 import { ByteArray } from '../utils/ByteArray';
-import { IContextGL, IIndexBuffer } from '@awayjs/stage';
 import { Context3D } from './Context3D';
 
 export class IndexBuffer3D extends ASObject {
