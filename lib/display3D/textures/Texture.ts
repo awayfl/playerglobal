@@ -1,15 +1,17 @@
-import { BitmapData } from './../display/BitmapData';
-import { ByteArray } from './../utils/ByteArray';
-export class Texture {
+import { TextureBase } from '@awayjs/renderer';
+import { BitmapData } from './../../display/BitmapData';
+import { ByteArray } from './../../utils/ByteArray';
+export class Texture extends TextureBase {
 
 	// todo. can probably route directly to awayjs class
 
 	public static fromBitmapData(bitmapData: BitmapData): Texture {
 		console.warn('[playerglobal/display3D/Texture] - fromBitmapData not implemented');
-		return null;
+		return;
 	}
 
 	constructor () {
+		super()
 	}
 
 	public uploadCompressedTextureFromByteArray (data: ByteArray, byteArrayOffset: number, async: boolean = false) {

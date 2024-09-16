@@ -1,6 +1,6 @@
 import { ASObject, AXClass, Uint32Vector } from '@awayfl/avm2';
 import { Debug } from '@awayfl/swf-loader';
-import { ByteArray } from '../utils/ByteArray'
+import { ByteArray } from '../utils/ByteArray';
 import { IContextGL, IIndexBuffer } from '@awayjs/stage';
 import { Context3D } from './Context3D';
 
@@ -18,11 +18,10 @@ export class IndexBuffer3D extends ASObject {
 	}
 
 	public uploadFromVector(data: Uint32Vector, startOffset: number, count: number): void {
-		let uint16ArrayData = new Uint16Array(data.length);
+		const uint16ArrayData = new Uint16Array(data.length);
 		for (let i: number = 0; i < data.length; i++) {
-			uint16ArrayData[i] = data.axGetNumericProperty(i);;
+			uint16ArrayData[i] = data.axGetNumericProperty(i);
 		}
-		console.log(uint16ArrayData)
 		this._adaptee.uploadFromArray(uint16ArrayData, startOffset, count);
 	}
 
@@ -31,7 +30,7 @@ export class IndexBuffer3D extends ASObject {
 	}
 
 	public dispose(): void {
-		this._adaptee.dispose()
+		this._adaptee.dispose();
 	}
 
 }
