@@ -1,4 +1,9 @@
-export class Context3DProfile {
+import { ASObject } from '@awayfl/avm2';
+
+export class Context3DProfile extends ASObject {
+	// Called whenever the class is initialized.
+	public static classInitializer: any = null;
+
 	public static BASELINE: string = 'baseline';
 	public static BASELINE_CONSTRAINED: string = 'baselineConstrained';
 	public static BASELINE_EXTENDED: string = 'baselineExtended';

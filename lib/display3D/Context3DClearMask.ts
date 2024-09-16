@@ -1,5 +1,10 @@
+import { ASObject } from '@awayfl/avm2';
+
 // Based on https://github.com/ruffle-rs/ruffle/blob/master/core/src/avm2/globals/flash/display3D/Context3DClearMask.as
-export class Context3DClearMask {
+export class Context3DClearMask extends ASObject {
+
+	// Called whenever the class is initialized.
+	public static classInitializer: any = null;
 
 	// Clear only the color buffer.
 	public static COLOR: number   = 1 << 0;

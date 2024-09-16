@@ -9,7 +9,6 @@ import { Event } from '../events/Event';
 import { SecurityDomain } from '../SecurityDomain';
 
 export class Stage3D extends EventDispatcher {
-	static axClass: typeof Stage3D & AXClass;
 	// Called whenever the class is initialized.
 	public static classInitializer: any = null;
 
@@ -23,17 +22,17 @@ export class Stage3D extends EventDispatcher {
 	private _x: number
 	private _y: number
 	private _id: number
-	private _adaptee:AwayStage
+	private _adaptee: AwayStage
 
 	constructor(i) {
-		super()
-		console.log("Stage3D Constructor")
+		super();
+		console.log('Stage3D Constructor');
 		this._adaptee = AVMStage.instance().stage3Ds[i];
-		this._id = i
+		this._id = i;
 	}
 
-	public get adaptee(): AwayStage{
-		return this._adaptee
+	public get adaptee(): AwayStage {
+		return this._adaptee;
 	}
 
 	public get x(): number {
@@ -72,9 +71,9 @@ export class Stage3D extends EventDispatcher {
 
 	public requestContext3D(context3DRenderMode: string = 'auto', profile: string = 'baseline'): void {
 		console.log('Request Context');
-		this._context3D = new (this.sec as SecurityDomain).flash.display3D.Context3D(0, this, profile, context3DRenderMode );
+		this._context3D = new (this.sec as SecurityDomain).flash.display3D.Context3D(0, this, profile, context3DRenderMode);
 		const forceSoftware: boolean = (context3DRenderMode == 'auto');
-		var awayContextProfile:ContextGLProfile
+		let awayContextProfile: ContextGLProfile;
 		switch (profile) {
 			case 'baseline':
 				awayContextProfile = ContextGLProfile.BASELINE;

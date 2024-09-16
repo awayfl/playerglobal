@@ -1,5 +1,5 @@
-import { ContextGLDrawMode, ContextGLProfile, ContextGLProgramType, ContextGLVertexBufferFormat, 
-		 ContextWebGL, ProgramWebGL, Stage as AwayStage, StageEvent } from '@awayjs/stage';
+import { ContextGLDrawMode, ContextGLProfile, ContextGLProgramType, ContextGLVertexBufferFormat,
+		 ContextWebGL, IndexBufferWebGL, ProgramWebGL, Stage as AwayStage, StageEvent } from '@awayjs/stage';
 import { BitmapData } from '../display/BitmapData';
 import { Stage3D } from '../display/Stage3D';
 import { Context3DProgramType } from '../display3D/Context3DProgramType';
@@ -33,17 +33,17 @@ export class Context3D extends EventDispatcher {
 	private _stage3D: Stage3D
 
 	constructor(id: number, stage3D: Stage3D, renderMode: string = 'auto', profile: string = 'baseline') {
-		super()
+		super();
 		console.log('Context3D Create');
-		this._renderMode = renderMode
-		this._profile = profile
-		this._stage3D = stage3D
-		this._adaptee = stage3D.adaptee
+		this._renderMode = renderMode;
+		this._profile = profile;
+		this._stage3D = stage3D;
+		this._adaptee = stage3D.adaptee;
 		console.log(stage3D);
 	}
 
-	public get adaptee():AwayStage {
-		return this._adaptee
+	public get adaptee(): AwayStage {
+		return this._adaptee;
 	}
 
 	/*private _onAwayContextCreatedDelegate(e: StageEvent): void {
@@ -85,7 +85,7 @@ export class Context3D extends EventDispatcher {
 
 	public drawTriangles(indexBuffer: IndexBuffer3D, firstIndex: number = 0, numTriangles: number = -1): void {
 		// @todo: This is not working
-		this._adaptee.context.drawIndices(ContextGLDrawMode.TRIANGLES, indexBuffer._adaptee, firstIndex, (numTriangles == -1) ? -1 : (numTriangles * 3))
+		this._adaptee.context.drawIndices(ContextGLDrawMode.TRIANGLES, indexBuffer._adaptee, firstIndex, (numTriangles == -1) ? -1 : (numTriangles * 3));
 	}
 
 	public present(): void {
@@ -102,7 +102,7 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public setProgramConstantsFromMatrix(programType: string, firstRegister: number, matrix: Matrix3D, transposedMatrix: boolean = false): void {
-		let awayProgramType:ContextGLProgramType
+		let awayProgramType: ContextGLProgramType;
 		switch (programType) {
 			case Context3DProgramType.FRAGMENT:
 				awayProgramType = ContextGLProgramType.FRAGMENT;
@@ -122,7 +122,7 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public setVertexBufferAt(index: number, buffer: VertexBuffer3D, bufferOffset: number = 0, format: string = 'float4'): void {
-		let awayFormat:number
+		let awayFormat: number;
 		switch (format) {
 			case Context3DVertexBufferFormat.BYTES_4:
 				awayFormat = ContextGLVertexBufferFormat.BYTE_4;
@@ -142,7 +142,7 @@ export class Context3D extends EventDispatcher {
 			default:
 				break;
 		}
-		this._adaptee.context.setVertexBufferAt(index, buffer._adaptee, bufferOffset, awayFormat);
+		this._adaptee.context.setVertexBufferAt(index, buffer._adaptee, bufferOffset * 4, awayFormat);
 	}
 
 	public setBlendFactors(sourceFactor: string, destinationFactor: string): void {
@@ -174,7 +174,7 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public createVertexBuffer(numVertices: number, data32PerVertex: number, bufferUsage: string = 'staticDraw'): VertexBuffer3D {
-		console.log("createVertexBuffer")
+		console.log('createVertexBuffer');
 		return new (this.sec as SecurityDomain).flash.display3D.VertexBuffer3D(this, numVertices, data32PerVertex);
 	}
 
