@@ -69,7 +69,7 @@ export class Stage3D extends EventDispatcher {
 	public requestContext3D(context3DRenderMode: string = 'auto', profile: string = 'baseline'): void {
 		console.log('Request Context');
 		this._context3D = new (this.sec as SecurityDomain).flash.display3D.Context3D(0, this, profile, context3DRenderMode);
-		const forceSoftware: boolean = (context3DRenderMode == 'auto');
+		const forceSoftware: boolean = (context3DRenderMode == 'software');
 		let awayContextProfile: ContextGLProfile;
 		switch (profile) {
 			case 'baseline':
