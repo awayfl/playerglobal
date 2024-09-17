@@ -1,5 +1,5 @@
 import { AVMStage } from '@awayfl/swf-loader';
-import { ContextGLProfile, Stage as AwayStage } from '@awayjs/stage';
+import { ContextGLProfile, Stage as AwayStage, StageEvent } from '@awayjs/stage';
 import { Context3D } from '../display3D/Context3D';
 import { Event } from '../events/Event';
 import { EventDispatcher } from '../events/EventDispatcher';
@@ -86,7 +86,11 @@ export class Stage3D extends EventDispatcher {
 				break;
 		}
 		console.log('Context3D Config: ', 'id: ', 0, ' forceSoftware: ', forceSoftware, ' profile: ', awayContextProfile);
+		const stage3D:Stage3D = this
+		const thisSec:SecurityDomain = (this.sec as SecurityDomain);
+		this._adaptee.addEventListener(StageEvent.CONTEXT_RECREATED, function(e:StageEvent){
+			stage3D.dispatchEvent(new thisSec.flash.events.Event(Event.CONTEXT3D_CREATE));
+		})
 		this._adaptee.requestContext(forceSoftware, awayContextProfile);
-		super.dispatchEvent(new (this.sec as SecurityDomain).flash.events.Event(Event.CONTEXT3D_CREATE));
 	}
 }
