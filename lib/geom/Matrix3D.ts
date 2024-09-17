@@ -142,7 +142,7 @@ export class Matrix3D extends ASObject {
 	}
 
 	public transformVector(v: Vector3D): Vector3D {
-		return new (<SecurityDomain> this.sec).flash.geom.Vector3D(this._adaptee.transformVector(v.adaptee, null, true));
+		return new (<SecurityDomain> this.sec).flash.geom.Vector3D(this._adaptee.transformVector(v.adaptee));
 	}
 
 	public deltaTransformVector(v: Vector3D): Vector3D {

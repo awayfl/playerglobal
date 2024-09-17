@@ -45,29 +45,65 @@ export class Context3D extends EventDispatcher {
 		return this._adaptee;
 	}
 
-	/*private _onAwayContextCreatedDelegate(e: StageEvent): void {
-		console.log(e.stage);
-		this._adaptee = e.stage;
-		this._gl = (this._adaptee.context as ContextWebGL)._gl;
-		//this._stage3D.dispatchEvent(new (this.sec as SecurityDomain).flash.events.Event(Event.CONTEXT3D_CREATE))
-		console.log('Context Created');
+	public get backBufferHeight(): number {
+		return this._adaptee.height
+	}
 
-	}*/
+	public get backBufferWidth(): number {
+		return this._adaptee.width
+	}
 
 	public get driverInfo(): string {
-		Debug.notImplemented('public flash.display3D.Context3D::get driverInfo'); return;
-		// return this._driverInfo;
+		Debug.notImplemented('public flash.display3D.Context3D::get driverInfo'); 
+		let fmtProfile = this._profile
+		.split('_')
+		.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+		.join(' ');
+		return `OpenGL (${fmtProfile})`;;
 	}
 
 	public get enableErrorChecking(): boolean {
-		Debug.notImplemented('public flash.display3D.Context3D::get enableErrorChecking'); return;
-		// return this._enableErrorChecking;
+		Debug.notImplemented('public flash.display3D.Context3D::get enableErrorChecking'); 
+		return false
 	}
 
 	public set enableErrorChecking(toggle: boolean) {
 		toggle = !!toggle;
 		Debug.notImplemented('public flash.display3D.Context3D::set enableErrorChecking'); return;
 		// this._enableErrorChecking = toggle;
+	}
+
+	public get maxBackBufferWidth(): number {
+		Debug.notImplemented('public flash.display3D.Context3D::get maxBackBufferWidth'); 
+		return 2048;
+	}
+
+	public set maxBackBufferWidth(value: number) {
+		Debug.notImplemented('public flash.display3D.Context3D::set maxBackBufferWidth'); 
+	}
+
+	public get maxBackBufferHeight(): number {
+		Debug.notImplemented('public flash.display3D.Context3D::set maxBackBufferHeight'); 
+		return 2048;
+	}
+
+	public set maxBackBufferHeight(value: number) {
+		Debug.notImplemented('public flash.display3D.Context3D::set maxBackBufferHeight'); 
+	}
+
+	public get profile(): string {
+		Debug.notImplemented('public flash.display3D.Context3D::get profile'); 
+		return this._profile;
+	}
+
+	public static get supportsVideoTexture(): boolean {
+		Debug.notImplemented('public flash.display3D.Context3D::get driverInfo'); 
+		return false;;
+	}
+
+	public get totalGPUMemory(): number {
+		Debug.notImplemented('public flash.display3D.Context3D::get totalGPUMemory'); 
+		return 1024;;
 	}
 
 	public dispose(): void {
@@ -97,7 +133,24 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public setProgramConstantsFromVector(programType: string, firstRegister: number /*int*/, data: Float64Vector, numRegisters: number /*int*/ = -1): void {
-		Debug.notImplemented('public flash.display3D.Context3D::setProgramConstantsFromVector'); return;
+		let awayProgramType: ContextGLProgramType;
+		switch (programType) {
+			case Context3DProgramType.FRAGMENT:
+				awayProgramType = ContextGLProgramType.FRAGMENT;
+				break;
+			case Context3DProgramType.VERTEX:
+				awayProgramType = ContextGLProgramType.VERTEX;
+				break;
+			default:
+				break;
+		}
+		// @todo: support transposed matrixes
+		let awayData:Float32Array = new Float32Array(data.length)
+		for(let i = 0; i < data.length; i++) {
+			awayData[i] = data.axGetNumericProperty(i)
+
+		}
+		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, awayData);
 	}
 
 	public setProgramConstantsFromMatrix(programType: string, firstRegister: number, matrix: Matrix3D, transposedMatrix: boolean = false): void {
@@ -112,10 +165,8 @@ export class Context3D extends EventDispatcher {
 			default:
 				break;
 		}
-		const programWebGL: ProgramWebGL = this._program._adaptee as ProgramWebGL;
-		// @todo: uniformMatrix4fv isn't working for some reason?
-		//programWebGL.uniformMatrix4fv(awayProgramType, transposedMatrix, matrix.adaptee._rawData);
-		programWebGL.uniform4fv(awayProgramType, matrix.adaptee._rawData);
+		// @todo: support transposed matrixes
+		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, matrix.adaptee._rawData);
 	}
 
 	public setProgramConstantsFromByteArray(programType: string, firstRegister: number /*int*/, numRegisters: number /*int*/, data: ByteArray, byteArrayOffset: number /*uint*/): void {
