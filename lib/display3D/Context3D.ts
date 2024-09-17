@@ -1,4 +1,4 @@
-import { ContextGLDrawMode, ContextGLProgramType, ContextGLVertexBufferFormat, ProgramWebGL, Stage as AwayStage } from '@awayjs/stage';
+import { ContextGLDrawMode, ContextGLProfile, ContextGLProgramType, ContextGLVertexBufferFormat, IVertexBuffer, ProgramWebGL, Stage as AwayStage, StageEvent } from '@awayjs/stage';
 import { BitmapData } from '../display/BitmapData';
 import { Stage3D } from '../display/Stage3D';
 import { Context3DProgramType } from '../display3D/Context3DProgramType';
@@ -10,8 +10,7 @@ import { EventDispatcher } from '../events/EventDispatcher';
 import { Matrix3D } from '../geom/Matrix3D';
 import { Rectangle } from '../geom/Rectangle';
 import { ByteArray } from '../utils/ByteArray';
-
-import { Float64Vector } from '@awayfl/avm2';
+import { axCoerceString, Float64Vector } from '@awayfl/avm2';
 import { Debug } from '@awayfl/swf-loader';
 import { SecurityDomain } from '../SecurityDomain';
 
@@ -24,19 +23,14 @@ export class Context3D extends EventDispatcher {
 
 	// List of instance symbols to link.
 	public static instanceSymbols: string[] = null; // [];
+
 	private _adaptee: AwayStage
-	private _renderMode: string
 	private _profile: string
-	private _gl: WebGLRenderingContext | WebGL2RenderingContext
-	private _program: Program3D
-	private _stage3D: Stage3D
 
 	constructor(id: number, stage3D: Stage3D, renderMode: string = 'auto', profile: string = 'baseline') {
 		super();
-		console.log('Context3D Create');
-		this._renderMode = renderMode;
+		console.log(`Context3D Create: ${renderMode} ${profile}`);
 		this._profile = profile;
-		this._stage3D = stage3D;
 		this._adaptee = stage3D.adaptee;
 		console.log(stage3D);
 	}
@@ -55,11 +49,7 @@ export class Context3D extends EventDispatcher {
 
 	public get driverInfo(): string {
 		Debug.notImplemented('public flash.display3D.Context3D::get driverInfo'); 
-		let fmtProfile = this._profile
-		.split('_')
-		.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-		.join(' ');
-		return `OpenGL (${fmtProfile})`;;
+		return axCoerceString(`OpenGL`);;
 	}
 
 	public get enableErrorChecking(): boolean {
@@ -93,7 +83,7 @@ export class Context3D extends EventDispatcher {
 
 	public get profile(): string {
 		Debug.notImplemented('public flash.display3D.Context3D::get profile'); 
-		return this._profile;
+		return axCoerceString(this._profile);
 	}
 
 	public static get supportsVideoTexture(): boolean {
@@ -129,7 +119,6 @@ export class Context3D extends EventDispatcher {
 
 	public setProgram(program: Program3D): void {
 		this._adaptee.context.setProgram(program._adaptee);
-		this._program = program;
 	}
 
 	public setProgramConstantsFromVector(programType: string, firstRegister: number /*int*/, data: Float64Vector, numRegisters: number /*int*/ = -1): void {

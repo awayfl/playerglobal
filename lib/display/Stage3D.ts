@@ -1,4 +1,4 @@
-import { AVMStage, Debug } from '@awayfl/swf-loader';
+import { AVMStage } from '@awayfl/swf-loader';
 import { ContextGLProfile, Stage as AwayStage } from '@awayjs/stage';
 import { Context3D } from '../display3D/Context3D';
 import { Event } from '../events/Event';
@@ -15,9 +15,6 @@ export class Stage3D extends EventDispatcher {
 	// List of instance symbols to link.
 	public static instanceSymbols: string[] = null; // [];
 	private _context3D: Context3D
-	private _visible: boolean
-	private _x: number
-	private _y: number
 	private _id: number
 	private _adaptee: AwayStage
 
@@ -33,33 +30,27 @@ export class Stage3D extends EventDispatcher {
 	}
 
 	public get x(): number {
-		Debug.notImplemented('[playerglobal/display/Stage3D] - get x not implemented');
-		return this._x;
+		return this._adaptee.x;
 	}
 
 	public set x(value: number) {
-		this._x = value;
-		Debug.notImplemented('[playerglobal/display/Stage3D] - set x not implemented');
+		this._adaptee.y = value;
 	}
 
 	public get y(): number {
-		Debug.notImplemented('[playerglobal/display/Stage3D] - get y not implemented');
-		return this._y;
+		return this._adaptee.y;
 	}
 
 	public set y(value: number) {
-		value = this._y;
-		Debug.notImplemented('[playerglobal/display/Stage3D] - set y not implemented');
+		this._adaptee.y = value;
 	}
 
 	public get visible(): boolean {
-		Debug.notImplemented('[playerglobal/display/Stage3D] - get visible not implemented');
-		return this._visible;
+		return this._adaptee.visible ;
 	}
 
 	public set visible(value: boolean) {
-		this._visible = value;
-		Debug.notImplemented('[playerglobal/display/Stage3D] - set visible not implemented');
+		this._adaptee.visible = value;
 	}
 
 	public get context3D(): Context3D {
