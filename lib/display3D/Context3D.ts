@@ -13,6 +13,7 @@ import { ByteArray } from '../utils/ByteArray';
 import { axCoerceString, Float64Vector } from '@awayfl/avm2';
 import { Debug } from '@awayfl/swf-loader';
 import { SecurityDomain } from '../SecurityDomain';
+import { Event } from '../events/Event';
 
 export class Context3D extends EventDispatcher {
 	// Called whenever the class is initialized.
@@ -29,11 +30,18 @@ export class Context3D extends EventDispatcher {
 
 	constructor(id: number, stage3D: Stage3D, renderMode: string = 'auto', profile: string = 'baseline') {
 		super();
+		const context3D:Context3D = this
+		const thisSec:SecurityDomain = (this.sec as SecurityDomain);
+
 		console.log(`Context3D Create: ${renderMode} ${profile}`);
 		this._profile = profile;
 		this._adaptee = stage3D.adaptee;
-		console.log(stage3D);
-	}
+		function dispatchContextCreated(e:StageEvent){
+			context3D.adaptee.removeEventListener(StageEvent.CONTEXT_RECREATED, dispatchContextCreated)
+			context3D.dispatchEvent(new thisSec.flash.events.Event(Event.CONTEXT3D_CREATE));
+		}
+		this._adaptee.addEventListener(StageEvent.CONTEXT_RECREATED, dispatchContextCreated)	
+		}
 
 	public get adaptee(): AwayStage {
 		return this._adaptee;
@@ -49,7 +57,7 @@ export class Context3D extends EventDispatcher {
 
 	public get driverInfo(): string {
 		Debug.notImplemented('public flash.display3D.Context3D::get driverInfo'); 
-		return axCoerceString(`OpenGL`);;
+		return 'OpenGL';
 	}
 
 	public get enableErrorChecking(): boolean {

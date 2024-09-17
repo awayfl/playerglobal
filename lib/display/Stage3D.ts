@@ -88,9 +88,12 @@ export class Stage3D extends EventDispatcher {
 		console.log('Context3D Config: ', 'id: ', 0, ' forceSoftware: ', forceSoftware, ' profile: ', awayContextProfile);
 		const stage3D:Stage3D = this
 		const thisSec:SecurityDomain = (this.sec as SecurityDomain);
-		this._adaptee.addEventListener(StageEvent.CONTEXT_RECREATED, function(e:StageEvent){
+		function dispatchContextCreated(e:Event){
+			console.log(stage3D.context3D.driverInfo)
+			stage3D._context3D.removeEventListener(Event.CONTEXT3D_CREATE, dispatchContextCreated)
 			stage3D.dispatchEvent(new thisSec.flash.events.Event(Event.CONTEXT3D_CREATE));
-		})
+		}
+		this._context3D.addEventListener(Event.CONTEXT3D_CREATE, dispatchContextCreated)		
 		this._adaptee.requestContext(forceSoftware, awayContextProfile);
 	}
 }
