@@ -70,8 +70,7 @@ export class URLLoader extends EventDispatcher {
 				return new (<SecurityDomain> this.sec).flash.net.URLVariables(rawData);
 			}
 			case URLLoaderDataFormat.BINARY: {
-				console.warn('[URLLoader] Binary not supported');
-				return null;
+				return new (<SecurityDomain> this.sec).flash.utils.ByteArray(rawData);
 			}
 
 			default: {
