@@ -14,6 +14,10 @@ import { axCoerceString, Float64Vector } from '@awayfl/avm2';
 import { Debug } from '@awayfl/swf-loader';
 import { SecurityDomain } from '../SecurityDomain';
 import { Event } from '../events/Event';
+import { Security } from '../system/Security';
+import { Texture } from './textures/Texture';
+import { CubeTexture } from './textures/CubeTexture';
+import { TextureBase } from '@awayjs/renderer';
 
 export class Context3D extends EventDispatcher {
 	// Called whenever the class is initialized.
@@ -232,11 +236,15 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public createTexture(width: number /*int*/, height: number /*int*/, format: string, optimizeForRenderToTexture: boolean, streamingLevels: number /*int*/ = 0): any {
-		Debug.notImplemented('public flash.display3D.Context3D::createTexture'); return;
+		return new (this.sec as SecurityDomain).flash.display3D.textures.Texture(this, width, height, format, optimizeForRenderToTexture, streamingLevels);
+	}
+
+	public createRectangleTexture(width: number /*int*/, height: number /*int*/, format: string, optimizeForRenderToTexture: boolean): any {
+		return new (this.sec as SecurityDomain).flash.display3D.textures.RectangleTexture(this, width, height, format, optimizeForRenderToTexture);
 	}
 
 	public createCubeTexture(size: number /*int*/, format: string, optimizeForRenderToTexture: boolean, streamingLevels: number /*int*/ = 0): any /*CubeTexture*/ {
-		Debug.notImplemented('public flash.display3D.Context3D::createCubeTexture'); return;
+		return new (this.sec as SecurityDomain).flash.display3D.textures.CubeTexture(this, size, format, optimizeForRenderToTexture, streamingLevels)
 	}
 
 	public createProgram(): Program3D {
@@ -247,16 +255,16 @@ export class Context3D extends EventDispatcher {
 		Debug.notImplemented('public flash.display3D.Context3D::drawToBitmapData'); return;
 	}
 
-	public setRenderToTextureInternal(textureTextureBase, targetType: number /*int*/, enableDepthAndStencil: boolean, antiAlias: number /*int*/, surfaceSelector: number /*int*/): void {
-		Debug.notImplemented('public flash.display3D.Context3D::setRenderToTextureInternal'); return;
+	public setRenderToTextureInternal(texture:TextureBase, targetType: number /*int*/, enableDepthAndStencil: boolean, antiAlias: number /*int*/, surfaceSelector: number /*int*/): void {
+		Debug.notImplemented('public flash.display3D.Context3D::setRenderToTextureInternal ' + texture.adaptee); return;
 	}
 
-	public setTextureInternal(sampler: number /*int*/, textureTexture): void {
-		Debug.notImplemented('public flash.display3D.Context3D::setTextureInternal'); return;
+	public setTextureInternal(sampler: number /*int*/, texture:Texture): void {
+		this._adaptee.context.setTextureAt(sampler, texture._adaptee)
 	}
 
-	public setCubeTextureInternal(sampler: number /*int*/, textureCubeTexture): void {
-		Debug.notImplemented('public flash.display3D.Context3D::setCubeTextureInternal'); return;
+	public setCubeTextureInternal(sampler: number /*int*/, textureCube:CubeTexture): void {
+		this._adaptee.context.setTextureAt(sampler, textureCube._adaptee)
 	}
 
 }

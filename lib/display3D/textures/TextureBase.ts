@@ -15,18 +15,21 @@
  */
 
 import { Debug } from '@awayfl/swf-loader';
+import { CubeTextureWebGL, TextureBaseWebGL, TextureWebGL } from '@awayjs/stage';
 import { EventDispatcher } from '../../events/EventDispatcher';
+import { CubeTexture } from './CubeTexture';
+import { Texture } from './Texture';
 
 export class TextureBase extends EventDispatcher {
 
 	// Called whenever the class is initialized.
 	static classInitializer: any = null;
-
+	public _adaptee: TextureBaseWebGL;
 	constructor () {
 		super();
 	}
 
 	public dispose(): void {
-		Debug.notImplemented('public flash.display3D.textures.TextureBase::dispose')
+		this._adaptee.dispose();
 	}
 }

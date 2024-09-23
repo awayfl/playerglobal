@@ -112,6 +112,7 @@ export class SecurityDomain extends AXSecurityDomain {
 			textures: { 
 				TextureBase: TextureBase,
 				Texture: Texture,
+				RectangleTexture: Texture,
 				CubeTexture: CubeTexture,
 			}
 		},
