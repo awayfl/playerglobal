@@ -330,6 +330,7 @@ export function initLink() {
 
 	M('flash.display3D.textures.TextureBase', TextureBase);
 	M('flash.display3D.textures.Texture', Texture);
+	M('flash.display3D.textures.RectangleTexture', Texture);
 	M('flash.display3D.textures.CubeTexture', CubeTexture);
 
 	//M('flash.errors.DRMManagerError', DRMManagerError);//AIR
