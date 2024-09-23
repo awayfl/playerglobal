@@ -14,32 +14,61 @@
  * limitations under the License.
  */
 // Class: CubeTexture
-import { Debug } from '@awayfl/swf-loader';
-import { BitmapData } from './../../display/BitmapData';
-import { ByteArray } from './../../utils/ByteArray';
-import { TextureBase } from './TextureBase';
+import { Debug } from "@awayfl/swf-loader";
+import { ContextGLTextureFormat, CubeTextureWebGL, TextureWebGL } from "@awayjs/stage";
+import { Context3D } from "../Context3D";
+import { BitmapData } from "./../../display/BitmapData";
+import { ByteArray } from "./../../utils/ByteArray";
+import { TextureBase } from "./TextureBase";
 
 export class CubeTexture extends TextureBase {
-
 	// Called whenever the class is initialized.
 	static classInitializer: any = null;
 
-	constructor() {
+	constructor(
+		context: Context3D,
+		size: number,
+		format: String,
+		optimizeForRenderToTexture: boolean,
+		streamingLevels: number = 0
+	) {
 		super();
+		let awayTextureFormat: ContextGLTextureFormat;
+		switch (format) {
+			case "bgra":
+				awayTextureFormat = ContextGLTextureFormat.BGRA;
+				break;
+			case "compressed":
+				awayTextureFormat = ContextGLTextureFormat.COMPRESSED;
+				break;
+			case "compressedAlpha":
+				awayTextureFormat = ContextGLTextureFormat.COMPRESSED_ALPHA;
+				break;
+		}
+		this._adaptee = context.adaptee.context.createCubeTexture(
+			size,
+			awayTextureFormat,
+			optimizeForRenderToTexture,
+			streamingLevels
+		) as CubeTextureWebGL;
 	}
 
-	uploadFromBitmapData(source: BitmapData, side: number /*uint*/, miplevel: number /*uint*/ = 0): void {
-		source = source; side = side >>> 0; miplevel = miplevel >>> 0;
-		Debug.notImplemented('public flash.display3D.textures.CubeTexture::uploadFromBitmapData'); return;
+	public uploadFromBitmapData(source: BitmapData, side: number /*uint*/, miplevel: number /*uint*/ = 0): void {
+		(<CubeTextureWebGL>this._adaptee).uploadFromArray(new Uint8Array(source.adaptee.getDataInternal()), side, miplevel)
 	}
 
-	uploadFromByteArray(data: ByteArray, byteArrayOffset: number /*uint*/, side: number /*uint*/, miplevel: number /*uint*/ = 0): void {
-		data = data; byteArrayOffset = byteArrayOffset >>> 0; side = side >>> 0; miplevel = miplevel >>> 0;
-		Debug.notImplemented('public flash.display3D.textures.CubeTexture::uploadFromByteArray'); return;
+	uploadFromByteArray(data: ByteArray,byteArrayOffset: number /*uint*/,side: number /*uint*/,miplevel: number /*uint*/ = 0
+	): void {
+		data.position = byteArrayOffset;
+		(<CubeTextureWebGL>this._adaptee).uploadFromArray(new Uint8Array(data.arraybytes), side, miplevel)
 	}
 
-	uploadCompressedTextureFromByteArray(data: ByteArray, byteArrayOffset: number /*uint*/, async: boolean = false): void {
-		data = data; byteArrayOffset = byteArrayOffset >>> 0; async = !!async;
-		Debug.notImplemented('public flash.display3D.textures.CubeTexture::uploadCompressedTextureFromByteArray'); return;
+	uploadCompressedTextureFromByteArray(data: ByteArray,byteArrayOffset: number /*uint*/,async: boolean = false
+	): void {
+		data = data;
+		byteArrayOffset = byteArrayOffset >>> 0;
+		async = !!async;
+		Debug.notImplemented("public flash.display3D.textures.CubeTexture::uploadCompressedTextureFromByteArray");
+		return;
 	}
 }
