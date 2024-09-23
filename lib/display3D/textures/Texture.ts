@@ -39,10 +39,12 @@ export class Texture extends TextureBase {
 	}
 
 	public uploadFromBitmapData(source: BitmapData, miplevel: number = 0) {
+		if(miplevel==0) // @todo: Additional Mips cause errors
 		(<TextureWebGL>this._adaptee).uploadFromArray(new Uint8Array(source.adaptee.getDataInternal()), miplevel);
 	}
 
 	public uploadFromByteArray(data: ByteArray, byteArrayOffset: number, miplevel: number = 0) {
+		if(miplevel==0) // @todo: Additional Mips cause errors
 		(<TextureWebGL>this._adaptee).uploadFromArray(new Uint8Array(data.arraybytes), miplevel);
 	}
 }

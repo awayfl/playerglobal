@@ -24,6 +24,5 @@ export class Program3D extends ASObject {
 
 	public upload(vertexProgram: ByteArray, fragmentProgram: ByteArray): void {
 		this._adaptee.upload(vertexProgram, fragmentProgram);
-		this._context.setProgram(this._adaptee);
 	}
 }

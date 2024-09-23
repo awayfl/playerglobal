@@ -31,6 +31,7 @@ export class Context3D extends EventDispatcher {
 
 	private _adaptee: AwayStage
 	private _profile: string
+	private _currentProgram : Program3D
 
 	constructor(id: number, stage3D: Stage3D, renderMode: string = 'auto', profile: string = 'baseline') {
 		super();
@@ -131,6 +132,7 @@ export class Context3D extends EventDispatcher {
 
 	public setProgram(program: Program3D): void {
 		this._adaptee.context.setProgram(program._adaptee);
+		this._currentProgram = program
 	}
 
 	public setProgramConstantsFromVector(programType: string, firstRegister: number /*int*/, data: Float64Vector, numRegisters: number /*int*/ = -1): void {
@@ -195,7 +197,8 @@ export class Context3D extends EventDispatcher {
 			default:
 				break;
 		}
-		this._adaptee.context.setVertexBufferAt(index, buffer._adaptee, bufferOffset * 4, awayFormat);
+		if(this._currentProgram && buffer) // Away3D uses a null buffer to clear this, but null in AwayJS just errors
+			this._adaptee.context.setVertexBufferAt(index, buffer._adaptee, bufferOffset * 4, awayFormat);
 	}
 
 	public setBlendFactors(sourceFactor: string, destinationFactor: string): void {
@@ -260,11 +263,13 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public setTextureInternal(sampler: number /*int*/, texture:Texture): void {
-		this._adaptee.context.setTextureAt(sampler, texture._adaptee)
+		if(texture) // Away3D uses a null texture to clear this, but null in AwayJS just errors
+			this._adaptee.context.setTextureAt(sampler, texture._adaptee)
 	}
 
 	public setCubeTextureInternal(sampler: number /*int*/, textureCube:CubeTexture): void {
-		this._adaptee.context.setTextureAt(sampler, textureCube._adaptee)
+		if(textureCube) // Away3D uses a null texture to clear this, but null in AwayJS just errors
+			this._adaptee.context.setTextureAt(sampler, textureCube._adaptee)
 	}
 
 }
