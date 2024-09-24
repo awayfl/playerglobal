@@ -17,7 +17,7 @@ import { Event } from '../events/Event';
 import { Security } from '../system/Security';
 import { Texture } from './textures/Texture';
 import { CubeTexture } from './textures/CubeTexture';
-import { TextureBase } from '@awayjs/renderer';
+import { TextureBase } from './textures/TextureBase';
 
 export class Context3D extends EventDispatcher {
 	// Called whenever the class is initialized.
@@ -31,7 +31,7 @@ export class Context3D extends EventDispatcher {
 
 	private _adaptee: AwayStage
 	private _profile: string
-	private _currentProgram : Program3D
+	//private _currentProgram : Program3D
 
 	constructor(id: number, stage3D: Stage3D, renderMode: string = 'auto', profile: string = 'baseline') {
 		super();
@@ -122,7 +122,6 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public drawTriangles(indexBuffer: IndexBuffer3D, firstIndex: number = 0, numTriangles: number = -1): void {
-		// @todo: This is not working
 		this._adaptee.context.drawIndices(ContextGLDrawMode.TRIANGLES, indexBuffer._adaptee, firstIndex, (numTriangles == -1) ? -1 : (numTriangles * 3));
 	}
 
@@ -132,7 +131,7 @@ export class Context3D extends EventDispatcher {
 
 	public setProgram(program: Program3D): void {
 		this._adaptee.context.setProgram(program._adaptee);
-		this._currentProgram = program
+		//this._currentProgram = program
 	}
 
 	public setProgramConstantsFromVector(programType: string, firstRegister: number /*int*/, data: Float64Vector, numRegisters: number /*int*/ = -1): void {
@@ -197,8 +196,8 @@ export class Context3D extends EventDispatcher {
 			default:
 				break;
 		}
-		if(this._currentProgram && buffer) // Away3D uses a null buffer to clear this, but null in AwayJS just errors
-			this._adaptee.context.setVertexBufferAt(index, buffer._adaptee, bufferOffset * 4, awayFormat);
+		//if(this._currentProgram && buffer) // Away3D uses a null buffer to clear this, but null in AwayJS just errors
+			this._adaptee.context.setVertexBufferAt(index, buffer._adaptee, bufferOffset * 4, awayFormat, false);
 	}
 
 	public setBlendFactors(sourceFactor: string, destinationFactor: string): void {
@@ -259,7 +258,7 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public setRenderToTextureInternal(texture:TextureBase, targetType: number /*int*/, enableDepthAndStencil: boolean, antiAlias: number /*int*/, surfaceSelector: number /*int*/): void {
-		Debug.notImplemented('public flash.display3D.Context3D::setRenderToTextureInternal ' + texture.adaptee); return;
+		Debug.notImplemented('public flash.display3D.Context3D::setRenderToTextureInternal ' + texture._adaptee); return;
 	}
 
 	public setTextureInternal(sampler: number /*int*/, texture:Texture): void {
