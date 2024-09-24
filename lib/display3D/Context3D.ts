@@ -1,4 +1,4 @@
-import { ContextGLDrawMode, ContextGLProfile, ContextGLProgramType, ContextGLVertexBufferFormat, IVertexBuffer, ProgramWebGL, Stage as AwayStage, StageEvent } from '@awayjs/stage';
+import { ContextGLDrawMode, ContextGLProfile, ContextGLProgramType, ContextGLVertexBufferFormat, ContextWebGL, IVertexBuffer, ProgramWebGL, Stage as AwayStage, StageEvent } from '@awayjs/stage';
 import { BitmapData } from '../display/BitmapData';
 import { Stage3D } from '../display/Stage3D';
 import { Context3DProgramType } from '../display3D/Context3DProgramType';
@@ -18,6 +18,7 @@ import { Security } from '../system/Security';
 import { Texture } from './textures/Texture';
 import { CubeTexture } from './textures/CubeTexture';
 import { TextureBase } from './textures/TextureBase';
+import { VertexBufferWebGL } from '@awayjs/stage';
 
 export class Context3D extends EventDispatcher {
 	// Called whenever the class is initialized.
@@ -196,8 +197,9 @@ export class Context3D extends EventDispatcher {
 			default:
 				break;
 		}
-		//if(this._currentProgram && buffer) // Away3D uses a null buffer to clear this, but null in AwayJS just errors
-			this._adaptee.context.setVertexBufferAt(index, buffer._adaptee, bufferOffset * 4, awayFormat, false);
+			if(buffer) // Away3D uses a null buffer to clear this, but null in AwayJS just errors
+				(<ContextWebGL>this._adaptee.context).setVertexBufferAt(index, <VertexBufferWebGL>buffer._adaptee, bufferOffset * 4, awayFormat, false);
+
 	}
 
 	public setBlendFactors(sourceFactor: string, destinationFactor: string): void {
