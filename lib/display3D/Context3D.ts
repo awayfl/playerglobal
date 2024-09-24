@@ -198,7 +198,7 @@ export class Context3D extends EventDispatcher {
 				break;
 		}
 			if(buffer) // Away3D uses a null buffer to clear this, but null in AwayJS just errors
-				(<ContextWebGL>this._adaptee.context).setVertexBufferAt(index, <VertexBufferWebGL>buffer._adaptee, bufferOffset * 4, awayFormat, false);
+				(<ContextWebGL>this._adaptee.context).setVertexBufferAt(index, buffer ? <VertexBufferWebGL>buffer._adaptee : null, bufferOffset * 4, awayFormat, false);
 
 	}
 
