@@ -83,6 +83,7 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 		// create the root for the root-symbol
 		const asObj = constructClassFromSymbol(symbol, symbolClass);
 		asObj.adaptee = new Sprite(graphics);
+		asObj.adaptee.name = graphics.name;
 		// manually call the axInitializer for now:
 		//asObj.axInitializer(Sprite.getNewSprite(new this._sec.flash.display.Graphics(graphics).adaptee));
 
@@ -182,6 +183,7 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 		let clone: DisplayObject;
 		if (asset.isAsset(Graphics)) {
 			clone = Sprite.getNewSprite(<Graphics> asset.clone());//TODO: remove this clone() without the mem leak
+			clone.name = asset.name;
 			clone.mouseEnabled = false;
 		} else if (asset.isAsset(Sprite)) {
 			clone = Sprite.getNewSprite((<Sprite> asset).graphics);
