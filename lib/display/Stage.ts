@@ -481,7 +481,7 @@ export class Stage extends DisplayObjectContainer {
 	public get contentsScaleFactor (): number {
 		// @todo
 		Debug.throwPIR('playerglobals/display/Stage', 'get contentsScaleFactor', '');
-		return 0;
+		return 1;
 	}
 
 	public get displayContextInfo (): string {
