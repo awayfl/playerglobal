@@ -4,6 +4,7 @@ import { Context3D } from '../display3D/Context3D';
 import { Event } from '../events/Event';
 import { EventDispatcher } from '../events/EventDispatcher';
 import { SecurityDomain } from '../SecurityDomain';
+import { AXSecurityDomain } from '@awayfl/avm2';
 
 export class Stage3D extends EventDispatcher {
 	// Called whenever the class is initialized.
@@ -58,8 +59,10 @@ export class Stage3D extends EventDispatcher {
 	}
 
 	public requestContext3D(context3DRenderMode: string = 'auto', profile: string = 'baseline'): void {
+		const stage3D:Stage3D = this
+		setTimeout(function(){
 		console.log('Request Context');
-		this._context3D = new (this.sec as SecurityDomain).flash.display3D.Context3D(this._id, this, profile, context3DRenderMode);
+		stage3D._context3D = new (stage3D.sec as SecurityDomain).flash.display3D.Context3D(stage3D._id, stage3D, profile, context3DRenderMode);
 		const forceSoftware: boolean = (context3DRenderMode == 'software');
 		let awayContextProfile: ContextGLProfile;
 		switch (profile) {
@@ -85,15 +88,14 @@ export class Stage3D extends EventDispatcher {
 				awayContextProfile = ContextGLProfile.BASELINE;
 				break;
 		}
-		console.log('Context3D Config: ', 'id: ', this._id, ' forceSoftware: ', forceSoftware, ' profile: ', awayContextProfile);
-		const stage3D:Stage3D = this
-		const thisSec:SecurityDomain = (this.sec as SecurityDomain);
+		console.log('Context3D Config: ', 'id: ', stage3D._id, ' forceSoftware: ', forceSoftware, ' profile: ', awayContextProfile);
+		
 		function dispatchContextCreated(e:Event){
 			console.log(stage3D.context3D.driverInfo)
 			stage3D._context3D.removeEventListener(Event.CONTEXT3D_CREATE, dispatchContextCreated)
-			stage3D.dispatchEvent(new thisSec.flash.events.Event(Event.CONTEXT3D_CREATE));
+			stage3D.dispatchEvent(new (<SecurityDomain>stage3D.sec).flash.events.Event(Event.CONTEXT3D_CREATE));
 		}
-		this._context3D.addEventListener(Event.CONTEXT3D_CREATE, dispatchContextCreated)		
-		this._adaptee.requestContext(forceSoftware, awayContextProfile);
+		stage3D._context3D.addEventListener(Event.CONTEXT3D_CREATE, dispatchContextCreated)		
+		stage3D._adaptee.requestContext(forceSoftware, awayContextProfile);},1)
 	}
 }
