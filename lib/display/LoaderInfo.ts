@@ -160,6 +160,7 @@ export class LoaderInfo extends EventDispatcher {
 
 	private _swfVersion: number;
 	private _applicationDomain: ApplicationDomain;
+	private _uncaughtErrorEvents: UncaughtErrorEvents;
 
 	/**
 	 * The ActionScript version of the loaded SWF file. The language
@@ -194,6 +195,7 @@ export class LoaderInfo extends EventDispatcher {
 	constructor(loader: ILoader, container: AwayDisplayObject) {
 		super();
 
+		this._uncaughtErrorEvents;
 		// Events that are supposed to be working are registered as eventMappingExtern:
 
 		this.eventMappingExtern[Event.COMPLETE] = 'LoaderInfo:Event.COMPLETE';
@@ -637,8 +639,14 @@ export class LoaderInfo extends EventDispatcher {
 	 * `uncaughtErrorEvents` property is available after the
 	 * `applicationComplete` event is dispatched.
 	 */
-	public get uncaughtErrorEvents(): UncaughtErrorEvents {
-		return this._loader.uncaughtErrorEvents;
+	public get uncaughtErrorEvents(): any {
+		// @todo
+		Debug.throwPIR('playerglobals/display/LoaderInfo', 'get uncaughtErrorEvents', '');
+		if (!this._uncaughtErrorEvents)
+			this._uncaughtErrorEvents = new UncaughtErrorEvents();
+
+		return this._uncaughtErrorEvents;
+
 	}
 
 	/**
