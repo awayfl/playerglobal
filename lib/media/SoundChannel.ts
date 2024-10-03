@@ -5,7 +5,7 @@ import { SecurityDomain } from '../SecurityDomain';
 import { Event } from '../events/Event';
 import { EventBase, IAudioChannel } from '@awayjs/core';
 import { ISoundSource, SoundMixer } from './SoundMixer';
-import { BaseAudioChannel } from '@awayjs/core/dist/lib/managers/BaseAudioChannel';
+import { BaseAudioChannel } from '@awayjs/core';
 
 /**
  * Dispatched when a sound has finished playing.

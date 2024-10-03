@@ -1,4 +1,4 @@
-import { ContextGLDrawMode, ContextGLProfile, ContextGLProgramType, ContextGLVertexBufferFormat, ContextWebGL, IVertexBuffer, ProgramWebGL, Stage as AwayStage, StageEvent } from '@awayjs/stage';
+import { BitmapImage2D, ContextGLDrawMode, ContextGLProfile, ContextGLProgramType, ContextGLVertexBufferFormat, ContextWebGL, IVertexBuffer, ProgramWebGL, Stage as AwayStage, StageEvent, TextureWebGL } from '@awayjs/stage';
 import { BitmapData } from '../display/BitmapData';
 import { Stage3D } from '../display/Stage3D';
 import { Context3DProgramType } from '../display3D/Context3DProgramType';
@@ -32,6 +32,7 @@ export class Context3D extends EventDispatcher {
 
 	private _adaptee: AwayStage
 	private _profile: string
+	private _gl: WebGL2RenderingContext | WebGLRenderingContext
 	//private _currentProgram : Program3D
 
 	constructor(id: number, stage3D: Stage3D, renderMode: string = 'auto', profile: string = 'baseline') {
@@ -45,6 +46,7 @@ export class Context3D extends EventDispatcher {
 		function dispatchContextCreated(e:StageEvent){
 			context3D.adaptee.removeEventListener(StageEvent.CONTEXT_RECREATED, dispatchContextCreated)
 			context3D.dispatchEvent(new thisSec.flash.events.Event(Event.CONTEXT3D_CREATE));
+			context3D._gl = (<ContextWebGL>context3D.adaptee.context)._gl
 		}
 		this._adaptee.addEventListener(StageEvent.CONTEXT_RECREATED, dispatchContextCreated)	
 		}
@@ -111,7 +113,7 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public dispose(): void {
-		Debug.notImplemented('public flash.display3D.Context3D::dispose'); return;
+		this._adaptee.context.dispose();
 	}
 
 	public configureBackBuffer(width: number, height: number, antiAlias: number, enableDepthAndStencil: boolean = true, wantsBestResolution: boolean = false, wantsBestResolutionOnBrowserZoom: boolean = false): void {
@@ -255,21 +257,19 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public drawToBitmapData(destination: BitmapData): void {
-		Debug.notImplemented('public flash.display3D.Context3D::drawToBitmapData'); return;
+		this.adaptee.context.drawToBitmapImage2D(destination.adaptee as any as BitmapImage2D);
 	}
 
-	public setRenderToTextureInternal(texture:TextureBase, targetType: number /*int*/, enableDepthAndStencil: boolean, antiAlias: number /*int*/, surfaceSelector: number /*int*/): void {
-		Debug.notImplemented('public flash.display3D.Context3D::setRenderToTextureInternal ' + texture._adaptee); return;
+	public setRenderToBackBuffer() {
+		this._adaptee.context.setRenderToBackBuffer();
 	}
 
-	public setTextureInternal(sampler: number /*int*/, texture:Texture): void {
-		if(texture) // Away3D uses a null texture to clear this, but null in AwayJS just errors
-			this._adaptee.context.setTextureAt(sampler, texture._adaptee)
+	public setRenderToTexture(texture:TextureBase, targetType: number /*int*/, enableDepthAndStencil: boolean, antiAlias: number /*int*/, surfaceSelector: number /*int*/): void {
+		this._adaptee.context.setRenderToTexture(texture._adaptee, enableDepthAndStencil, antiAlias, surfaceSelector)
 	}
 
-	public setCubeTextureInternal(sampler: number /*int*/, textureCube:CubeTexture): void {
-		if(textureCube) // Away3D uses a null texture to clear this, but null in AwayJS just errors
-			this._adaptee.context.setTextureAt(sampler, textureCube._adaptee)
+	public setTextureAt(sampler: number /*int*/, texture:TextureBase): void {
+		if(texture)
+			this._adaptee.context.setTextureAt(sampler, <TextureWebGL>texture._adaptee)			
 	}
-
 }

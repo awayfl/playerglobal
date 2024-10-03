@@ -61,7 +61,6 @@ export class CubeTexture extends TextureBase {
 	public uploadFromByteArray(data: ByteArray,byteArrayOffset: number /*uint*/,side: number /*uint*/,miplevel: number /*uint*/ = 0
 	): void {
 		if(miplevel==0) // @todo: Additional Mips cause errors
-		data.position = byteArrayOffset;
 		(<CubeTextureWebGL>this._adaptee).uploadFromArray(new Uint8Array(data.arraybytes), side, miplevel)
 	}
 
