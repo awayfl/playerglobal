@@ -1,10 +1,11 @@
 import { AVMStage } from '@awayfl/swf-loader';
-import { ContextGLProfile, Stage as AwayStage, StageEvent } from '@awayjs/stage';
+import { ContextGLProfile, Stage as AwayStage } from '@awayjs/stage';
 import { Context3D } from '../display3D/Context3D';
 import { Event } from '../events/Event';
 import { EventDispatcher } from '../events/EventDispatcher';
 import { SecurityDomain } from '../SecurityDomain';
 import { AXSecurityDomain } from '@awayfl/avm2';
+import { ErrorEvent } from '../events/ErrorEvent';
 
 export class Stage3D extends EventDispatcher {
 	// Called whenever the class is initialized.
@@ -64,7 +65,7 @@ export class Stage3D extends EventDispatcher {
 		console.log('Request Context');
 		stage3D._context3D = new (stage3D.sec as SecurityDomain).flash.display3D.Context3D(stage3D._id, stage3D, profile, context3DRenderMode);
 		const forceSoftware: boolean = (context3DRenderMode == 'software');
-		let awayContextProfile: ContextGLProfile;
+		var awayContextProfile: ContextGLProfile;
 		switch (profile) {
 			case 'baseline':
 				awayContextProfile = ContextGLProfile.BASELINE;
@@ -76,16 +77,18 @@ export class Stage3D extends EventDispatcher {
 				awayContextProfile = ContextGLProfile.BASELINE_EXTENDED;
 				break;
 			case 'standard':
-				console.log('Unsupported Context3D Profile \'standard\' Requested');
+				awayContextProfile = ContextGLProfile.STANDARD;
 				break;
 			case 'standard_constrained':
-				console.log('Unsupported Context3D Profile \'standard_constrained\' Requested');
+				awayContextProfile = ContextGLProfile.STANDARD_CONSTRAINED;
 				break;
 			case 'standard_extended':
-				console.log('Unsupported Context3D Profile \'standard_extended\' Requested');
+				awayContextProfile = ContextGLProfile.STANDARD_EXTENDED;
+				break;
+			case 'enhanced':
+				awayContextProfile = ContextGLProfile.ENHANCED;
 				break;
 			default:
-				awayContextProfile = ContextGLProfile.BASELINE;
 				break;
 		}
 		console.log('Context3D Config: ', 'id: ', stage3D._id, ' forceSoftware: ', forceSoftware, ' profile: ', awayContextProfile);
