@@ -1,4 +1,4 @@
-import { MouseEvent as MouseEventAway } from '@awayjs/scene';
+import { MouseButtons, MouseEvent as MouseEventAway } from '@awayjs/scene';
 import { Event } from './Event';
 import { notImplemented } from '@awayfl/swf-loader';
 import { InteractiveObject } from '../display/InteractiveObject';
@@ -111,6 +111,8 @@ export class MouseEvent extends Event {
 
 		this.ctrlKey = awayEvent.ctrlKey;
 		this.shiftKey = awayEvent.shiftKey;
+
+		this.buttonDown = Boolean(awayEvent.buttons & MouseButtons.PRIMARY_BUTTON);
 
 		//this._stageX = awayEvent.screenX;
 		//this._stageY = awayEvent.screenY;
