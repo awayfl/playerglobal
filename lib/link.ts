@@ -25,6 +25,26 @@ import { Shape } from './display/Shape';
 import { SimpleButton } from './display/SimpleButton';
 import { Sprite } from './display/Sprite';
 import { Stage } from './display/Stage';
+import { Stage3D } from './display/Stage3D';
+
+import { Context3D } from './display3D/Context3D';
+import { Context3DBlendFactor } from './display3D/Context3DBlendFactor';
+import { Context3DClearMask } from './display3D/Context3DClearMask';
+import { Context3DCompareMode } from './display3D/Context3DCompareMode';
+import { Context3DProfile } from './display3D/Context3DProfile';
+import { Context3DProgramType } from './display3D/Context3DProgramType';
+import { Context3DRenderMode } from './display3D/Context3DRenderMode';
+import { Context3DStencilAction } from './display3D/Context3DStencilAction';
+import { Context3DTextureFormat } from './display3D/Context3DTextureFormat';
+import { Context3DTriangleFace } from './display3D/Context3DTriangleFace';
+import { Context3DVertexBufferFormat } from './display3D/Context3DVertexBufferFormat';
+import { IndexBuffer3D } from './display3D/IndexBuffer3D';
+import { Program3D } from './display3D/Program3D';
+import { VertexBuffer3D } from './display3D/VertexBuffer3D';
+
+import { CubeTexture } from './display3D/textures/CubeTexture';
+import { Texture } from './display3D/textures/Texture';
+import { TextureBase } from './display3D/textures/TextureBase';
 
 import { EOFError } from './errors/EOFError';
 import { IllegalOperationError } from './errors/IllegalOperationError';
@@ -50,8 +70,8 @@ import { AsyncErrorEvent } from './events/AsyncErrorEvent';
 import { ContextMenuEvent } from './events/ContextMenuEvent';
 import { DataEvent } from './events/DataEvent';
 import { ErrorEvent } from './events/ErrorEvent';
-import { EventDispatcher } from './events/EventDispatcher';
 import { Event } from './events/Event';
+import { EventDispatcher } from './events/EventDispatcher';
 import { EventPhase } from './events/EventPhase';
 import { FocusEvent } from './events/FocusEvent';
 import { FullScreenEvent } from './events/FullScreenEvent';
@@ -104,39 +124,39 @@ import { NumberFormatter } from './globalization/NumberFormatter';
 
 import { Sound } from './media/Sound';
 import { SoundChannel } from './media/SoundChannel';
-import { SoundTransform } from './media/SoundTransform';
 import { SoundMixer } from './media/SoundMixer';
+import { SoundTransform } from './media/SoundTransform';
 
 import { FileFilter } from './net/FileFilter';
 import { FileReference } from './net/FileReference';
-import { SharedObject } from './net/SharedObject';
-import { URLRequest } from './net/URLRequest';
-import { URLLoader } from './net/URLLoader';
-import { URLVariables } from './net/URLVariables';
 import { LocalConnection } from './net/LocalConnection';
+import { SharedObject } from './net/SharedObject';
+import { URLLoader } from './net/URLLoader';
+import { URLRequest } from './net/URLRequest';
+import { URLVariables } from './net/URLVariables';
 
-import { SecurityDomain } from './system/SecurityDomain';
+import { ApplicationDomain } from './system/ApplicationDomain';
 import { Capabilities } from './system/Capabilities';
 import { fscommand } from './system/FSCommand';
-import { Security } from './system/Security';
 import { LoaderContext } from './system/LoaderContext';
-import { ApplicationDomain } from './system/ApplicationDomain';
+import { Security } from './system/Security';
+import { SecurityDomain } from './system/SecurityDomain';
 import { System } from './system/System';
 
+import { CSMSettings } from './text/CSMSettings';
 import { Font } from './text/Font';
+import { FontType } from './text/FontType';
+import { StaticText } from './text/StaticText';
 import { StyleSheet } from './text/StyleSheet';
+import { TextColorType } from './text/TextColorType';
+import { TextDisplayMode } from './text/TextDisplayMode';
+import { TextExtent } from './text/TextExtent';
 import { TextField } from './text/TextField';
 import { TextFormat } from './text/TextFormat';
-import { TextRun } from './text/TextRun';
-import { StaticText } from './text/StaticText';
-import { TextRenderer } from './text/TextRenderer';
 import { TextFormatDisplay } from './text/TextFormatDisplay';
-import { TextExtent } from './text/TextExtent';
-import { TextDisplayMode } from './text/TextDisplayMode';
-import { TextColorType } from './text/TextColorType';
-import { FontType } from './text/FontType';
-import { CSMSettings } from './text/CSMSettings';
 import { TextLineMetrics } from './text/TextLineMetrics';
+import { TextRenderer } from './text/TextRenderer';
+import { TextRun } from './text/TextRun';
 import { TextSnapshot } from './text/TextSnapshot';
 
 import { CompositionAttributeRange } from './text/ime/CompositionAttributeRange';
@@ -174,27 +194,26 @@ import { TextLineValidity } from './text/engine/TextLineValidity';
 import { TextRotation } from './text/engine/TextRotation';
 import { TypographicCase } from './text/engine/TypographicCase';
 
-import { Keyboard } from './ui/Keyboard';
+import { ASClass, ByteArray, registerNativeClass, registerNativeFunction, XMLDocument, XMLNode } from '@awayfl/avm2';
+import { release } from '@awayfl/swf-loader';
+import { BlendMode } from '@awayjs/stage';
+import { GroupElement } from './text/engine/GroupElement';
 import { ContextMenu } from './ui/ContextMenu';
-import { ContextMenuItem } from './ui/ContextMenuItem';
 import { ContextMenuBuiltInItems } from './ui/ContextMenuBuiltInItems';
 import { ContextMenuClipboardItems } from './ui/ContextMenuClipboardItems';
+import { ContextMenuItem } from './ui/ContextMenuItem';
 import { GameInput } from './ui/GameInput';
 import { GameInputControl } from './ui/GameInputControl';
 import { GameInputControlType } from './ui/GameInputControlType';
 import { GameInputDevice } from './ui/GameInputDevice';
 import { GameInputFinger } from './ui/GameInputFinger';
 import { GameInputHand } from './ui/GameInputHand';
+import { Keyboard } from './ui/Keyboard';
 import { Mouse } from './ui/Mouse';
-import { MultitouchInputMode } from './ui/MultitouchInputMode';
 import { Multitouch } from './ui/Multitouch';
-import { Timer } from './utils/Timer';
+import { MultitouchInputMode } from './ui/MultitouchInputMode';
 import { CompressionAlgorithm } from './utils/CompressionAlgorithm';
-import { XMLDocument, XMLNode, ASClass, registerNativeClass, registerNativeFunction } from '@awayfl/avm2';
-import { release } from '@awayfl/swf-loader';
-import { BlendMode } from '@awayjs/stage';
-import { GroupElement } from './text/engine/GroupElement';
-import { ByteArray } from '@awayfl/avm2';
+import { Timer } from './utils/Timer';
 
 import { BaseTextLayoutImporter, Property } from './text/engine/NativehacksForTLF';
 
@@ -283,7 +302,8 @@ export function initLink() {
 	//M('flash.display.SpreadMethod', SpreadMethod);
 	M('flash.display.Sprite', Sprite);
 	M('flash.display.Stage', Stage);
-	//M('flash.display.Stage3D', Stage3D);
+	M('flash.display.Stage3D', Stage3D);
+
 	//M('flash.display.StageAlign', StageAlign);
 	//M('flash.display.StageAspectRatio', StageAspectRatio);//AIR
 	//M('flash.display.StageDisplayState', StageDisplayState);
@@ -291,8 +311,27 @@ export function initLink() {
 	//M('flash.display.StageScaleMode', StageScaleMode);
 	//M('flash.display.TriangleCulling', TriangleCulling);
 
-	// flash.display3D
-	// flash.display3D.textures
+	// TODO: Add display3d stuff
+
+	M('flash.display3D.Context3D', Context3D);
+	M('flash.display3D.Context3DBlendFactor', Context3DBlendFactor);
+	M('flash.display3D.Context3DClearMask', Context3DClearMask);
+	M('flash.display3D.Context3DCompareMode', Context3DCompareMode);
+	M('flash.display3D.Context3DProfile', Context3DProfile);
+	M('flash.display3D.Context3DProgramType', Context3DProgramType);
+	M('flash.display3D.Context3DRenderMode', Context3DRenderMode);
+	M('flash.display3D.Context3DStencilAction', Context3DStencilAction);
+	M('flash.display3D.Context3DTextureFormat', Context3DTextureFormat);
+	M('flash.display3D.Context3DTriangleFace', Context3DTriangleFace);
+	M('flash.display3D.Context3DVertexBufferFormat', Context3DVertexBufferFormat);
+	M('flash.display3D.IndexBuffer3D', IndexBuffer3D);
+	M('flash.display3D.Program3D', Program3D);
+	M('flash.display3D.VertexBuffer3D', VertexBuffer3D);
+
+	M('flash.display3D.textures.TextureBase', TextureBase);
+	M('flash.display3D.textures.Texture', Texture);
+	M('flash.display3D.textures.RectangleTexture', Texture);
+	M('flash.display3D.textures.CubeTexture', CubeTexture);
 
 	//M('flash.errors.DRMManagerError', DRMManagerError);//AIR
 	M('flash.errors.EOFError', EOFError);

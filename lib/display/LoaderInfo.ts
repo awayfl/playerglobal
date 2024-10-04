@@ -12,6 +12,7 @@ import { DisplayObject as AwayDisplayObject } from '@awayjs/scene';
 import { SecurityDomain } from '../SecurityDomain';
 import { PickGroup } from '@awayjs/view';
 import { AVMStage } from '@awayfl/swf-loader';
+import { UncaughtErrorEvents } from '../events/UncaughtErrorEvents';
 
 interface LoaderInfoCompleteQueueItem {
 	loaderInfo: LoaderInfo;
@@ -159,6 +160,7 @@ export class LoaderInfo extends EventDispatcher {
 
 	private _swfVersion: number;
 	private _applicationDomain: ApplicationDomain;
+	private _uncaughtErrorEvents: UncaughtErrorEvents;
 
 	/**
 	 * The ActionScript version of the loaded SWF file. The language
@@ -193,6 +195,7 @@ export class LoaderInfo extends EventDispatcher {
 	constructor(loader: ILoader, container: AwayDisplayObject) {
 		super();
 
+		this._uncaughtErrorEvents;
 		// Events that are supposed to be working are registered as eventMappingExtern:
 
 		this.eventMappingExtern[Event.COMPLETE] = 'LoaderInfo:Event.COMPLETE';
@@ -639,7 +642,10 @@ export class LoaderInfo extends EventDispatcher {
 	public get uncaughtErrorEvents(): any {
 		// @todo
 		Debug.throwPIR('playerglobals/display/LoaderInfo', 'get uncaughtErrorEvents', '');
-		return null;
+		if (!this._uncaughtErrorEvents)
+			this._uncaughtErrorEvents = new UncaughtErrorEvents();
+
+		return this._uncaughtErrorEvents;
 
 	}
 
