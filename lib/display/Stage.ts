@@ -311,7 +311,6 @@ export class Stage extends DisplayObjectContainer {
 			//FrameScriptManager.execute_queue();
 		}
 
-
 		// broadcast FRAME_CONSTRUCTED event to all objects
 		this._stage.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
 
