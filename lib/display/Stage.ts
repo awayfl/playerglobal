@@ -298,6 +298,9 @@ export class Stage extends DisplayObjectContainer {
 		//	objects get removed, created and updated - framescripts get queued
 		this._stage.adaptee.advanceFrame();
 
+		// execute pending constructors:
+		FrameScriptManager.execute_as3_constructors_enterFrame(<any> this._stage.adaptee);
+
 		//	in FP, the first enterFrame after a swf-load is ignored:
 		const child = (<AwayDisplayObjectContainer> this._stage.adaptee).getChildAt(0);
 		if ((<any>child).firstFrameOnSWFStart) {
@@ -308,8 +311,6 @@ export class Stage extends DisplayObjectContainer {
 			//FrameScriptManager.execute_queue();
 		}
 
-		// execute pending constructors:
-		FrameScriptManager.execute_as3_constructors_enterFrame(<any> this._stage.adaptee);
 
 		// broadcast FRAME_CONSTRUCTED event to all objects
 		this._stage.dispatchStaticBroadCastEvent(Event.FRAME_CONSTRUCTED);
