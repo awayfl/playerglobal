@@ -219,6 +219,8 @@ import { BlendMode } from '@awayjs/stage';
 import { GroupElement } from './text/engine/GroupElement';
 import { ByteArray } from '@awayfl/avm2';
 
+import { BaseTextLayoutImporter, Property } from './text/engine/NativehacksForTLF';
+
 function M(name: string, asClass: ASClass) {
 	registerNativeClass(name, asClass);
 }
