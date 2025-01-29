@@ -99,6 +99,6 @@ export class Stage3D extends EventDispatcher {
 			stage3D.dispatchEvent(new (<SecurityDomain>stage3D.sec).flash.events.Event(Event.CONTEXT3D_CREATE));
 		}
 		stage3D._context3D.addEventListener(Event.CONTEXT3D_CREATE, dispatchContextCreated)		
-		stage3D._adaptee.requestContext(forceSoftware, awayContextProfile);},1)
+		stage3D._adaptee.requestContext(forceSoftware, awayContextProfile)
 	}
 }
