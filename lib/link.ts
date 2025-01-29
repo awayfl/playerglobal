@@ -26,6 +26,25 @@ import { SimpleButton } from './display/SimpleButton';
 import { Sprite } from './display/Sprite';
 import { Stage } from './display/Stage';
 
+import { Stage3D } from './display/Stage3D';
+import { Context3D } from './display3D/Context3D';
+import { Context3DBlendFactor } from './display3D/Context3DBlendFactor';
+import { Context3DClearMask } from './display3D/Context3DClearMask';
+import { Context3DCompareMode } from './display3D/Context3DCompareMode';
+import { Context3DProfile } from './display3D/Context3DProfile';
+import { Context3DProgramType } from './display3D/Context3DProgramType';
+import { Context3DRenderMode } from './display3D/Context3DRenderMode';
+import { Context3DStencilAction } from './display3D/Context3DStencilAction';
+import { Context3DTextureFormat } from './display3D/Context3DTextureFormat';
+import { Context3DTriangleFace } from './display3D/Context3DTriangleFace';
+import { Context3DVertexBufferFormat } from './display3D/Context3DVertexBufferFormat';
+import { IndexBuffer3D } from './display3D/IndexBuffer3D';
+import { Program3D } from './display3D/Program3D';
+import { VertexBuffer3D } from './display3D/VertexBuffer3D';
+import { CubeTexture } from './display3D/textures/CubeTexture';
+import { Texture } from './display3D/textures/Texture';
+import { TextureBase } from './display3D/textures/TextureBase';
+
 import { EOFError } from './errors/EOFError';
 import { IllegalOperationError } from './errors/IllegalOperationError';
 import { InvalidSWFError } from './errors/InvalidSWFError';
