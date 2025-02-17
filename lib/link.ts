@@ -114,6 +114,7 @@ import { URLRequest } from './net/URLRequest';
 import { URLLoader } from './net/URLLoader';
 import { URLVariables } from './net/URLVariables';
 import { LocalConnection } from './net/LocalConnection';
+import { Socket } from './net/Socket';
 
 import { SecurityDomain } from './system/SecurityDomain';
 import { Capabilities } from './system/Capabilities';
@@ -503,7 +504,7 @@ export function initLink() {
 	//M('flash.net.ServerSocket', ServerSocket);//AIR
 	M('flash.net.SharedObject', SharedObject);
 	//M('flash.net.SharedObjectFlushStatus', SharedObjectFlushStatus);
-	//M('flash.net.Socket', Socket);
+	M('flash.net.Socket', Socket);
 	M('flash.net.URLLoader', URLLoader);
 	//M('flash.net.URLLoader', URLLoaderDataFormat);
 	M('flash.net.URLRequest', URLRequest);
