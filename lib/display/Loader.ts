@@ -185,7 +185,7 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 		Debug.throwPIR('playerglobals/display/Loader', 'get uncaughtErrorEvents', '');
 
 		if (!this._uncaughtErrorEvents)
-			this._uncaughtErrorEvents = new UncaughtErrorEvents();
+			this._uncaughtErrorEvents = new (<SecurityDomain> this.sec).flash.events.UncaughtErrorEvents();
 
 		return this._uncaughtErrorEvents;
 	}

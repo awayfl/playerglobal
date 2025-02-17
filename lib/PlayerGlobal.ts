@@ -24,7 +24,7 @@ import {
 } from '@awayjs/scene';
 
 import { FlashSceneGraphFactory } from './factories/FlashSceneGraphFactory';
-import { AssetBase, IAsset, WaveAudio } from '@awayjs/core';
+import { AssetBase, Debug, IAsset, WaveAudio } from '@awayjs/core';
 import { ApplicationDomain } from './system/ApplicationDomain';
 import { BitmapImage2D } from '@awayjs/stage';
 import { Graphics } from '@awayjs/graphics';
@@ -33,6 +33,7 @@ import { DisplayObject } from './display/DisplayObject';
 import { LoaderInfo } from './display/LoaderInfo';
 import { ILoader } from './ILoader';
 import { SharedObject } from './net/SharedObject';
+import { UncaughtErrorEvents } from './events/UncaughtErrorEvents';
 
 // alternate of using a `node path`
 function normalisePath (p: string) {
@@ -66,6 +67,7 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 	public static builtinsBaseUrl = './assets/builtins/';
 	private _contentLoaderInfo: LoaderInfo;
 	private _content: DisplayObject;
+	private _uncaughtErrorEvents: UncaughtErrorEvents;
 	private _avmStage: AVMStage;
 	private _stage: Stage;
 	private _applicationDomain: ApplicationDomain;
@@ -76,6 +78,13 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 
 	public get content(): DisplayObject {
 		return this._content;
+	}
+
+	public get uncaughtErrorEvents(): UncaughtErrorEvents {
+		// @todo
+		Debug.throwPIR('playerglobals/display/Loader', 'get uncaughtErrorEvents', '');
+
+		return this._uncaughtErrorEvents;
 	}
 
 	public dispose() {
@@ -177,6 +186,7 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 		this._contentLoaderInfo.url = new URL(file.url, document.baseURI).href;
 		this._applicationDomain = new sec.flash.system.ApplicationDomain();
 		this._contentLoaderInfo._setApplicationDomain(this._applicationDomain);
+		this._uncaughtErrorEvents = new sec.flash.events.UncaughtErrorEvents();
 
 		// not needs, because shuld be resolved from domain
 		ActiveLoaderContext.loaderContext = new sec.flash.system.LoaderContext(

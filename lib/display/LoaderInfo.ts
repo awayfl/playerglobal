@@ -12,6 +12,7 @@ import { DisplayObject as AwayDisplayObject } from '@awayjs/scene';
 import { SecurityDomain } from '../SecurityDomain';
 import { PickGroup } from '@awayjs/view';
 import { AVMStage } from '@awayfl/swf-loader';
+import { UncaughtErrorEvents } from '../events/UncaughtErrorEvents';
 
 interface LoaderInfoCompleteQueueItem {
 	loaderInfo: LoaderInfo;
@@ -636,11 +637,8 @@ export class LoaderInfo extends EventDispatcher {
 	 * `uncaughtErrorEvents` property is available after the
 	 * `applicationComplete` event is dispatched.
 	 */
-	public get uncaughtErrorEvents(): any {
-		// @todo
-		Debug.throwPIR('playerglobals/display/LoaderInfo', 'get uncaughtErrorEvents', '');
-		return null;
-
+	public get uncaughtErrorEvents(): UncaughtErrorEvents {
+		return this._loader.uncaughtErrorEvents;
 	}
 
 	/**

@@ -74,6 +74,7 @@ import { ContextMenuItem } from './ui/ContextMenuItem';
 import { FrameLabel } from './display/FrameLabel';
 import { TextLineMetrics } from './text/TextLineMetrics';
 import { FocusEvent } from './events/FocusEvent';
+import { UncaughtErrorEvents } from './events/UncaughtErrorEvents';
 
 export class Mouse {}
 
@@ -105,6 +106,7 @@ export class SecurityDomain extends AXSecurityDomain {
 			ProgressEvent: ProgressEvent,
 			IOErrorEvent: IOErrorEvent,
 			TimerEvent:TimerEvent,
+			UncaughtErrorEvents: UncaughtErrorEvents,
 		},
 		external: {
 			ExternalInterface: ExternalInterface
