@@ -54,7 +54,7 @@ export class Socket extends EventDispatcher implements IDataInput, IDataOutput {
 	// _endian: string;
 	// _bytesPending: number /*uint*/;
 	get bytesAvailable(): number /*uint*/ {
-		release || notImplemented('public flash.net.Socket::get bytesAvailable'); 
+		release || notImplemented('public flash.net.Socket::get bytesAvailable');
 		return 0;
 		// return this._bytesAvailable;
 	}
