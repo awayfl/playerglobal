@@ -1,5 +1,4 @@
-import { ASFunction  } from '../../avm2/nat/ASFunction';
-import { ASObject  } from '../../avm2/nat/ASObject';
+import { ASFunction, ASObject } from '@awayfl/avm2';
 /**
  * Copyright 2014 Mozilla Foundation
  *
@@ -30,11 +29,17 @@ export class Responder extends ASObject {
 
 	constructor (result: ASFunction, status: ASFunction = null) {
 		super();
-
-		this._result = result;
-		this._status = status;
 	}
 
 	private _result: ASFunction;
 	private _status: ASFunction;
+
+	// JS -> AS Bindings
+
+	// AS -> JS Bindings
+
+	ctor(result: ASFunction, status: ASFunction): void {
+		this._result = result;
+		this._status = status;
+	}
 }

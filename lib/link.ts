@@ -114,6 +114,8 @@ import { URLRequest } from './net/URLRequest';
 import { URLLoader } from './net/URLLoader';
 import { URLVariables } from './net/URLVariables';
 import { LocalConnection } from './net/LocalConnection';
+import { NetConnection } from './net/NetConnection';
+import { Responder } from './net/Responder';
 import { Socket } from './net/Socket';
 
 import { SecurityDomain } from './system/SecurityDomain';
@@ -484,7 +486,7 @@ export function initLink() {
 	//M('flash.net.InterfaceAddress', InterfaceAddress);
 	//M('flash.net.IPVersion', IPVersion);//AIR
 	M('flash.net.LocalConnection', LocalConnection);
-	//M('flash.net.NetConnection', NetConnection);
+	M('flash.net.NetConnection', NetConnection);
 	//M('flash.net.NetGroup', NetGroup);
 	//M('flash.net.NetGroupInfo', NetGroupInfo);
 	//M('flash.net.NetGroupRecieveMode', NetGroupRecieveMode);
@@ -499,7 +501,7 @@ export function initLink() {
 	//M('flash.net.NetworkInfo', NetworkInfo);//AIR
 	//M('flash.net.NetworkInterface', NetworkInterface);//AIR
 	//M('flash.net.ObjectEncoding', ObjectEncoding);
-	//M('flash.net.Responder', Responder);
+	M('flash.net.Responder', Responder);
 	//M('flash.net.SecureSocket', SecureSocket);
 	//M('flash.net.ServerSocket', ServerSocket);//AIR
 	M('flash.net.SharedObject', SharedObject);

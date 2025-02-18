@@ -75,6 +75,8 @@ import { FrameLabel } from './display/FrameLabel';
 import { TextLineMetrics } from './text/TextLineMetrics';
 import { FocusEvent } from './events/FocusEvent';
 import { UncaughtErrorEvents } from './events/UncaughtErrorEvents';
+import { NetConnection } from './net/NetConnection';
+import { Responder } from './net/Responder';
 
 export class Mouse {}
 
@@ -142,7 +144,9 @@ export class SecurityDomain extends AXSecurityDomain {
 			URLRequest: URLRequest,
 			URLLoader: URLLoader,
 			URLVariables: URLVariables,
-			SharedObject: SharedObject
+			SharedObject: SharedObject,
+			NetConnection: NetConnection,
+			Responder: Responder
 		},
 		system: {
 			ApplicationDomain: ApplicationDomain,
