@@ -669,7 +669,7 @@ export class Sprite extends DisplayObjectContainer {
 
 		if (this._adaptee.parent) {
 			if (!this.startDragMCPosition) {
-				this._setStartDragMCPosition(this._adaptee.parent)
+				this._setStartDragMCPosition(this._adaptee.parent);
 			}
 			const offset = AVMStage.instance().view.getNode(this._adaptee.parent)
 				.globalToLocal(this.startDragPoint.subtract(new Point(this._stage.mouseX, this._stage.mouseY)));
