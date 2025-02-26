@@ -53,9 +53,9 @@ export class GradientGlowFilter extends BitmapFilter {
 			obj.distance,
 			angle,
 			// Boxing these is obviously not ideal, but everything else is just annoying.
-			this.sec.createArrayUnsafe(colors),
-			this.sec.createArrayUnsafe(alphas),
-			this.sec.createArrayUnsafe(obj.ratios),
+			sec.createArrayUnsafe(colors),
+			sec.createArrayUnsafe(alphas),
+			sec.createArrayUnsafe(obj.ratios),
 			obj.blurX,
 			obj.blurY,
 			obj.strength,
