@@ -611,16 +611,15 @@ export class Sprite extends DisplayObjectContainer {
 		this._dragBounds = bounds;
 		if (!this.isDragging) {
 			this.isDragging = true;
-			this.startDragPoint =
-			AVMStage.instance().view.getNode(this._adaptee.parent).globalToLocal(new Point(this.stage.mouseX, this.stage.mouseY));
-			if (lockCenter) {
-				this.adaptee.x = this.startDragPoint.x;
-				this.adaptee.y = this.startDragPoint.y;
+			this.startDragPoint = new Point(this._stage.mouseX, this._stage.mouseY);
+			this.lockCenter = lockCenter;
+
+			if (this.adaptee.parent) {
+				this._setStartDragMCPosition(this._adaptee.parent);
 			}
+
 			if (this._dragBounds)
 				this.checkBounds();
-			this.startDragMCPosition.x = this.adaptee.x;
-			this.startDragMCPosition.y = this.adaptee.y;
 
 			const avmStage = AVMStage.instance();
 			const dragNode = avmStage.view.getNode(this.adaptee);
@@ -643,36 +642,40 @@ export class Sprite extends DisplayObjectContainer {
 
 	public checkBounds() {
 
-		if (this.adaptee.x < (this._dragBounds.left)) {
-			this.adaptee.x = this._dragBounds.left;
+		if (this._adaptee.x < (this._dragBounds.left)) {
+			this._adaptee.x = this._dragBounds.left;
 		}
-		if (this.adaptee.x > (this._dragBounds.right)) {
-			this.adaptee.x = (this._dragBounds.right);
+		if (this._adaptee.x > (this._dragBounds.right)) {
+			this._adaptee.x = (this._dragBounds.right);
 		}
-		if (this.adaptee.y < this._dragBounds.top) {
-			this.adaptee.y = this._dragBounds.top;
+		if (this._adaptee.y < this._dragBounds.top) {
+			this._adaptee.y = this._dragBounds.top;
 		}
-		if (this.adaptee.y > (this._dragBounds.bottom)) {
-			this.adaptee.y = this._dragBounds.bottom;
+		if (this._adaptee.y > (this._dragBounds.bottom)) {
+			this._adaptee.y = this._dragBounds.bottom;
 		}
 	}
 
-	private isDragging: boolean = false;
-	private static currentDraggedMC: Sprite = null;
-	private startDragPoint: Point = new Point();
-	private startDragMCPosition: Point = new Point();
+	private isDragging: boolean;
+	private lockCenter: boolean;
+	private static currentDraggedMC: Sprite;
+	private startDragPoint: Point;
+	private startDragMCPosition: Point;
 	private _dragBounds: any;
 	public dragListenerDelegate: (e) => void;
 
 	public dragListener(e) {
 		//console.log("drag", e);
 
-		if (this.adaptee.parent) {
-			const tmpPoint = AVMStage.instance().view.getNode(this._adaptee.parent).globalToLocal(
-				new Point(this.stage.mouseX, this.stage.mouseY));
+		if (this._adaptee.parent) {
+			if (!this.startDragMCPosition) {
+				this._setStartDragMCPosition(this._adaptee.parent)
+			}
+			const offset = AVMStage.instance().view.getNode(this._adaptee.parent)
+				.globalToLocal(this.startDragPoint.subtract(new Point(this._stage.mouseX, this._stage.mouseY)));
 
-			this.adaptee.x = this.startDragMCPosition.x + (tmpPoint.x - this.startDragPoint.x);
-			this.adaptee.y = this.startDragMCPosition.y + (tmpPoint.y - this.startDragPoint.y);
+			this.adaptee.x = this.startDragMCPosition.x - offset.x;
+			this.adaptee.y = this.startDragMCPosition.y - offset.y;
 
 			if (this._dragBounds)
 				this.checkBounds();
@@ -710,6 +713,7 @@ export class Sprite extends DisplayObjectContainer {
 
 	public stopDragDelegate: (e) => void;
 	public stopDrag(e = null) {
+		this.startDragMCPosition = null;
 		if (Sprite.currentDraggedMC && Sprite.currentDraggedMC != this) {
 			Sprite.currentDraggedMC.stopDrag();
 		}
@@ -733,4 +737,15 @@ export class Sprite extends DisplayObjectContainer {
 		Debug.throwPIR('playerglobals/display/Sprite', 'stopTouchDrag', '');
 	}
 
+	private _setStartDragMCPosition(parent: AwayDisplayObjectContainer): void {
+		this.startDragMCPosition = new Point();
+		if (this.lockCenter) {
+			this.startDragMCPosition = AVMStage.instance().view.getNode(parent).globalToLocal(this.startDragPoint, this.startDragMCPosition);
+			this._adaptee.x = this.startDragMCPosition.x;
+			this._adaptee.y = this.startDragMCPosition.y;
+		} else {
+			this.startDragMCPosition.x = this._adaptee.x;
+			this.startDragMCPosition.y = this._adaptee.y;
+		}
+	}
 }
