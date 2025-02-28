@@ -611,7 +611,6 @@ export class Sprite extends DisplayObjectContainer {
 		this._dragBounds = bounds;
 		if (!this.isDragging) {
 			this.isDragging = true;
-			this.startDragPoint = new Point(this._stage.mouseX, this._stage.mouseY);
 			this.lockCenter = lockCenter;
 
 			if (this.adaptee.parent) {
@@ -659,7 +658,6 @@ export class Sprite extends DisplayObjectContainer {
 	private isDragging: boolean;
 	private lockCenter: boolean;
 	private static currentDraggedMC: Sprite;
-	private startDragPoint: Point;
 	private startDragMCPosition: Point;
 	private _dragBounds: any;
 	public dragListenerDelegate: (e) => void;
@@ -671,11 +669,12 @@ export class Sprite extends DisplayObjectContainer {
 			if (!this.startDragMCPosition) {
 				this._setStartDragMCPosition(this._adaptee.parent);
 			}
-			const offset = AVMStage.instance().view.getNode(this._adaptee.parent)
-				.globalToLocal(this.startDragPoint.subtract(new Point(this._stage.mouseX, this._stage.mouseY)));
 
-			this.adaptee.x = this.startDragMCPosition.x - offset.x;
-			this.adaptee.y = this.startDragMCPosition.y - offset.y;
+			const tmpPoint = AVMStage.instance().view.getNode(this._adaptee.parent).globalToLocal(
+				new Point(this._stage.mouseX, this._stage.mouseY));
+
+			this.adaptee.x = this.startDragMCPosition.x + tmpPoint.x;
+			this.adaptee.y = this.startDragMCPosition.y + tmpPoint.y;
 
 			if (this._dragBounds)
 				this.checkBounds();
@@ -738,14 +737,16 @@ export class Sprite extends DisplayObjectContainer {
 	}
 
 	private _setStartDragMCPosition(parent: AwayDisplayObjectContainer): void {
-		this.startDragMCPosition = new Point();
+		const startDragPoint = AVMStage.instance().view.getNode(parent).globalToLocal(new Point(this._stage.mouseX, this._stage.mouseY));
 		if (this.lockCenter) {
-			this.startDragMCPosition = AVMStage.instance().view.getNode(parent).globalToLocal(this.startDragPoint, this.startDragMCPosition);
-			this._adaptee.x = this.startDragMCPosition.x;
-			this._adaptee.y = this.startDragMCPosition.y;
+			this.startDragMCPosition = new Point();
+			this._adaptee.x = startDragPoint.x;
+			this._adaptee.y = startDragPoint.y;
 		} else {
-			this.startDragMCPosition.x = this._adaptee.x;
-			this.startDragMCPosition.y = this._adaptee.y;
+			this.startDragMCPosition = new Point(
+				this._adaptee.x - startDragPoint.x,
+				this._adaptee.y - startDragPoint.y
+			);
 		}
 	}
 }
