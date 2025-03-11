@@ -447,7 +447,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		}
 
 		//only execute scripts if playhead has moved or constructors have yet to run
-		if (!navigated && !(<any> this).constructorHasRun) {
+		if (!navigated) {
 			return;
 		}
 
