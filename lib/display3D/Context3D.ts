@@ -1,4 +1,18 @@
-import { BitmapImage2D, ContextGLDrawMode, ContextGLProfile, ContextGLProgramType, ContextGLVertexBufferFormat, ContextWebGL, IVertexBuffer, ProgramWebGL, Stage as AwayStage, StageEvent, TextureWebGL } from '@awayjs/stage';
+import { BitmapImage2D, 
+		 ContextGLDrawMode, 
+		 ContextGLProfile, 
+		 ContextGLProgramType, 
+		 ContextGLVertexBufferFormat, 
+		 ContextWebGL, 
+		 IVertexBuffer, 
+		 ProgramWebGL, 
+		 Stage as AwayStage, 
+		 StageEvent, 
+		 TextureWebGL, 
+		 VertexBufferWebGL, 
+		 ContextGLClearMask} from '@awayjs/stage';
+import { axCoerceString, Float64Vector } from '@awayfl/avm2';
+import { Debug } from '@awayfl/swf-loader';
 import { BitmapData } from '../display/BitmapData';
 import { Stage3D } from '../display/Stage3D';
 import { Context3DProgramType } from '../display3D/Context3DProgramType';
@@ -10,15 +24,14 @@ import { EventDispatcher } from '../events/EventDispatcher';
 import { Matrix3D } from '../geom/Matrix3D';
 import { Rectangle } from '../geom/Rectangle';
 import { ByteArray } from '../utils/ByteArray';
-import { axCoerceString, Float64Vector } from '@awayfl/avm2';
-import { Debug } from '@awayfl/swf-loader';
 import { SecurityDomain } from '../SecurityDomain';
 import { Event } from '../events/Event';
 import { Security } from '../system/Security';
 import { Texture } from './textures/Texture';
+import { RectangleTexture } from './textures/RectangleTexture';
 import { CubeTexture } from './textures/CubeTexture';
 import { TextureBase } from './textures/TextureBase';
-import { VertexBufferWebGL } from '@awayjs/stage';
+import { Context3DClearMask } from './Context3DClearMask';
 
 export class Context3D extends EventDispatcher {
 	// Called whenever the class is initialized.
@@ -30,10 +43,10 @@ export class Context3D extends EventDispatcher {
 	// List of instance symbols to link.
 	public static instanceSymbols: string[] = null; // [];
 
-	private _adaptee: AwayStage
-	private _profile: string
-	private _gl: WebGL2RenderingContext | WebGLRenderingContext
-	//private _currentProgram : Program3D
+	private _adaptee: AwayStage;
+	private _profile: string;
+	private _gl: WebGL2RenderingContext | WebGLRenderingContext;
+	//private _currentProgram : Program3D;
 
 	constructor(id: number, stage3D: Stage3D, renderMode: string = 'auto', profile: string = 'baseline') {
 		super();
@@ -46,7 +59,7 @@ export class Context3D extends EventDispatcher {
 		function dispatchContextCreated(e:StageEvent){
 			context3D.adaptee.removeEventListener(StageEvent.CONTEXT_RECREATED, dispatchContextCreated)
 			context3D.dispatchEvent(new thisSec.flash.events.Event(Event.CONTEXT3D_CREATE));
-			context3D._gl = (<ContextWebGL>context3D.adaptee.context)._gl
+			context3D._gl = (context3D.adaptee.context as ContextWebGL)._gl;
 		}
 		this._adaptee.addEventListener(StageEvent.CONTEXT_RECREATED, dispatchContextCreated)	
 		}
@@ -80,8 +93,7 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public get maxBackBufferWidth(): number {
-		Debug.notImplemented('public flash.display3D.Context3D::get maxBackBufferWidth'); 
-		return 2048;
+		return this._gl.getParameter(this._gl.MAX_VIEWPORT_DIMS);
 	}
 
 	public set maxBackBufferWidth(value: number) {
@@ -89,8 +101,7 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public get maxBackBufferHeight(): number {
-		Debug.notImplemented('public flash.display3D.Context3D::set maxBackBufferHeight'); 
-		return 2048;
+		return this._gl.getParameter(this._gl.MAX_VIEWPORT_DIMS);
 	}
 
 	public set maxBackBufferHeight(value: number) {
@@ -98,7 +109,6 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public get profile(): string {
-		Debug.notImplemented('public flash.display3D.Context3D::get profile'); 
 		return axCoerceString(this._profile);
 	}
 
@@ -121,7 +131,16 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public clear(red: number = 0.0, green: number = 0.0, blue: number = 0.0, alpha: number = 1.0, depth: number = 1.0, stencil: number = 0, mask: number = 0xffffffff): void {
-		this._adaptee.clear(red, green, blue, alpha, depth, stencil, mask);
+		
+		var awayMask: number = 0;
+		if(mask & Context3DClearMask.COLOR)
+			awayMask |= ContextGLClearMask.COLOR;
+		if(mask & Context3DClearMask.DEPTH)
+			awayMask |= ContextGLClearMask.DEPTH;
+		if(mask & Context3DClearMask.STENCIL)
+			awayMask |= ContextGLClearMask.STENCIL;
+		
+		this._adaptee.clear(red, green, blue, alpha, depth, stencil, awayMask);
 	}
 
 	public drawTriangles(indexBuffer: IndexBuffer3D, firstIndex: number = 0, numTriangles: number = -1): void {
@@ -138,7 +157,7 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public setProgramConstantsFromVector(programType: string, firstRegister: number /*int*/, data: Float64Vector, numRegisters: number /*int*/ = -1): void {
-		let awayProgramType: ContextGLProgramType;
+		var awayProgramType: ContextGLProgramType;
 		switch (programType) {
 			case Context3DProgramType.FRAGMENT:
 				awayProgramType = ContextGLProgramType.FRAGMENT;
@@ -149,17 +168,17 @@ export class Context3D extends EventDispatcher {
 			default:
 				break;
 		}
+		
 		// @todo: support transposed matrixes
-		let awayData:Float32Array = new Float32Array(data.length)
-		for(let i = 0; i < data.length; i++) {
+		var awayData:Float32Array = new Float32Array(data.length)
+		for(let i = 0; i < data.length; i++)
 			awayData[i] = data.axGetNumericProperty(i)
 
-		}
 		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, awayData);
 	}
 
 	public setProgramConstantsFromMatrix(programType: string, firstRegister: number, matrix: Matrix3D, transposedMatrix: boolean = false): void {
-		let awayProgramType: ContextGLProgramType;
+		var awayProgramType: ContextGLProgramType;
 		switch (programType) {
 			case Context3DProgramType.FRAGMENT:
 				awayProgramType = ContextGLProgramType.FRAGMENT;
@@ -179,7 +198,7 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public setVertexBufferAt(index: number, buffer: VertexBuffer3D, bufferOffset: number = 0, format: string = 'float4'): void {
-		let awayFormat: number;
+		var awayFormat: number;
 		switch (format) {
 			case Context3DVertexBufferFormat.BYTES_4:
 				awayFormat = ContextGLVertexBufferFormat.BYTE_4;
@@ -199,7 +218,7 @@ export class Context3D extends EventDispatcher {
 			default:
 				break;
 		}
-		(<ContextWebGL>this._adaptee.context).setVertexBufferAt( buffer ? index : -1, buffer ? <VertexBufferWebGL>buffer._adaptee : null, bufferOffset * 4, awayFormat, false);
+		(this._adaptee.context as ContextWebGL).setVertexBufferAt( buffer ? index : -1, buffer ? <VertexBufferWebGL>buffer._adaptee : null, bufferOffset * 4, awayFormat, false);
 
 	}
 
@@ -228,7 +247,7 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public setScissorRectangle(rectangle: Rectangle): void {
-		Debug.notImplemented('public flash.display3D.Context3D::setScissorRectangle'); return;
+		(this._adaptee.context as ContextWebGL).setScissorRectangle(rectangle.adaptee);
 	}
 
 	public createVertexBuffer(numVertices: number, data32PerVertex: number, bufferUsage: string = 'staticDraw'): VertexBuffer3D {
@@ -240,15 +259,15 @@ export class Context3D extends EventDispatcher {
 		return new (this.sec as SecurityDomain).flash.display3D.IndexBuffer3D(this, numIndices);
 	}
 
-	public createTexture(width: number /*int*/, height: number /*int*/, format: string, optimizeForRenderToTexture: boolean, streamingLevels: number /*int*/ = 0): any {
+	public createTexture(width: number /*int*/, height: number /*int*/, format: string, optimizeForRenderToTexture: boolean, streamingLevels: number /*int*/ = 0): Texture {
 		return new (this.sec as SecurityDomain).flash.display3D.textures.Texture(this, width, height, format, optimizeForRenderToTexture, streamingLevels);
 	}
 
-	public createRectangleTexture(width: number /*int*/, height: number /*int*/, format: string, optimizeForRenderToTexture: boolean): any {
+	public createRectangleTexture(width: number /*int*/, height: number /*int*/, format: string, optimizeForRenderToTexture: boolean): RectangleTexture {
 		return new (this.sec as SecurityDomain).flash.display3D.textures.RectangleTexture(this, width, height, format, optimizeForRenderToTexture);
 	}
 
-	public createCubeTexture(size: number /*int*/, format: string, optimizeForRenderToTexture: boolean, streamingLevels: number /*int*/ = 0): any /*CubeTexture*/ {
+	public createCubeTexture(size: number /*int*/, format: string, optimizeForRenderToTexture: boolean, streamingLevels: number /*int*/ = 0): CubeTexture /*CubeTexture*/ {
 		return new (this.sec as SecurityDomain).flash.display3D.textures.CubeTexture(this, size, format, optimizeForRenderToTexture, streamingLevels)
 	}
 
@@ -260,15 +279,15 @@ export class Context3D extends EventDispatcher {
 		this.adaptee.context.drawToBitmapImage2D(destination.adaptee as any as BitmapImage2D);
 	}
 
-	public setRenderToBackBuffer() {
+	public setRenderToBackBuffer(): void {
 		this._adaptee.context.setRenderToBackBuffer();
 	}
 
 	public setRenderToTexture(texture:TextureBase, targetType: number /*int*/, enableDepthAndStencil: boolean, antiAlias: number /*int*/, surfaceSelector: number /*int*/): void {
-		this._adaptee.context.setRenderToTexture(texture._adaptee, enableDepthAndStencil, antiAlias, surfaceSelector)
+		this._adaptee.context.setRenderToTexture(texture._adaptee, enableDepthAndStencil, antiAlias, surfaceSelector);
 	}
 
-	public setTextureAt(sampler: number /*int*/, texture:TextureBase): void {
+	public setTextureAt(sampler: number /*int*/, texture: TextureBase): void {
 		if(texture)
 			this._adaptee.context.setTextureAt(sampler, <TextureWebGL>texture._adaptee)			
 	}

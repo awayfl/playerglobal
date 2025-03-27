@@ -85,6 +85,7 @@ import { VertexBuffer3D } from './display3D/VertexBuffer3D';
 import { TextureBase } from './display3D/textures/TextureBase';
 import { Texture } from './display3D/textures/Texture';
 import { CubeTexture } from './display3D/textures/CubeTexture';
+import { RectangleTexture } from './display3D/textures/RectangleTexture';
 
 export class Mouse {}
 
@@ -115,7 +116,7 @@ export class SecurityDomain extends AXSecurityDomain {
 			textures: { 
 				TextureBase: TextureBase,
 				Texture: Texture,
-				RectangleTexture: Texture,
+				RectangleTexture: RectangleTexture,
 				CubeTexture: CubeTexture,
 			}
 		},

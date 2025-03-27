@@ -42,6 +42,7 @@ import { IndexBuffer3D } from './display3D/IndexBuffer3D';
 import { Program3D } from './display3D/Program3D';
 import { VertexBuffer3D } from './display3D/VertexBuffer3D';
 import { CubeTexture } from './display3D/textures/CubeTexture';
+import { RectangleTexture } from './display3D/textures/RectangleTexture';
 import { Texture } from './display3D/textures/Texture';
 import { TextureBase } from './display3D/textures/TextureBase';
 
@@ -315,8 +316,6 @@ export function initLink() {
 	//M('flash.display.StageScaleMode', StageScaleMode);
 	//M('flash.display.TriangleCulling', TriangleCulling);
 
-	// TODO: Add display3d stuff
-
 	M('flash.display3D.Context3D', Context3D);
 	M('flash.display3D.Context3DBlendFactor', Context3DBlendFactor);
 	M('flash.display3D.Context3DClearMask', Context3DClearMask);
@@ -334,7 +333,7 @@ export function initLink() {
 
 	M('flash.display3D.textures.TextureBase', TextureBase);
 	M('flash.display3D.textures.Texture', Texture);
-	M('flash.display3D.textures.RectangleTexture', Texture);
+	M('flash.display3D.textures.RectangleTexture', RectangleTexture);
 	M('flash.display3D.textures.CubeTexture', CubeTexture);
 
 	//M('flash.errors.DRMManagerError', DRMManagerError);//AIR

@@ -4,7 +4,8 @@ import { Context3D } from "../Context3D";
 import { BitmapData } from "./../../display/BitmapData";
 import { ByteArray } from "./../../utils/ByteArray";
 import { TextureBase } from "./TextureBase";
-export class Texture extends TextureBase {
+
+export class RectangleTexture extends TextureBase {
 	constructor(
 		context: Context3D,
 		width: number,

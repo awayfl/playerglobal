@@ -814,8 +814,6 @@ export class Stage extends DisplayObjectContainer {
 	}
 
 	public get stage3Ds (): GenericVector {
-		// @todo
-		Debug.throwPIR('playerglobals/display/Stage', 'get stage3Ds', '');
 		return this._stage3Ds;
 	}
 
