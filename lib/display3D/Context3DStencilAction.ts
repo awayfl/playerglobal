@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-import { ASObject } from "@awayfl/avm2";
+import { ASObject } from '@awayfl/avm2';
 
 // Class: Context3DStencilAction
 export class Context3DStencilAction extends ASObject {
 
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
+	// Called whenever the class is initialized.
+	static classInitializer: any = null;
 
-		constructor () {
-			super();
-		}
-
-		// JS -> AS Bindings
-		static KEEP: string = 'keep';
-		static ZERO: string = 'zero';
-		static INCREMENT_SATURATE: string = 'incrementSaturate';
-		static DECREMENT_SATURATE: string = 'decrementSaturate';
-		static INVERT: string = 'invert';
-		static INCREMENT_WRAP: string = 'incrementWrap';
-		static DECREMENT_WRAP: string = 'decrementWrap';
-		static SET: string = 'set';
-
-		// AS -> JS Bindings
-
+	constructor () {
+		super();
 	}
+
+	// JS -> AS Bindings
+	static KEEP: string = 'keep';
+	static ZERO: string = 'zero';
+	static INCREMENT_SATURATE: string = 'incrementSaturate';
+	static DECREMENT_SATURATE: string = 'decrementSaturate';
+	static INVERT: string = 'invert';
+	static INCREMENT_WRAP: string = 'incrementWrap';
+	static DECREMENT_WRAP: string = 'decrementWrap';
+	static SET: string = 'set';
+
+	// AS -> JS Bindings
+
+}

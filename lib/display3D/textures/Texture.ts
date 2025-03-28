@@ -1,9 +1,9 @@
-import { Debug } from "@awayfl/swf-loader";
-import { ContextGLTextureFormat, TextureWebGL } from "@awayjs/stage";
-import { Context3D } from "../Context3D";
-import { BitmapData } from "./../../display/BitmapData";
-import { ByteArray } from "./../../utils/ByteArray";
-import { TextureBase } from "./TextureBase";
+import { Debug } from '@awayfl/swf-loader';
+import { ContextGLTextureFormat, TextureWebGL } from '@awayjs/stage';
+import { Context3D } from '../Context3D';
+import { BitmapData } from './../../display/BitmapData';
+import { ByteArray } from './../../utils/ByteArray';
+import { TextureBase } from './TextureBase';
 export class Texture extends TextureBase {
 	constructor(
 		context: Context3D,
@@ -16,13 +16,13 @@ export class Texture extends TextureBase {
 		super();
 		let awayTextureFormat: ContextGLTextureFormat;
 		switch (format) {
-			case "bgra":
+			case 'bgra':
 				awayTextureFormat = ContextGLTextureFormat.BGRA;
 				break;
-			case "compressed":
+			case 'compressed':
 				awayTextureFormat = ContextGLTextureFormat.COMPRESSED;
 				break;
-			case "compressedAlpha":
+			case 'compressedAlpha':
 				awayTextureFormat = ContextGLTextureFormat.COMPRESSED_ALPHA;
 				break;
 		}
@@ -35,16 +35,16 @@ export class Texture extends TextureBase {
 	}
 
 	public uploadCompressedTextureFromByteArray(data: ByteArray, byteArrayOffset: number, async: boolean = false) {
-		Debug.notImplemented("public flash.display3D.textures.Texture::uploadCompressedTextureFromByteArray");
+		Debug.notImplemented('public flash.display3D.textures.Texture::uploadCompressedTextureFromByteArray');
 	}
 
 	public uploadFromBitmapData(source: BitmapData, miplevel: number = 0) {
-		if(miplevel==0) // @todo: Additional Mips cause errors
-			(<TextureWebGL>this._adaptee).uploadFromArray(new Uint8Array(source.adaptee.getDataInternal()), miplevel);
+		if (miplevel == 0) // @todo: Additional Mips cause errors
+			(<TextureWebGL> this._adaptee).uploadFromArray(new Uint8Array(source.adaptee.getDataInternal()), miplevel);
 	}
 
 	public uploadFromByteArray(data: ByteArray, byteArrayOffset: number, miplevel: number = 0) {
-		if(miplevel==0) // @todo: Additional Mips cause errors
-			(<TextureWebGL>this._adaptee).uploadFromArray(new Uint8Array(data.arraybytes), miplevel);
+		if (miplevel == 0) // @todo: Additional Mips cause errors
+			(<TextureWebGL> this._adaptee).uploadFromArray(new Uint8Array(data.arraybytes), miplevel);
 	}
 }

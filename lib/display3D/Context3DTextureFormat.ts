@@ -1,4 +1,4 @@
-import { ASObject } from "@awayfl/avm2";
+import { ASObject } from '@awayfl/avm2';
 
 /**
  * Copyright 2014 Mozilla Foundation
@@ -15,21 +15,20 @@ import { ASObject } from "@awayfl/avm2";
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-	export class Context3DTextureFormat extends ASObject {
+export class Context3DTextureFormat extends ASObject {
 
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
-		
-		constructor () {
-			super();
-		}
+	// Called whenever the class is initialized.
+	static classInitializer: any = null;
 
-		// JS -> AS Bindings
-		static BGRA: string = 'bgra';
-		static COMPRESSED: string = 'compressed';
-		static COMPRESSED_ALPHA: string = 'compressedAlpha';
-
-		// AS -> JS Bindings
-
+	constructor () {
+		super();
 	}
 
+	// JS -> AS Bindings
+	static BGRA: string = 'bgra';
+	static COMPRESSED: string = 'compressed';
+	static COMPRESSED_ALPHA: string = 'compressedAlpha';
+
+	// AS -> JS Bindings
+
+}

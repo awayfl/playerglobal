@@ -17,14 +17,12 @@ export class Stage3D extends EventDispatcher {
 	// List of instance symbols to link.
 	public static instanceSymbols: string[] = null; // [];
 	private _context3D: Context3D
-	private _id: number
 	private _adaptee: AwayStage
 
 	constructor(i) {
 		super();
 		console.log('Stage3D Constructor');
 		this._adaptee = AVMStage.instance().stage3Ds[i];
-		this._id = i;
 	}
 
 	public get adaptee(): AwayStage {
@@ -60,46 +58,46 @@ export class Stage3D extends EventDispatcher {
 	}
 
 	public requestContext3D(context3DRenderMode: string = 'auto', profile: string = 'baseline'): void {
-		const stage3D:Stage3D = this
-		// setTimeout(function(){
-		console.log('Request Context');
-		stage3D._context3D = new (stage3D.sec as SecurityDomain).flash.display3D.Context3D(stage3D._id, stage3D, profile, context3DRenderMode);
-		const forceSoftware: boolean = (context3DRenderMode == 'software');
-		var awayContextProfile: ContextGLProfile;
-		switch (profile) {
-			case 'baseline':
-				awayContextProfile = ContextGLProfile.BASELINE;
-				break;
-			case 'baseline_constrained':
-				awayContextProfile = ContextGLProfile.BASELINE_CONSTRAINED;
-				break;
-			case 'baseline_extended':
-				awayContextProfile = ContextGLProfile.BASELINE_EXTENDED;
-				break;
-			case 'standard':
-				awayContextProfile = ContextGLProfile.STANDARD;
-				break;
-			case 'standard_constrained':
-				awayContextProfile = ContextGLProfile.STANDARD_CONSTRAINED;
-				break;
-			case 'standard_extended':
-				awayContextProfile = ContextGLProfile.STANDARD_EXTENDED;
-				break;
-			case 'enhanced':
-				awayContextProfile = ContextGLProfile.ENHANCED;
-				break;
-			default:
-				break;
-		}
-		console.log('Context3D Config: ', 'id: ', stage3D._id, ' forceSoftware: ', forceSoftware, ' profile: ', awayContextProfile);
-		
-		function dispatchContextCreated(e:Event){
-			console.log(stage3D.context3D.driverInfo);
-			stage3D._context3D.removeEventListener(Event.CONTEXT3D_CREATE, dispatchContextCreated);
-			stage3D.dispatchEvent(new (<SecurityDomain>stage3D.sec).flash.events.Event(Event.CONTEXT3D_CREATE));
-		}
+		const stage3D: Stage3D = this;
+		setTimeout(function() {
+			console.log('Request Context');
+			stage3D._context3D = new (stage3D.sec as SecurityDomain).flash.display3D.Context3D(stage3D, profile, context3DRenderMode);
+			const forceSoftware: boolean = (context3DRenderMode == 'software');
+			let awayContextProfile: ContextGLProfile = ContextGLProfile.BASELINE;
+			switch (profile) {
+				case 'baseline':
+					awayContextProfile = ContextGLProfile.BASELINE;
+					break;
+				case 'baseline_constrained':
+					awayContextProfile = ContextGLProfile.BASELINE_CONSTRAINED;
+					break;
+				case 'baseline_extended':
+					awayContextProfile = ContextGLProfile.BASELINE_EXTENDED;
+					break;
+				case 'standard':
+					awayContextProfile = ContextGLProfile.STANDARD;
+					break;
+				case 'standard_constrained':
+					awayContextProfile = ContextGLProfile.STANDARD_CONSTRAINED;
+					break;
+				case 'standard_extended':
+					awayContextProfile = ContextGLProfile.STANDARD_EXTENDED;
+					break;
+				case 'enhanced':
+					awayContextProfile = ContextGLProfile.BASELINE_EXTENDED;
+					break;
+				default:
+					break;
+			}
+			console.log('Context3D Config: ', 'forceSoftware: ', forceSoftware, ' profile: ', profile);
+			function dispatchContextCreated(e: Event) {
+				console.log(stage3D.context3D.driverInfo);
+				stage3D._context3D.removeEventListener(Event.CONTEXT3D_CREATE, dispatchContextCreated);
+				stage3D.dispatchEvent(new (<SecurityDomain>stage3D.sec).flash.events.Event(Event.CONTEXT3D_CREATE));
+			}
 
-		stage3D._context3D.addEventListener(Event.CONTEXT3D_CREATE, dispatchContextCreated);
-		stage3D._adaptee.requestContext(forceSoftware, awayContextProfile);
-	} //, 0)};
+			stage3D._context3D.addEventListener(Event.CONTEXT3D_CREATE, dispatchContextCreated);
+			stage3D._adaptee.requestContext(forceSoftware, awayContextProfile);
+		} , 0);
+	}
 }

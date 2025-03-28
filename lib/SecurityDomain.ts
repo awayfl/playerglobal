@@ -113,7 +113,7 @@ export class SecurityDomain extends AXSecurityDomain {
 			IndexBuffer3D: IndexBuffer3D,
 			Program3D: Program3D,
 			VertexBuffer3D: VertexBuffer3D,
-			textures: { 
+			textures: {
 				TextureBase: TextureBase,
 				Texture: Texture,
 				RectangleTexture: RectangleTexture,

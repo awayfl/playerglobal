@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 // Class: CubeTexture
-import { Debug } from "@awayfl/swf-loader";
-import { ContextGLTextureFormat, CubeTextureWebGL, TextureWebGL } from "@awayjs/stage";
-import { Context3D } from "../Context3D";
-import { BitmapData } from "./../../display/BitmapData";
-import { ByteArray } from "./../../utils/ByteArray";
-import { TextureBase } from "./TextureBase";
+import { Debug } from '@awayfl/swf-loader';
+import { ContextGLTextureFormat, CubeTextureWebGL, TextureWebGL } from '@awayjs/stage';
+import { Context3D } from '../Context3D';
+import { BitmapData } from './../../display/BitmapData';
+import { ByteArray } from './../../utils/ByteArray';
+import { TextureBase } from './TextureBase';
 
 export class CubeTexture extends TextureBase {
 	// Called whenever the class is initialized.
@@ -35,13 +35,13 @@ export class CubeTexture extends TextureBase {
 		super();
 		let awayTextureFormat: ContextGLTextureFormat;
 		switch (format) {
-			case "bgra":
+			case 'bgra':
 				awayTextureFormat = ContextGLTextureFormat.BGRA;
 				break;
-			case "compressed":
+			case 'compressed':
 				awayTextureFormat = ContextGLTextureFormat.COMPRESSED;
 				break;
-			case "compressedAlpha":
+			case 'compressedAlpha':
 				awayTextureFormat = ContextGLTextureFormat.COMPRESSED_ALPHA;
 				break;
 		}
@@ -54,14 +54,14 @@ export class CubeTexture extends TextureBase {
 	}
 
 	public uploadFromBitmapData(source: BitmapData, side: number /*uint*/, miplevel: number /*uint*/ = 0): void {
-		if(miplevel==0) // @todo: Additional Mips cause errors
-		(<CubeTextureWebGL>this._adaptee).uploadFromArray(new Uint8Array(source.adaptee.getDataInternal()), side, miplevel)
+		if (miplevel == 0) // @todo: Additional Mips cause errors
+			(<CubeTextureWebGL> this._adaptee).uploadFromArray(new Uint8Array(source.adaptee.getDataInternal()), side, miplevel);
 	}
 
 	public uploadFromByteArray(data: ByteArray,byteArrayOffset: number /*uint*/,side: number /*uint*/,miplevel: number /*uint*/ = 0
 	): void {
-		if(miplevel==0) // @todo: Additional Mips cause errors
-		(<CubeTextureWebGL>this._adaptee).uploadFromArray(new Uint8Array(data.arraybytes), side, miplevel)
+		if (miplevel == 0) // @todo: Additional Mips cause errors
+			(<CubeTextureWebGL> this._adaptee).uploadFromArray(new Uint8Array(data.arraybytes), side, miplevel);
 	}
 
 	public uploadCompressedTextureFromByteArray(data: ByteArray,byteArrayOffset: number /*uint*/,async: boolean = false
@@ -69,7 +69,7 @@ export class CubeTexture extends TextureBase {
 		data = data;
 		byteArrayOffset = byteArrayOffset >>> 0;
 		async = !!async;
-		Debug.notImplemented("public flash.display3D.textures.CubeTexture::uploadCompressedTextureFromByteArray");
+		Debug.notImplemented('public flash.display3D.textures.CubeTexture::uploadCompressedTextureFromByteArray');
 		return;
 	}
 }

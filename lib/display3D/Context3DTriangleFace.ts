@@ -15,23 +15,23 @@
  */
 // Class: Context3DTriangleFace
 
-import { ASObject } from "@awayfl/avm2";
+import { ASObject } from '@awayfl/avm2';
 
-	export class Context3DTriangleFace extends ASObject {
+export class Context3DTriangleFace extends ASObject {
 
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
+	// Called whenever the class is initialized.
+	static classInitializer: any = null;
 
-		constructor () {
-			super();
-		}
-
-		// JS -> AS Bindings
-		static NONE: string = 'none';
-		static BACK: string = 'back';
-		static FRONT: string = 'front';
-		static FRONT_AND_BACK: string = 'frontAndBack';
-
-		// AS -> JS Bindings
-
+	constructor () {
+		super();
 	}
+
+	// JS -> AS Bindings
+	static NONE: string = 'none';
+	static BACK: string = 'back';
+	static FRONT: string = 'front';
+	static FRONT_AND_BACK: string = 'frontAndBack';
+
+	// AS -> JS Bindings
+
+}

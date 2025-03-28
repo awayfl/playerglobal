@@ -14,28 +14,27 @@
  * limitations under the License.
  */
 
-import { ASObject } from "@awayfl/avm2";
+import { ASObject } from '@awayfl/avm2';
 
-	export class Context3DCompareMode extends ASObject {
+export class Context3DCompareMode extends ASObject {
 
-		// Called whenever the class is initialized.
-		static classInitializer: any = null;
+	// Called whenever the class is initialized.
+	static classInitializer: any = null;
 
-		constructor () {
-			super();
-		}
-
-		// JS -> AS Bindings
-		static ALWAYS: string = 'always';
-		static NEVER: string = 'never';
-		static LESS: string = 'less';
-		static LESS_EQUAL: string = 'lessEqual';
-		static EQUAL: string = 'equal';
-		static GREATER_EQUAL: string = 'greaterEqual';
-		static GREATER: string = 'greater';
-		static NOT_EQUAL: string = 'notEqual';
-
-		// AS -> JS Bindings
-
+	constructor () {
+		super();
 	}
 
+	// JS -> AS Bindings
+	static ALWAYS: string = 'always';
+	static NEVER: string = 'never';
+	static LESS: string = 'less';
+	static LESS_EQUAL: string = 'lessEqual';
+	static EQUAL: string = 'equal';
+	static GREATER_EQUAL: string = 'greaterEqual';
+	static GREATER: string = 'greater';
+	static NOT_EQUAL: string = 'notEqual';
+
+	// AS -> JS Bindings
+
+}
