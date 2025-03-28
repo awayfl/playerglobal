@@ -59,9 +59,16 @@ export class Stage3D extends EventDispatcher {
 
 	public requestContext3D(context3DRenderMode: string = 'auto', profile: string = 'baseline'): void {
 		const stage3D: Stage3D = this;
+		this._context3D = new (stage3D.sec as SecurityDomain).flash.display3D.Context3D(this, context3DRenderMode, profile);
+		
+		function dispatchContextCreated(e: Event) {
+			stage3D._context3D.removeEventListener(Event.CONTEXT3D_CREATE, dispatchContextCreated);
+			stage3D.dispatchEvent(new (<SecurityDomain>stage3D.sec).flash.events.Event(Event.CONTEXT3D_CREATE));
+		}
+
+		this._context3D.addEventListener(Event.CONTEXT3D_CREATE, dispatchContextCreated);
 		setTimeout(function() {
 			console.log('Request Context');
-			stage3D._context3D = new (stage3D.sec as SecurityDomain).flash.display3D.Context3D(stage3D, profile, context3DRenderMode);
 			const forceSoftware: boolean = (context3DRenderMode == 'software');
 			let awayContextProfile: ContextGLProfile = ContextGLProfile.BASELINE;
 			switch (profile) {
@@ -90,13 +97,6 @@ export class Stage3D extends EventDispatcher {
 					break;
 			}
 			console.log('Context3D Config: ', 'forceSoftware: ', forceSoftware, ' profile: ', profile);
-			function dispatchContextCreated(e: Event) {
-				console.log(stage3D.context3D.driverInfo);
-				stage3D._context3D.removeEventListener(Event.CONTEXT3D_CREATE, dispatchContextCreated);
-				stage3D.dispatchEvent(new (<SecurityDomain>stage3D.sec).flash.events.Event(Event.CONTEXT3D_CREATE));
-			}
-
-			stage3D._context3D.addEventListener(Event.CONTEXT3D_CREATE, dispatchContextCreated);
 			stage3D._adaptee.requestContext(forceSoftware, awayContextProfile);
 		} , 0);
 	}

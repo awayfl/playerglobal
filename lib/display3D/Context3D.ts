@@ -64,7 +64,6 @@ export class Context3D extends EventDispatcher {
 		this._profile = profile;
 		this._adaptee = stage3D.adaptee;
 		function dispatchContextCreated(e: StageEvent) {
-			context3D.adaptee.removeEventListener(StageEvent.CONTEXT_RECREATED, dispatchContextCreated);
 			context3D.dispatchEvent(new thisSec.flash.events.Event(Event.CONTEXT3D_CREATE));
 			context3D._gl = (context3D.adaptee.context as unknown as ContextWebGL)._gl;
 		}
@@ -120,7 +119,6 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public static get supportsVideoTexture(): boolean {
-		Debug.notImplemented('public flash.display3D.Context3D::get driverInfo');
 		return false;
 	}
 
