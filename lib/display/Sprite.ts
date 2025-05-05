@@ -719,7 +719,10 @@ export class Sprite extends DisplayObjectContainer {
 		this.isDragging = false;
 		Sprite.currentDraggedMC = null;
 		const avmStage = AVMStage.instance();
+		const dragNode = avmStage.view.getNode(this.adaptee);
 		avmStage.mousePicker.dragNode = null;
+		const dragEntity = this.adaptee.getAbstraction<EntityNode>(dragNode.partition);
+		dragEntity.setParent(null);
 		avmStage.mouseManager.stopDragObject();
 		avmStage.root.removeEventListener(MouseEvent.MOUSE_MOVE, this.dragListenerDelegate);
 	}
