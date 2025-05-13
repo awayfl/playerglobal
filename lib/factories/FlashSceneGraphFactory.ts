@@ -31,7 +31,6 @@ import {
 } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 import { LoaderInfo } from '../display/LoaderInfo';
-import { BasicPartition } from '@awayjs/view';
 import { IAsset } from '@awayjs/core';
 
 export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements ISceneGraphFactory {
@@ -202,7 +201,6 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 			clone = (<any> asset.adapter).clone(false).adaptee;
 		}
 
-		clone.partitionClass = BasicPartition;
 		clone._sessionID = sessionID;
 		return clone;
 	}

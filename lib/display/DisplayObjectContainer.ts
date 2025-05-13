@@ -130,7 +130,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 				obj.children[childname].text = (<AwayTextField>oneChild).text;
 				obj.children[childname].rectangle = 'x:' + oneChild.x + ', y:' + oneChild.y;
 				const box: Box = PickGroup.getInstance()
-					.getBoundsPicker(AVMStage.instance().view.getNode(oneChild).partition).getBoxBounds(AVMStage.instance().view.getNode(oneChild));
+					.getBoundsPicker(AVMStage.instance().view.getNode(oneChild)).getBoxBounds(AVMStage.instance().view.getNode(oneChild));
 				obj.children[childname].width = (box == null) ? 0 : box.width;
 				obj.children[childname].height = (box == null) ? 0 : box.height;
 			}
@@ -467,7 +467,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 */
 	public getObjectsUnderPoint(point: Point): DisplayObject[] {
 
-		const raycastPicker = PickGroup.getInstance().getRaycastPicker(AVMStage.instance().view.getNode(this.adaptee).partition);
+		const raycastPicker = PickGroup.getInstance().getRaycastPicker(AVMStage.instance().view.getNode(this.adaptee));
 
 		const awayChildren: IPartitionContainer[] =
 			raycastPicker.getObjectsUnderPoint(

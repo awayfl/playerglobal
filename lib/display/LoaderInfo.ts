@@ -436,7 +436,7 @@ export class LoaderInfo extends EventDispatcher {
 	 */
 	public get height(): number {
 		const node = AVMStage.instance().view.getNode(this._container);
-		const box: Box = PickGroup.getInstance().getBoundsPicker(node.partition).getBoxBounds(node);
+		const box: Box = PickGroup.getInstance().getBoundsPicker(node).getBoxBounds(node);
 
 		return (box == null) ? 0 : box.height;
 
@@ -676,7 +676,7 @@ export class LoaderInfo extends EventDispatcher {
 	 */
 	public get width(): number {
 		const node = AVMStage.instance().view.getNode(this._container);
-		const box: Box = PickGroup.getInstance().getBoundsPicker(node.partition).getBoxBounds(node);
+		const box: Box = PickGroup.getInstance().getBoundsPicker(node).getBoxBounds(node);
 
 		return (box == null) ? 0 : box.width;
 	}

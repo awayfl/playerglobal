@@ -11,7 +11,7 @@ import { IVirtualSceneGraphItem } from './IVirtualSceneGraphItem';
 import { constructClassFromSymbol } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 import { release, AVMStage } from '@awayfl/swf-loader';
-import { EntityNode, PickEntity } from '@awayjs/view';
+import { PickEntity } from '@awayjs/view';
 import { SoundTransform } from '../media/SoundTransform';
 
 export class Sprite extends DisplayObjectContainer {
@@ -624,10 +624,7 @@ export class Sprite extends DisplayObjectContainer {
 			const dragNode = avmStage.view.getNode(this.adaptee);
 			avmStage.mousePicker.dragNode = dragNode;
 
-			const dragEntity = this.adaptee.getAbstraction<EntityNode>(dragNode.partition);
-			dragEntity.setParent(dragNode);
-
-			const collision = dragEntity
+			const collision = dragNode
 				.getAbstraction<PickEntity>(avmStage.mousePicker.pickGroup)
 				.pickingCollision;
 
@@ -721,8 +718,6 @@ export class Sprite extends DisplayObjectContainer {
 		const avmStage = AVMStage.instance();
 		const dragNode = avmStage.view.getNode(this.adaptee);
 		avmStage.mousePicker.dragNode = null;
-		const dragEntity = this.adaptee.getAbstraction<EntityNode>(dragNode.partition);
-		dragEntity.setParent(null);
 		avmStage.mouseManager.stopDragObject();
 		avmStage.root.removeEventListener(MouseEvent.MOUSE_MOVE, this.dragListenerDelegate);
 	}

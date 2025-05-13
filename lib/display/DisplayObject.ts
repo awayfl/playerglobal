@@ -1,5 +1,5 @@
 import { Point as AwayPoint,
-	Box, AbstractMethodError, Debug, AssetEvent } from '@awayjs/core';
+	Box, AbstractMethodError, Debug } from '@awayjs/core';
 import { EventDispatcher, BroadcastEventDispatchQueue } from '../events/EventDispatcher';
 import { Event } from '../events/Event';
 import { StaticEvents } from '../events/StaticEvents';
@@ -8,7 +8,7 @@ import { DisplayObject as AwayDisplayObject,
 import { LoaderInfo } from './LoaderInfo';
 import { DisplayObjectContainer } from './DisplayObjectContainer';
 import { Stage } from './Stage';
-import { PickGroup, BoundsPicker, BasicPartition, ContainerNode, ContainerEvent } from '@awayjs/view';
+import { PickGroup, BoundsPicker, ContainerNode } from '@awayjs/view';
 import { constructClassFromSymbol, AXClass, ASArray } from '@awayfl/avm2';
 import { Transform } from '../geom/Transform';
 import { Rectangle } from '../geom/Rectangle';
@@ -67,8 +67,6 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 		obj.$lazyConstructProperty = null;
 	}
-
-	private _onNodeClearDelegate: (event: AssetEvent) => void;
 
 	protected _loaderInfo: LoaderInfo;
 	protected _isStage: boolean;
@@ -237,8 +235,6 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	constructor() {
 		super();
 
-		this._onNodeClearDelegate = (event: AssetEvent) => this._onNodeClear(event);
-
 		DisplayObject.applyLazy(this);
 
 		this._filters = this._filters || this.sec.createArrayUnsafe([]);
@@ -269,11 +265,6 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		this._transform = new (<SecurityDomain> this.sec).flash.geom.Transform(this.adaptee.transform);
 	}
 
-	private _onNodeClear(event: AssetEvent): void {
-		this._node.removeEventListener(AssetEvent.CLEAR, this._onNodeClearDelegate);
-		this._node = null;
-	}
-
 	protected createAdaptee(): AwayDisplayObject {
 		return new AwayDisplayObject();
 	}
@@ -282,7 +273,6 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		if (adaptee) {
 			// if (!adaptee.partition)
 			// 	adaptee.partition = new SceneGraphPartition(adaptee);
-			adaptee.partitionClass = BasicPartition;
 			adaptee.adapter = this;
 		}
 
@@ -313,10 +303,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	// --------------------- stuff needed because of implementing the existing IDisplayObjectAdapter
 
 	public get node(): ContainerNode {
-		if (!this._node) {
+		if (!this._node)
 			this._node = AVMStage.instance().view.getNode(this._adaptee);
-			this._node.addEventListener(AssetEvent.CLEAR, this._onNodeClearDelegate);
-		}
 
 		return this._node;
 	}
@@ -756,11 +744,6 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			return (<TextField> this.adaptee).height;
 		}
 
-		if (!this.node.partition) {
-			console.warn('Trying to get Display.height on orphan child!');
-			return 100;
-		}
-
 		const box: Box = this.getBoundsInternal(this.parent || <any> this._stage);
 
 		return (box == null) ? 0 : Math.round(box.height * 20) / 20;
@@ -783,11 +766,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			return;
 		}
 
-		if (!this.node.partition) {
-			console.warn('Trying to set Display.height on orphan child!');
-			return;
-		}
-		PickGroup.getInstance().getBoundsPicker(this.node.partition).height = value;
+		PickGroup.getInstance().getBoundsPicker(this.node).height = value;
 
 	}
 
@@ -1297,12 +1276,6 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		if (this.adaptee.isAsset(TextField)) {
 			return (<TextField> this.adaptee).width;
 		}
-		//todo2019
-		if (!this.node.partition) {
-			console.warn('Trying to get Display.width on orphan child!');
-			return 100;
-
-		}
 
 		const box: Box = this.getBoundsInternal(this.parent || <any> this._stage);
 
@@ -1317,12 +1290,6 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 		value = clampASValues(value);
 
-		if (!this.node.partition) {
-			console.warn('Trying to set Display.width on orphan child!');
-			return;
-
-		}
-
 		// round to twips
 		value = Math.round(value * 20) / 20;
 
@@ -1334,7 +1301,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			return;
 		}
 
-		PickGroup.getInstance().getBoundsPicker(this.node.partition).width = value;
+		PickGroup.getInstance().getBoundsPicker(this.node).width = value;
 
 	}
 
@@ -1476,7 +1443,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		if	(!targetCoordinateSpace)
 			targetCoordinateSpace = this;
 		//if(!this._boundsPicker) {
-		this._boundsPicker = PickGroup.getInstance().getBoundsPicker(this.node.partition);
+		this._boundsPicker = PickGroup.getInstance().getBoundsPicker(this.node);
 		//}
 
 		return this._boundsPicker
@@ -1556,10 +1523,9 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 */
 	public hitTestObject(obj: DisplayObject): boolean {
 
-		return PickGroup.getInstance().getBoundsPicker(
-			this.node.partition).hitTestObject(
-			PickGroup.getInstance()
-				.getBoundsPicker(AVMStage.instance().view.getNode(obj.adaptee).partition));
+		return PickGroup.getInstance()
+			.getBoundsPicker(this.node)
+			.hitTestObject(PickGroup.getInstance().getBoundsPicker(obj.node));
 
 	}
 
@@ -1577,8 +1543,9 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   false otherwise.
 	 */
 	public hitTestPoint(x: number, y: number, shapeFlag: boolean = false): boolean {
-		return PickGroup.getInstance().getBoundsPicker(
-			this.node.partition).hitTestPoint(x, y, shapeFlag);
+		return PickGroup.getInstance()
+			.getBoundsPicker(this.node)
+			.hitTestPoint(x, y, shapeFlag);
 	}
 
 	/**
