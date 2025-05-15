@@ -181,7 +181,7 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 		const asset: IAsset = this.awaySymbols[symbolID];
 		let clone: DisplayObject;
 		if (asset.isAsset(Graphics)) {
-			clone = Sprite.getNewSprite(<Graphics> asset.clone());//TODO: remove this clone() without the mem leak
+			clone = Sprite.getNewSprite(<Graphics> asset);
 			clone.name = asset.name;
 			clone.mouseEnabled = false;
 		} else if (asset.isAsset(Sprite)) {
