@@ -77,7 +77,6 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 	private _transform: Transform;
 	private _filters: gASArray<BitmapFilter>;
-	private _boundsPicker: BoundsPicker;
 
 	// hack for TFL to return correct width / height for TextLine
 	public _forceWidth: number = 0;
@@ -1442,11 +1441,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 		if	(!targetCoordinateSpace)
 			targetCoordinateSpace = this;
-		//if(!this._boundsPicker) {
-		this._boundsPicker = PickGroup.getInstance().getBoundsPicker(this.node);
-		//}
 
-		return this._boundsPicker
+		return PickGroup.getInstance().getBoundsPicker(this.node)
 			.getBoxBounds(AVMStage.instance().view.getNode(targetCoordinateSpace.adaptee), strokeFlag, true);
 	}
 
