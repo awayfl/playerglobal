@@ -264,7 +264,7 @@ export class BroadcastEventDispatchQueue {
 	dispatchEvent(event: Event) {
 		//release || assert (event.isBroadcastEvent(), "Cannot dispatch non-broadcast events.");
 		const queue = this._queues[event._type];
-		const keys = this._keys[event._type]
+		const keys = this._keys[event._type];
 
 		//return if no listeners exist for event type
 		if (!queue)
@@ -272,7 +272,7 @@ export class BroadcastEventDispatchQueue {
 
 		let i = keys.length;
 		while (i--) {
-			let key = keys[i];
+			const key = keys[i];
 			let target = queue[key];
 			if (USE_WEAK)
 				target = (<WeakRef<EventDispatcher>> target)?.deref();
