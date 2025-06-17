@@ -466,17 +466,17 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public _addOwner(owner: IBitmapDataOwner) {
-		if (this._owners.indexOf(owner) == -1) this._owners.push(owner);
+		//if (this._owners.indexOf(owner) == -1) this._owners.push(owner);
 	}
 
 	public _removeOwner(owner: IBitmapDataOwner) {
-		const index: number = this._owners.indexOf(owner);
+		// const index: number = this._owners.indexOf(owner);
 
-		if (index != -1) {
-			this._owners.splice(index, 1);
+		// if (index != -1) {
+		// 	this._owners.splice(index, 1);
 
-			if (this._owners.length === 0)
-				this._adaptee.clear();
-		}
+		// 	if (this._owners.length === 0)
+		// 		this._adaptee.clear();
+		// }
 	}
 }
