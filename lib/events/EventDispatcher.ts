@@ -228,7 +228,6 @@ export class BroadcastEventDispatchQueue {
 	 * Periodically we compact them if too many null values exist.
 	 */
 	private _queues: Record<string,  Record<number, WeakRef<EventDispatcher>> | Record<number, EventDispatcher>> = {};
-	private _keys: Record<string,  number[]> = {};
 	private static _instance: BroadcastEventDispatchQueue;
 	public static getInstance(): BroadcastEventDispatchQueue {
 		return BroadcastEventDispatchQueue._instance
@@ -238,13 +237,11 @@ export class BroadcastEventDispatchQueue {
 	add(type: string, target: EventDispatcher) {
 		// release || assert(Event.isBroadcastEventType(type), "Can only register broadcast events.");
 		const queue = this._queues[type] || (this._queues[type] = []);
-		const keys = this._keys[type] || (this._keys[type] = []);
 
 		if (queue[target.id])
 			return;
 
 		queue[target.id] = (USE_WEAK ? new self.WeakRef(target) : target);
-		keys.push(target.id);
 	}
 
 	remove(type: string, target: EventDispatcher) {
@@ -252,27 +249,17 @@ export class BroadcastEventDispatchQueue {
 		const queue = this._queues[type];
 		release || assert(queue, 'There should already be a queue for this.');
 		delete queue[target.id];
-
-		const keys = this._keys[type] || (this._keys[type] = []);
-		const index = keys.indexOf(target.id);
-		if (index == -1)
-			return;
-		release || assert(keys, 'There should already be a key for this.');
-		keys.splice(index);
 	}
 
 	dispatchEvent(event: Event) {
 		//release || assert (event.isBroadcastEvent(), "Cannot dispatch non-broadcast events.");
 		const queue = this._queues[event._type];
-		const keys = this._keys[event._type];
 
 		//return if no listeners exist for event type
 		if (!queue)
 			return;
 
-		let i = keys.length;
-		while (i--) {
-			const key = keys[i];
+		for (const key in queue) {
 			let target = queue[key];
 			if (USE_WEAK)
 				target = (<WeakRef<EventDispatcher>> target)?.deref();
@@ -282,12 +269,11 @@ export class BroadcastEventDispatchQueue {
 			} else {
 				console.debug('[BroadcastEventDispatchQueue] Broadcast target was deleted by GC:', key);
 				delete queue[key];
-				keys.splice(i);
 			}
 		}
 	}
 
 	getQueueLength(type: string) {
-		return this._keys[type] ? this._keys[type].length : 0;
+		return this._queues[type] ? Object.getOwnPropertyNames(this._queues[type]).length : 0;
 	}
 }
