@@ -99,9 +99,9 @@ export class Matrix3D extends ASObject {
 	public decompose(orientationStyle: string = 'eulerAngles'): GenericVector {
 		const array = this._adaptee.decompose(axCoerceString(orientationStyle));
 
-		const v = new (<SecurityDomain> this.sec).ObjectVector(4, true);
+		const v = new (<SecurityDomain> this.sec).ObjectVector(3, true);
 
-		for (let i = 0; i < 4; i++)
+		for (let i = 0; i < 3; i++)
 			v.axSetNumericProperty(i, new (<SecurityDomain> this.sec).flash.geom.Vector3D(array[i]));
 
 		return v;
