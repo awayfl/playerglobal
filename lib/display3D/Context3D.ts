@@ -345,12 +345,16 @@ export class Context3D extends EventDispatcher {
 		switch (triangleFaceToCull) {
 			case Context3DTriangleFace.NONE:
 				awayTriangleFaceToCull = ContextGLTriangleFace.NONE;
+				break;
 			case Context3DTriangleFace.BACK:
 				awayTriangleFaceToCull = ContextGLTriangleFace.BACK;
+				break;
 			case Context3DTriangleFace.FRONT:
 				awayTriangleFaceToCull = ContextGLTriangleFace.FRONT;
+				break;
 			case Context3DTriangleFace.FRONT_AND_BACK:
 				awayTriangleFaceToCull = ContextGLTriangleFace.FRONT_AND_BACK;
+				break;
 		}
 		this._adaptee.context.setCulling(awayTriangleFaceToCull);
 	}
