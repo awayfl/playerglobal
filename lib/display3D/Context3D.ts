@@ -52,6 +52,7 @@ export class Context3D extends EventDispatcher {
 	private _adaptee: AwayStage;
 	private _profile: string;
 	private _gl: WebGL2RenderingContext | WebGLRenderingContext;
+	private _programConstants = [];
 	//private _currentProgram : Program3D;
 
 	// @todo: Constructor isn't meant to be public
@@ -153,6 +154,7 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public present(): void {
+		this._programConstants.length = 0;
 		this._adaptee.present();
 	}
 
@@ -175,11 +177,14 @@ export class Context3D extends EventDispatcher {
 		}
 
 		// @todo: support transposed matrixes
-		const awayData: Float32Array = new Float32Array(data.length);
+		let awayData = [];
+		awayData.length = data.length;
 		for (let i = 0; i < data.length; i++)
 			awayData[i] = data.axGetNumericProperty(i);
 
-		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, awayData);
+		this._programConstants.length++;
+		this._programConstants[firstRegister] = awayData;
+		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, new Float32Array(this._programConstants.flat()));
 	}
 
 	public setProgramConstantsFromMatrix(programType: string, firstRegister: number, matrix: Matrix3D, transposedMatrix: boolean = false): void {
@@ -195,7 +200,12 @@ export class Context3D extends EventDispatcher {
 				break;
 		}
 		// @todo: support transposed matrixes
-		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, matrix.adaptee._rawData);
+		this._programConstants.length += 4;
+
+		for(let i = 0; i < 4; i++)
+			this._programConstants[firstRegister+i] = [matrix.adaptee._rawData[i], matrix.adaptee._rawData[i+4], matrix.adaptee._rawData[i+8], matrix.adaptee._rawData[i+12]];
+		
+		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, new Float32Array(this._programConstants.flat()));
 	}
 
 	public setProgramConstantsFromByteArray(programType: string, firstRegister: number /*int*/, numRegisters: number /*int*/, data: ByteArray, byteArrayOffset: number /*uint*/): void {
@@ -223,7 +233,7 @@ export class Context3D extends EventDispatcher {
 			default:
 				break;
 		}
-		(this._adaptee.context as unknown as ContextWebGL).setVertexBufferAt(buffer ? index : -1, buffer ? (buffer._adaptee as unknown as VertexBufferWebGL) : null, bufferOffset * 4, awayFormat, false);
+		this._adaptee.context.setVertexBufferAt(buffer ? index : -1, buffer?._adaptee, bufferOffset * 4, awayFormat);
 
 	}
 
@@ -543,11 +553,10 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public setRenderToTexture(texture: TextureBase, targetType: number /*int*/, enableDepthAndStencil: boolean, antiAlias: number /*int*/, surfaceSelector: number /*int*/): void {
-		this._adaptee.context.setRenderToTexture(texture._adaptee, enableDepthAndStencil, antiAlias, surfaceSelector);
+		this._adaptee.context.setRenderToTexture(texture?._adaptee, enableDepthAndStencil, antiAlias, surfaceSelector);
 	}
 
 	public setTextureAt(sampler: number /*int*/, texture: TextureBase): void {
-		if (texture)
-			this._adaptee.context.setTextureAt(sampler, <TextureWebGL>texture._adaptee);
+		this._adaptee.context.setTextureAt(sampler, texture?._adaptee);
 	}
 }
