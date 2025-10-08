@@ -129,15 +129,14 @@ import { SoundMixer } from './media/SoundMixer';
 
 import { FileFilter } from './net/FileFilter';
 import { FileReference } from './net/FileReference';
-import { LocalConnection } from './net/LocalConnection';
-import { NetConnection } from './net/NetConnection';
-import { Responder } from './net/Responder';
-import { Socket } from './net/Socket';
 import { SharedObject } from './net/SharedObject';
 import { URLRequest } from './net/URLRequest';
 import { URLLoader } from './net/URLLoader';
 import { URLVariables } from './net/URLVariables';
 import { LocalConnection } from './net/LocalConnection';
+import { NetConnection } from './net/NetConnection';
+import { Responder } from './net/Responder';
+import { Socket } from './net/Socket';
 
 import { SecurityDomain } from './system/SecurityDomain';
 import { Capabilities } from './system/Capabilities';
