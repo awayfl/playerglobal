@@ -52,7 +52,8 @@ export class Context3D extends EventDispatcher {
 	private _adaptee: AwayStage;
 	private _profile: string;
 	private _gl: WebGL2RenderingContext | WebGLRenderingContext;
-	private _programConstants = [];
+	private _fragmentProgramConstants = [];
+	private _vertexProgramConstants = [];
 	//private _currentProgram : Program3D;
 
 	// @todo: Constructor isn't meant to be public
@@ -151,10 +152,11 @@ export class Context3D extends EventDispatcher {
 
 	public drawTriangles(indexBuffer: IndexBuffer3D, firstIndex: number = 0, numTriangles: number = -1): void {
 		this._adaptee.context.drawIndices(ContextGLDrawMode.TRIANGLES, indexBuffer._adaptee, firstIndex, (numTriangles == -1) ? -1 : (numTriangles * 3));
+		this._vertexProgramConstants.length = 0;
+		this._fragmentProgramConstants.length = 0;
 	}
 
 	public present(): void {
-		this._programConstants.length = 0;
 		this._adaptee.present();
 	}
 
@@ -181,10 +183,9 @@ export class Context3D extends EventDispatcher {
 		awayData.length = data.length;
 		for (let i = 0; i < data.length; i++)
 			awayData[i] = data.axGetNumericProperty(i);
-
-		this._programConstants.length++;
-		this._programConstants[firstRegister] = awayData;
-		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, new Float32Array(this._programConstants.flat()));
+		let programConstants = (programType == Context3DProgramType.FRAGMENT) ? this._fragmentProgramConstants : this._vertexProgramConstants;
+		programConstants[firstRegister] = awayData;
+		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, new Float32Array(programConstants.flat()));
 	}
 
 	public setProgramConstantsFromMatrix(programType: string, firstRegister: number, matrix: Matrix3D, transposedMatrix: boolean = false): void {
@@ -199,13 +200,13 @@ export class Context3D extends EventDispatcher {
 			default:
 				break;
 		}
+		let programConstants = (programType == Context3DProgramType.FRAGMENT) ? this._fragmentProgramConstants : this._vertexProgramConstants;
 		// @todo: support transposed matrixes
-		this._programConstants.length += 4;
 
 		for(let i = 0; i < 4; i++)
-			this._programConstants[firstRegister+i] = [matrix.adaptee._rawData[i], matrix.adaptee._rawData[i+4], matrix.adaptee._rawData[i+8], matrix.adaptee._rawData[i+12]];
+			programConstants[firstRegister+i] = [matrix.adaptee._rawData[i], matrix.adaptee._rawData[i+4], matrix.adaptee._rawData[i+8], matrix.adaptee._rawData[i+12]];
 		
-		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, new Float32Array(this._programConstants.flat()));
+		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, new Float32Array(programConstants.flat()));
 	}
 
 	public setProgramConstantsFromByteArray(programType: string, firstRegister: number /*int*/, numRegisters: number /*int*/, data: ByteArray, byteArrayOffset: number /*uint*/): void {
@@ -520,7 +521,6 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public createVertexBuffer(numVertices: number, data32PerVertex: number, bufferUsage: string = 'staticDraw'): VertexBuffer3D {
-		console.log('createVertexBuffer');
 		return new (this.sec as SecurityDomain).flash.display3D.VertexBuffer3D(this, numVertices, data32PerVertex);
 	}
 
