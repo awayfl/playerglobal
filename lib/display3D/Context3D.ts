@@ -52,9 +52,11 @@ export class Context3D extends EventDispatcher {
 	private _adaptee: AwayStage;
 	private _profile: string;
 	private _gl: WebGL2RenderingContext | WebGLRenderingContext;
+	
+	// Due to how AwayJS works, we need to submit a flat array of vectors
+	// We use these to make sure they're submitted in the right place
 	private _fragmentProgramConstants = [];
 	private _vertexProgramConstants = [];
-	//private _currentProgram : Program3D;
 
 	// @todo: Constructor isn't meant to be public
 	constructor(stage3D: Stage3D, renderMode: string = 'auto', profile: string = 'baseline') {
@@ -180,7 +182,6 @@ export class Context3D extends EventDispatcher {
 
 		// @todo: support transposed matrixes
 		let awayData = [];
-		awayData.length = data.length;
 		for (let i = 0; i < data.length; i++)
 			awayData[i] = data.axGetNumericProperty(i);
 		let programConstants = (programType == Context3DProgramType.FRAGMENT) ? this._fragmentProgramConstants : this._vertexProgramConstants;
@@ -201,10 +202,17 @@ export class Context3D extends EventDispatcher {
 				break;
 		}
 		let programConstants = (programType == Context3DProgramType.FRAGMENT) ? this._fragmentProgramConstants : this._vertexProgramConstants;
-		// @todo: support transposed matrixes
 
-		for(let i = 0; i < 4; i++)
-			programConstants[firstRegister+i] = [matrix.adaptee._rawData[i], matrix.adaptee._rawData[i+4], matrix.adaptee._rawData[i+8], matrix.adaptee._rawData[i+12]];
+		if(!transposedMatrix)
+		{
+			for(let i = 0; i < 4; i++)
+				programConstants[firstRegister+i] = [matrix.adaptee._rawData[i], matrix.adaptee._rawData[i+4], matrix.adaptee._rawData[i+8], matrix.adaptee._rawData[i+12]];
+		}
+		else
+		{
+			for(let i = 0; i < 4; i++)
+				programConstants[firstRegister+i] = [matrix.adaptee._rawData[i], matrix.adaptee._rawData[i+1], matrix.adaptee._rawData[i+2], matrix.adaptee._rawData[i+3]];
+		}
 		
 		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, new Float32Array(programConstants.flat()));
 	}
