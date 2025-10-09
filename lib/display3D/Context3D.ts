@@ -61,15 +61,13 @@ export class Context3D extends EventDispatcher {
 	// @todo: Constructor isn't meant to be public
 	constructor(stage3D: Stage3D, renderMode: string = 'auto', profile: string = 'baseline') {
 		super();
-		const context3D: Context3D = this;
-		const thisSec: SecurityDomain = (this.sec as SecurityDomain);
 
 		console.log(`Context3D Create: ${renderMode} ${profile}`);
 		this._profile = profile;
 		this._adaptee = stage3D.adaptee;
-		function dispatchContextCreated(e: StageEvent) {
-			context3D.dispatchEvent(new thisSec.flash.events.Event(Event.CONTEXT3D_CREATE));
-			context3D._gl = (context3D.adaptee.context as unknown as ContextWebGL)._gl;
+		const dispatchContextCreated = (e: StageEvent) => {
+			stage3D.dispatchEvent(new (this.sec as SecurityDomain).flash.events.Event(Event.CONTEXT3D_CREATE));
+			this._gl = (this.adaptee.context as unknown as ContextWebGL)._gl;
 		}
 		this._adaptee.addEventListener(StageEvent.CONTEXT_RECREATED, dispatchContextCreated);
 	}
@@ -182,11 +180,21 @@ export class Context3D extends EventDispatcher {
 
 		// @todo: support transposed matrixes
 		let awayData = [];
-		for (let i = 0; i < data.length; i++)
-			awayData[i] = data.axGetNumericProperty(i);
 		let programConstants = (programType == Context3DProgramType.FRAGMENT) ? this._fragmentProgramConstants : this._vertexProgramConstants;
-		programConstants[firstRegister] = awayData;
-		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, new Float32Array(programConstants.flat()));
+		const total = numRegisters === -1 ? data.length : numRegisters * 4;
+
+    	for (let i = 0, j = 0; i < total; i += 4, j++) {
+    	    programConstants[firstRegister + j] = [
+    	        data.axGetNumericProperty(i + 0),
+    	        data.axGetNumericProperty(i + 1),
+    	        data.axGetNumericProperty(i + 2),
+    	        data.axGetNumericProperty(i + 3)
+    	    ];
+    	}
+		const flatConstants = new Float32Array(programConstants.flat());
+		//console.log(flatConstants);
+		
+		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, flatConstants);
 	}
 
 	public setProgramConstantsFromMatrix(programType: string, firstRegister: number, matrix: Matrix3D, transposedMatrix: boolean = false): void {
@@ -210,10 +218,8 @@ export class Context3D extends EventDispatcher {
 		}
 		else
 		{
-			programConstants[firstRegister+0] = [matrix.adaptee._rawData[0], matrix.adaptee._rawData[1], matrix.adaptee._rawData[2], matrix.adaptee._rawData[3]];
-			programConstants[firstRegister+1] = [matrix.adaptee._rawData[4], matrix.adaptee._rawData[5], matrix.adaptee._rawData[6], matrix.adaptee._rawData[7]];
-			programConstants[firstRegister+2] = [matrix.adaptee._rawData[8], matrix.adaptee._rawData[9], matrix.adaptee._rawData[10], matrix.adaptee._rawData[11]];
-			programConstants[firstRegister+3] = [matrix.adaptee._rawData[12], matrix.adaptee._rawData[13], matrix.adaptee._rawData[14], matrix.adaptee._rawData[15]];
+			for(let i = 0; i < 16; i+=4)
+				programConstants[firstRegister+i] = [matrix.adaptee._rawData[i+0], matrix.adaptee._rawData[i+1], matrix.adaptee._rawData[i+2], matrix.adaptee._rawData[i+3]];
 		}
 		
 		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, new Float32Array(programConstants.flat()));
