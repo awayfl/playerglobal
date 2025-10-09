@@ -203,15 +203,17 @@ export class Context3D extends EventDispatcher {
 		}
 		let programConstants = (programType == Context3DProgramType.FRAGMENT) ? this._fragmentProgramConstants : this._vertexProgramConstants;
 
-		if(!transposedMatrix)
+		if(transposedMatrix)
 		{
 			for(let i = 0; i < 4; i++)
 				programConstants[firstRegister+i] = [matrix.adaptee._rawData[i], matrix.adaptee._rawData[i+4], matrix.adaptee._rawData[i+8], matrix.adaptee._rawData[i+12]];
 		}
 		else
 		{
-			for(let i = 0; i < 4; i++)
-				programConstants[firstRegister+i] = [matrix.adaptee._rawData[i], matrix.adaptee._rawData[i+1], matrix.adaptee._rawData[i+2], matrix.adaptee._rawData[i+3]];
+			programConstants[firstRegister+0] = [matrix.adaptee._rawData[0], matrix.adaptee._rawData[1], matrix.adaptee._rawData[2], matrix.adaptee._rawData[3]];
+			programConstants[firstRegister+1] = [matrix.adaptee._rawData[4], matrix.adaptee._rawData[5], matrix.adaptee._rawData[6], matrix.adaptee._rawData[7]];
+			programConstants[firstRegister+2] = [matrix.adaptee._rawData[8], matrix.adaptee._rawData[9], matrix.adaptee._rawData[10], matrix.adaptee._rawData[11]];
+			programConstants[firstRegister+3] = [matrix.adaptee._rawData[12], matrix.adaptee._rawData[13], matrix.adaptee._rawData[14], matrix.adaptee._rawData[15]];
 		}
 		
 		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, new Float32Array(programConstants.flat()));
