@@ -11,7 +11,10 @@ import { BitmapImage2D,
 		 ContextGLCompareMode,
 		 ContextGLStencilAction,
 		 ContextGLTriangleFace,
-		 ContextGLBlendFactor } from '@awayjs/stage';
+		 ContextGLBlendFactor, 
+		 ContextGLBlendEquation,
+		 ContextMode,
+		 ContextGLProfile} from '@awayjs/stage';
 import { axCoerceString, Float64Vector } from '@awayfl/avm2';
 import { Debug } from '@awayfl/swf-loader';
 import { BitmapData } from '../display/BitmapData';
@@ -129,8 +132,9 @@ export class Context3D extends EventDispatcher {
 		return 1024;
 	}
 
-	public dispose(): void {
+	public dispose(recreate: boolean = true): void {
 		this._adaptee.context.dispose();
+		this._profile = "Disposed";
 	}
 
 	public configureBackBuffer(width: number, height: number, antiAlias: number, enableDepthAndStencil: boolean = true, wantsBestResolution: boolean = false, wantsBestResolutionOnBrowserZoom: boolean = false): void {
@@ -162,6 +166,8 @@ export class Context3D extends EventDispatcher {
 
 	public setProgram(program: Program3D): void {
 		this._adaptee.context.setProgram(program._adaptee);
+		this._vertexProgramConstants.length = 0;
+		this._fragmentProgramConstants.length = 0;
 		//this._currentProgram = program
 	}
 
@@ -178,23 +184,22 @@ export class Context3D extends EventDispatcher {
 				break;
 		}
 
-		// @todo: support transposed matrixes
-		let awayData = [];
 		let programConstants = (programType == Context3DProgramType.FRAGMENT) ? this._fragmentProgramConstants : this._vertexProgramConstants;
-		const total = numRegisters === -1 ? data.length : numRegisters * 4;
-
-    	for (let i = 0, j = 0; i < total; i += 4, j++) {
-    	    programConstants[firstRegister + j] = [
-    	        data.axGetNumericProperty(i + 0),
-    	        data.axGetNumericProperty(i + 1),
-    	        data.axGetNumericProperty(i + 2),
-    	        data.axGetNumericProperty(i + 3)
-    	    ];
-    	}
-		const flatConstants = new Float32Array(programConstants.flat());
-		//console.log(flatConstants);
+		if (numRegisters == -1)
+		{
+			numRegisters = (data.length >> 2);
+		}
+		let sourceIndex = 0;
+		let destIndex = firstRegister * 4;
+		for (let i = 0; i < numRegisters; i++)
+		{
+			programConstants[destIndex++] = data.axGetNumericProperty(sourceIndex++);
+			programConstants[destIndex++] = data.axGetNumericProperty(sourceIndex++);
+			programConstants[destIndex++] = data.axGetNumericProperty(sourceIndex++);
+			programConstants[destIndex++] = data.axGetNumericProperty(sourceIndex++);
+		}
 		
-		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, flatConstants);
+		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, new Float32Array(programConstants));
 	}
 
 	public setProgramConstantsFromMatrix(programType: string, firstRegister: number, matrix: Matrix3D, transposedMatrix: boolean = false): void {
@@ -211,18 +216,30 @@ export class Context3D extends EventDispatcher {
 		}
 		let programConstants = (programType == Context3DProgramType.FRAGMENT) ? this._fragmentProgramConstants : this._vertexProgramConstants;
 
-		if(transposedMatrix)
+		let i = firstRegister * 4;
+
+		if (transposedMatrix)
 		{
-			for(let i = 0; i < 4; i++)
-				programConstants[firstRegister+i] = [matrix.adaptee._rawData[i], matrix.adaptee._rawData[i+4], matrix.adaptee._rawData[i+8], matrix.adaptee._rawData[i+12]];
+			for(let j = 0; j < 16; j+=4)
+			{
+				programConstants[i++] = matrix.adaptee._rawData[j+0];
+				programConstants[i++] = matrix.adaptee._rawData[j+4];
+				programConstants[i++] = matrix.adaptee._rawData[j+8];
+				programConstants[i++] = matrix.adaptee._rawData[j+12];
+			}
 		}
 		else
 		{
-			for(let i = 0; i < 16; i+=4)
-				programConstants[firstRegister+i] = [matrix.adaptee._rawData[i+0], matrix.adaptee._rawData[i+1], matrix.adaptee._rawData[i+2], matrix.adaptee._rawData[i+3]];
+			for(let j = 0; j < 16; j+=4)
+			{
+				programConstants[i++] = matrix.adaptee._rawData[j+0];
+				programConstants[i++] = matrix.adaptee._rawData[j+1];
+				programConstants[i++] = matrix.adaptee._rawData[j+2];
+				programConstants[i++] = matrix.adaptee._rawData[j+3];
+			}
 		}
-		
-		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, new Float32Array(programConstants.flat()));
+
+		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, new Float32Array(programConstants));
 	}
 
 	public setProgramConstantsFromByteArray(programType: string, firstRegister: number /*int*/, numRegisters: number /*int*/, data: ByteArray, byteArrayOffset: number /*uint*/): void {
@@ -327,7 +344,8 @@ export class Context3D extends EventDispatcher {
 				break;
 		}
 
-		this._adaptee.context.setBlendFactors(awaySourceFactor, awayDestinationFactor);
+		this._adaptee.context.setBlendFactors(awaySourceFactor, awayDestinationFactor, awaySourceFactor, awayDestinationFactor);
+		this._adaptee.context.setBlendEquation(ContextGLBlendEquation.ADD, ContextGLBlendEquation.ADD);
 	}
 
 	public setColorMask(red: boolean, green: boolean, blue: boolean, alpha: boolean): void {
@@ -533,7 +551,7 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public setScissorRectangle(rectangle: Rectangle): void {
-		this._adaptee.context.setScissorRectangle(rectangle ? rectangle.adaptee : null);
+		this._adaptee.context.setScissorRectangle(rectangle?.adaptee);
 	}
 
 	public createVertexBuffer(numVertices: number, data32PerVertex: number, bufferUsage: string = 'staticDraw'): VertexBuffer3D {
