@@ -2,7 +2,7 @@ import { Vector3D } from './Vector3D';
 import { ASObject } from '@awayfl/avm2';
 import { notImplemented, release, somewhatImplemented } from '@awayfl/swf-loader';
 import { axCoerceString } from '@awayjs/graphics';
-import { Matrix3D as AwayMatrix3D } from '@awayjs/core';
+import { Matrix3D as AwayMatrix3D, Vector3D as AwayVector3D } from '@awayjs/core';
 import { Float64Vector, GenericVector } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 
@@ -107,10 +107,17 @@ export class Matrix3D extends ASObject {
 		return v;
 	}
 
-	public recompose(components: Float64Vector, orientationStyle: string = 'eulerAngles'): boolean {
-		//this._adaptee.recompose()
-		orientationStyle = axCoerceString(orientationStyle);
-		release || notImplemented('public flash.geom.Matrix3D::recompose'); return;
+	public recompose(components: ObjectVector, orientationStyle: string = 'eulerAngles'): boolean {
+		somewhatImplemented('public flash.geom.Matrix3D::recompose');
+
+		let array:AwayVector3D[] = [];
+
+		for (let i = 0; i < 3; i++)
+			array[i] = components.axGetNumericProperty(i).adaptee;
+		
+		return this._adaptee.recompose(array);
+		//orientationStyle = axCoerceString(orientationStyle);
+		//release || notImplemented('public flash.geom.Matrix3D::recompose'); return;
 	}
 
 	public appendTranslation(x: number, y: number, z: number): void {
