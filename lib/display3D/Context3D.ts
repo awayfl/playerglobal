@@ -1,22 +1,20 @@
-import { BitmapImage2D,
-		 ContextGLDrawMode,
-		 ContextGLProgramType,
-		 ContextGLVertexBufferFormat,
-		 ContextWebGL,
-		 Stage as AwayStage,
-		 StageEvent,
-		 TextureWebGL,
-		 VertexBufferWebGL,
-		 ContextGLClearMask,
-		 ContextGLCompareMode,
-		 ContextGLStencilAction,
-		 ContextGLTriangleFace,
-		 ContextGLBlendFactor, 
-		 ContextGLBlendEquation,
-		 ContextMode,
-		 ContextGLProfile} from '@awayjs/stage';
+import {
+	BitmapImage2D,
+	ContextGLDrawMode,
+	ContextGLProgramType,
+	ContextGLVertexBufferFormat,
+	ContextWebGL,
+	Stage as AwayStage,
+	StageEvent,
+	ContextGLClearMask,
+	ContextGLCompareMode,
+	ContextGLStencilAction,
+	ContextGLTriangleFace,
+	ContextGLBlendFactor,
+	ContextGLBlendEquation,
+} from '@awayjs/stage';
 import { axCoerceString, Float64Vector } from '@awayfl/avm2';
-import { Debug } from '@awayfl/swf-loader';
+import { AVMStage, Debug } from '@awayfl/swf-loader';
 import { BitmapData } from '../display/BitmapData';
 import { Stage3D } from '../display/Stage3D';
 import { Context3DProgramType } from '../display3D/Context3DProgramType';
@@ -30,7 +28,6 @@ import { Rectangle } from '../geom/Rectangle';
 import { ByteArray } from '../utils/ByteArray';
 import { SecurityDomain } from '../SecurityDomain';
 import { Event } from '../events/Event';
-import { Security } from '../system/Security';
 import { Texture } from './textures/Texture';
 import { RectangleTexture } from './textures/RectangleTexture';
 import { CubeTexture } from './textures/CubeTexture';
@@ -55,11 +52,9 @@ export class Context3D extends EventDispatcher {
 	private _adaptee: AwayStage;
 	private _profile: string;
 	private _gl: WebGL2RenderingContext | WebGLRenderingContext;
-	
-	// Due to how AwayJS works, we need to submit a flat array of vectors
-	// We use these to make sure they're submitted in the right place
 	private _fragmentProgramConstants = [];
 	private _vertexProgramConstants = [];
+	private _resizeStage: boolean = false;
 
 	// @todo: Constructor isn't meant to be public
 	constructor(stage3D: Stage3D, renderMode: string = 'auto', profile: string = 'baseline') {
@@ -89,7 +84,7 @@ export class Context3D extends EventDispatcher {
 
 	public get driverInfo(): string {
 		Debug.notImplemented('public flash.display3D.Context3D::get driverInfo');
-		return axCoerceString('OpenGL');
+		return axCoerceString('OpenGL (' + this.profile.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, str => str.toUpperCase()) + ')');
 	}
 
 	public get enableErrorChecking(): boolean {
@@ -138,6 +133,12 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public configureBackBuffer(width: number, height: number, antiAlias: number, enableDepthAndStencil: boolean = true, wantsBestResolution: boolean = false, wantsBestResolutionOnBrowserZoom: boolean = false): void {
+		// Hack so that if we don't use noScale, the Stage3Ds get Scaled
+		// This isn't done directly here because some games seem to blow up if we do
+		// @todo: Should probably make this a Setting
+		let stageManager = AVMStage.instance();
+		this._resizeStage = width == stageManager.stageWidth && height == stageManager.stageHeight && stageManager.scaleMode != 'noScale';
+
 		this._adaptee.configureBackBuffer(width, height, antiAlias, enableDepthAndStencil);
 	}
 
@@ -161,6 +162,11 @@ export class Context3D extends EventDispatcher {
 	}
 
 	public present(): void {
+		if (this._resizeStage) {
+			AVMStage.instance().stageWidth = AVMStage.instance().stageWidth;
+			this._resizeStage = false;
+		}
+
 		this._adaptee.present();
 	}
 
@@ -217,27 +223,16 @@ export class Context3D extends EventDispatcher {
 		let programConstants = (programType == Context3DProgramType.FRAGMENT) ? this._fragmentProgramConstants : this._vertexProgramConstants;
 
 		let i = firstRegister * 4;
-
-		if (transposedMatrix)
-		{
+		let matrixData = new Float32Array(16);
+		matrix.adaptee.copyRawDataTo(matrixData, 0, transposedMatrix);
 			for(let j = 0; j < 16; j+=4)
 			{
-				programConstants[i++] = matrix.adaptee._rawData[j+0];
-				programConstants[i++] = matrix.adaptee._rawData[j+4];
-				programConstants[i++] = matrix.adaptee._rawData[j+8];
-				programConstants[i++] = matrix.adaptee._rawData[j+12];
+				programConstants[i++] = matrixData[j+0];
+				programConstants[i++] = matrixData[j+1];
+				programConstants[i++] = matrixData[j+2];
+				programConstants[i++] = matrixData[j+3];
 			}
-		}
-		else
-		{
-			for(let j = 0; j < 16; j+=4)
-			{
-				programConstants[i++] = matrix.adaptee._rawData[j+0];
-				programConstants[i++] = matrix.adaptee._rawData[j+1];
-				programConstants[i++] = matrix.adaptee._rawData[j+2];
-				programConstants[i++] = matrix.adaptee._rawData[j+3];
-			}
-		}
+		
 
 		this._adaptee.context.setProgramConstantsFromArray(awayProgramType, new Float32Array(programConstants));
 	}
@@ -344,7 +339,7 @@ export class Context3D extends EventDispatcher {
 				break;
 		}
 
-		this._adaptee.context.setBlendFactors(awaySourceFactor, awayDestinationFactor, awaySourceFactor, awayDestinationFactor);
+		this._adaptee.context.setBlendFactors(awaySourceFactor, awayDestinationFactor);
 		this._adaptee.context.setBlendEquation(ContextGLBlendEquation.ADD, ContextGLBlendEquation.ADD);
 	}
 
@@ -586,7 +581,7 @@ export class Context3D extends EventDispatcher {
 		this._adaptee.context.setRenderToBackBuffer();
 	}
 
-	public setRenderToTexture(texture: TextureBase, targetType: number /*int*/, enableDepthAndStencil: boolean, antiAlias: number /*int*/, surfaceSelector: number /*int*/): void {
+	public setRenderToTexture(texture:TextureBase, enableDepthAndStencil:boolean = false, antiAlias:number/*int*/ = 0, surfaceSelector:number/*int*/ = 0, colorOutputIndex:number/*int*/ = 0): void {
 		this._adaptee.context.setRenderToTexture(texture?._adaptee, enableDepthAndStencil, antiAlias, surfaceSelector);
 	}
 

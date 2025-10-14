@@ -36,7 +36,7 @@ export class RectangleTexture extends TextureBase {
 	}
 
 	public uploadCompressedTextureFromByteArray(data: ByteArray, byteArrayOffset: number, async: boolean = false) {
-		Debug.notImplemented('public flash.display3D.textures.Texture::uploadCompressedTextureFromByteArray');
+		Debug.notImplemented('public flash.display3D.textures.RectangleTexture::uploadCompressedTextureFromByteArray');
 	}
 
 	public uploadFromBitmapData(source: BitmapData, miplevel: number = 0) {
