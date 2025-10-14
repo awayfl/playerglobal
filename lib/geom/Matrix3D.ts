@@ -107,7 +107,7 @@ export class Matrix3D extends ASObject {
 		return v;
 	}
 
-	public recompose(components: ObjectVector, orientationStyle: string = 'eulerAngles'): boolean {
+	public recompose(components: GenericVector, orientationStyle: string = 'eulerAngles'): boolean {
 		//this._adaptee.recompose()
 		orientationStyle = axCoerceString(orientationStyle);
 		release || notImplemented('public flash.geom.Matrix3D::recompose'); return;
