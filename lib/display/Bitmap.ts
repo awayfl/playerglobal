@@ -93,7 +93,7 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner {
 			this._adaptee =  mappedAdapt = Billboard.getNewBillboard(MaterialManager.getMaterialForBitmap(), 'auto', false);
 
 			this._adaptee.style.image = adaptee;
-			
+
 			const bitmap = new (<any> this.sec).flash.display.BitmapData(adaptee);
 
 			this.bitmapData = bitmap;
@@ -151,7 +151,7 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner {
 		if (this._bitmapData)
 			this._bitmapData._addOwner(this);
 
-		this.adaptee.style.image = this._bitmapData? this._bitmapData.adaptee : null;
+		this.adaptee.style.image = this._bitmapData ? this._bitmapData.adaptee : null;
 	}
 
 	/**
