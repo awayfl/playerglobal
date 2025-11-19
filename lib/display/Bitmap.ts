@@ -2,11 +2,11 @@ import { Billboard, DisplayObject as AwayDisplayObject, SceneImage2D } from '@aw
 import { DisplayObject } from './DisplayObject';
 import { BitmapData } from './BitmapData';
 import { ImageTexture2D } from '@awayjs/renderer';
-import { MethodMaterial } from '@awayjs/materials';
 
 import { IBitmapDataOwner } from './IBitmapDataOwner';
 import { BitmapImage2D } from '@awayjs/stage';
 import { Debug } from '@awayjs/core';
+import { MaterialManager } from '@awayjs/graphics';
 
 /**
  * The Bitmap class represents display objects that represent bitmap images. These can be images
@@ -58,13 +58,10 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner {
 		pixelSnapping: string = 'auto',
 		smoothing: boolean = false): Bitmap {
 		if (Bitmap._bitmaps.length) {
-			const newMaterial: MethodMaterial = bitmapData ?
-				new MethodMaterial(bitmapData.adaptee) : new MethodMaterial(0x0);
-			newMaterial.alphaBlending = true;
-			newMaterial.useColorTransform = true;
-
 			const bitmap: Bitmap = Bitmap._bitmaps.pop();
-			bitmap.adaptee = Billboard.getNewBillboard(newMaterial, pixelSnapping, smoothing);
+			bitmap.adaptee = Billboard.getNewBillboard(MaterialManager.getMaterialForBitmap(), pixelSnapping, smoothing);
+			bitmap.adaptee.style.image = bitmapData.adaptee;
+
 			return bitmap;
 		}
 
@@ -93,8 +90,10 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner {
 		let mappedAdapt = adaptee;
 		if (adaptee instanceof BitmapImage2D || adaptee instanceof SceneImage2D) {
 
-			this._adaptee =  mappedAdapt = Billboard.getNewBillboard(new MethodMaterial(adaptee) , 'auto', false);
+			this._adaptee =  mappedAdapt = Billboard.getNewBillboard(MaterialManager.getMaterialForBitmap(), 'auto', false);
 
+			this._adaptee.style.image = adaptee;
+			
 			const bitmap = new (<any> this.sec).flash.display.BitmapData(adaptee);
 
 			this.bitmapData = bitmap;
@@ -105,11 +104,7 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner {
 	}
 
 	protected createAdaptee(): AwayDisplayObject {
-		const newMaterial: MethodMaterial = new MethodMaterial(0x0);
-		newMaterial.alphaBlending = true;
-		newMaterial.useColorTransform = true;
-
-		const newAdaptee = Billboard.getNewBillboard(newMaterial);
+		const newAdaptee = Billboard.getNewBillboard(MaterialManager.getMaterialForBitmap());
 
 		return newAdaptee;
 	}
@@ -156,22 +151,7 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner {
 		if (this._bitmapData)
 			this._bitmapData._addOwner(this);
 
-		const material: MethodMaterial = <MethodMaterial> (<Billboard> this.adaptee).material;
-		if (this._bitmapData) {
-			if (!material.ambientMethod.texture)
-				material.ambientMethod.texture = new ImageTexture2D();
-
-			material.style.image = this._bitmapData.adaptee;
-			material.useColorTransform = true;// for any reason
-		} else {
-			if (material.ambientMethod.texture)
-				material.ambientMethod.texture = null;
-
-			material.style.image = null;
-			material.style.color = 0x0;
-		}
-
-		material.invalidateTextures();
+		this.adaptee.style.image = this._bitmapData? this._bitmapData.adaptee : null;
 	}
 
 	/**
@@ -199,14 +179,11 @@ export class Bitmap extends DisplayObject implements IBitmapDataOwner {
 	 * smoothed when scaled. If false, the bitmap is not smoothed when scaled.
 	 */
 	public get smoothing (): boolean {
-		if ((<Billboard> this.adaptee).sampler)
-			return (<Billboard> this.adaptee).sampler.smooth;
-		return false;
+		return this.adaptee.style.sampler.smooth;
 	}
 
 	public set smoothing (value: boolean) {
-		if ((<Billboard> this.adaptee).sampler)
-			(<Billboard> this.adaptee).sampler.smooth = value;
+		this.adaptee.style.sampler.smooth = value;
 	}
 
 }

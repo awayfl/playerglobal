@@ -14,13 +14,13 @@ import {
 	DisplayObject,
 	FrameScriptManager,
 } from '@awayjs/scene';
-import { MaterialBase, MethodMaterial } from '@awayjs/materials';
+import { MaterialBase } from '@awayjs/materials';
 import { DefaultSceneGraphFactory } from '@awayjs/scene';
 import { SceneImage2D } from '@awayjs/scene';
 
 import { Bitmap } from '../display/Bitmap';
 import { BitmapData } from '../display/BitmapData';
-import { Graphics } from '@awayjs/graphics';
+import { Graphics, MaterialManager } from '@awayjs/graphics';
 import {
 	Multiname,
 	NamespaceType,
@@ -191,12 +191,10 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 			clone = MorphSprite.getNewMorphSprite((<MorphSprite> asset).graphics.clone());
 			clone.mouseEnabled = false;
 		} else if (asset.isAsset(BitmapImage2D)) {
-			// enable blending for symbols, because if you place image directly on stage
-			// it not enable blend mode
-			const m = new MethodMaterial(<BitmapImage2D>asset);
-			m.alphaBlending = (<BitmapImage2D>asset).transparent;
-			clone = Billboard.getNewBillboard(m);
+			clone = Billboard.getNewBillboard(MaterialManager.getMaterialForBitmap());
 			clone.mouseEnabled = false;
+			clone.style.image = <BitmapImage2D> asset;
+
 		} else {
 			clone = (<any> asset.adapter).clone(false).adaptee;
 		}
