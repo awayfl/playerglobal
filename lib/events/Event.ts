@@ -56,7 +56,7 @@ export class Event extends ASObject {
 		return false;
 	}
 
-	constructor(type: string, bubbles: boolean = true, cancelable: boolean = true) {
+	constructor(type: string, bubbles: boolean = false, cancelable: boolean = false) {
 		super();
 		this._type = axCoerceString(type);
 		this._bubbles = !!bubbles;
