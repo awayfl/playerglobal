@@ -131,7 +131,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	constructor(width: number | SceneImage2D | BitmapImage2D,
-		height: number, transparent: boolean = true, fillColor: number = 0xffffffff) {
+		height?: number, transparent: boolean = true, fillColor: number = 0xffffffff) {
 		super();
 
 		if (typeof width === 'number') {

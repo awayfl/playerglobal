@@ -269,7 +269,7 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 
 			// we should only do this for bitmaps loaded from jpg or png
 			if (this._isImage) {
-				this._content = new Bitmap(<BitmapData> (<SceneImage2D> asset).adapter);
+				this._content = new (<SecurityDomain> this.sec).flash.display.Bitmap(new (<SecurityDomain> this.sec).flash.display.BitmapData(<SceneImage2D> asset));
 				(<AwayDisplayObjectContainer> this._adaptee).addChild(this._content.adaptee);
 			}
 
