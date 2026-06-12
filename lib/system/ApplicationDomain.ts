@@ -163,7 +163,7 @@ export class ApplicationDomain extends ASObject {
 	}
 
 	public hasSymbolForClass(className: string): boolean {
-		return this._definitions[className] || this._font_definitions[className] || this._audio_definitions[className];
+		return this._definitions[className] || this._font_definitions[className] || this._audio_definitions[className] || this._parentDomain?.hasSymbolForClass(className);
 	}
 
 	public getSymbolAdaptee(className: string): any {
@@ -184,7 +184,7 @@ export class ApplicationDomain extends ASObject {
 		} else if (this._audio_definitions[className]) {
 			return this._audio_definitions[className];
 		}
-		return null;
+		return this._parentDomain?.getSymbolAdaptee(className);
 	}
 
 	public getSymbolDefinition(className: string): any {
@@ -208,6 +208,7 @@ export class ApplicationDomain extends ASObject {
 			//sound.adaptee.adapter=sound;
 			return sound;
 		}
+		return this._parentDomain?.getSymbolDefinition(className);
 	}
 
 	/**
@@ -224,20 +225,20 @@ export class ApplicationDomain extends ASObject {
 		/**
 		 * @todo Cache a FromSimpleName
 		 */
-		return this.axApplicationDomain.getClass(Multiname.FromSimpleName(name));
+		return this.axApplicationDomain.getClass(Multiname.FromSimpleName(name)) || this._parentDomain?.getDefinition(name);
 	}
 
 	public getFontDefinition (name: string): Font {
-		return this._font_definitions[name];
+		return this._font_definitions[name] || this._parentDomain?.getFontDefinition(name);
 	}
 
 	public getAwayJSAudio(name: string): WaveAudio {
-		return this._audio_definitions[name];
+		return this._audio_definitions[name] || this._parentDomain?.getAwayJSAudio(name);
 	}
 
 	public getAudioDefinition (name: string): Sound {
 		const sound: Sound = new Sound();
-		sound.adaptee = this._audio_definitions[name];
+		sound.adaptee = this._audio_definitions[name] || this._parentDomain?.getAudioDefinition(name);
 		//sound.adaptee.adapter=sound;
 		return sound;
 	}
