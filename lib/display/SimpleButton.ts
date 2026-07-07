@@ -286,7 +286,7 @@ export class SimpleButton extends InteractiveObject {
 						if (!(<IDisplayObjectAdapter> newChildren[i].adapter).isBlockedByScript()
 							&& !(<any>newChildren[i]).noTimelineUpdate) {
 							newChildren[i].transform.clearMatrix3D();
-							newChildren[i].updateTimelineMask(null);
+							newChildren[i].timelineMasks = undefined;
 						}
 						if (!(<IDisplayObjectAdapter> newChildren[i].adapter).isVisibilityByScript()) {
 							newChildren[i].visible = true;
@@ -295,7 +295,7 @@ export class SimpleButton extends InteractiveObject {
 						newChildren[i].transform.clearColorTransform();
 						newChildren[i].transform.clearMatrix3D();
 						newChildren[i].visible = true;
-						newChildren[i].updateTimelineMask(null);
+						newChildren[i].timelineMasks = undefined;
 					}
 				}
 			} else {
