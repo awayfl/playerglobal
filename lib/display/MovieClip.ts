@@ -376,7 +376,7 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 	) {
 		if (Number.isNaN(frame))
 			return;
- 
+
 		if (!force && MovieClip.current_script_scope == this) {
 			this.queuedNavigationAction = () => this._gotoInternal(frame, scene, true, stop);
 			return;
