@@ -212,12 +212,12 @@ export class FileReference extends EventDispatcher {
 			const mime = knownTypes[ext].mime;
 			types[0] = {
 				description: knownTypes[ext].description,
-				accept: { [mime] : ext },
+				accept: { [mime] : ext as `.${string}` },
 			};
 		} else {
 			types[0] = {
 				description: '',
-				accept: { 'application/unknown' : ext },
+				accept: { 'application/unknown' : ext as `.${string}` },
 			};
 		}
 
