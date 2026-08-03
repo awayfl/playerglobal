@@ -1,5 +1,5 @@
-import { EventBase }					from '@awayjs/core';
 import { ASObject, AXClass } from '@awayfl/avm2';
+import { Event } from './Event';
 
 /**
  * Base export class for dispatching events
@@ -30,7 +30,7 @@ export class EventDispatcherBase extends ASObject {
 	 * @param {Function} Callback function
 	 */
 	public addEventListener(type: string,
-		listener: (event: EventBase) => void,
+		listener: (event: Event) => void,
 		useCapture: boolean = false,
 		priority: number /*int*/ = 0,
 		useWeakReference: boolean = false): void {
@@ -51,7 +51,7 @@ export class EventDispatcherBase extends ASObject {
 	 * @param {String} Name of event to remove a listener for
 	 * @param {Function} Callback function
 	 */
-	public removeEventListener(type: string, listener: (event: EventBase) => void): void {
+	public removeEventListener(type: string, listener: (event: Event) => void): void {
 
 		this._listenerObjects || (this._listenerObjects = []);
 
@@ -70,7 +70,7 @@ export class EventDispatcherBase extends ASObject {
 	 * @method dispatchEvent
 	 * @param {Event} Event to dispatch
 	 */
-	public dispatchEvent(event: EventBase): boolean {
+	public dispatchEvent(event: Event): boolean {
 
 		this._listenerObjects || (this._listenerObjects = []);
 		const l: ListenerObject = this._listenerObjects[event.type];
@@ -90,7 +90,7 @@ export class EventDispatcherBase extends ASObject {
 	 * @param {String} Name of event to remove a listener for
 	 * @param {Function} Callback function
 	 */
-	public hasEventListener(type: string, listener?: (event: EventBase) => void): boolean {
+	public hasEventListener(type: string, listener?: (event: Event) => void): boolean {
 		if (this._listenerObjects[type] === undefined)
 			return false;
 
@@ -103,7 +103,7 @@ export class EventDispatcherBase extends ASObject {
 
 interface IListenerPriority{
 	priority: number,
-	listeners?: Array<(event: EventBase) => void>
+	listeners?: Array<(event: Event) => void>
 
 }
 function sortListenersByPriority(a: IListenerPriority, b: IListenerPriority) {
@@ -113,13 +113,13 @@ export class ListenerObject {
 	private _index: number = 0;
 	private _singlePriority: number = 0;
 
-	private _listeners: Array<(event: EventBase) => void> = new Array<(event: EventBase) => void>();
+	private _listeners: Array<(event: Event) => void> = new Array<(event: Event) => void>();
 
 	private _listenersByPriority: IListenerPriority[];
 
 	public numListeners: number = 0;
 
-	public addEventListener(listener: (event: EventBase) => void, priority: number = 0): void {
+	public addEventListener(listener: (event: Event) => void, priority: number = 0): void {
 
 		// if event already exists, it will not be added again, and old priority will remain
 
@@ -194,7 +194,7 @@ export class ListenerObject {
 		this.numListeners++;
 	}
 
-	public removeEventListener(listener: (event: EventBase) => void): void {
+	public removeEventListener(listener: (event: Event) => void): void {
 		let index: number = -1;
 		if (!this._listenersByPriority) {
 			index = this._listeners.indexOf(listener);
@@ -219,7 +219,7 @@ export class ListenerObject {
 		}
 	}
 
-	public dispatchEvent(event: EventBase): void {
+	public dispatchEvent(event: Event): void {
 		// when listeners do attach/remove new listeners the new listeners will be ignored during this dispatch,
 		// and listeners that got removed will still dispatch during this dispatch
 		// this means we need to concat the listener-array before we iterate it
@@ -265,7 +265,7 @@ export class ListenerObject {
 	 * @param {String} Name of event to remove a listener for
 	 * @param {Function} Callback function
 	 */
-	public getEventListenerIndex(listener: (event: EventBase) => void): number {
+	public getEventListenerIndex(listener: (event: Event) => void): number {
 		if (!this._listenersByPriority) {
 			// single-priority mode:
 			return this._listeners.indexOf(listener);

@@ -6,7 +6,7 @@ import { DisplayObjectContainer } from './DisplayObjectContainer';
 import { DisplayObject } from './DisplayObject';
 import { FrameScriptManager } from '@awayjs/scene';
 import { View } from '@awayjs/view';
-import { Stage3D } from './Stage3D';
+import { Stage as AwayStage, StageQuality, Stage3D } from '@awayjs/stage';
 import { DisplayObjectContainer as AwayDisplayObjectContainer, MouseEvent as MouseEventAway } from '@awayjs/scene';
 import { Transform } from '../geom/Transform';
 import { Rectangle } from '../geom/Rectangle';
@@ -727,15 +727,12 @@ export class Stage extends DisplayObjectContainer {
 	 *   For more information, see the "Security" chapter in the ActionScript 3.0 Developer's Guide.
 	 */
 	public get quality (): string {
-		// @todo
-		Debug.throwPIR('playerglobals/display/Stage', 'get quality', '');
-		return '';
+		return AVMStage.instance().quality.toUpperCase();
 
 	}
 
 	public set quality (value: string) {
-		// @todo
-		Debug.throwPIR('playerglobals/display/Stage', 'set quality', '');
+		AVMStage.instance().quality = <StageQuality> value.toLowerCase();
 	}
 
 	/**

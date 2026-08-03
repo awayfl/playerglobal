@@ -2,7 +2,7 @@ import { Event } from './Event';
 import { IEventMapper } from './IEventMapper';
 import { EventDispatcherBase } from './EventDispatcherBase';
 
-import { EventBase, UUID } from '@awayjs/core';
+import { UUID } from '@awayjs/core';
 import { release } from '@awayfl/swf-loader';
 import { assert } from '@awayjs/graphics';
 import { SecurityDomain } from '../SecurityDomain';
@@ -50,7 +50,7 @@ export class EventDispatcher extends EventDispatcherBase {
 		return '';
 	}
 
-	public hasEventListener(type: string, listener?: (event: EventBase) => void): boolean {
+	public hasEventListener(type: string, listener?: (event: Event) => void): boolean {
 		return super.hasEventListener(type, listener);
 
 	}
@@ -59,7 +59,7 @@ export class EventDispatcher extends EventDispatcherBase {
 
 	}
 
-	public dispatchEvent(event: EventBase, comesFromAway: boolean = false): boolean {
+	public dispatchEvent(event: Event, comesFromAway: boolean = false): boolean {
 		(<any>event).currentTarget = this;
 		if (event.type == 'enterFrame') {//} || event.type=="scroll"){
 			(<any>event).target = this;
@@ -69,7 +69,7 @@ export class EventDispatcher extends EventDispatcherBase {
 		// workaround for now.
 		// mousevents already bubble up the scenegraph in MouseMangager
 		// for all other events, we want to bubble them up here:
-		if (!comesFromAway && EventDispatcher.eventsThatBubbleInAwayJS.indexOf(event.type) == -1) {
+		if (!comesFromAway && event.bubbles && EventDispatcher.eventsThatBubbleInAwayJS.indexOf(event.type) == -1) {
 			if ((<any> this).adaptee && (<any> this).adaptee.parent) {
 				(<any> this).adaptee.parent.adapter.dispatchEvent(event);
 			}
@@ -144,7 +144,7 @@ export class EventDispatcher extends EventDispatcherBase {
 	}
 
 	/*overwrite*/
-	public addEventListener(type: string, listener: (event: EventBase) => void, useCapture: boolean = false,
+	public addEventListener(type: string, listener: (event: Event) => void, useCapture: boolean = false,
 		priority: number /*int*/ = 0, useWeakReference: boolean = false): void {
 
 		if (!useCapture && Event.isBroadcastEventType(type)) {
@@ -194,7 +194,7 @@ export class EventDispatcher extends EventDispatcherBase {
 	 * @param {String} type of event to remove a listener for
 	 * @param {Function} listener function
 	 */
-	public removeEventListener(type: string, listener: (event: EventBase) => void): void {
+	public removeEventListener(type: string, listener: (event: Event) => void): void {
 
 		this.eventMapping || (this.eventMapping = {});
 		this.eventMappingDummys || (this.eventMappingDummys = {});

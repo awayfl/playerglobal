@@ -295,7 +295,7 @@ export class Sprite extends DisplayObjectContainer {
 						if (!(<IDisplayObjectAdapter> newChildren[i].adapter).isBlockedByScript()
 							&& !(<any>newChildren[i]).noTimelineUpdate) {
 							newChildren[i].transform.clearMatrix3D();
-							newChildren[i].updateTimelineMask(null);
+							newChildren[i].timelineMasks = undefined;
 						}
 						if (!(<IDisplayObjectAdapter> newChildren[i].adapter).isVisibilityByScript()) {
 							newChildren[i].visible = true;
@@ -304,7 +304,7 @@ export class Sprite extends DisplayObjectContainer {
 						newChildren[i].transform.clearColorTransform();
 						newChildren[i].transform.clearMatrix3D();
 						newChildren[i].visible = true;
-						newChildren[i].updateTimelineMask(null);
+						newChildren[i].timelineMasks = undefined;
 					}
 				}
 			} else {
@@ -374,7 +374,7 @@ export class Sprite extends DisplayObjectContainer {
 
 		if (child.name === 'mask') {
 			// explicit scripted mask assignment
-			this.adaptee.scriptMask = child;
+			this.adaptee.mask = child;
 			return;
 		}
 
@@ -624,8 +624,8 @@ export class Sprite extends DisplayObjectContainer {
 			const dragNode = avmStage.view.getNode(this.adaptee);
 			avmStage.mousePicker.dragNode = dragNode;
 
-			const collision = dragNode
-				.getAbstraction<PickEntity>(avmStage.mousePicker.pickGroup)
+			const collision = avmStage.mousePicker.pickGroup.abstractions
+				.getAbstraction<PickEntity>(dragNode)
 				.pickingCollision;
 
 			// collision MUST has rootNode, otherwise will be drag bug

@@ -814,11 +814,11 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 * NOT ASSIGN DEFAULT! Because this value settings before execute constructor
 	 */
 	public get mask(): DisplayObject {
-		return <DisplayObject> this.adaptee.scriptMask?.adapter || null;
+		return <DisplayObject> this.adaptee.mask?.adapter || null;
 	}
 
 	public set mask(value: DisplayObject) {
-		this.adaptee.scriptMask = value?.adaptee || null;
+		this.adaptee.mask = value?.adaptee || null;
 	}
 
 	public get metaData(): any {
