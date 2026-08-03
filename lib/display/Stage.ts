@@ -6,7 +6,7 @@ import { DisplayObjectContainer } from './DisplayObjectContainer';
 import { DisplayObject } from './DisplayObject';
 import { FrameScriptManager } from '@awayjs/scene';
 import { View } from '@awayjs/view';
-import { Stage as AwayStage, StageQuality, Stage3D } from '@awayjs/stage';
+import { Stage as AwayStage, StageQuality } from '@awayjs/stage';
 import { DisplayObjectContainer as AwayDisplayObjectContainer, MouseEvent as MouseEventAway } from '@awayjs/scene';
 import { Transform } from '../geom/Transform';
 import { Rectangle } from '../geom/Rectangle';
@@ -18,6 +18,7 @@ import { Debug } from '@awayjs/core';
 import { InteractiveObject } from './InteractiveObject';
 import { StageManager } from '@awayjs/stage';
 import { GenericVector } from '@awayfl/avm2';
+import { Stage3D } from './Stage3D';
 
 /**
  * Dispatched by the Stage object when the state of the stageVideos property changes.
