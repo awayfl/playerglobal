@@ -121,7 +121,7 @@ export class ApplicationDomain extends ASObject {
 		console.log('[UNSAFE IMPLEMENTATION!] domainMemory:flash/ApplicationDomain');
 
 		// Missed types! ByteArray has buffer instead arraybuffer
-		if (mem || (<any> this._memory).buffer !== (<any>mem).buffer) {
+		if (mem && this._memory && (<any> this._memory).buffer !== (<any>mem).buffer) {
 			this._memoryView = new DataView((<any>mem).buffer);
 		}
 		this._memory = mem;
