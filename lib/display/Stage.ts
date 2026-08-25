@@ -551,14 +551,11 @@ export class Stage extends DisplayObjectContainer {
 	 *   true throws a security error.
 	 */
 	public get displayState (): string {
-		// @todo
-		Debug.throwPIR('playerglobals/display/Stage', 'get displayState', '');
-		return '';
+		return AVMStage.instance().displayState;
 	}
 
 	public set displayState (value: string) {
-		// @todo
-		Debug.throwPIR('playerglobals/display/Stage', 'set displayState', '');
+		AVMStage.instance().displayState = value as any;
 	}
 
 	/**
