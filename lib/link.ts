@@ -26,6 +26,26 @@ import { SimpleButton } from './display/SimpleButton';
 import { Sprite } from './display/Sprite';
 import { Stage } from './display/Stage';
 
+import { Stage3D } from './display/Stage3D';
+import { Context3D } from './display3D/Context3D';
+import { Context3DBlendFactor } from './display3D/Context3DBlendFactor';
+import { Context3DClearMask } from './display3D/Context3DClearMask';
+import { Context3DCompareMode } from './display3D/Context3DCompareMode';
+import { Context3DProfile } from './display3D/Context3DProfile';
+import { Context3DProgramType } from './display3D/Context3DProgramType';
+import { Context3DRenderMode } from './display3D/Context3DRenderMode';
+import { Context3DStencilAction } from './display3D/Context3DStencilAction';
+import { Context3DTextureFormat } from './display3D/Context3DTextureFormat';
+import { Context3DTriangleFace } from './display3D/Context3DTriangleFace';
+import { Context3DVertexBufferFormat } from './display3D/Context3DVertexBufferFormat';
+import { IndexBuffer3D } from './display3D/IndexBuffer3D';
+import { Program3D } from './display3D/Program3D';
+import { VertexBuffer3D } from './display3D/VertexBuffer3D';
+import { CubeTexture } from './display3D/textures/CubeTexture';
+import { RectangleTexture } from './display3D/textures/RectangleTexture';
+import { Texture } from './display3D/textures/Texture';
+import { TextureBase } from './display3D/textures/TextureBase';
+
 import { EOFError } from './errors/EOFError';
 import { IllegalOperationError } from './errors/IllegalOperationError';
 import { InvalidSWFError } from './errors/InvalidSWFError';
@@ -286,7 +306,8 @@ export function initLink() {
 	//M('flash.display.SpreadMethod', SpreadMethod);
 	M('flash.display.Sprite', Sprite);
 	M('flash.display.Stage', Stage);
-	//M('flash.display.Stage3D', Stage3D);
+	M('flash.display.Stage3D', Stage3D);
+
 	//M('flash.display.StageAlign', StageAlign);
 	//M('flash.display.StageAspectRatio', StageAspectRatio);//AIR
 	//M('flash.display.StageDisplayState', StageDisplayState);
@@ -294,8 +315,25 @@ export function initLink() {
 	//M('flash.display.StageScaleMode', StageScaleMode);
 	//M('flash.display.TriangleCulling', TriangleCulling);
 
-	// flash.display3D
-	// flash.display3D.textures
+	M('flash.display3D.Context3D', Context3D);
+	M('flash.display3D.Context3DBlendFactor', Context3DBlendFactor);
+	M('flash.display3D.Context3DClearMask', Context3DClearMask);
+	M('flash.display3D.Context3DCompareMode', Context3DCompareMode);
+	M('flash.display3D.Context3DProfile', Context3DProfile);
+	M('flash.display3D.Context3DProgramType', Context3DProgramType);
+	M('flash.display3D.Context3DRenderMode', Context3DRenderMode);
+	M('flash.display3D.Context3DStencilAction', Context3DStencilAction);
+	M('flash.display3D.Context3DTextureFormat', Context3DTextureFormat);
+	M('flash.display3D.Context3DTriangleFace', Context3DTriangleFace);
+	M('flash.display3D.Context3DVertexBufferFormat', Context3DVertexBufferFormat);
+	M('flash.display3D.IndexBuffer3D', IndexBuffer3D);
+	M('flash.display3D.Program3D', Program3D);
+	M('flash.display3D.VertexBuffer3D', VertexBuffer3D);
+
+	M('flash.display3D.textures.TextureBase', TextureBase);
+	M('flash.display3D.textures.Texture', Texture);
+	M('flash.display3D.textures.RectangleTexture', RectangleTexture);
+	M('flash.display3D.textures.CubeTexture', CubeTexture);
 
 	//M('flash.errors.DRMManagerError', DRMManagerError);//AIR
 	M('flash.errors.EOFError', EOFError);

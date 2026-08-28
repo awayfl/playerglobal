@@ -17,6 +17,7 @@ import { EventDispatcher } from './events/EventDispatcher';
 import { DisplayObject } from './display/DisplayObject';
 import { DisplayObjectContainer } from './display/DisplayObjectContainer';
 import { Stage } from './display/Stage';
+import { Stage3D } from './display/Stage3D';
 import { Loader } from './display/Loader';
 import { LoaderInfo } from './display/LoaderInfo';
 import { MovieClip } from './display/MovieClip';
@@ -77,6 +78,14 @@ import { FocusEvent } from './events/FocusEvent';
 import { UncaughtErrorEvents } from './events/UncaughtErrorEvents';
 import { NetConnection } from './net/NetConnection';
 import { Responder } from './net/Responder';
+import { Context3D } from './display3D/Context3D';
+import { IndexBuffer3D } from './display3D/IndexBuffer3D';
+import { Program3D } from './display3D/Program3D';
+import { VertexBuffer3D } from './display3D/VertexBuffer3D';
+import { TextureBase } from './display3D/textures/TextureBase';
+import { Texture } from './display3D/textures/Texture';
+import { CubeTexture } from './display3D/textures/CubeTexture';
+import { RectangleTexture } from './display3D/textures/RectangleTexture';
 
 export class Mouse {}
 
@@ -87,6 +96,7 @@ export class SecurityDomain extends AXSecurityDomain {
 			DisplayObject: DisplayObject,
 			DisplayObjectContainer: DisplayObjectContainer,
 			Stage: Stage,
+			Stage3D: Stage3D,
 			Loader: Loader,
 			LoaderInfo: LoaderInfo,
 			MovieClip: MovieClip,
@@ -97,6 +107,18 @@ export class SecurityDomain extends AXSecurityDomain {
 			Sprite: Sprite,
 			Shape: Shape,
 			FrameLabel: FrameLabel
+		},
+		display3D: {
+			Context3D: Context3D,
+			IndexBuffer3D: IndexBuffer3D,
+			Program3D: Program3D,
+			VertexBuffer3D: VertexBuffer3D,
+			textures: {
+				TextureBase: TextureBase,
+				Texture: Texture,
+				RectangleTexture: RectangleTexture,
+				CubeTexture: CubeTexture,
+			}
 		},
 		events: {
 			EventDispatcher: EventDispatcher,

@@ -16,6 +16,9 @@ import { Loader as PlayerGlobalLoader } from './Loader';
 import { LoaderInfo, LoaderInfoCompleteQueue } from './LoaderInfo';
 import { Debug } from '@awayjs/core';
 import { InteractiveObject } from './InteractiveObject';
+import { StageManager } from '@awayjs/stage';
+import { GenericVector } from '@awayfl/avm2';
+import { Stage3D } from './Stage3D';
 
 /**
  * Dispatched by the Stage object when the state of the stageVideos property changes.
@@ -153,7 +156,7 @@ import { InteractiveObject } from './InteractiveObject';
 
 export class Stage extends DisplayObjectContainer {
 
-	private _stage3Ds: AwayStage[];
+	private _stage3Ds: GenericVector;
 
 	private _sendEventRender: boolean;
 
@@ -162,7 +165,10 @@ export class Stage extends DisplayObjectContainer {
 
 		this._isStage = true;
 
-		this._stage3Ds = [];
+		this._stage3Ds = new (<SecurityDomain> this.sec).ObjectVector();
+		for (let i: number = 0; i < AVMStage.instance().stage3Ds.length; i++) {
+			this._stage3Ds.axSetNumericProperty(i, new (<SecurityDomain> this.sec).flash.display.Stage3D(i));
+		}
 
 		// resize event listens on window
 		this._resizeCallbackDelegate = (event: any) => this.resizeCallback(event);
@@ -476,7 +482,7 @@ export class Stage extends DisplayObjectContainer {
 	public get contentsScaleFactor (): number {
 		// @todo
 		Debug.throwPIR('playerglobals/display/Stage', 'get contentsScaleFactor', '');
-		return 0;
+		return 1;
 	}
 
 	public get displayContextInfo (): string {
@@ -802,9 +808,7 @@ export class Stage extends DisplayObjectContainer {
 
 	}
 
-	public get stage3Ds (): AwayStage[] {
-		// @todo
-		Debug.throwPIR('playerglobals/display/Stage', 'get stage3Ds', '');
+	public get stage3Ds (): GenericVector {
 		return this._stage3Ds;
 	}
 
