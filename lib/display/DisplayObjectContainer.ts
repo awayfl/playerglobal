@@ -511,7 +511,11 @@ export class DisplayObjectContainer extends InteractiveObject {
 		try {
 			(<AwayDisplayObjectContainer> this._adaptee).removeChild(child.adaptee);
 		} catch (e) {
-			throw (<SecurityDomain> this.sec).createError('ArgumentError', Errors.NotAChildError);
+			// The adaptee scene graph can diverge from the AS3 display list (orphan/unload
+			// management), so a child that is still in the AS3 list may already be detached
+			// here. Throwing Flash's #2025 in that case erupts through whatever frame
+			// callback is running (e.g. a tween onComplete) and can kill the shared ticker.
+			console.warn('[DisplayObjectContainer] removeChild: not a child (already removed?) — ignoring');
 		}
 		//OrphanManager.addOrphan(child.adaptee);
 		return child;

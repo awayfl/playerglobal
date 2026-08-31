@@ -189,6 +189,7 @@ import { GameInputDevice } from './ui/GameInputDevice';
 import { GameInputFinger } from './ui/GameInputFinger';
 import { GameInputHand } from './ui/GameInputHand';
 import { Mouse } from './ui/Mouse';
+import { MouseCursorData } from './ui/MouseCursorData';
 import { MultitouchInputMode } from './ui/MultitouchInputMode';
 import { Multitouch } from './ui/Multitouch';
 import { Timer } from './utils/Timer';
@@ -640,7 +641,7 @@ export function initLink() {
 	//M('flash.ui.KeyLocation', KeyLocation);
 	M('flash.ui.Mouse', Mouse);
 	//M('flash.ui.MouseCursor', MouseCursor);
-	//M('flash.ui.MouseCursorData', MouseCursorData);
+	M('flash.ui.MouseCursorData', MouseCursorData);
 	M('flash.ui.Multitouch', <any>Multitouch);
 	M('flash.ui.MultitouchInputMode', <any>MultitouchInputMode);
 
