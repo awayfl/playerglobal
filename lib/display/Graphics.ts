@@ -1,13 +1,32 @@
 
-import { Graphics as AwayGraphics } from '@awayjs/graphics';
+import {
+	Graphics as AwayGraphics,
+	GraphicsPath as AwayGraphicsPath,
+	GraphicsStrokeStyle,
+	GraphicsFillStyle,
+	GraphicsEndFill as AwayGraphicsEndFill,
+	SolidFillStyle,
+	GradientFillStyle,
+	BitmapFillStyle,
+	IGraphicsData as AwayIGraphicsData,
+} from '@awayjs/graphics';
 import { ASObject, Float64Vector, Int32Vector } from '@awayfl/avm2';
-import { Debug, IAssetAdapter } from '@awayjs/core';
+import { Debug, IAssetAdapter, Matrix as AwayMatrix } from '@awayjs/core';
 
 import { ASArray, GenericVector, AXClass } from '@awayfl/avm2';
 import { BitmapData } from './BitmapData';
 import { LoaderInfo } from './LoaderInfo';
 import { SecurityDomain } from '../SecurityDomain';
 import { Matrix } from '../geom/Matrix';
+import { DisplayObject } from './DisplayObject';
+import { DisplayObjectContainer } from './DisplayObjectContainer';
+import { GraphicsSolidFill } from './GraphicsSolidFill';
+import { GraphicsEndFill } from './GraphicsEndFill';
+import { GraphicsGradientFill } from './GraphicsGradientFill';
+import { GraphicsBitmapFill } from './GraphicsBitmapFill';
+import { GraphicsStroke } from './GraphicsStroke';
+import { GraphicsPath } from './GraphicsPath';
+import { GraphicsTrianglePath } from './GraphicsTrianglePath';
 
 export class Graphics extends ASObject implements IAssetAdapter {
 
@@ -174,14 +193,352 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	}
 
 	public drawGraphicsData(graphicsData: GenericVector): void {
-		// @todo
-		Debug.throwPIR('playerglobals/display/Graphics', 'drawGraphicsData', '');
+		if (!graphicsData)
+			return;
+
+		const len = graphicsData.length | 0;
+		for (let i = 0; i < len; i++) {
+			const item = this._vectorAt(graphicsData, i);
+			if (item)
+				this._drawGraphicsDataItem(item);
+		}
 	}
 
-	public readGraphicsData(graphicsData: GenericVector): any[] {
-		// @todo
-		Debug.throwPIR('playerglobals/display/Graphics', 'readGraphicsData', '');
-		return [];
+	public readGraphicsData(recurse: boolean = true): GenericVector {
+		const result = new this.sec.ObjectVector();
+		const owner = this._findOwner();
+		this._collectGraphicsData(result, this.adaptee, owner, !!recurse, true);
+		return result;
+	}
+
+	private _drawGraphicsDataItem(item: any): void {
+		if (!item)
+			return;
+
+		if (this._isType(item, 'GraphicsSolidFill', GraphicsSolidFill)) {
+			this.beginFill(item.color, item.alpha);
+			return;
+		}
+
+		if (this._isType(item, 'GraphicsGradientFill', GraphicsGradientFill)) {
+			this.beginGradientFill(
+				item.type, item.colors, item.alphas, item.ratios,
+				item.matrix, item.spreadMethod, item.interpolationMethod, item.focalPointRatio);
+			return;
+		}
+
+		if (this._isType(item, 'GraphicsBitmapFill', GraphicsBitmapFill)) {
+			this.beginBitmapFill(item.bitmapData, item.matrix, item.repeat, item.smooth);
+			return;
+		}
+
+		if (this._isType(item, 'GraphicsEndFill', GraphicsEndFill)) {
+			this.endFill();
+			return;
+		}
+
+		if (this._isType(item, 'GraphicsStroke', GraphicsStroke)) {
+			this._applyStroke(item);
+			return;
+		}
+
+		if (this._isType(item, 'GraphicsPath', GraphicsPath)) {
+			if (item.commands && item.data)
+				this.drawPath(item.commands, item.data, item.winding || 'evenOdd');
+			return;
+		}
+
+		if (this._isType(item, 'GraphicsTrianglePath', GraphicsTrianglePath)) {
+			// AIR readGraphicsData skips triangles; drawTriangles is not implemented.
+			return;
+		}
+
+		// Engine IGraphicsData (has data_type) can be forwarded directly.
+		if (item.data_type && this.adaptee)
+			this.adaptee.drawGraphicsData([item]);
+	}
+
+	private _applyStroke(stroke: GraphicsStroke): void {
+		const fill: any = stroke.fill;
+		let color = 0;
+		let alpha = 1;
+
+		if (this._isType(fill, 'GraphicsSolidFill', GraphicsSolidFill)) {
+			color = fill.color;
+			alpha = fill.alpha;
+		}
+
+		this.lineStyle(
+			stroke.thickness, color, alpha,
+			stroke.pixelHinting, stroke.scaleMode,
+			stroke.caps, stroke.joints, stroke.miterLimit);
+
+		if (this._isType(fill, 'GraphicsGradientFill', GraphicsGradientFill)) {
+			this.lineGradientStyle(
+				fill.type, fill.colors, fill.alphas, fill.ratios,
+				fill.matrix, fill.spreadMethod, fill.interpolationMethod, fill.focalPointRatio);
+			return;
+		}
+
+		if (this._isType(fill, 'GraphicsBitmapFill', GraphicsBitmapFill)) {
+			this.lineBitmapStyle(fill.bitmapData, fill.matrix, fill.repeat, fill.smooth);
+		}
+	}
+
+	private _collectGraphicsData(
+		result: GenericVector,
+		awayGraphics: AwayGraphics,
+		owner: DisplayObject,
+		recurse: boolean,
+		isRoot: boolean
+	): void {
+		if (!isRoot && owner && owner.visible === false)
+			return;
+
+		if (!isRoot && owner && owner.parent && owner.parent.mask === owner)
+			return;
+
+		if (awayGraphics) {
+			const matrix = owner ? this._concatenatedMatrix(owner) : new AwayMatrix();
+			const items = awayGraphics.readGraphicsData();
+			for (let i = 0; i < items.length; i++) {
+				const as3 = this._engineItemToAS3(items[i], matrix);
+				if (as3)
+					this._vectorPush(result, as3);
+			}
+		}
+
+		if (!recurse || !owner || !this._isContainer(owner))
+			return;
+
+		const container = <DisplayObjectContainer> owner;
+		const n = container.numChildren;
+		for (let i = 0; i < n; i++) {
+			const child = container.getChildAt(i);
+			if (!child || child.visible === false)
+				continue;
+			if (container.mask === child)
+				continue;
+
+			const childGraphics: Graphics = (<any> child).graphics;
+			const childAdaptee = (childGraphics && childGraphics !== this)
+				? childGraphics.adaptee
+				: null;
+			this._collectGraphicsData(result, childAdaptee, child, true, false);
+		}
+	}
+
+	private _findOwner(): DisplayObject {
+		let found: DisplayObject = null;
+		const graphics = this.adaptee as any;
+		if (graphics && typeof graphics.forEachOwner === 'function') {
+			graphics.forEachOwner((owner: any) => {
+				if (found)
+					return;
+				const adapter = owner && owner.adapter;
+				if (adapter && adapter !== owner)
+					found = adapter;
+			});
+		}
+		return found;
+	}
+
+	private _isContainer(obj: DisplayObject): boolean {
+		return !!(obj && typeof (<any> obj).numChildren === 'number' &&
+			typeof (<any> obj).getChildAt === 'function');
+	}
+
+	private _concatenatedMatrix(obj: DisplayObject): AwayMatrix {
+		const result = new AwayMatrix();
+		const stack: AwayMatrix[] = [];
+		let current: DisplayObject = obj;
+		while (current) {
+			const transform = current.adaptee && (<any> current.adaptee).transform;
+			const local = transform && transform.matrix;
+			if (local)
+				stack.push(local);
+			current = current.parent;
+		}
+		for (let i = stack.length - 1; i >= 0; i--)
+			result.concat(stack[i]);
+		return result;
+	}
+
+	private _engineItemToAS3(item: AwayIGraphicsData, concatenated: AwayMatrix): any {
+		if (!item)
+			return null;
+
+		const sec = <SecurityDomain> this.sec;
+		const type = item.data_type;
+
+		if (type == GraphicsFillStyle.data_type)
+			return this._engineItemToAS3((<GraphicsFillStyle<any>> item).fillStyle, concatenated);
+
+		if (type == SolidFillStyle.data_type) {
+			const solid = <SolidFillStyle> item;
+			return new sec.flash.display.GraphicsSolidFill(solid.color, solid.alpha);
+		}
+
+		if (type == GradientFillStyle.data_type) {
+			const gradient = <GradientFillStyle> item;
+			return new sec.flash.display.GraphicsGradientFill(
+				gradient.type,
+				this._toASArray(gradient.colors),
+				this._toASArray(gradient.alphas),
+				this._toASArray(gradient.ratios),
+				this._wrapMatrix(this._concatFillMatrix(gradient.matrix, concatenated)),
+				gradient.spreadMethod,
+				gradient.interpolationMethod,
+				gradient.focalPointRatio
+			);
+		}
+
+		if (type == BitmapFillStyle.data_type) {
+			const bitmap = <BitmapFillStyle> item;
+			return new sec.flash.display.GraphicsBitmapFill(
+				this._wrapBitmapData(bitmap.image),
+				this._wrapMatrix(this._concatFillMatrix(bitmap.matrix, concatenated)),
+				true,
+				false
+			);
+		}
+
+		if (type == AwayGraphicsEndFill.data_type)
+			return new sec.flash.display.GraphicsEndFill();
+
+		if (type == GraphicsStrokeStyle.data_type) {
+			const stroke = <GraphicsStrokeStyle<any>> item;
+			const fill = this._engineItemToAS3(this._strokeFill(stroke), concatenated);
+			return new sec.flash.display.GraphicsStroke(
+				stroke.thickness,
+				false,
+				'normal',
+				'none',
+				'round',
+				3,
+				fill
+			);
+		}
+
+		if (type == AwayGraphicsPath.data_type) {
+			const path = <AwayGraphicsPath> item;
+			return new sec.flash.display.GraphicsPath(
+				this._toInt32Vector(path.commands),
+				this._toFloat64Vector(this._transformPairs(path.data, concatenated)),
+				path.winding || 'evenOdd'
+			);
+		}
+
+		return null;
+	}
+
+	private _strokeFill(stroke: GraphicsStrokeStyle<any>): AwayIGraphicsData {
+		let fill: any = stroke.fillStyle;
+		if (fill && fill.data_type == GraphicsFillStyle.data_type)
+			fill = fill.fillStyle;
+		return fill;
+	}
+
+	private _concatFillMatrix(local: AwayMatrix, concatenated: AwayMatrix): AwayMatrix {
+		const result = concatenated ? concatenated.clone() : new AwayMatrix();
+		if (local)
+			result.concat(local);
+		return result;
+	}
+
+	private _transformPairs(data: number[], matrix: AwayMatrix): number[] {
+		if (!data)
+			return [];
+		const out = data.concat();
+		if (!matrix || out.length < 2)
+			return out;
+
+		const raw = matrix.rawData;
+		const a = raw[0], b = raw[1], c = raw[2], d = raw[3], tx = raw[4], ty = raw[5];
+		for (let i = 0; i + 1 < out.length; i += 2) {
+			const x = out[i];
+			const y = out[i + 1];
+			out[i] = a * x + c * y + tx;
+			out[i + 1] = b * x + d * y + ty;
+		}
+		return out;
+	}
+
+	private _wrapMatrix(matrix: AwayMatrix): Matrix {
+		if (!matrix)
+			return null;
+		return new (<SecurityDomain> this.sec).flash.geom.Matrix(matrix.clone());
+	}
+
+	private _wrapBitmapData(image: any): BitmapData {
+		if (!image)
+			return null;
+		if (image.adapter)
+			return image.adapter;
+		return new (<SecurityDomain> this.sec).flash.display.BitmapData(image);
+	}
+
+	private _toASArray(values: number[]): ASArray {
+		const list = values ? values.concat() : [];
+		const sec: any = this.sec;
+		if (typeof sec.createArray === 'function')
+			return sec.createArray(list);
+		const arr: any = list;
+		arr.value = list.concat();
+		return arr;
+	}
+
+	private _toInt32Vector(values: number[]): Int32Vector {
+		const list = values || [];
+		const vector = new this.sec.Int32Vector(list.length, false);
+		for (let i = 0; i < list.length; i++)
+			this._vectorSet(vector, i, list[i] | 0);
+		return vector;
+	}
+
+	private _toFloat64Vector(values: number[]): Float64Vector {
+		const list = values || [];
+		const vector = new this.sec.Float64Vector(list.length, false);
+		for (let i = 0; i < list.length; i++)
+			this._vectorSet(vector, i, +list[i]);
+		return vector;
+	}
+
+	private _isType(item: any, name: string, Ctor: any): boolean {
+		if (!item)
+			return false;
+		if (item instanceof Ctor)
+			return true;
+		const ax = (<any> (<SecurityDomain> this.sec).flash.display)[name];
+		return !!(ax && typeof ax.axIsType === 'function' && ax.axIsType(item));
+	}
+
+	private _vectorAt(vector: any, index: number): any {
+		if (typeof vector.axGetNumericProperty === 'function')
+			return vector.axGetNumericProperty(index);
+		if (vector.value)
+			return vector.value[index];
+		return vector[index];
+	}
+
+	private _vectorPush(vector: any, value: any): void {
+		if (typeof vector.axSetNumericProperty === 'function') {
+			vector.axSetNumericProperty(vector.length, value);
+			return;
+		}
+		if (typeof vector.push === 'function') {
+			vector.push(value);
+			return;
+		}
+		vector[vector.length] = value;
+	}
+
+	private _vectorSet(vector: any, index: number, value: any): void {
+		if (typeof vector.axSetNumericProperty === 'function') {
+			vector.axSetNumericProperty(index, value);
+			return;
+		}
+		vector[index] = value;
 	}
 
 }
