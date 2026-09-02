@@ -30,6 +30,7 @@ export class Shape extends DisplayObject {
 	constructor() {
 		super();
 		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics((<AwaySprite> this._adaptee).graphics);
+		this._graphics.ownerAdapter = this;
 	}
 
 	protected createAdaptee(): AwayDisplayObject {
@@ -46,6 +47,10 @@ export class Shape extends DisplayObject {
 		 */
 
 	public get graphics(): Graphics {
+		const awayGfx = this._adaptee && (<AwaySprite> this._adaptee).graphics;
+		if (!this._graphics || (awayGfx && this._graphics.adaptee !== awayGfx))
+			this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics(awayGfx || null);
+		this._graphics.ownerAdapter = this;
 		return this._graphics;
 	}
 

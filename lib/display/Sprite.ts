@@ -57,6 +57,7 @@ export class Sprite extends DisplayObjectContainer {
 		this.dragListenerDelegate = (event) => this.dragListener(event);
 		this.stopDragDelegate = (event) => this.stopDrag(event);
 		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics((<AwaySprite> this._adaptee).graphics);
+		this._graphics.ownerAdapter = this;
 
 		// our prototype is not MC (MC extends Sprite and we MUST check this)
 		if (
@@ -515,7 +516,14 @@ export class Sprite extends DisplayObjectContainer {
 	 * drawing commands can occur.
 	 */
 	public get graphics(): Graphics {
-		return this._graphics || (this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics(null));
+		const awayGfx = this._adaptee && (<AwaySprite> this._adaptee).graphics;
+		// Timeline/factory can replace adaptee after construction. The old fallback
+		// `new Graphics(null)` produced an empty Graphics, so readGraphicsData()
+		// returned [] and applyPattern's graphicsData[0]=bitmapFill had no path.
+		if (!this._graphics || (awayGfx && this._graphics.adaptee !== awayGfx))
+			this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics(awayGfx || null);
+		this._graphics.ownerAdapter = this;
+		return this._graphics;
 	}
 
 	/**

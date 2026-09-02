@@ -34,9 +34,25 @@ export class Graphics extends ASObject implements IAssetAdapter {
 
 	public static currentAwayGraphics: AwayGraphics;
 
-	static classInitializer: any = null;
+	static classInitializer: any = function (this: any) {
+		// playerglobal.abcs Graphics is missing readGraphicsData, so linkClass never
+		// installs $BgreadGraphicsData. AS3 then calls a missing function (Error #1006).
+		const proto = this.dPrototype;
+		if (!proto)
+			return;
+		if (typeof proto.readGraphicsData === 'function')
+			proto.$BgreadGraphicsData = proto.readGraphicsData;
+		if (typeof proto.nativeGetGraphicsData === 'function')
+			proto.$BgnativeGetGraphicsData = proto.nativeGetGraphicsData;
+	};
 
 	private _adaptee: AwayGraphics;
+
+	/**
+	 * AS3 DisplayObject (Shape/Sprite) that owns this wrapper. Timeline instances
+	 * share one AwayGraphics per symbol; we use this to copy-on-write on clear().
+	 */
+	public ownerAdapter: DisplayObject = null;
 
 	constructor(adaptee: AwayGraphics = null) {
 		super();
@@ -66,7 +82,39 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	}*/
 
 	public clear(): void {
+		this._detachSharedGraphics();
 		this.adaptee.clear();
+	}
+
+	/**
+	 * Flash copy-on-write: graphics.clear() on one instance must not wipe the
+	 * symbol Graphics used by other timeline instances (or graphicsPool).
+	 * Replace this sprite's Graphics with a fresh empty one and leave the
+	 * shared original intact so later instances can still read their paths.
+	 */
+	private _detachSharedGraphics(): void {
+		const current = this._adaptee;
+		if (!current)
+			return;
+
+		let owners = 0;
+		if (typeof (current as any).forEachOwner === 'function') {
+			(current as any).forEachOwner(() => { owners++; });
+		}
+
+		const owner = this.ownerAdapter || this._findOwner();
+		const awayOwner: any = owner && owner.adaptee;
+		const shared = owners > 1
+			|| !!(current as any).sourceGraphics
+			|| (awayOwner && awayOwner.graphics === current);
+
+		if (!shared || !awayOwner || typeof awayOwner.graphics === 'undefined')
+			return;
+
+		const fresh = new AwayGraphics();
+		this._adaptee = fresh;
+		fresh.adapter = this;
+		awayOwner.graphics = fresh;
 	}
 
 	/**
@@ -97,9 +145,8 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	public beginBitmapFill(bitmap: BitmapData, matrix: Matrix = null,
 		repeat: boolean = true, smooth: boolean = false): void {
 		const image = this._resolveBitmapImage(bitmap);
-		if (!image) {
+		if (!image)
 			return;
-		}
 		this.adaptee.beginBitmapFill(image, matrix?.adaptee, repeat, smooth);
 	}
 
@@ -193,8 +240,12 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	}
 
 	public drawPath(commands: Int32Vector, data: Float64Vector, winding: string = 'evenOdd'): void {
+		const cmdArr = this._vectorNums(commands);
+		const dataArr = this._vectorNums(data);
+		if (!cmdArr.length || !dataArr.length)
+			return;
 		//@ts-ignore
-		this.adaptee.drawPath(commands._buffer.slice(0, commands.length), data._buffer.slice(0, data.length), winding);
+		this.adaptee.drawPath(cmdArr, dataArr, winding);
 	}
 
 	public drawTriangles(vertices: Float64Vector, indices: Int32Vector = null,
@@ -216,8 +267,16 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	}
 
 	public readGraphicsData(recurse: boolean = true): GenericVector {
-		const result = new this.sec.ObjectVector();
-		const owner = this._findOwner();
+		return this.nativeGetGraphicsData(recurse, true);
+	}
+
+	/**
+	 * AIR Graphics.as calls this private native from readGraphicsData().
+	 * Present on playerglobal_new.abc; older catalogs omit readGraphicsData entirely.
+	 */
+	public nativeGetGraphicsData(recurse: boolean = true, _strokes: boolean = true): GenericVector {
+		const result = new (<any> this.sec).ObjectVector();
+		const owner = this.ownerAdapter || this._findOwner();
 		this._collectGraphicsData(result, this.adaptee, owner, !!recurse, true);
 		return result;
 	}
@@ -240,7 +299,11 @@ export class Graphics extends ASObject implements IAssetAdapter {
 
 		if (this._isType(item, 'GraphicsBitmapFill', GraphicsBitmapFill) ||
 			this._isBitmapFillLike(item)) {
-			this.beginBitmapFill(item.bitmapData, item.matrix, item.repeat, item.smooth);
+			const bd = item._nativeBitmapData || this._axProp(item, 'bitmapData');
+			const mx = item._nativeMatrix || this._axProp(item, 'matrix');
+			const rp = (item._nativeRepeat !== undefined) ? item._nativeRepeat : this._axProp(item, 'repeat');
+			const sm = (item._nativeSmooth !== undefined) ? item._nativeSmooth : this._axProp(item, 'smooth');
+			this.beginBitmapFill(bd, mx, rp !== false, !!sm);
 			return;
 		}
 
@@ -255,8 +318,11 @@ export class Graphics extends ASObject implements IAssetAdapter {
 		}
 
 		if (this._isType(item, 'GraphicsPath', GraphicsPath)) {
-			if (item.commands && item.data)
-				this.drawPath(item.commands, item.data, item.winding || 'evenOdd');
+			const commands = this._axProp(item, 'commands') || item.commands;
+			const data = this._axProp(item, 'data') || item.data;
+			const winding = this._axProp(item, 'winding') || item.winding || 'evenOdd';
+			if (commands && data)
+				this.drawPath(commands, data, winding);
 			return;
 		}
 
@@ -311,7 +377,11 @@ export class Graphics extends ASObject implements IAssetAdapter {
 			return;
 
 		if (awayGraphics) {
-			const matrix = owner ? this._concatenatedMatrix(owner) : new AwayMatrix();
+			// AIR: IGraphicsData is in the local space of the Graphics being read.
+			// Recursed children are transformed into that object's space, not stage space.
+			const matrix = isRoot
+				? new AwayMatrix()
+				: (owner ? this._concatenatedMatrix(owner) : new AwayMatrix());
 			const items = awayGraphics.readGraphicsData();
 			for (let i = 0; i < items.length; i++) {
 				const as3 = this._engineItemToAS3(items[i], matrix);
@@ -435,11 +505,19 @@ export class Graphics extends ASObject implements IAssetAdapter {
 
 		if (type == AwayGraphicsPath.data_type) {
 			const path = <AwayGraphicsPath> item;
-			return new sec.flash.display.GraphicsPath(
-				this._toInt32Vector(path.commands),
-				this._toFloat64Vector(this._transformPairs(path.data, concatenated)),
-				path.winding || 'evenOdd'
-			);
+			const winding = path.winding === 'nonZero' ? 'nonZero' : 'evenOdd';
+			const commands = this._toInt32Vector(path.commands);
+			const data = this._toFloat64Vector(this._transformPairs(path.data, concatenated));
+			// Construct with a valid winding first (ABC validates it). Then poke
+			// commands/data onto both JS fields and $Bg slots — the ABC ctor does not.
+			const as3: any = new sec.flash.display.GraphicsPath(null, null, winding);
+			as3.commands = commands;
+			as3.data = data;
+			as3.winding = winding;
+			as3.$Bgcommands = commands;
+			as3.$Bgdata = data;
+			as3.$Bgwinding = winding;
+			return as3;
 		}
 
 		return null;
@@ -502,8 +580,9 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	private _resolveBitmapImage(bitmap: any): any {
 		if (!bitmap)
 			return null;
-		if (bitmap.adaptee)
-			return bitmap.adaptee;
+		const adaptee = bitmap.adaptee || bitmap._adaptee || this._axProp(bitmap, 'adaptee');
+		if (adaptee)
+			return adaptee;
 		// Image2D / BitmapImage2D passed through because adapter defaulted to self.
 		if (typeof bitmap.width === 'number' && typeof bitmap.height === 'number')
 			return bitmap;
@@ -557,6 +636,25 @@ export class Graphics extends ASObject implements IAssetAdapter {
 		return className === name || className === 'flash.display.' + name;
 	}
 
+	private _vectorNums(vector: any): number[] {
+		if (!vector)
+			return [];
+		const n = vector.length | 0;
+		if (vector._buffer && typeof vector._buffer.slice === 'function')
+			return Array.prototype.slice.call(vector._buffer, 0, n);
+		if (typeof vector.axGetNumericProperty === 'function') {
+			const out: number[] = [];
+			for (let i = 0; i < n; i++)
+				out.push(+vector.axGetNumericProperty(i));
+			return out;
+		}
+		if (vector.value)
+			return Array.prototype.slice.call(vector.value, 0, n);
+		if (typeof vector.slice === 'function')
+			return vector.slice(0, n);
+		return [];
+	}
+
 	private _vectorAt(vector: any, index: number): any {
 		if (typeof vector.axGetNumericProperty === 'function')
 			return vector.axGetNumericProperty(index);
@@ -583,6 +681,27 @@ export class Graphics extends ASObject implements IAssetAdapter {
 			return;
 		}
 		vector[index] = value;
+	}
+
+	private _axProp(item: any, name: string): any {
+		if (!item)
+			return undefined;
+		// ABC slots default to null ($Bgfoo). The TS constructor writes `this.foo`,
+		// so prefer a non-null own/JS field over an uninitialized slot.
+		const direct = item[name];
+		if (direct != null)
+			return direct;
+		const bg = item['$Bg' + name];
+		if (bg != null)
+			return bg;
+		if (typeof item.axGetPublicProperty === 'function') {
+			try {
+				const v = item.axGetPublicProperty(name);
+				if (v != null)
+					return v;
+			} catch (_e) { /* ignore */ }
+		}
+		return direct != null ? direct : bg;
 	}
 
 }

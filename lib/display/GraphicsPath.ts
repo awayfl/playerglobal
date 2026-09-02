@@ -22,6 +22,10 @@ export class GraphicsPath extends ASObject implements IGraphicsData, IGraphicsPa
 		this.commands = commands;
 		this.data = data;
 		this.winding = axCoerceString(winding) || 'evenOdd';
+		const self = <any> this;
+		self.$Bgcommands = commands;
+		self.$Bgdata = data;
+		self.$Bgwinding = this.winding;
 	}
 
 	public moveTo(x: number, y: number): void {
