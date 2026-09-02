@@ -96,17 +96,21 @@ export class Graphics extends ASObject implements IAssetAdapter {
 
 	public beginBitmapFill(bitmap: BitmapData, matrix: Matrix = null,
 		repeat: boolean = true, smooth: boolean = false): void {
-		this.adaptee.beginBitmapFill(bitmap.adaptee, matrix?.adaptee, repeat, smooth);
+		const image = this._resolveBitmapImage(bitmap);
+		if (!image) {
+			return;
+		}
+		this.adaptee.beginBitmapFill(image, matrix?.adaptee, repeat, smooth);
 	}
 
 	public endFill(): void {
 		this.adaptee.endFill();
 	}
 
-	//    beginShaderFill(shader: flash.display.Shader, matrix: flash.geom.Matrix = null): void {
-	//      //shader = shader; matrix = matrix;
-	//      release || notImplemented("public flash.display.Graphics::beginShaderFill"); return;
-	//    }
+	public beginShaderFill(shader: any = null, matrix: Matrix = null): void {
+		// Pixel Bender shaders are not supported; keep the native trait bound.
+	}
+
 
 	public lineStyle(thickness: number, color: number /*uint*/ = 0, alpha: number = 1,
 		pixelHinting: boolean = false, scaleMode: string = 'normal', caps: string = null,
@@ -125,7 +129,14 @@ export class Graphics extends ASObject implements IAssetAdapter {
 
 	public lineBitmapStyle(bitmap: BitmapData, matrix: Matrix = null,
 		repeat: boolean = true, smooth: boolean = false): void {
-		this.adaptee.lineBitmapStyle(bitmap.adaptee, matrix?.adaptee, repeat, smooth);
+		const image = this._resolveBitmapImage(bitmap);
+		if (!image)
+			return;
+		this.adaptee.lineBitmapStyle(image, matrix?.adaptee, repeat, smooth);
+	}
+
+	public lineShaderStyle(shader: any = null, matrix: Matrix = null): void {
+		// Pixel Bender shaders are not supported; keep the native trait bound.
 	}
 
 	public drawRect(x: number, y: number, width: number, height: number): void {
@@ -227,7 +238,8 @@ export class Graphics extends ASObject implements IAssetAdapter {
 			return;
 		}
 
-		if (this._isType(item, 'GraphicsBitmapFill', GraphicsBitmapFill)) {
+		if (this._isType(item, 'GraphicsBitmapFill', GraphicsBitmapFill) ||
+			this._isBitmapFillLike(item)) {
 			this.beginBitmapFill(item.bitmapData, item.matrix, item.repeat, item.smooth);
 			return;
 		}
@@ -395,8 +407,9 @@ export class Graphics extends ASObject implements IAssetAdapter {
 
 		if (type == BitmapFillStyle.data_type) {
 			const bitmap = <BitmapFillStyle> item;
+			const wrapped = this._wrapBitmapData(bitmap.image);
 			return new sec.flash.display.GraphicsBitmapFill(
-				this._wrapBitmapData(bitmap.image),
+				wrapped,
 				this._wrapMatrix(this._concatFillMatrix(bitmap.matrix, concatenated)),
 				true,
 				false
@@ -473,9 +486,33 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	private _wrapBitmapData(image: any): BitmapData {
 		if (!image)
 			return null;
-		if (image.adapter)
-			return image.adapter;
+
+		const adapter = image.adapter;
+		// BitmapImage2D.adapter defaults to the image itself when unset.
+		if (adapter && adapter !== image && adapter.adaptee === image)
+			return adapter;
+
+		// Keep a hard adapter so WeakRef GC cannot dispose the SWF texture.
+		if (typeof image.unuseWeakRef === 'function')
+			image.unuseWeakRef();
+
 		return new (<SecurityDomain> this.sec).flash.display.BitmapData(image);
+	}
+
+	private _resolveBitmapImage(bitmap: any): any {
+		if (!bitmap)
+			return null;
+		if (bitmap.adaptee)
+			return bitmap.adaptee;
+		// Image2D / BitmapImage2D passed through because adapter defaulted to self.
+		if (typeof bitmap.width === 'number' && typeof bitmap.height === 'number')
+			return bitmap;
+		return null;
+	}
+
+	private _isBitmapFillLike(item: any): boolean {
+		return !!(item && !item.data_type && !item.thickness &&
+			'bitmapData' in item && 'repeat' in item && 'smooth' in item);
 	}
 
 	private _toASArray(values: number[]): ASArray {
@@ -510,7 +547,14 @@ export class Graphics extends ASObject implements IAssetAdapter {
 		if (item instanceof Ctor)
 			return true;
 		const ax = (<any> (<SecurityDomain> this.sec).flash.display)[name];
-		return !!(ax && typeof ax.axIsType === 'function' && ax.axIsType(item));
+		if (!ax)
+			return false;
+		if (typeof ax.axIsType === 'function' && ax.axIsType(item))
+			return true;
+		if (item.axClass === ax)
+			return true;
+		const className = item.axClassName || (item.axClass && (item.axClass.name || item.axClass.__name));
+		return className === name || className === 'flash.display.' + name;
 	}
 
 	private _vectorAt(vector: any, index: number): any {
