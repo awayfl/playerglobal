@@ -68,6 +68,9 @@ export class GraphicsPath extends ASObject implements IGraphicsData, IGraphicsPa
 			this.commands = new this.sec.Int32Vector();
 		if (!this.data)
 			this.data = new this.sec.Float64Vector();
+		const self = <any> this;
+		self.$Bgcommands = this.commands;
+		self.$Bgdata = this.data;
 	}
 
 	private _pushCommand(command: number, ...coords: number[]): void {

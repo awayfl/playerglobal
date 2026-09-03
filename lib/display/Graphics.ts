@@ -481,8 +481,8 @@ export class Graphics extends ASObject implements IAssetAdapter {
 			return new sec.flash.display.GraphicsBitmapFill(
 				wrapped,
 				this._wrapMatrix(this._concatFillMatrix(bitmap.matrix, concatenated)),
-				true,
-				false
+				bitmap.repeat !== false,
+				!!bitmap.smooth
 			);
 		}
 
@@ -540,12 +540,15 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	private _transformPairs(data: number[], matrix: AwayMatrix): number[] {
 		if (!data)
 			return [];
-		const out = data.concat();
-		if (!matrix || out.length < 2)
-			return out;
+		if (!matrix || data.length < 2)
+			return data;
 
 		const raw = matrix.rawData;
 		const a = raw[0], b = raw[1], c = raw[2], d = raw[3], tx = raw[4], ty = raw[5];
+		if (a === 1 && b === 0 && c === 0 && d === 1 && tx === 0 && ty === 0)
+			return data;
+
+		const out = data.slice();
 		for (let i = 0; i + 1 < out.length; i += 2) {
 			const x = out[i];
 			const y = out[i + 1];
@@ -595,12 +598,12 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	}
 
 	private _toASArray(values: number[]): ASArray {
-		const list = values ? values.concat() : [];
+		const list = values || [];
 		const sec: any = this.sec;
 		if (typeof sec.createArray === 'function')
 			return sec.createArray(list);
-		const arr: any = list;
-		arr.value = list.concat();
+		const arr: any = list.slice();
+		arr.value = arr;
 		return arr;
 	}
 
@@ -701,7 +704,7 @@ export class Graphics extends ASObject implements IAssetAdapter {
 					return v;
 			} catch (_e) { /* ignore */ }
 		}
-		return direct != null ? direct : bg;
+		return undefined;
 	}
 
 }
