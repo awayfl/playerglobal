@@ -47,10 +47,7 @@ export class Shape extends DisplayObject {
 		 */
 
 	public get graphics(): Graphics {
-		const awayGfx = this._adaptee && (<AwaySprite> this._adaptee).graphics;
-		if (!this._graphics || (awayGfx && this._graphics.adaptee !== awayGfx))
-			this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics(awayGfx || null);
-		this._graphics.ownerAdapter = this;
+		// One Graphics per Shape — bound in the constructor. Do not rebind on access.
 		return this._graphics;
 	}
 
