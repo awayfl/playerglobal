@@ -47,7 +47,12 @@ export class Shape extends DisplayObject {
 		 */
 
 	public get graphics(): Graphics {
-		// One Graphics per Shape — bound in the constructor. Do not rebind on access.
+		const awayGfx = this._adaptee && (<AwaySprite> this._adaptee).graphics;
+		// Timeline.graphicsPool / swap_graphics can replace adaptee.graphics after
+		// construction. Rebind so readGraphicsData() sees the live AwayGraphics.
+		if (!this._graphics || (awayGfx && this._graphics.adaptee !== awayGfx))
+			this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics(awayGfx || null);
+		this._graphics.ownerAdapter = this;
 		return this._graphics;
 	}
 

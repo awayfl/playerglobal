@@ -516,7 +516,13 @@ export class Sprite extends DisplayObjectContainer {
 	 * drawing commands can occur.
 	 */
 	public get graphics(): Graphics {
-		// One Graphics per Sprite — bound in the constructor. Do not rebind on access.
+		const awayGfx = this._adaptee && (<AwaySprite> this._adaptee).graphics;
+		// Timeline/factory can replace adaptee.graphics after construction (graphicsPool
+		// / swap_graphics). Without rebind, readGraphicsData() sees the empty ctor
+		// Graphics and applyPattern's graphicsData[0]=bitmapFill has no path.
+		if (!this._graphics || (awayGfx && this._graphics.adaptee !== awayGfx))
+			this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics(awayGfx || null);
+		this._graphics.ownerAdapter = this;
 		return this._graphics;
 	}
 
