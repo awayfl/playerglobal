@@ -1231,8 +1231,20 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	public set transform(value: Transform) {
-		// @todo
-		Debug.throwPIR('playerglobals/display/DisplayObject', 'set transform', '');
+		if (!value || !this.adaptee)
+			return;
+
+		this._ctBlockedByScript = true;
+		const src = value.adaptee;
+		const dst = this.adaptee.transform;
+		if (!src || !dst)
+			return;
+
+		// Flash copies matrix + colorTransform values, it does not share the Transform.
+		const m = src.matrix;
+		const ct = src.colorTransform;
+		dst.matrix = (m && typeof (m as any).clone === 'function') ? (m as any).clone() : m;
+		dst.colorTransform = (ct && typeof (ct as any).clone === 'function') ? (ct as any).clone() : ct;
 	}
 
 	/**
