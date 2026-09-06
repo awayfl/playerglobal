@@ -30,6 +30,21 @@ export class Shape extends DisplayObject {
 	constructor() {
 		super();
 		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics((<AwaySprite> this._adaptee).graphics);
+		this._graphics.ownerAdapter = this;
+	}
+
+	public updateGraphics(): void {
+		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics((<AwaySprite> this._adaptee).graphics);
+		this._graphics.ownerAdapter = this;
+	}
+
+	protected mapAdaptee(adaptee: AwaySprite) {
+		let mappedAdapt = adaptee;
+
+		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics(mappedAdapt.graphics);
+		this._graphics.ownerAdapter = this;
+
+		return super.mapAdaptee(mappedAdapt);
 	}
 
 	protected createAdaptee(): AwayDisplayObject {

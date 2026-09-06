@@ -21,6 +21,13 @@ import { Loader } from './display/Loader';
 import { LoaderInfo } from './display/LoaderInfo';
 import { MovieClip } from './display/MovieClip';
 import { Graphics } from './display/Graphics';
+import { GraphicsPath } from './display/GraphicsPath';
+import { GraphicsSolidFill } from './display/GraphicsSolidFill';
+import { GraphicsEndFill } from './display/GraphicsEndFill';
+import { GraphicsGradientFill } from './display/GraphicsGradientFill';
+import { GraphicsBitmapFill } from './display/GraphicsBitmapFill';
+import { GraphicsStroke } from './display/GraphicsStroke';
+import { GraphicsTrianglePath } from './display/GraphicsTrianglePath';
 import { Bitmap } from './display/Bitmap';
 import { BitmapData } from './display/BitmapData';
 import { SimpleButton } from './display/SimpleButton';
@@ -91,6 +98,13 @@ export class SecurityDomain extends AXSecurityDomain {
 			LoaderInfo: LoaderInfo,
 			MovieClip: MovieClip,
 			Graphics: Graphics,
+			GraphicsPath: GraphicsPath,
+			GraphicsSolidFill: GraphicsSolidFill,
+			GraphicsEndFill: GraphicsEndFill,
+			GraphicsGradientFill: GraphicsGradientFill,
+			GraphicsBitmapFill: GraphicsBitmapFill,
+			GraphicsStroke: GraphicsStroke,
+			GraphicsTrianglePath: GraphicsTrianglePath,
 			Bitmap: Bitmap,
 			BitmapData: BitmapData,
 			SimpleButton: SimpleButton,

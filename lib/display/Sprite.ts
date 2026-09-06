@@ -57,6 +57,7 @@ export class Sprite extends DisplayObjectContainer {
 		this.dragListenerDelegate = (event) => this.dragListener(event);
 		this.stopDragDelegate = (event) => this.stopDrag(event);
 		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics((<AwaySprite> this._adaptee).graphics);
+		this._graphics.ownerAdapter = this;
 
 		// our prototype is not MC (MC extends Sprite and we MUST check this)
 		if (
@@ -117,6 +118,20 @@ export class Sprite extends DisplayObjectContainer {
 		(<any>child).just_added_to_timeline = true;
 		(<AwayMovieClip> this.adaptee)._sessionID_childs[child._sessionID] = child;
 		return (<AwayMovieClip> this.adaptee).addChildAt(child, index);
+	}
+
+	public updateGraphics(): void {
+		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics((<AwaySprite> this._adaptee).graphics);
+		this._graphics.ownerAdapter = this;
+	}
+
+	protected mapAdaptee(adaptee: AwaySprite) {
+		let mappedAdapt = adaptee;
+
+		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics(mappedAdapt.graphics);
+		this._graphics.ownerAdapter = this;
+
+		return super.mapAdaptee(mappedAdapt);
 	}
 
 	public removeTimelineChildAt(value: number): void {
@@ -515,7 +530,7 @@ export class Sprite extends DisplayObjectContainer {
 	 * drawing commands can occur.
 	 */
 	public get graphics(): Graphics {
-		return this._graphics || (this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics(null));
+		return this._graphics;
 	}
 
 	/**
