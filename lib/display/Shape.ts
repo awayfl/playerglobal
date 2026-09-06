@@ -33,6 +33,20 @@ export class Shape extends DisplayObject {
 		this._graphics.ownerAdapter = this;
 	}
 
+	public updateGraphics(): void {
+		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics((<AwaySprite> this._adaptee).graphics);
+		this._graphics.ownerAdapter = this;
+	}
+
+	protected mapAdaptee(adaptee: AwaySprite) {
+		let mappedAdapt = adaptee;
+
+		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics(mappedAdapt.graphics);
+		this._graphics.ownerAdapter = this;
+
+		return super.mapAdaptee(mappedAdapt);
+	}
+
 	protected createAdaptee(): AwayDisplayObject {
 		const newAdaptee = AwaySprite.getNewSprite();
 
@@ -47,12 +61,6 @@ export class Shape extends DisplayObject {
 		 */
 
 	public get graphics(): Graphics {
-		const awayGfx = this._adaptee && (<AwaySprite> this._adaptee).graphics;
-		// Timeline.graphicsPool / swap_graphics can replace adaptee.graphics after
-		// construction. Rebind so readGraphicsData() sees the live AwayGraphics.
-		if (!this._graphics || (awayGfx && this._graphics.adaptee !== awayGfx))
-			this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics(awayGfx || null);
-		this._graphics.ownerAdapter = this;
 		return this._graphics;
 	}
 

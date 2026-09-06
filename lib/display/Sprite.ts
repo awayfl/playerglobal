@@ -120,6 +120,20 @@ export class Sprite extends DisplayObjectContainer {
 		return (<AwayMovieClip> this.adaptee).addChildAt(child, index);
 	}
 
+	public updateGraphics(): void {
+		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics((<AwaySprite> this._adaptee).graphics);
+		this._graphics.ownerAdapter = this;
+	}
+
+	protected mapAdaptee(adaptee: AwaySprite) {
+		let mappedAdapt = adaptee;
+
+		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics(mappedAdapt.graphics);
+		this._graphics.ownerAdapter = this;
+
+		return super.mapAdaptee(mappedAdapt);
+	}
+
 	public removeTimelineChildAt(value: number): void {
 		// in as3 we remove by sessionID
 		const child = (<AwayMovieClip> this.adaptee)._sessionID_childs[value];
@@ -516,13 +530,6 @@ export class Sprite extends DisplayObjectContainer {
 	 * drawing commands can occur.
 	 */
 	public get graphics(): Graphics {
-		const awayGfx = this._adaptee && (<AwaySprite> this._adaptee).graphics;
-		// Timeline/factory can replace adaptee.graphics after construction (graphicsPool
-		// / swap_graphics). Without rebind, readGraphicsData() sees the empty ctor
-		// Graphics and applyPattern's graphicsData[0]=bitmapFill has no path.
-		if (!this._graphics || (awayGfx && this._graphics.adaptee !== awayGfx))
-			this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics(awayGfx || null);
-		this._graphics.ownerAdapter = this;
 		return this._graphics;
 	}
 
