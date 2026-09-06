@@ -19,27 +19,20 @@ export class GraphicsPath extends ASObject implements IGraphicsData, IGraphicsPa
 		data: Float64Vector = null,
 		winding: string = 'evenOdd') {
 		super();
-		this.commands = commands;
-		this.data = data;
+		this.commands = commands || new this.sec.Int32Vector();
+		this.data = data || new this.sec.Float64Vector();
 		this.winding = axCoerceString(winding) || 'evenOdd';
-		const self = <any> this;
-		self.$Bgcommands = commands;
-		self.$Bgdata = data;
-		self.$Bgwinding = this.winding;
 	}
 
 	public moveTo(x: number, y: number): void {
-		this._ensureLists();
 		this._pushCommand(GraphicsPathCommand.MOVE_TO, x, y);
 	}
 
 	public lineTo(x: number, y: number): void {
-		this._ensureLists();
 		this._pushCommand(GraphicsPathCommand.LINE_TO, x, y);
 	}
 
 	public curveTo(controlX: number, controlY: number, anchorX: number, anchorY: number): void {
-		this._ensureLists();
 		this._pushCommand(GraphicsPathCommand.CURVE_TO, controlX, controlY, anchorX, anchorY);
 	}
 
@@ -47,30 +40,17 @@ export class GraphicsPath extends ASObject implements IGraphicsData, IGraphicsPa
 		controlX1: number, controlY1: number,
 		controlX2: number, controlY2: number,
 		anchorX: number, anchorY: number): void {
-		this._ensureLists();
 		this._pushCommand(
 			GraphicsPathCommand.CUBIC_CURVE,
 			controlX1, controlY1, controlX2, controlY2, anchorX, anchorY);
 	}
 
 	public wideMoveTo(x: number, y: number): void {
-		this._ensureLists();
 		this._pushCommand(GraphicsPathCommand.WIDE_MOVE_TO, 0, 0, x, y);
 	}
 
 	public wideLineTo(x: number, y: number): void {
-		this._ensureLists();
 		this._pushCommand(GraphicsPathCommand.WIDE_LINE_TO, 0, 0, x, y);
-	}
-
-	private _ensureLists(): void {
-		if (!this.commands)
-			this.commands = new this.sec.Int32Vector();
-		if (!this.data)
-			this.data = new this.sec.Float64Vector();
-		const self = <any> this;
-		self.$Bgcommands = this.commands;
-		self.$Bgdata = this.data;
 	}
 
 	private _pushCommand(command: number, ...coords: number[]): void {

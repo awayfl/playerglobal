@@ -53,12 +53,7 @@ export class Transform extends ASObject {
 	}
 
 	public get colorTransform(): ColorTransform {
-		// Flash returns a copy. Wrapping the live adaptee lets scripts mutate
-		// parent multipliers (e.g. ct.color = n) and black out bitmap fills.
-		const src = this._adaptee.colorTransform;
-		const clone = new AwayColorTransform();
-		clone.copyRawDataFrom(src._rawData);
-		return new (<SecurityDomain> this.sec).flash.geom.ColorTransform(clone);
+		return new (<SecurityDomain> this.sec).flash.geom.ColorTransform(this._adaptee.colorTransform.clone());
 	}
 
 	public set colorTransform(value: ColorTransform) {
