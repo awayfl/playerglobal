@@ -1187,13 +1187,17 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		// if we call myStage.stage, it will still execute this function,
 		// because abc code does not know there exists a "get stage" on stage.
 		// also checking by "this instanceof Stage" does not work due to circular dependencies
-		// "_isAVMStage" is a workaround which should only ever return true if "this" is a Stage object
-		return this._isStage ? (<any> this) : (<DisplayObject> this.adaptee.parent?.adapter)?.stage;
+		// "_isStage" is a workaround which should only ever return true if "this" is a Stage object
+		if (this._isStage)
+			return <any> this;
 
-		// @todo: hack/fix for satprof content:
-		// when swf is loaded via loader,
-		// we must execute contructor of loaded Scene, but Loader is not added to stage yet.
-		// if constructor tries to get stage, it errors if we not return a stage
+		const parentAdapter = <DisplayObject> this.adaptee?.parent?.adapter;
+		if (parentAdapter)
+			return parentAdapter.stage;
+
+		// AS3 returns null (not undefined) when the object is not on the display list.
+		// Optional-chaining previously leaked `undefined`, which breaks AVM null-checks
+		// and callers like LoaderInfo.loaderURL (`this._loader.stage.getChildAt(0)`).
 		return null;
 	}
 

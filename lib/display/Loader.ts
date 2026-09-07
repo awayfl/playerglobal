@@ -32,6 +32,7 @@ import { Bitmap } from './Bitmap';
 import { BitmapData } from './BitmapData';
 import { DisplayObjectContainer } from './DisplayObjectContainer';
 import { DisplayObject } from './DisplayObject';
+import { Stage } from './Stage';
 import { URLRequest } from '../net/URLRequest';
 import { ILoader } from '../ILoader';
 import { IRedirectRule, matchRedirect } from '@awayfl/swf-loader';
@@ -123,6 +124,19 @@ export class Loader extends DisplayObjectContainer implements ILoader {
 	private _content: DisplayObject;
 	private _contentLoaderInfo: LoaderInfo
 	private _onAssetCompleteDelegate: (event: AssetEvent) => void;
+
+	/**
+	 * Loaders are frequently used off the display list (created, load(), never addChild'ed).
+	 * Flash still exposes null for stage in that case, but AwayFL content constructors and
+	 * LoaderInfo.loaderURL historically expect a usable Stage. Fall back to the active Stage
+	 * when this Loader is not on the display list so `.stage` is never `undefined`.
+	 */
+	public get stage(): Stage {
+		// Avoid `super.stage` (TS2340 on accessors). Walk parent like DisplayObject,
+		// then fall back to activeStage when this Loader is off the display list.
+		const parentAdapter = <DisplayObject> this.adaptee?.parent?.adapter;
+		return (parentAdapter ? parentAdapter.stage : null) || this.activeStage;
+	}
 
 	/**
 	 * Returns a LoaderInfo object corresponding to the object being loaded.
