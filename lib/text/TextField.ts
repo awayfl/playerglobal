@@ -185,15 +185,11 @@ export class TextField extends InteractiveObject {
 	 * fonts that are larger than 48 points.
 	 */
 	public get antiAliasType (): string {
-		// @todo
-		Debug.throwPIR('playerglobals/text/Textfield', 'get antiAliasType', '');
-		return '';//(<AwayTextField> this._adaptee).antiAliasType;
+		return (<AwayTextField> this._adaptee).antiAliasType as any as string;
 	}
 
 	public set antiAliasType (antiAliasType: string) {
-		// @todo
-		Debug.throwPIR('playerglobals/text/Textfield', 'set antiAliasType', '');
-		//(<AwayTextField> this._adaptee).antiAliasType=value;
+		(<AwayTextField> this._adaptee).antiAliasType = antiAliasType as any;
 	}
 
 	/**
@@ -400,14 +396,27 @@ export class TextField extends InteractiveObject {
 	 * If the specified font is not embedded in the SWF file, the text is not displayed.
 	 */
 	public get embedFonts (): boolean {
-		// @todo
-		Debug.throwPIR('playerglobals/text/Textfield', 'get embedFonts', '');
-		return false;
+		return !!(<AwayTextField> this._adaptee).embedFonts;
 	}
 
 	public set embedFonts (value: boolean) {
-		// @todo
-		Debug.throwPIR('playerglobals/text/Textfield', 'set embedFonts', '');
+		const field = <AwayTextField> this._adaptee;
+		const embed = !!value;
+		if (field.embedFonts === embed)
+			return;
+
+		field.embedFonts = embed;
+
+		// LanguageClass (and similar) applies defaultTextFormat before embedFonts.
+		// Re-apply the current format font name so lookup runs again after any
+		// embedded Font subclass has registered under its family name.
+		const format = field.newTextFormat;
+		if (format && format.font_name) {
+			const fontName = format.font_name;
+			format.font = null;
+			format.font_name = fontName;
+			field.newTextFormat = format;
+		}
 	}
 
 	/**
