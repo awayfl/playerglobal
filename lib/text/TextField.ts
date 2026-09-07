@@ -366,7 +366,11 @@ export class TextField extends InteractiveObject {
 
 	public set defaultTextFormat (format: TextFormat) {
 		//console.log("todo TextFormat");
-		(<AwayTextField> this._adaptee).newTextFormat = format.adaptee;
+		const textField = <AwayTextField> this._adaptee;
+		const mergedFormat = textField.newTextFormat;
+
+		format.adaptee.applyToFormat(mergedFormat);
+		textField.newTextFormat = mergedFormat;
 	}
 
 	/**
