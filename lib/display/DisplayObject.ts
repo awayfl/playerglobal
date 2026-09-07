@@ -1188,17 +1188,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		// because abc code does not know there exists a "get stage" on stage.
 		// also checking by "this instanceof Stage" does not work due to circular dependencies
 		// "_isStage" is a workaround which should only ever return true if "this" is a Stage object
-		if (this._isStage)
-			return <any> this;
+		return this._isStage ? (<any> this) : (<DisplayObject> this.adaptee.parent?.adapter)?.stage;
 
-		const parentAdapter = <DisplayObject> this.adaptee?.parent?.adapter;
-		if (parentAdapter)
-			return parentAdapter.stage;
-
-		// AS3 returns null (not undefined) when the object is not on the display list.
-		// Optional-chaining previously leaked `undefined`, which breaks AVM null-checks
-		// and callers like LoaderInfo.loaderURL (`this._loader.stage.getChildAt(0)`).
-		return null;
 	}
 
 	/**

@@ -4,6 +4,8 @@ import { UncaughtErrorEvents } from './events/UncaughtErrorEvents';
 
 export interface ILoader
 {
+	activeStage: Stage;
+
 	stage: Stage;
 
 	content: DisplayObject;

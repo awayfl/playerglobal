@@ -506,17 +506,8 @@ export class LoaderInfo extends EventDispatcher {
 	 * file, this URL is the same as the SWF file's own URL.
 	 */
 	public get loaderURL(): string {
-		// Nested Loaders are often used off the display list (never addChild'ed).
-		// DisplayObject.stage is then null; fall back to the active Stage so we can
-		// still resolve the initiating root SWF URL (AS3 loaderURL semantics).
-		const loader: any = this._loader;
-		const stage = loader?.stage
-			|| loader?.activeStage
-			|| (<SecurityDomain> this.sec).flash.display.DisplayObject.axClass._activeStage;
-		if (!stage)
-			return this._url || '';
-		const root = stage.getChildAt(0);
-		return root?.loaderInfo?.url || this._url || '';
+		return this._loader.activeStage.getChildAt(0).loaderInfo.url;
+
 	}
 
 	/**
