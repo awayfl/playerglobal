@@ -39,7 +39,7 @@ export class Shape extends DisplayObject {
 	}
 
 	protected mapAdaptee(adaptee: AwaySprite) {
-		let mappedAdapt = adaptee;
+		const mappedAdapt = adaptee;
 
 		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics(mappedAdapt.graphics);
 		this._graphics.ownerAdapter = this;
