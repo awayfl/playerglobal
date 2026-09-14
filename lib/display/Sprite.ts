@@ -548,7 +548,7 @@ export class Sprite extends DisplayObjectContainer {
 	 * of your sprite button.
 	 */
 	public get hitArea(): Sprite {
-		return <Sprite> this.adaptee.pickObject.adapter;
+		return <Sprite> this.adaptee.pickObject?.adapter || null;
 	}
 
 	public set hitArea(value: Sprite) {
