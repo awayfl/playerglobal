@@ -1187,14 +1187,9 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		// if we call myStage.stage, it will still execute this function,
 		// because abc code does not know there exists a "get stage" on stage.
 		// also checking by "this instanceof Stage" does not work due to circular dependencies
-		// "_isAVMStage" is a workaround which should only ever return true if "this" is a Stage object
+		// "_isStage" is a workaround which should only ever return true if "this" is a Stage object
 		return this._isStage ? (<any> this) : (<DisplayObject> this.adaptee.parent?.adapter)?.stage;
 
-		// @todo: hack/fix for satprof content:
-		// when swf is loaded via loader,
-		// we must execute contructor of loaded Scene, but Loader is not added to stage yet.
-		// if constructor tries to get stage, it errors if we not return a stage
-		return null;
 	}
 
 	/**
@@ -1231,8 +1226,20 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	}
 
 	public set transform(value: Transform) {
-		// @todo
-		Debug.throwPIR('playerglobals/display/DisplayObject', 'set transform', '');
+		if (!value || !this.adaptee)
+			return;
+
+		this._ctBlockedByScript = true;
+		const src = value.adaptee;
+		const dst = this.adaptee.transform;
+		if (!src || !dst)
+			return;
+
+		// Flash copies matrix + colorTransform values, it does not share the Transform.
+		const m = src.matrix;
+		const ct = src.colorTransform;
+		dst.matrix = (m && typeof (m as any).clone === 'function') ? (m as any).clone() : m;
+		dst.colorTransform = (ct && typeof (ct as any).clone === 'function') ? (ct as any).clone() : ct;
 	}
 
 	/**

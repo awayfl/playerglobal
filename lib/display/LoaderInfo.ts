@@ -506,7 +506,7 @@ export class LoaderInfo extends EventDispatcher {
 	 * file, this URL is the same as the SWF file's own URL.
 	 */
 	public get loaderURL(): string {
-		return this._loader.stage.getChildAt(0).loaderInfo.url;
+		return this._loader.activeStage.getChildAt(0).loaderInfo.url;
 
 	}
 

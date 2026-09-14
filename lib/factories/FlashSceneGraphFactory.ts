@@ -190,10 +190,10 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 		} else if (asset.isAsset(MorphSprite)) {
 			clone = MorphSprite.getNewMorphSprite((<MorphSprite> asset).graphics.clone());
 			clone.mouseEnabled = false;
-		} else if (asset.isAsset(BitmapImage2D)) {
+		} else if (asset.isAsset(BitmapImage2D) || asset.isAsset(SceneImage2D)) {
 			clone = Billboard.getNewBillboard(MaterialManager.getMaterialForBitmap());
 			clone.mouseEnabled = false;
-			clone.style.image = <BitmapImage2D> asset;
+			clone.style.image = <Image2D> asset;
 
 		} else {
 			clone = (<any> asset.adapter).clone(false).adaptee;

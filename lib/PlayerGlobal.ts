@@ -72,6 +72,10 @@ export class PlayerGlobal implements IPlayerGlobal, ILoader {
 	private _stage: Stage;
 	private _applicationDomain: ApplicationDomain;
 
+	public get activeStage(): Stage {
+		return this._stage;
+	}
+
 	public get stage(): Stage {
 		return this._stage;
 	}

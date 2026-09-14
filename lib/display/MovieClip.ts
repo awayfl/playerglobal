@@ -318,21 +318,32 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 		if (!this._framescripts)
 			this._framescripts = [];
 
+		const adaptee = <AwayMovieClip> this.adaptee;
+		let currentFrameScriptChanged = false;
+
 		for (let i = 0; i < numArgs; i += 2) {
 			const frameNum = (args[i] | 0);
 			const fn = args[i + 1];
 			this._framescripts[frameNum] = fn;
-
-			// newly registered scripts get queued in FrameScriptManager.execute-as3constructor
-			//console.log("add framescript", frameNum, this.adaptee, this.adaptee.parent);
-			// 	if the mc was already added to scene before the construcor was run,
-			//	no framescript was defined, and therefore we might need to add scripts for the current frame manually
-			//	todo: make sure that this is correctly behaving in case constructor navigates the mc to another frame
-			//if((<AwayMovieClip>this.adaptee).currentFrameIndex==frameNum){
-			//	FrameScriptManager.add_script_to_queue_pass2(<AwayMovieClip>this.adaptee, [fn]);
-			//}
+		
+			if(frameNum == adaptee.currentFrameIndex)
+				currentFrameScriptChanged = true;
 
 		}
+
+		//Navigation may already have consumed this frame's script.
+		//Defer the new callback, reusing an exisiting queued visit.
+		if(currentFrameScriptChanged && (<any> this).constructorHasRun
+			&& (<any> this.sec).swfVersion > 9
+			&& MovieClip.current_script_scope != this) {
+				const script = this._framescripts[adaptee.currentFrameIndex];
+				const queue = FrameScriptManager.get_queue();
+
+				if(script && queue.queued_mcs.indexOf(adaptee) < 0
+				&& queue.queued_mcs_pass2.indexOf(adaptee) < 0) {
+					FrameScriptManager.add_script_to_queue_pass2(adaptee, [script]);
+				}
+			}
 		(<any> this).constructorHasRun = true;
 	}
 

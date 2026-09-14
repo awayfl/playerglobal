@@ -18,6 +18,10 @@ export class Font extends ASObject {
 		this.isAVMFont = true;
 		if (this.axClassName != 'Font') {
 			this._adaptee = DefaultFontManager.getFont(this.axClassName);
+			// Also alias under Font.fontName for TextFormat lookup / embedFonts.
+			if (this._adaptee?.name) {
+				DefaultFontManager.registerFontForClassName(this._adaptee, this._adaptee.name);
+			}
 		}
 	}
 

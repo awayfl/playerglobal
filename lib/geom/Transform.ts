@@ -7,7 +7,7 @@ import { release, notImplemented } from '@awayfl/swf-loader';
 import { PerspectiveProjection } from './PerspectiveProjection';
 import { DisplayObject } from '../display/DisplayObject';
 
-import { Transform as AwayTransform } from '@awayjs/core';
+import { Transform as AwayTransform, ColorTransform as AwayColorTransform } from '@awayjs/core';
 import { SecurityDomain } from '../SecurityDomain';
 
 /**
@@ -53,7 +53,7 @@ export class Transform extends ASObject {
 	}
 
 	public get colorTransform(): ColorTransform {
-		return new (<SecurityDomain> this.sec).flash.geom.ColorTransform(this._adaptee.colorTransform);
+		return new (<SecurityDomain> this.sec).flash.geom.ColorTransform(this._adaptee.colorTransform.clone());
 	}
 
 	public set colorTransform(value: ColorTransform) {
