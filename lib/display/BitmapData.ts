@@ -66,6 +66,18 @@ function unpremultiplyChannel(value: number, alpha: number): number {
 	return (value * FLASH_UNPREMUL_FACTOR[alpha] + 0x8000) >> 16;
 }
 
+/** Flash/Ruffle premul: (c * a + 127) / 255. Opposite of unpremultiplyChannel. */
+function premultiplyChannel(value: number, alpha: number): number {
+	if (!alpha)
+		return 0;
+	if (alpha === 0xff)
+		return value;
+	return ((value * alpha + 127) / 255) | 0;
+}
+
+/** Scratch RGBA for single-pixel get/set (avoids per-call alloc). */
+const PIXEL_SCRATCH = new Uint8ClampedArray(4);
+
 export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapter {
 	private _adaptee: SceneImage2D;
 	private _owners: IBitmapDataOwner[] = [];
@@ -269,16 +281,21 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		if (!this._adaptee.rect.contains(x, y))
 			return 0;
 
-		// Read raw adaptee bytes (PMA when !unpackPMA); do not use stage getPixel32.
-		const rect = new (<SecurityDomain> this.sec).flash.geom.Rectangle(x, y, 1, 1);
-		const pixels = this.adaptee.getPixels(rect.adaptee);
-		const a = pixels[3];
+		// SceneImage2D.getPixel32 syncs GPU→CPU, but stage then trunc-unpremuls
+		// (and always divides by alpha). Flash-exact factor unpremul needs the
+		// raw storage bytes — same source as getPixels — so sync via getPixel32
+		// then read/modify the 4-byte pixel via getPixelData.
+		this._adaptee.getPixel32(x, y);
+
+		const pixel = PIXEL_SCRATCH;
+		this._adaptee.getPixelData(x, y, pixel);
+		const a = pixel[3];
 		if (!a)
 			return 0;
 
-		let r = pixels[0];
-		let g = pixels[1];
-		let b = pixels[2];
+		let r = pixel[0];
+		let g = pixel[1];
+		let b = pixel[2];
 		if (!this.adaptee.unpackPMA) {
 			r = unpremultiplyChannel(r, a);
 			g = unpremultiplyChannel(g, a);
@@ -288,12 +305,45 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		return ((a << 24) | (r << 16) | (g << 8) | b) >>> 0;
 	}
 
-	public setPixel(x: number, y: number, color: number) {
-		this._adaptee.setPixel(x, y, color);
+	public setPixel(x: number, y: number, color: number): void {
+		// Opaque write; alpha forced to 0xff (Flash setPixel).
+		this.setPixel32(x, y, (color & 0xffffff) | 0xff000000);
 	}
 
-	public setPixel32(x: number, y: number, color: number) {
-		this._adaptee.setPixel32(x, y, color);
+	public setPixel32(x: number, y: number, color: number): void {
+		x = x | 0;
+		y = y | 0;
+		if (!this._adaptee.rect.contains(x, y))
+			return;
+
+		color = color >>> 0;
+		const a = (color >>> 24) & 0xff;
+		let r = (color >>> 16) & 0xff;
+		let g = (color >>> 8) & 0xff;
+		let b = color & 0xff;
+
+		// Flash: API takes unmultiplied ARGB; storage is PMA via (c*a+127)/255.
+		// Stage setPixel32/fillRect uses trunc (c*a/255)|0 instead — write raw
+		// Flash-premuls bytes so getPixel32/getPixels factor path round-trips.
+		r = premultiplyChannel(r, a);
+		g = premultiplyChannel(g, a);
+		b = premultiplyChannel(b, a);
+
+		const adaptee = this._adaptee as SceneImage2D & {
+			canUseMSAAInternaly?: boolean;
+			_dropMSAA?: () => void;
+			_unpackPMA?: boolean;
+		};
+		if (adaptee.canUseMSAAInternaly && typeof adaptee._dropMSAA === 'function')
+			adaptee._dropMSAA();
+
+		const pixel = PIXEL_SCRATCH;
+		pixel[0] = r;
+		pixel[1] = g;
+		pixel[2] = b;
+		pixel[3] = a;
+		adaptee.setPixelData(x, y, pixel);
+		adaptee._unpackPMA = false;
 	}
 
 	public applyFilter(
