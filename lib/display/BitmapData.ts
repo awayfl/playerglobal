@@ -43,25 +43,29 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public setPixels(rect: Rectangle, inputByteArray: ByteArray): void {
-		// @todo
-		Debug.throwPIR('playerglobals/display/BitmapData', 'setPixels', '');
+		const count = (rect.width | 0) * (rect.height | 0);
+		const argb = new Uint8ClampedArray(count * 4);
+
+		// ByteArray holds 32-bit unmultiplied ARGB (readUnsignedInt order).
+		for (let i = 0; i < count; i++) {
+			const v = inputByteArray.readUnsignedInt() >>> 0;
+			const o = i * 4;
+			argb[o] = v >>> 24;
+			argb[o + 1] = (v >>> 16) & 0xff;
+			argb[o + 2] = (v >>> 8) & 0xff;
+			argb[o + 3] = v & 0xff;
+		}
+
+		this.adaptee.setPixels(rect.adaptee, argb);
 	}
 
 	public getPixels(rect: Rectangle): ByteArray {
-		// Adaptee returns unmultiplied RGBA; reorder to ARGB for the AS3 ByteArray.
+		// Adaptee returns unmultiplied ARGB bytes - wrap without channel reorder.
 		const pixels = this.adaptee.getPixels(rect.adaptee);
-		const buffer = new Uint8Array(pixels.length);
-
-		for (let i = 0; i < pixels.length; i += 4) {
-			buffer[i] = pixels[i + 3];
-			buffer[i + 1] = pixels[i];
-			buffer[i + 2] = pixels[i + 1];
-			buffer[i + 3] = pixels[i + 2];
-		}
-
+		const buffer = pixels.buffer.slice(pixels.byteOffset, pixels.byteOffset + pixels.byteLength);
 		const arr = new (<SecurityDomain> this.sec).flash.utils.ByteArray();
 		// @ts-ignore
-		arr.setArrayBuffer(buffer.buffer);
+		arr.setArrayBuffer(buffer);
 		return arr;
 	}
 
@@ -71,17 +75,15 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public getVector(rect: Rectangle): Uint32Vector {
-		// Adaptee returns unmultiplied RGBA; pack as ARGB uint32s.
+		// Adaptee returns unmultiplied ARGB bytes; pack as ARGB uint32s.
 		const u8 = this.adaptee.getPixels(rect.adaptee);
 		const vector = new this.sec.Uint32Vector(0, true);
-		const u32 = new Uint32Array(u8.buffer);
+		const count = (u8.length / 4) | 0;
+		const u32 = new Uint32Array(count);
 
-		for (let i = 0; i < u32.length; i++) {
-			const r = u8[i * 4 + 0];
-			const g = u8[i * 4 + 1];
-			const b = u8[i * 4 + 2];
-			const a = u8[i * 4 + 3];
-			u32[i] = ((a << 24) | (r << 16) | (g << 8) | b) >>> 0;
+		for (let i = 0; i < count; i++) {
+			const o = i * 4;
+			u32[i] = ((u8[o] << 24) | (u8[o + 1] << 16) | (u8[o + 2] << 8) | u8[o + 3]) >>> 0;
 		}
 
 		// replace a buffer for avoid coping
@@ -95,8 +97,20 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public setVector(rect: Rectangle, inputVector: Uint32Vector): void {
-		// @todo
-		Debug.throwPIR('playerglobals/display/BitmapData', 'setVector', '');
+		const count = (rect.width | 0) * (rect.height | 0);
+		const argb = new Uint8ClampedArray(count * 4);
+		const src = inputVector._view();
+
+		for (let i = 0; i < count; i++) {
+			const v = src[i] >>> 0;
+			const o = i * 4;
+			argb[o] = v >>> 24;
+			argb[o + 1] = (v >>> 16) & 0xff;
+			argb[o + 2] = (v >>> 8) & 0xff;
+			argb[o + 3] = v & 0xff;
+		}
+
+		this.adaptee.setPixels(rect.adaptee, argb);
 	}
 
 	public histogram(hRect: Rectangle = null): GenericVector {
