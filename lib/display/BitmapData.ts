@@ -19,31 +19,6 @@ const ALERT_ONCE = (id: string, message: string) => {
 	ALER_TABLE[id] = true;
 };
 
-// Flash-exact PMA→straight channel conversion (Adobe getPixels bit-exact).
-// Closed form equivalent to Ruffle FLASH_PREMUL_FACTOR mul/shift table:
-//   (c * ((255 << 8) / a) + 127) >> 8
-// Bias is +127 (not +128). Inline reciprocal — no 256-entry LUT.
-/** Unpremultiply one premultiplied channel to Flash-matching straight 0..255. */
-function unpremultiplyChannel(value: number, alpha: number): number {
-	if (!alpha)
-		return 0;
-	if (value > alpha)
-		value = alpha;
-	return (value * ((255 << 8) / alpha | 0) + 127) >> 8;
-}
-
-/** Flash/Ruffle premul: (c * a + 127) / 255. Opposite of unpremultiplyChannel. */
-function premultiplyChannel(value: number, alpha: number): number {
-	if (!alpha)
-		return 0;
-	if (alpha === 0xff)
-		return value;
-	return ((value * alpha + 127) / 255) | 0;
-}
-
-/** Scratch RGBA for single-pixel get/set (avoids per-call alloc). */
-const PIXEL_SCRATCH = new Uint8ClampedArray(4);
-
 export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapter {
 	private _adaptee: SceneImage2D;
 	private _owners: IBitmapDataOwner[] = [];
@@ -73,21 +48,15 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public getPixels(rect: Rectangle): ByteArray {
+		// Adaptee returns unmultiplied RGBA; reorder to ARGB for the AS3 ByteArray.
 		const pixels = this.adaptee.getPixels(rect.adaptee);
-		// Lazy decoding/readback can change the pixel representation.
-		const isPMA = !this.adaptee.unpackPMA;
 		const buffer = new Uint8Array(pixels.length);
 
 		for (let i = 0; i < pixels.length; i += 4) {
-			const alpha = pixels[i + 3];
-			buffer[i] = alpha;
-
-			for (let channel = 0; channel < 3; channel++) {
-				let value = pixels[i + channel];
-				if (isPMA)
-					value = unpremultiplyChannel(value, alpha);
-				buffer[i + channel + 1] = value;
-			}
+			buffer[i] = pixels[i + 3];
+			buffer[i + 1] = pixels[i];
+			buffer[i + 2] = pixels[i + 1];
+			buffer[i + 3] = pixels[i + 2];
 		}
 
 		const arr = new (<SecurityDomain> this.sec).flash.utils.ByteArray();
@@ -102,25 +71,16 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public getVector(rect: Rectangle): Uint32Vector {
+		// Adaptee returns unmultiplied RGBA; pack as ARGB uint32s.
 		const u8 = this.adaptee.getPixels(rect.adaptee);
-		const isPMA = !this.adaptee.unpackPMA;
-		// construct small buffer
 		const vector = new this.sec.Uint32Vector(0, true);
 		const u32 = new Uint32Array(u8.buffer);
 
-		// flash use ARGB view, adaptee is RGBA (PMA when !unpackPMA)
 		for (let i = 0; i < u32.length; i++) {
+			const r = u8[i * 4 + 0];
+			const g = u8[i * 4 + 1];
+			const b = u8[i * 4 + 2];
 			const a = u8[i * 4 + 3];
-			let r = u8[i * 4 + 0];
-			let g = u8[i * 4 + 1];
-			let b = u8[i * 4 + 2];
-
-			if (isPMA) {
-				r = unpremultiplyChannel(r, a);
-				g = unpremultiplyChannel(g, a);
-				b = unpremultiplyChannel(b, a);
-			}
-
 			u32[i] = ((a << 24) | (r << 16) | (g << 8) | b) >>> 0;
 		}
 
@@ -247,69 +207,17 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 		if (!this._adaptee.rect.contains(x, y))
 			return 0;
 
-		// SceneImage2D.getPixel32 syncs GPU→CPU, but stage then trunc-unpremuls
-		// (and always divides by alpha). Flash-exact factor unpremul needs the
-		// raw storage bytes — same source as getPixels — so sync via getPixel32
-		// then read/modify the 4-byte pixel via getPixelData.
-		this._adaptee.getPixel32(x, y);
-
-		const pixel = PIXEL_SCRATCH;
-		this._adaptee.getPixelData(x, y, pixel);
-		const a = pixel[3];
-		if (!a)
-			return 0;
-
-		let r = pixel[0];
-		let g = pixel[1];
-		let b = pixel[2];
-		if (!this.adaptee.unpackPMA) {
-			r = unpremultiplyChannel(r, a);
-			g = unpremultiplyChannel(g, a);
-			b = unpremultiplyChannel(b, a);
-		}
-
-		return ((a << 24) | (r << 16) | (g << 8) | b) >>> 0;
+		// SceneImage2D syncs GPU→CPU; stage returns unmultiplied ARGB.
+		return this._adaptee.getPixel32(x, y) >>> 0;
 	}
 
 	public setPixel(x: number, y: number, color: number): void {
-		// Opaque write; alpha forced to 0xff (Flash setPixel).
-		this.setPixel32(x, y, (color & 0xffffff) | 0xff000000);
+		this._adaptee.setPixel(x | 0, y | 0, color);
 	}
 
 	public setPixel32(x: number, y: number, color: number): void {
-		x = x | 0;
-		y = y | 0;
-		if (!this._adaptee.rect.contains(x, y))
-			return;
-
-		color = color >>> 0;
-		const a = (color >>> 24) & 0xff;
-		let r = (color >>> 16) & 0xff;
-		let g = (color >>> 8) & 0xff;
-		let b = color & 0xff;
-
-		// Flash: API takes unmultiplied ARGB; storage is PMA via (c*a+127)/255.
-		// Stage setPixel32/fillRect uses trunc (c*a/255)|0 instead — write raw
-		// Flash-premuls bytes so getPixel32/getPixels factor path round-trips.
-		r = premultiplyChannel(r, a);
-		g = premultiplyChannel(g, a);
-		b = premultiplyChannel(b, a);
-
-		const adaptee = this._adaptee as SceneImage2D & {
-			canUseMSAAInternaly?: boolean;
-			_dropMSAA?: () => void;
-			_unpackPMA?: boolean;
-		};
-		if (adaptee.canUseMSAAInternaly && typeof adaptee._dropMSAA === 'function')
-			adaptee._dropMSAA();
-
-		const pixel = PIXEL_SCRATCH;
-		pixel[0] = r;
-		pixel[1] = g;
-		pixel[2] = b;
-		pixel[3] = a;
-		adaptee.setPixelData(x, y, pixel);
-		adaptee._unpackPMA = false;
+		// Adaptee accepts unmultiplied ARGB and premuls into PMA storage.
+		this._adaptee.setPixel32(x | 0, y | 0, color >>> 0);
 	}
 
 	public applyFilter(
