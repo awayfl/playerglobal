@@ -441,7 +441,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 
 		this._adaptee.copyPixels(
 			this._adaptee, this._adaptee.rect, new APoint(x,y) , null, null, false);
-		//console.log('scroll not implemented yet in flash/BitmapData');
+		//console.log('scroll not implemented yet in BitmapData');
 	}
 
 	public threshold(
