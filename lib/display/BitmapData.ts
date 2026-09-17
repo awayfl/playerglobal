@@ -212,26 +212,19 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 	}
 
 	public getPixel(x: number, y: number): number {
-		return this.getPixel32(x, y) & 0xffffff;
+		return this._adaptee.getPixel(x, y);
 	}
 
 	public getPixel32(x: number, y: number): number {
-		x = x | 0;
-		y = y | 0;
-		if (!this._adaptee.rect.contains(x, y))
-			return 0;
-
-		// SceneImage2D syncs GPU→CPU; stage returns unmultiplied ARGB.
-		return this._adaptee.getPixel32(x, y) >>> 0;
+		return this._adaptee.getPixel32(x, y);
 	}
 
 	public setPixel(x: number, y: number, color: number): void {
-		this._adaptee.setPixel(x | 0, y | 0, color);
+		this._adaptee.setPixel(x, y, color);
 	}
 
 	public setPixel32(x: number, y: number, color: number): void {
-		// Adaptee accepts unmultiplied ARGB and premuls into PMA storage.
-		this._adaptee.setPixel32(x | 0, y | 0, color >>> 0);
+		this._adaptee.setPixel32(x, y, color);
 	}
 
 	public applyFilter(
@@ -455,7 +448,7 @@ export class BitmapData extends ASObject implements IBitmapDrawable, IAssetAdapt
 
 		this._adaptee.copyPixels(
 			this._adaptee, this._adaptee.rect, new APoint(x,y) , null, null, false);
-		//console.log('scroll not implemented yet in BitmapData');
+		//console.log('scroll not implemented yet in flash/BitmapData');
 	}
 
 	public threshold(
