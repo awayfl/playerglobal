@@ -54,7 +54,7 @@ export class Capabilities extends ASObject {
 	private static _os: string = null;
 	// static _cpuArchitecture: string;
 	private static _playerType: string = null;// DEFAULT_CAPABILITIES.PLAYER_TYPE;
-	private static _version: string = 'SHUMWAY 10,0,0,0';
+	private static _version: string = 'WIN 32,0,0,465';
 	// static _screenColor: string;
 	// static _pixelAspectRatio: number;
 	private static _screenDPI: number = 0;// = DEFAULT_CAPABILITIES.SCREEN_DPI;

@@ -1,8 +1,8 @@
 import { Vector3D } from './Vector3D';
-import { ASObject } from '@awayfl/avm2';
+import { ASObject, Errors } from '@awayfl/avm2';
 import { notImplemented, release, somewhatImplemented } from '@awayfl/swf-loader';
 import { axCoerceString } from '@awayjs/graphics';
-import { Matrix3D as AwayMatrix3D } from '@awayjs/core';
+import { Matrix3D as AwayMatrix3D, Vector3D as AwayVector3D, Orientation3D } from '@awayjs/core';
 import { Float64Vector, GenericVector } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 
@@ -107,10 +107,107 @@ export class Matrix3D extends ASObject {
 		return v;
 	}
 
-	public recompose(components: Float64Vector, orientationStyle: string = 'eulerAngles'): boolean {
-		//this._adaptee.recompose()
-		orientationStyle = axCoerceString(orientationStyle);
-		release || notImplemented('public flash.geom.Matrix3D::recompose'); return;
+	public recompose(components: GenericVector, orientationStyle: string = 'eulerAngles'): boolean {
+		// RUFFLE - unlike in OpenFL, we continue on even if some of the 'scale' components are 0
+		if (components.length < 3) {
+			return false;
+		}
+
+		if (!(orientationStyle == Orientation3D.AXIS_ANGLE || orientationStyle == Orientation3D.EULER_ANGLES || orientationStyle == Orientation3D.QUATERNION)) {
+			this.sec.throwError("flash.geom.Matrix3D", Errors.Matrix3DDecomposeTypeInvalid, orientationStyle);
+		}
+
+		let awayComponets: Array<AwayVector3D> = new Array<AwayVector3D>(3);
+
+		for (let i = 0; i < 3; i++)
+			awayComponets[i] = components.axGetNumericProperty(i).adaptee;
+
+		if (orientationStyle == Orientation3D.QUATERNION) {
+			// Flash throws exceptions from 'recompose' certain values of 'components',
+			// which we need to reproduce. See the 'matrix3d_compose' test
+			somewhatImplemented("public flash.geom.Matrix3D::recompose with Orientation3D.QUATERNION");
+		}
+
+		this.adaptee.identity();
+
+		let _rawData = this.adaptee._rawData;
+
+		var scale = [];
+		scale[0] = scale[1] = scale[2] = awayComponets[2].x;
+		scale[4] = scale[5] = scale[6] = awayComponets[2].y;
+		scale[8] = scale[9] = scale[10] = awayComponets[2].z;
+
+		switch (orientationStyle) {
+			case Orientation3D.EULER_ANGLES:
+				var cx = Math.cos(awayComponets[1].x);
+				var cy = Math.cos(awayComponets[1].y);
+				var cz = Math.cos(awayComponets[1].z);
+				var sx = Math.sin(awayComponets[1].x);
+				var sy = Math.sin(awayComponets[1].y);
+				var sz = Math.sin(awayComponets[1].z);
+
+				_rawData[0] = cy * cz * scale[0];
+				_rawData[1] = cy * sz * scale[1];
+				_rawData[2] = -sy * scale[2];
+				_rawData[3] = 0;
+				_rawData[4] = (sx * sy * cz - cx * sz) * scale[4];
+				_rawData[5] = (sx * sy * sz + cx * cz) * scale[5];
+				_rawData[6] = sx * cy * scale[6];
+				_rawData[7] = 0;
+				_rawData[8] = (cx * sy * cz + sx * sz) * scale[8];
+				_rawData[9] = (cx * sy * sz - sx * cz) * scale[9];
+				_rawData[10] = cx * cy * scale[10];
+				_rawData[11] = 0;
+				_rawData[12] = awayComponets[0].x;
+				_rawData[13] = awayComponets[0].y;
+				_rawData[14] = awayComponets[0].z;
+				_rawData[15] = 1;
+				break;
+
+			default:
+				var x = awayComponets[1].x;
+				var y = awayComponets[1].y;
+				var z = awayComponets[1].z;
+				var w = awayComponets[1].w;
+
+				if (orientationStyle == Orientation3D.AXIS_ANGLE) {
+					x *= Math.sin(w / 2);
+					y *= Math.sin(w / 2);
+					z *= Math.sin(w / 2);
+					w = Math.cos(w / 2);
+				}
+
+				_rawData[0] = (1 - 2 * y * y - 2 * z * z) * scale[0];
+				_rawData[1] = (2 * x * y + 2 * w * z) * scale[1];
+				_rawData[2] = (2 * x * z - 2 * w * y) * scale[2];
+				_rawData[3] = 0;
+				_rawData[4] = (2 * x * y - 2 * w * z) * scale[4];
+				_rawData[5] = (1 - 2 * x * x - 2 * z * z) * scale[5];
+				_rawData[6] = (2 * y * z + 2 * w * x) * scale[6];
+				_rawData[7] = 0;
+				_rawData[8] = (2 * x * z + 2 * w * y) * scale[8];
+				_rawData[9] = (2 * y * z - 2 * w * x) * scale[9];
+				_rawData[10] = (1 - 2 * x * x - 2 * y * y) * scale[10];
+				_rawData[11] = 0;
+				_rawData[12] = awayComponets[0].x;
+				_rawData[13] = awayComponets[0].y;
+				_rawData[14] = awayComponets[0].z;
+				_rawData[15] = 1;
+		}
+
+		if (awayComponets[2].x == 0) {
+			_rawData[0] = 1e-15;
+		}
+
+		if (awayComponets[2].y == 0) {
+			_rawData[5] = 1e-15;
+		}
+
+		if (awayComponets[2].z == 0) {
+			_rawData[10] = 1e-15;
+		}
+
+		return !(awayComponets[2].x == 0 || awayComponets[2].y == 0 || awayComponets[2].y == 0);
 	}
 
 	public appendTranslation(x: number, y: number, z: number): void {
@@ -142,7 +239,7 @@ export class Matrix3D extends ASObject {
 	}
 
 	public transformVector(v: Vector3D): Vector3D {
-		return new (<SecurityDomain> this.sec).flash.geom.Vector3D(this._adaptee.transformVector(v.adaptee, null, true));
+		return new (<SecurityDomain> this.sec).flash.geom.Vector3D(this._adaptee.transformVector(v.adaptee));
 	}
 
 	public deltaTransformVector(v: Vector3D): Vector3D {

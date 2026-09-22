@@ -21,16 +21,16 @@ export class Utils3D extends ASObject {
 	// AS -> JS Bindings
 	static projectVector(m: Matrix3D, v: Vector3D): Vector3D {
 		Matrix3D;
-		release || notImplemented('public flash.geom.Utils3D::static projectVector'); return;
+		notImplemented('public flash.geom.Utils3D::static projectVector'); return;
 	}
 
 	static projectVectors(m: Matrix3D, verts: Float64Vector, projectedVerts: Float64Vector, uvts: Float64Vector): void {
-		release || notImplemented('public flash.geom.Utils3D::static projectVectors'); return;
+		notImplemented('public flash.geom.Utils3D::static projectVectors'); return;
 	}
 
 	static pointTowards(percent: number, mat: Matrix3D, pos: Vector3D,
 		at: Vector3D = null, up: Vector3D = null): Matrix3D {
 		percent = +percent;
-		release || notImplemented('public flash.geom.Utils3D::static pointTowards'); return;
+		notImplemented('public flash.geom.Utils3D::static pointTowards'); return;
 	}
 }
