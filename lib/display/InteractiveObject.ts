@@ -727,6 +727,10 @@ export class InteractiveObject extends DisplayObject {
 
 	private _mouseCallbackDelegate: (event: MouseEventAway) => void;
 	private mouseCallback(event: MouseEventAway): void {
+		if ((event.type == MouseEventAway.MOUSE_OUT || event.type == MouseEventAway.ROLL_OUT)
+			&& !this.stage) {
+			return;
+		}
 		const adaptedEvent: MouseEvent =
 			new (<SecurityDomain> this.sec).flash.events.MouseEvent(this.eventMappingInvert[event.type]);
 		adaptedEvent.fillFromAway(event);
