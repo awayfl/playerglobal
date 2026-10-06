@@ -12,6 +12,7 @@ import {
 } from '@awayjs/graphics';
 import { ASObject, Float64Vector, Int32Vector } from '@awayfl/avm2';
 import { Debug, IAssetAdapter, Matrix as AwayMatrix } from '@awayjs/core';
+import { MovieClip as AwayMovieClip } from '@awayjs/scene';
 
 import { ASArray, GenericVector, AXClass } from '@awayfl/avm2';
 import { BitmapData } from './BitmapData';
@@ -47,15 +48,39 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	private _adaptee: AwayGraphics;
 
 	/**
-	 * AS3 DisplayObject (Shape/Sprite) that owns this wrapper. Timeline instances
-	 * share one AwayGraphics per symbol; we use this to copy-on-write on clear().
+	 * True once clear() has given this wrapper its own private AwayGraphics.
+	 * Reset whenever the wrapper is retargeted to another AwayGraphics.
 	 */
-	public ownerAdapter: DisplayObject = null;
+	private _ownsAdaptee: boolean = false;
 
 	constructor(adaptee: AwayGraphics = null) {
 		super();
-		this._adaptee = adaptee || new AwayGraphics();
-		this._adaptee.adapter = this;
+		this._setAdaptee(adaptee);
+	}
+
+	/**
+	 * Point this wrapper at a (possibly different) AwayGraphics. Called by the
+	 * owning Shape/Sprite when its AwayJS graphics object changes, so the AS3
+	 * Graphics instance stays the same for the lifetime of its display object.
+	 *
+	 * Note: this wrapper never stores a reference to its owning display object.
+	 * Timeline shape symbols share one AwayGraphics between all instances, and
+	 * that AwayGraphics lives as long as the symbol; anything reachable from it
+	 * (including its adapter) must not reach back into a display list.
+	 */
+	public _setAdaptee(adaptee: AwayGraphics): void {
+		const next = adaptee || new AwayGraphics();
+		const prev = this._adaptee;
+
+		if (prev === next)
+			return;
+
+		if (prev && prev._adapter === this)
+			prev.adapter = null;
+
+		this._adaptee = next;
+		this._ownsAdaptee = false;
+		next.adapter = this;
 	}
 
 	public dispose() {
@@ -85,34 +110,58 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	}
 
 	/**
-	 * Flash copy-on-write: graphics.clear() on one instance must not wipe the
-	 * symbol Graphics used by other timeline instances (or graphicsPool).
-	 * Replace this sprite's Graphics with a fresh empty one and leave the
-	 * shared original intact so later instances can still read their paths.
+	 * Copy-on-write: clear() on one instance must not wipe an AwayGraphics that
+	 * is also used by other instances (timeline shape symbols share one
+	 * AwayGraphics per symbol and keep it in the timeline graphics pool).
+	 * Give the owning display object a fresh, private AwayGraphics instead and
+	 * leave the shared original intact.
 	 */
 	private _detachSharedGraphics(): void {
 		const current = this._adaptee;
-		if (!current)
+		if (!current || this._ownsAdaptee)
 			return;
 
 		let owners = 0;
-		if (typeof (current as any).forEachOwner === 'function') {
-			(current as any).forEachOwner(() => { owners++; });
+		this._forEachOwner(current, () => { owners++; });
+
+		const owner = this._findOwner();
+		const awayOwner: any = owner ? owner.adaptee : null;
+
+		if (!awayOwner) {
+			// Orphaned wrapper: never clear an AwayGraphics that something
+			// else still displays, otherwise clear in place.
+			if (owners > 0)
+				this._takePrivateAdaptee(new AwayGraphics());
+			return;
 		}
 
-		const owner = this.ownerAdapter || this._findOwner();
-		const awayOwner: any = owner && owner.adaptee;
+		// Sprite/MovieClip graphics are created per instance and are only
+		// shared if more than one owner holds them or they were copied from
+		// another Graphics (copyTo shares shapes with the source). A plain
+		// AwayJS Sprite (timeline shape) may hold a symbol AwayGraphics even
+		// with a single owner, so it is detached once on its first clear().
 		const shared = owners > 1
-			|| !!(current as any).sourceGraphics
-			|| (awayOwner && awayOwner.graphics === current);
+			|| !!current.sourceGraphics
+			|| !awayOwner.isAsset(AwayMovieClip);
 
-		if (!shared || !awayOwner || typeof awayOwner.graphics === 'undefined')
+		if (!shared)
 			return;
 
 		const fresh = new AwayGraphics();
-		this._adaptee = fresh;
-		fresh.adapter = this;
+		// The owner's graphics setter calls updateGraphics() on the AS3 owner,
+		// which retargets this same wrapper to the fresh graphics.
 		awayOwner.graphics = fresh;
+		this._takePrivateAdaptee(fresh);
+	}
+
+	private _takePrivateAdaptee(fresh: AwayGraphics): void {
+		this._setAdaptee(fresh);
+		this._ownsAdaptee = true;
+	}
+
+	private _forEachOwner(graphics: AwayGraphics, callback: (owner: any) => void): void {
+		if (graphics && typeof graphics.forEachOwner === 'function')
+			graphics.forEachOwner(callback);
 	}
 
 	/**
@@ -256,7 +305,7 @@ export class Graphics extends ASObject implements IAssetAdapter {
 
 	public readGraphicsData(recurse: boolean = true): GenericVector {
 		const result = new (<any> this.sec).ObjectVector();
-		const owner = this.ownerAdapter || this._findOwner();
+		const owner = this._findOwner();
 		this._collectGraphicsData(result, this.adaptee, owner, !!recurse, true);
 		return result;
 	}
@@ -390,18 +439,25 @@ export class Graphics extends ASObject implements IAssetAdapter {
 		}
 	}
 
+	/**
+	 * Resolve the AS3 display object that owns this wrapper at call time from
+	 * the AwayGraphics owner set (held weakly by AwayGraphics). The owner is
+	 * the one whose AS3 adapter exposes this exact wrapper as its graphics,
+	 * which stays exact when several timeline instances share one AwayGraphics.
+	 */
 	private _findOwner(): DisplayObject {
 		let found: DisplayObject = null;
-		const graphics = this.adaptee as any;
-		if (graphics && typeof graphics.forEachOwner === 'function') {
-			graphics.forEachOwner((owner: any) => {
-				if (found)
-					return;
-				const adapter = owner && owner.adapter;
-				if (adapter && adapter !== owner)
-					found = adapter;
-			});
-		}
+		const graphics = this._adaptee;
+		if (!graphics)
+			return null;
+
+		this._forEachOwner(graphics, (awayOwner: any) => {
+			if (found || !awayOwner)
+				return;
+			const adapter = awayOwner._adapter;
+			if (adapter && adapter !== awayOwner && adapter.graphics === this)
+				found = adapter;
+		});
 		return found;
 	}
 
