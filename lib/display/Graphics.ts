@@ -118,7 +118,9 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	 */
 	private _detachSharedGraphics(): void {
 		const current = this._adaptee;
-		if (!current || this._ownsAdaptee)
+		// An owned graphics can still pick up shared shapes and a
+		// sourceGraphics fallback through copyFrom(), so detach it again then.
+		if (!current || (this._ownsAdaptee && !current.sourceGraphics))
 			return;
 
 		let owners = 0;
@@ -129,17 +131,18 @@ export class Graphics extends ASObject implements IAssetAdapter {
 
 		if (!awayOwner) {
 			// Orphaned wrapper: never clear an AwayGraphics that something
-			// else still displays, otherwise clear in place.
-			if (owners > 0)
+			// else still displays or that shares shapes with a copy source,
+			// otherwise clear in place.
+			if (owners > 0 || current.sourceGraphics)
 				this._takePrivateAdaptee(new AwayGraphics());
 			return;
 		}
 
-		// Sprite/MovieClip graphics are created per instance and are only
-		// shared if more than one owner holds them or they were copied from
-		// another Graphics (copyTo shares shapes with the source). A plain
-		// AwayJS Sprite (timeline shape) may hold a symbol AwayGraphics even
-		// with a single owner, so it is detached once on its first clear().
+		// MovieClip graphics are per instance (copyTo clones are caught by
+		// sourceGraphics). An AwayJS Sprite owner may be a timeline shape holding
+		// the symbol's shared AwayGraphics even with a single owner, so it is
+		// detached once on its first clear(). Script-created Shape/Sprite also
+		// use an AwayJS Sprite adaptee, so they pay one extra AwayGraphics here.
 		const shared = owners > 1
 			|| !!current.sourceGraphics
 			|| !awayOwner.isAsset(AwayMovieClip);
@@ -160,8 +163,10 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	}
 
 	private _forEachOwner(graphics: AwayGraphics, callback: (owner: any) => void): void {
-		if (graphics && typeof graphics.forEachOwner === 'function')
-			graphics.forEachOwner(callback);
+		// forEachOwner is newer than the published @awayjs/graphics typings
+		const g: any = graphics;
+		if (g && typeof g.forEachOwner === 'function')
+			g.forEachOwner(callback);
 	}
 
 	/**
