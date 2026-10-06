@@ -265,7 +265,11 @@ export class BroadcastEventDispatchQueue {
 				target = (<WeakRef<EventDispatcher>> target)?.deref();
 
 			if (target) {
-				(<EventDispatcher> target).dispatchEvent(event);
+				const dispatchedEvent = new (<SecurityDomain> event.sec).flash.events.Event(
+					event.type, event.bubbles, event.cancelable
+				);
+				dispatchedEvent._isBroadcastEvent = event._isBroadcastEvent;
+				(<EventDispatcher> target).dispatchEvent(dispatchedEvent);
 			} else {
 				console.debug('[BroadcastEventDispatchQueue] Broadcast target was deleted by GC:', key);
 				delete queue[key];
