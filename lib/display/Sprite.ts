@@ -56,8 +56,7 @@ export class Sprite extends DisplayObjectContainer {
 
 		this.dragListenerDelegate = (event) => this.dragListener(event);
 		this.stopDragDelegate = (event) => this.stopDrag(event);
-		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics((<AwaySprite> this._adaptee).graphics);
-		this._graphics.ownerAdapter = this;
+		this._syncGraphics(<AwaySprite> this._adaptee);
 
 		// our prototype is not MC (MC extends Sprite and we MUST check this)
 		if (
@@ -121,17 +120,27 @@ export class Sprite extends DisplayObjectContainer {
 	}
 
 	public updateGraphics(): void {
-		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics((<AwaySprite> this._adaptee).graphics);
-		this._graphics.ownerAdapter = this;
+		this._syncGraphics(<AwaySprite> this._adaptee);
 	}
 
 	protected mapAdaptee(adaptee: AwaySprite) {
-		const mappedAdapt = adaptee;
+		this._syncGraphics(adaptee);
 
-		this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics(mappedAdapt.graphics);
-		this._graphics.ownerAdapter = this;
+		return super.mapAdaptee(adaptee);
+	}
 
-		return super.mapAdaptee(mappedAdapt);
+	/**
+	 * Keep one AS3 Graphics wrapper per display object and point it at the
+	 * current AwayJS graphics (timeline graphics swaps, copy-on-write clear).
+	 */
+	private _syncGraphics(adaptee: AwaySprite): void {
+		if (!adaptee)
+			return;
+
+		if (this._graphics)
+			this._graphics._setAdaptee(adaptee.graphics);
+		else
+			this._graphics = new (<SecurityDomain> this.sec).flash.display.Graphics(adaptee.graphics);
 	}
 
 	public removeTimelineChildAt(value: number): void {
