@@ -105,6 +105,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 	public dispatch_ADDED_TO_STAGE(dispatchForThisChild: boolean = false) {
 		if (dispatchForThisChild) {
+			this.adaptee.hasDispatchedAddedToStage = true;
 			if (!StaticEvents.events[Event.ADDED_TO_STAGE])
 				StaticEvents.events[Event.ADDED_TO_STAGE] =
 					new (<SecurityDomain> this.sec).flash.events.Event(Event.ADDED_TO_STAGE);
@@ -115,6 +116,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 	public dispatch_REMOVED_FROM_STAGE(dispatchForThisChild: boolean = false) {
 		if (dispatchForThisChild) {
+			this.adaptee.hasDispatchedAddedToStage = false;
 			if (!StaticEvents.events[Event.REMOVED_FROM_STAGE])
 				StaticEvents.events[Event.REMOVED_FROM_STAGE] =
 					new (<SecurityDomain> this.sec).flash.events.Event(Event.REMOVED_FROM_STAGE);
