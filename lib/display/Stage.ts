@@ -1024,7 +1024,10 @@ export class Stage extends DisplayObjectContainer {
 	public set numChildren (value: number) {}
 	public get numChildren(): number {return 0;}
 	public set width (value: number) {}
-	public get width(): number {return 0;}
+	public get width(): number {
+		const descriptor = Object.getOwnPropertyDescriptor(DisplayObject.prototype, "width");
+		return descriptor?.get?.call(this);
+	}
 	public set height (value: number) {}
 	public get height(): number {return 0;}
 	public set opaqueBackground (value: number) {}
