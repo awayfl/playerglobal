@@ -5,6 +5,7 @@ import { FileFilter } from './FileFilter';
 import { ASObject } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 import { Event } from '../events/Event';
+import { IOErrorEvent } from '../events/IOErrorEvent';
 import { Settings } from '../Settings';
 
 const USE_FILE_PICKER = ('showSaveFilePicker' in self) && Settings.ENABLE_FILE_PICKER;
@@ -178,75 +179,139 @@ export class FileReference extends EventDispatcher {
 	}
 
 	//Opens a dialog box that lets the user save a file to the local filesystem.
-	public save(data: string | ASObject, _defaultFileName: string = null) {
-		if (this._useFileSystemSave(data, _defaultFileName)) {
+	public save(data: string | ASObject, defaultFileName: string = null) {
+		const name = defaultFileName || '';
+		const blob = FileReference._toBlob(data, name);
+
+		if (!blob) {
+			console.warn('[FileReference] save() supports String and ByteArray data only');
 			return;
 		}
+
+		this._name = name;
+		this._size = blob.size;
+
+		// Both paths must start synchronously here: save() is normally called from a
+		// mouse handler, and the browser only allows a save dialog / download while
+		// the originating user gesture is still active.
+		if (USE_FILE_PICKER && this._saveWithFilePicker(blob, name))
+			return;
+
+		this._saveWithAnchor(blob, name);
 	}
 
-	private _useFileSystemSave(data: any, name: string = ''): boolean {
-		const knownTypes = FileReference.knownMimeTypes;
-		const isString = typeof data === 'string';
-		const isByteArray = data.getBytes !== undefined;
-		const ext = name.slice(name.lastIndexOf('.'));
+	private static _toBlob(data: any, name: string): Blob | null {
+		const ext = name.slice(name.lastIndexOf('.')).toLowerCase();
+		const known = FileReference.knownMimeTypes[ext];
 
-		if (!USE_FILE_PICKER)
+		if (typeof data === 'string')
+			return new Blob([data], { type: known ? known.mime : 'text/plain' });
+
+		if (data && typeof data.getBytes === 'function') {
+			// copy, so the blob does not alias (or outlive) the ByteArray's backing buffer
+			const bytes: Uint8Array = data.getBytes().slice(0, data.length);
+			return new Blob([bytes], { type: known ? known.mime : 'application/octet-stream' });
+		}
+
+		// other objects are saved as their string representation
+		if (data && typeof data.toString === 'function')
+			return new Blob([String(data)], { type: 'text/plain' });
+
+		return null;
+	}
+
+	private _saveWithFilePicker(blob: Blob, name: string): boolean {
+		const openDialog: (options?: SaveFilePickerOptions) => Promise<FileSystemFileHandle>
+			= (<any>self).showSaveFilePicker;
+
+		if (!openDialog)
 			return false;
 
-		// this is draft API
-		// https://web.dev/file-system-access/
-		const openDialog: (options?: SaveFilePickerOptions) => Promise<FileSystemFileHandle> = window.showSaveFilePicker;
+		const ext = name.slice(name.lastIndexOf('.')).toLowerCase();
+		const known = FileReference.knownMimeTypes[ext];
+		const options: SaveFilePickerOptions = { suggestedName: name };
 
-		if (!openDialog) {
-			console.warn('[flash/net/FileReference] FileSystem API not supported!');
+		if (known && ext.length > 1)
+			options.types = [{ description: known.description, accept: { [known.mime]: [ext] } }];
+
+		let promise: Promise<FileSystemFileHandle>;
+
+		try {
+			promise = openDialog.call(self, options);
+		} catch (e) {
 			return false;
 		}
 
-		if (!isString && !isByteArray) {
-			console.warn('[FileReference] Save is only supported for String and ByteArray');
-			return;
-		}
+		let selected = false;
 
-		const types: FilePickerAcceptType[] = [];
-		if (ext in knownTypes) {
-			const mime = knownTypes[ext].mime;
-			types[0] = {
-				description: knownTypes[ext].description,
-				accept: { [mime] : ext },
-			};
-		} else {
-			types[0] = {
-				description: '',
-				accept: { 'application/unknown' : ext },
-			};
-		}
-
-		const options: SaveFilePickerOptions = {
-			suggestedName: name || '',
-			types
-		};
-
-		openDialog(options)
-			.then((fileHandler) => {
+		promise
+			.then((handle) => {
+				selected = true;
 				this._sendSelectEvent();
-				return fileHandler.createWritable();
+				return handle.createWritable();
 			})
-			.then((stream) => {
-				return stream
-					.write(isByteArray ? data.getBytes() : data)
-					.then(() => stream.close());
-			})
-			.then((_e)=>{
-				this._sendCompleteEvent();
-			})
+			.then((stream) => stream.write(blob).then(() => stream.close()))
+			.then(() => this._sendCompleteEvent())
 			.catch((e: DOMException) => {
-				if (e.code === 20 && e.message === 'The user aborted a request.') {
+				if (selected) {
+					console.warn('[FileReference] writing the file failed:', e);
+					this._sendIOErrorEvent(e && e.message);
+					return;
+				}
+
+				if (e && e.name === 'AbortError') {
 					this._sendCancelEvent();
 					return;
 				}
 
-				console.warn('[flash/net/FileReference] FileSystem API Reject `showSaveFilePicker` request:', e);
+				// e.g. SecurityError / NotAllowedError when the picker is refused:
+				// the gesture may already be consumed, but a download link still works
+				console.warn('[FileReference] save dialog unavailable, using a download instead:', e);
+				this._saveWithAnchor(blob, name);
 			});
+
+		return true;
+	}
+
+	private _saveWithAnchor(blob: Blob, name: string): void {
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+
+		a.href = url;
+		a.download = name || 'download';
+		a.style.display = 'none';
+		document.body.appendChild(a);
+
+		try {
+			a.click();
+		} catch (e) {
+			document.body.removeChild(a);
+			URL.revokeObjectURL(url);
+			this._sendIOErrorEvent(e && e.message);
+			return;
+		}
+
+		document.body.removeChild(a);
+
+		// the browser gives no feedback for downloads, so report success asynchronously,
+		// as the events would arrive after save() returns
+		setTimeout(() => {
+			this._sendSelectEvent();
+			this._sendCompleteEvent();
+		}, 0);
+
+		// keep the object URL alive long enough for the download to start
+		setTimeout(() => URL.revokeObjectURL(url), 60000);
+	}
+
+	private _sendIOErrorEvent(text: string = '') {
+		const sec = <SecurityDomain> this.sec;
+		const event = new sec.flash.events.IOErrorEvent(IOErrorEvent.IO_ERROR, false, false, text || '');
+
+		event.currentTarget = this;
+		event.target = this;
+
+		this.dispatchEvent(event);
 	}
 
 	private _sendCancelEvent() {
