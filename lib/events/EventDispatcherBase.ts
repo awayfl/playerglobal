@@ -76,6 +76,11 @@ export class EventDispatcherBase extends ASObject {
 		const l: ListenerObject = this._listenerObjects[event.type];
 
 		if (l) {
+			// Flash reports the aggregation target (EventDispatcher(target) constructor arg)
+			// as currentTarget during dispatch — e.g. GreenSock dispatches tween events via an
+			// internal aggregated dispatcher and handlers cast event.currentTarget to the tween.
+			if (this._t)
+				(<any> event).currentTarget = this._t;
 			if (!event.target)
 				event.target = this._t;
 			//console.log("dispatchEvent", event.type, (<any>this).adaptee?.id);
