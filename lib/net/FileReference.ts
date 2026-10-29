@@ -2,9 +2,10 @@ import { URLRequest } from './URLRequest';
 import { EventDispatcher } from '../events/EventDispatcher';
 import { ByteArray } from '../utils/ByteArray';
 import { FileFilter } from './FileFilter';
-import { ASObject } from '@awayfl/avm2';
+import { ASObject, axCoerceString, Errors } from '@awayfl/avm2';
 import { SecurityDomain } from '../SecurityDomain';
 import { Event } from '../events/Event';
+import { IOErrorEvent } from '../events/IOErrorEvent';
 import { Settings } from '../Settings';
 
 const USE_FILE_PICKER = ('showSaveFilePicker' in self) && Settings.ENABLE_FILE_PICKER;
@@ -12,6 +13,12 @@ const USE_FILE_PICKER = ('showSaveFilePicker' in self) && Settings.ENABLE_FILE_P
 if (USE_FILE_PICKER) {
 	console.debug('[FileReference] `showSaveFilePicker` used for save()');
 }
+
+// not in the shared error table (yet)
+const FILE_REFERENCE_BUSY_ERROR = {
+	code: 2174,
+	message: 'Only one download, upload, load or save operation can be active at a time on each FileReference.'
+};
 
 export class FileReference extends EventDispatcher {
 	public static forceNativeMethods = true;
@@ -25,6 +32,7 @@ export class FileReference extends EventDispatcher {
 	private _permissionStatus: string;
 	private _extension: string;
 	private _data: ByteArray;
+	private _saving: boolean = false;
 
 	constructor() {
 		super();
@@ -155,7 +163,7 @@ export class FileReference extends EventDispatcher {
 				this._sendCompleteEvent();
 			})
 			.catch((e: DOMException) => {
-				if (e.code === 20 && e.message === 'The user aborted a request.') {
+				if (FileReference._isAbort(e)) {
 					this._sendCancelEvent();
 					return;
 				}
@@ -178,75 +186,169 @@ export class FileReference extends EventDispatcher {
 	}
 
 	//Opens a dialog box that lets the user save a file to the local filesystem.
-	public save(data: string | ASObject, _defaultFileName: string = null) {
-		if (this._useFileSystemSave(data, _defaultFileName)) {
-			return;
+	//
+	// Data: String is saved as UTF-8 text, ByteArray as its bytes (up to length), XML/XMLList
+	// via toXMLString(), any other object via its AS3 toString(). null throws ArgumentError #2007.
+	// Only one save may be in progress at a time; a second call throws IllegalOperationError.
+	//
+	// Path: the save dialog (showSaveFilePicker) when available and enabled, otherwise a
+	// Blob URL download. The choice is made synchronously, because both need the user
+	// gesture that is still active while save() runs. Once the dialog has been opened the
+	// gesture is spent, so a dialog failure (other than cancel, which dispatches cancel)
+	// dispatches ioError rather than attempting a download the browser would silently block.
+	public save(data: string | ASObject, defaultFileName: string = null) {
+		const sec = <SecurityDomain> this.sec;
+
+		if (data == null)
+			sec.throwError('ArgumentError', Errors.NullPointerError, 'data');
+
+		if (this._saving)
+			sec.throwError('flash.errors.IllegalOperationError', FILE_REFERENCE_BUSY_ERROR);
+
+		const name = defaultFileName || '';
+		const blob = this._toBlob(data, name);
+
+		this._name = name;
+		this._size = blob.size;
+		this._saving = true;
+
+		if (USE_FILE_PICKER && typeof (<any>self).showSaveFilePicker === 'function') {
+			let promise: Promise<FileSystemFileHandle> = null;
+
+			try {
+				promise = (<any>self).showSaveFilePicker(FileReference._pickerOptions(name));
+			} catch (e) {
+				// threw synchronously, before using the gesture: a download is still allowed
+				console.warn('[FileReference] save dialog unavailable, using a download instead:', e);
+			}
+
+			if (promise) {
+				this._saveWithFilePicker(promise, blob);
+				return;
+			}
 		}
+
+		this._saveWithAnchor(blob, name);
 	}
 
-	private _useFileSystemSave(data: any, name: string = ''): boolean {
-		const knownTypes = FileReference.knownMimeTypes;
-		const isString = typeof data === 'string';
-		const isByteArray = data.getBytes !== undefined;
-		const ext = name.slice(name.lastIndexOf('.'));
+	private static _extOf(name: string): string {
+		const i = name ? name.lastIndexOf('.') : -1;
+		return i >= 0 ? name.slice(i).toLowerCase() : '';
+	}
 
-		if (!USE_FILE_PICKER)
-			return false;
+	private static _isAbort(e: any): boolean {
+		return !!e && (e.name === 'AbortError' || e.code === 20);
+	}
 
-		// this is draft API
-		// https://web.dev/file-system-access/
-		const openDialog: (options?: SaveFilePickerOptions) => Promise<FileSystemFileHandle> = window.showSaveFilePicker;
+	private static _pickerOptions(name: string): SaveFilePickerOptions {
+		const ext = FileReference._extOf(name);
+		const known = FileReference.knownMimeTypes[ext];
+		const options: SaveFilePickerOptions = { suggestedName: name };
 
-		if (!openDialog) {
-			console.warn('[flash/net/FileReference] FileSystem API not supported!');
-			return false;
+		if (known)
+			options.types = [{ description: known.description, accept: { [known.mime]: [ext] } }];
+
+		return options;
+	}
+
+	private _toBlob(data: any, name: string): Blob {
+		const known = FileReference.knownMimeTypes[FileReference._extOf(name)];
+
+		if (typeof data !== 'string' && typeof data.getBytes === 'function') {
+			// copy, so the blob does not alias (or outlive) the ByteArray's backing buffer
+			const bytes: Uint8Array = data.getBytes().slice(0, data.length);
+			return new Blob([bytes], { type: known ? known.mime : 'application/octet-stream' });
 		}
 
-		if (!isString && !isByteArray) {
-			console.warn('[FileReference] Save is only supported for String and ByteArray');
-			return;
-		}
+		return new Blob([this._toText(data)], { type: known ? known.mime : 'text/plain' });
+	}
 
-		const types: FilePickerAcceptType[] = [];
-		if (ext in knownTypes) {
-			const mime = knownTypes[ext].mime;
-			types[0] = {
-				description: knownTypes[ext].description,
-				accept: { [mime] : ext },
-			};
-		} else {
-			types[0] = {
-				description: '',
-				accept: { 'application/unknown' : ext },
-			};
-		}
+	private _toText(data: any): string {
+		if (typeof data === 'string')
+			return data;
 
-		const options: SaveFilePickerOptions = {
-			suggestedName: name || '',
-			types
-		};
+		// XML/XMLList are written as markup; their toString() gives only the text content
+		// of simple elements (e.g. '' for <a/>)
+		if (typeof data.$BgtoXMLString === 'function')
+			return axCoerceString(data.$BgtoXMLString());
 
-		openDialog(options)
-			.then((fileHandler) => {
+		// the AS3 public toString() (an override in user code, or Object's default)
+		if (typeof data.$BgtoString === 'function')
+			return axCoerceString(data.$BgtoString());
+
+		return axCoerceString(data);
+	}
+
+	private _saveWithFilePicker(promise: Promise<FileSystemFileHandle>, blob: Blob): void {
+		let selected = false;
+
+		promise
+			.then((handle) => {
+				selected = true;
 				this._sendSelectEvent();
-				return fileHandler.createWritable();
+				return handle.createWritable();
 			})
-			.then((stream) => {
-				return stream
-					.write(isByteArray ? data.getBytes() : data)
-					.then(() => stream.close());
-			})
-			.then((_e)=>{
+			.then((stream) => stream.write(blob).then(() => stream.close()))
+			.then(() => {
+				this._saving = false;
 				this._sendCompleteEvent();
 			})
 			.catch((e: DOMException) => {
-				if (e.code === 20 && e.message === 'The user aborted a request.') {
+				this._saving = false;
+
+				if (!selected && FileReference._isAbort(e)) {
 					this._sendCancelEvent();
 					return;
 				}
 
-				console.warn('[flash/net/FileReference] FileSystem API Reject `showSaveFilePicker` request:', e);
+				// refused (e.g. SecurityError / NotAllowedError) or the write failed: no download
+				// fallback here, the user gesture has already been used by the dialog
+				console.warn('[FileReference] save failed:', e);
+				this._sendIOErrorEvent(e && e.message);
 			});
+	}
+
+	private _saveWithAnchor(blob: Blob, name: string): void {
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+
+		a.href = url;
+		a.download = name || 'download';
+		a.style.display = 'none';
+		document.body.appendChild(a);
+
+		try {
+			a.click();
+		} catch (e) {
+			document.body.removeChild(a);
+			URL.revokeObjectURL(url);
+			this._saving = false;
+			this._sendIOErrorEvent(e && e.message);
+			return;
+		}
+
+		document.body.removeChild(a);
+
+		// the browser gives no feedback for downloads, so report success asynchronously,
+		// as the events would arrive after save() returns
+		setTimeout(() => {
+			this._saving = false;
+			this._sendSelectEvent();
+			this._sendCompleteEvent();
+		}, 0);
+
+		// keep the object URL alive long enough for the download to start
+		setTimeout(() => URL.revokeObjectURL(url), 60000);
+	}
+
+	private _sendIOErrorEvent(text: string = '') {
+		const sec = <SecurityDomain> this.sec;
+		const event = new sec.flash.events.IOErrorEvent(IOErrorEvent.IO_ERROR, false, false, text || '');
+
+		event.currentTarget = this;
+		event.target = this;
+
+		this.dispatchEvent(event);
 	}
 
 	private _sendCancelEvent() {
