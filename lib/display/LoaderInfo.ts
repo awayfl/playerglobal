@@ -257,6 +257,9 @@ export class LoaderInfo extends EventDispatcher {
 
 		this._url = new URL(event.url, document.baseURI).href;
 
+		const progressEvent = new (<SecurityDomain> this.sec).flash.events.ProgressEvent(ProgressEvent.PROGRESS, false, false, this._bytesLoaded,  this._bytesTotal);
+		progressEvent.currentTarget = this;
+		this.dispatchEvent(progressEvent);
 		LoaderInfoCompleteQueue.addQueue(this);
 	}
 
