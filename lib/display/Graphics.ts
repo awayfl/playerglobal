@@ -201,6 +201,11 @@ export class Graphics extends ASObject implements IAssetAdapter {
 	public lineStyle(thickness: number, color: number /*uint*/ = 0, alpha: number = 1,
 		pixelHinting: boolean = false, scaleMode: string = 'normal', caps: string = null,
 		joints: string = null, miterLimit: number = 3): void {
+		// Flash clamps alpha to [0, 1] (AS2-era content commonly passes 0-100)
+		if (alpha < 0)
+			alpha = 0;
+		if (alpha > 1)
+			alpha = 1;
 		this.adaptee.lineStyle(
 			thickness, color, alpha, pixelHinting, <any>scaleMode, <any>caps, <any>joints, miterLimit);
 	}

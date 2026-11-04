@@ -42,4 +42,16 @@ export class Responder extends ASObject {
 		this._result = result;
 		this._status = status;
 	}
+
+	/** Internal: invoke the result callback (used by NetConnection HTTP/AMF remoting). */
+	invokeResult(value: any): void {
+		if (this._result)
+			(<any> this._result).axApply(null, [value]);
+	}
+
+	/** Internal: invoke the status/fault callback (used by NetConnection HTTP/AMF remoting). */
+	invokeStatus(value: any): void {
+		if (this._status)
+			(<any> this._status).axApply(null, [value]);
+	}
 }
