@@ -212,11 +212,11 @@ export class FileReference extends EventDispatcher {
 		this._size = blob.size;
 		this._saving = true;
 
-		if (USE_FILE_PICKER && typeof (<any>self).showSaveFilePicker === 'function') {
+		if (USE_FILE_PICKER) {
 			let promise: Promise<FileSystemFileHandle> = null;
 
 			try {
-				promise = (<any>self).showSaveFilePicker(FileReference._pickerOptions(name));
+				promise = showSaveFilePicker(FileReference._pickerOptions(name));
 			} catch (e) {
 				// threw synchronously, before using the gesture: a download is still allowed
 				console.warn('[FileReference] save dialog unavailable, using a download instead:', e);
@@ -269,12 +269,12 @@ export class FileReference extends EventDispatcher {
 
 		// XML/XMLList are written as markup; their toString() gives only the text content
 		// of simple elements (e.g. '' for <a/>)
-		if (typeof data.$BgtoXMLString === 'function')
-			return axCoerceString(data.$BgtoXMLString());
+		if (this.sec.AXXML.axIsType(data) || this.sec.AXXMLList.axIsType(data))
+			return axCoerceString(data.toXMLString());
 
 		// the AS3 public toString() (an override in user code, or Object's default)
-		if (typeof data.$BgtoString === 'function')
-			return axCoerceString(data.$BgtoString());
+		if (this.sec.AXObject.axIsType(data))
+			return axCoerceString(data.toString());
 
 		return axCoerceString(data);
 	}
