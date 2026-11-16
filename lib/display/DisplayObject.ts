@@ -305,7 +305,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 
 	public get node(): ContainerNode {
 		if (!this._node)
-			this._node = AVMStage.instance().view.getNode(this._adaptee);
+			this._node = AVMStage.instance().root.getNode(this._adaptee);
 
 		return this._node;
 	}
@@ -767,7 +767,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			return;
 		}
 
-		PickGroup.getInstance().getBoundsPicker(this.node).height = value;
+		PickGroup.getPool(AVMStage.instance().view).getBoundsPicker(this.node).height = value;
 
 	}
 
@@ -1309,7 +1309,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 			return;
 		}
 
-		PickGroup.getInstance().getBoundsPicker(this.node).width = value;
+		PickGroup.getPool(AVMStage.instance().view).getBoundsPicker(this.node).width = value;
 
 	}
 
@@ -1451,8 +1451,8 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 		if	(!targetCoordinateSpace)
 			targetCoordinateSpace = this;
 
-		return PickGroup.getInstance().getBoundsPicker(this.node)
-			.getBoxBounds(AVMStage.instance().view.getNode(targetCoordinateSpace.adaptee), strokeFlag, true);
+		return PickGroup.getPool(AVMStage.instance().view).getBoundsPicker(this.node)
+			.getBoxBounds(AVMStage.instance().root.getNode(targetCoordinateSpace.adaptee), strokeFlag, true);
 	}
 
 	/**
@@ -1528,9 +1528,9 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 */
 	public hitTestObject(obj: DisplayObject): boolean {
 
-		return PickGroup.getInstance()
+		return PickGroup.getPool(AVMStage.instance().view)
 			.getBoundsPicker(this.node)
-			.hitTestObject(PickGroup.getInstance().getBoundsPicker(obj.node));
+			.hitTestObject(PickGroup.getPool(AVMStage.instance().view).getBoundsPicker(obj.node));
 
 	}
 
@@ -1548,7 +1548,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObjectAdap
 	 *   false otherwise.
 	 */
 	public hitTestPoint(x: number, y: number, shapeFlag: boolean = false): boolean {
-		return PickGroup.getInstance()
+		return PickGroup.getPool(AVMStage.instance().view)
 			.getBoundsPicker(this.node)
 			.hitTestPoint(x, y, shapeFlag);
 	}

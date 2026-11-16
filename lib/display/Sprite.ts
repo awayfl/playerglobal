@@ -645,10 +645,10 @@ export class Sprite extends DisplayObjectContainer {
 				this.checkBounds();
 
 			const avmStage = AVMStage.instance();
-			const dragNode = avmStage.view.getNode(this.adaptee);
+			const dragNode = avmStage.root.getNode(this.adaptee);
 			avmStage.mousePicker.dragNode = dragNode;
 
-			const collision = avmStage.mousePicker.pickGroup.abstractions
+			const collision = avmStage.mousePicker.pickPool.abstractions
 				.getAbstraction<PickEntity>(dragNode)
 				.pickingCollision;
 
@@ -691,7 +691,7 @@ export class Sprite extends DisplayObjectContainer {
 				this._setStartDragMCPosition(this._adaptee.parent);
 			}
 
-			const tmpPoint = AVMStage.instance().view.getNode(this._adaptee.parent).globalToLocal(
+			const tmpPoint = AVMStage.instance().root.getNode(this._adaptee.parent).globalToLocal(
 				new Point(this._stage.mouseX, this._stage.mouseY));
 
 			this.adaptee.x = this.startDragMCPosition.x + tmpPoint.x;
@@ -740,7 +740,7 @@ export class Sprite extends DisplayObjectContainer {
 		this.isDragging = false;
 		Sprite.currentDraggedMC = null;
 		const avmStage = AVMStage.instance();
-		const dragNode = avmStage.view.getNode(this.adaptee);
+		const dragNode = avmStage.root.getNode(this.adaptee);
 		avmStage.mousePicker.dragNode = null;
 		avmStage.mouseManager.stopDragObject();
 		avmStage.root.removeEventListener(MouseEvent.MOUSE_MOVE, this.dragListenerDelegate);
@@ -759,7 +759,7 @@ export class Sprite extends DisplayObjectContainer {
 	}
 
 	private _setStartDragMCPosition(parent: AwayDisplayObjectContainer): void {
-		const startDragPoint = AVMStage.instance().view.getNode(parent).globalToLocal(new Point(this._stage.mouseX, this._stage.mouseY));
+		const startDragPoint = AVMStage.instance().root.getNode(parent).globalToLocal(new Point(this._stage.mouseX, this._stage.mouseY));
 		if (this.lockCenter) {
 			this.startDragMCPosition = new Point();
 			this._adaptee.x = startDragPoint.x;
