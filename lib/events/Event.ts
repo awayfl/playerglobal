@@ -143,7 +143,7 @@ export class Event extends ASObject {
 	/**
    * Some events don't participate in the normal capturing and bubbling phase.
    */
-	private _isBroadcastEvent: boolean;
+	public _isBroadcastEvent: boolean;
 
 	get type(): string {
 		return this._type;
