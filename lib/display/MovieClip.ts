@@ -325,25 +325,25 @@ export class MovieClip extends Sprite implements IMovieClipAdapter {
 			const frameNum = (args[i] | 0);
 			const fn = args[i + 1];
 			this._framescripts[frameNum] = fn;
-		
-			if(frameNum == adaptee.currentFrameIndex)
+
+			if (frameNum == adaptee.currentFrameIndex)
 				currentFrameScriptChanged = true;
 
 		}
 
 		//Navigation may already have consumed this frame's script.
 		//Defer the new callback, reusing an exisiting queued visit.
-		if(currentFrameScriptChanged && (<any> this).constructorHasRun
+		if (currentFrameScriptChanged && (<any> this).constructorHasRun
 			&& (<any> this.sec).swfVersion > 9
 			&& MovieClip.current_script_scope != this) {
-				const script = this._framescripts[adaptee.currentFrameIndex];
-				const queue = FrameScriptManager.get_queue();
+			const script = this._framescripts[adaptee.currentFrameIndex];
+			const queue = FrameScriptManager.get_queue();
 
-				if(script && queue.queued_mcs.indexOf(adaptee) < 0
+			if (script && queue.queued_mcs.indexOf(adaptee) < 0
 				&& queue.queued_mcs_pass2.indexOf(adaptee) < 0) {
-					FrameScriptManager.add_script_to_queue_pass2(adaptee, [script]);
-				}
+				FrameScriptManager.add_script_to_queue_pass2(adaptee, [script]);
 			}
+		}
 		(<any> this).constructorHasRun = true;
 	}
 

@@ -181,7 +181,7 @@ export class Graphics extends ASObject implements IAssetAdapter {
 		interpolationMethod: string = 'rgb', focalPointRatio: number = 0): void {
 		this.adaptee.beginGradientFill(
 		<any>type, colors.value, alphas.value, ratios.value, matrix?.adaptee,
-			spreadMethod, interpolationMethod, focalPointRatio);
+		spreadMethod, interpolationMethod, focalPointRatio);
 	}
 
 	public beginBitmapFill(bitmap: BitmapData, matrix: Matrix = null,
@@ -468,7 +468,7 @@ export class Graphics extends ASObject implements IAssetAdapter {
 
 		if (type == GradientFillStyle.data_type) {
 			const gradient = <GradientFillStyle> item;
-			const matrix = concatenated.clone()
+			const matrix = concatenated.clone();
 			matrix.concat(gradient.matrix);
 			return new display.GraphicsGradientFill(
 				gradient.type,
@@ -484,7 +484,7 @@ export class Graphics extends ASObject implements IAssetAdapter {
 
 		if (type == BitmapFillStyle.data_type) {
 			const bitmap = <BitmapFillStyle> item;
-			const matrix = concatenated.clone()
+			const matrix = concatenated.clone();
 			matrix.concat(bitmap.matrix);
 			return new display.GraphicsBitmapFill(
 				<BitmapData> bitmap.image.adapter,
