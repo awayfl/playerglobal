@@ -12,7 +12,7 @@ import {
 import { DisplayObject } from './DisplayObject';
 import { InteractiveObject } from './InteractiveObject';
 import { Event } from '../events/Event';
-import { IContainer, PickGroup } from '@awayjs/view';
+import { ContainerNode, IContainer, PickGroup } from '@awayjs/view';
 import { constructClassFromSymbol, Errors, OrphanManager } from '@awayfl/avm2';
 import { Point } from '../geom/Point';
 import { SecurityDomain } from '../SecurityDomain';
@@ -129,8 +129,9 @@ export class DisplayObjectContainer extends InteractiveObject {
 				obj.children[childname].object = oneChild.adapter;
 				obj.children[childname].text = (<AwayTextField>oneChild).text;
 				obj.children[childname].rectangle = 'x:' + oneChild.x + ', y:' + oneChild.y;
-				const box: Box = PickGroup.getInstance()
-					.getBoundsPicker(AVMStage.instance().view.getNode(oneChild)).getBoxBounds(AVMStage.instance().view.getNode(oneChild));
+				const node: ContainerNode = AVMStage.instance().root.getNode(oneChild);
+				const box: Box = PickGroup.getPool(AVMStage.instance().view)
+					.getBoundsPicker(node).getBoxBounds(node);
 				obj.children[childname].width = (box == null) ? 0 : box.width;
 				obj.children[childname].height = (box == null) ? 0 : box.height;
 			}
@@ -469,7 +470,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 */
 	public getObjectsUnderPoint(point: Point): DisplayObject[] {
 
-		const raycastPicker = PickGroup.getInstance().getRaycastPicker(AVMStage.instance().view.getNode(this.adaptee));
+		const raycastPicker = PickGroup.getPool(AVMStage.instance().view).getRaycastPicker(AVMStage.instance().root.getNode(this.adaptee));
 
 		const awayChildren: IContainer[] =
 			raycastPicker.getObjectsUnderPoint(
