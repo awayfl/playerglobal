@@ -310,21 +310,24 @@ export class Graphics extends ASObject implements IAssetAdapter {
 			return;
 
 		const display = (<SecurityDomain> this.sec).flash.display;
+		const get = Graphics._field;
 
 		if (display.GraphicsSolidFill.axIsType(item)) {
-			this.beginFill(item.color, item.alpha);
+			this.beginFill(get(item, 'color'), get(item, 'alpha'));
 			return;
 		}
 
 		if (display.GraphicsGradientFill.axIsType(item)) {
 			this.beginGradientFill(
-				item.type, item.colors, item.alphas, item.ratios,
-				item.matrix, item.spreadMethod, item.interpolationMethod, item.focalPointRatio);
+				get(item, 'type'), get(item, 'colors'), get(item, 'alphas'), get(item, 'ratios'),
+				get(item, 'matrix'), get(item, 'spreadMethod'), get(item, 'interpolationMethod'),
+				get(item, 'focalPointRatio'));
 			return;
 		}
 
 		if (display.GraphicsBitmapFill.axIsType(item)) {
-			this.beginBitmapFill(item.bitmapData, item.matrix, item.repeat, item.smooth);
+			this.beginBitmapFill(
+				get(item, 'bitmapData'), get(item, 'matrix'), get(item, 'repeat'), get(item, 'smooth'));
 			return;
 		}
 
@@ -339,7 +342,7 @@ export class Graphics extends ASObject implements IAssetAdapter {
 		}
 
 		if (display.GraphicsPath.axIsType(item)) {
-			this.drawPath(item.commands, item.data, item.winding);
+			this.drawPath(get(item, 'commands'), get(item, 'data'), get(item, 'winding'));
 			return;
 		}
 
@@ -353,32 +356,45 @@ export class Graphics extends ASObject implements IAssetAdapter {
 			this.adaptee.drawGraphicsData([item]);
 	}
 
+	/**
+	 * Read a public field of an IGraphicsData instance. Instances built by AS3
+	 * code, or by the bytecode constructor (as readGraphicsData does), keep their
+	 * public vars only in AS3 slots, so the plain TS fields stay undefined. Fall
+	 * back to the TS field for instances that only set that.
+	 */
+	private static _field(item: any, name: string): any {
+		const value = item.axGetPublicProperty(name);
+		return value !== undefined ? value : item[name];
+	}
+
 	private _applyStroke(stroke: GraphicsStroke): void {
-		const fill: any = stroke.fill;
+		const get = Graphics._field;
+		const fill: any = get(stroke, 'fill');
 		let color = 0;
 		let alpha = 1;
 
 		const display = (<SecurityDomain> this.sec).flash.display;
 
 		if (display.GraphicsSolidFill.axIsType(fill)) {
-			color = fill.color;
-			alpha = fill.alpha;
+			color = get(fill, 'color');
+			alpha = get(fill, 'alpha');
 		}
 
 		this.lineStyle(
-			stroke.thickness, color, alpha,
-			stroke.pixelHinting, stroke.scaleMode,
-			stroke.caps, stroke.joints, stroke.miterLimit);
+			get(stroke, 'thickness'), color, alpha,
+			get(stroke, 'pixelHinting'), get(stroke, 'scaleMode'),
+			get(stroke, 'caps'), get(stroke, 'joints'), get(stroke, 'miterLimit'));
 
 		if (display.GraphicsGradientFill.axIsType(fill)) {
 			this.lineGradientStyle(
-				fill.type, fill.colors, fill.alphas, fill.ratios,
-				fill.matrix, fill.spreadMethod, fill.interpolationMethod, fill.focalPointRatio);
+				get(fill, 'type'), get(fill, 'colors'), get(fill, 'alphas'), get(fill, 'ratios'),
+				get(fill, 'matrix'), get(fill, 'spreadMethod'), get(fill, 'interpolationMethod'),
+				get(fill, 'focalPointRatio'));
 			return;
 		}
 
 		if (display.GraphicsBitmapFill.axIsType(fill)) {
-			this.lineBitmapStyle(fill.bitmapData, fill.matrix, fill.repeat, fill.smooth);
+			this.lineBitmapStyle(get(fill, 'bitmapData'), get(fill, 'matrix'), get(fill, 'repeat'), get(fill, 'smooth'));
 		}
 	}
 
@@ -463,7 +479,8 @@ export class Graphics extends ASObject implements IAssetAdapter {
 
 		if (type == SolidFillStyle.data_type) {
 			const solid = <SolidFillStyle> item;
-			return new display.GraphicsSolidFill(solid.color, solid.alpha);
+			// Engine colours can carry alpha bits (negative ints); AS3 color is 0xRRGGBB.
+			return new display.GraphicsSolidFill(solid.color & 0xffffff, solid.alpha);
 		}
 
 		if (type == GradientFillStyle.data_type) {
@@ -472,7 +489,8 @@ export class Graphics extends ASObject implements IAssetAdapter {
 			matrix.concat(gradient.matrix);
 			return new display.GraphicsGradientFill(
 				gradient.type,
-				this.sec.createArray(gradient.colors),
+				// gradient stops carry alpha bits like solid colours; AS3 colors are 0xRRGGBB
+				this.sec.createArray(gradient.colors.map((color: number) => color & 0xffffff)),
 				this.sec.createArray(gradient.alphas),
 				this.sec.createArray(gradient.ratios),
 				new (<SecurityDomain> this.sec).flash.geom.Matrix(matrix),
