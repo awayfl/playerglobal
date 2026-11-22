@@ -310,24 +310,21 @@ export class Graphics extends ASObject implements IAssetAdapter {
 			return;
 
 		const display = (<SecurityDomain> this.sec).flash.display;
-		const get = Graphics._field;
 
 		if (display.GraphicsSolidFill.axIsType(item)) {
-			this.beginFill(get(item, 'color'), get(item, 'alpha'));
+			this.beginFill(item.color, item.alpha);
 			return;
 		}
 
 		if (display.GraphicsGradientFill.axIsType(item)) {
 			this.beginGradientFill(
-				get(item, 'type'), get(item, 'colors'), get(item, 'alphas'), get(item, 'ratios'),
-				get(item, 'matrix'), get(item, 'spreadMethod'), get(item, 'interpolationMethod'),
-				get(item, 'focalPointRatio'));
+				item.type, item.colors, item.alphas, item.ratios,
+				item.matrix, item.spreadMethod, item.interpolationMethod, item.focalPointRatio);
 			return;
 		}
 
 		if (display.GraphicsBitmapFill.axIsType(item)) {
-			this.beginBitmapFill(
-				get(item, 'bitmapData'), get(item, 'matrix'), get(item, 'repeat'), get(item, 'smooth'));
+			this.beginBitmapFill(item.bitmapData, item.matrix, item.repeat, item.smooth);
 			return;
 		}
 
@@ -342,7 +339,7 @@ export class Graphics extends ASObject implements IAssetAdapter {
 		}
 
 		if (display.GraphicsPath.axIsType(item)) {
-			this.drawPath(get(item, 'commands'), get(item, 'data'), get(item, 'winding'));
+			this.drawPath(item.commands, item.data, item.winding);
 			return;
 		}
 
@@ -356,45 +353,32 @@ export class Graphics extends ASObject implements IAssetAdapter {
 			this.adaptee.drawGraphicsData([item]);
 	}
 
-	/**
-	 * Read a public field of an IGraphicsData instance. Instances built by AS3
-	 * code, or by the bytecode constructor (as readGraphicsData does), keep their
-	 * public vars only in AS3 slots, so the plain TS fields stay undefined. Fall
-	 * back to the TS field for instances that only set that.
-	 */
-	private static _field(item: any, name: string): any {
-		const value = item.axGetPublicProperty(name);
-		return value !== undefined ? value : item[name];
-	}
-
 	private _applyStroke(stroke: GraphicsStroke): void {
-		const get = Graphics._field;
-		const fill: any = get(stroke, 'fill');
+		const fill: any = stroke.fill;
 		let color = 0;
 		let alpha = 1;
 
 		const display = (<SecurityDomain> this.sec).flash.display;
 
 		if (display.GraphicsSolidFill.axIsType(fill)) {
-			color = get(fill, 'color');
-			alpha = get(fill, 'alpha');
+			color = fill.color;
+			alpha = fill.alpha;
 		}
 
 		this.lineStyle(
-			get(stroke, 'thickness'), color, alpha,
-			get(stroke, 'pixelHinting'), get(stroke, 'scaleMode'),
-			get(stroke, 'caps'), get(stroke, 'joints'), get(stroke, 'miterLimit'));
+			stroke.thickness, color, alpha,
+			stroke.pixelHinting, stroke.scaleMode,
+			stroke.caps, stroke.joints, stroke.miterLimit);
 
 		if (display.GraphicsGradientFill.axIsType(fill)) {
 			this.lineGradientStyle(
-				get(fill, 'type'), get(fill, 'colors'), get(fill, 'alphas'), get(fill, 'ratios'),
-				get(fill, 'matrix'), get(fill, 'spreadMethod'), get(fill, 'interpolationMethod'),
-				get(fill, 'focalPointRatio'));
+				fill.type, fill.colors, fill.alphas, fill.ratios,
+				fill.matrix, fill.spreadMethod, fill.interpolationMethod, fill.focalPointRatio);
 			return;
 		}
 
 		if (display.GraphicsBitmapFill.axIsType(fill)) {
-			this.lineBitmapStyle(get(fill, 'bitmapData'), get(fill, 'matrix'), get(fill, 'repeat'), get(fill, 'smooth'));
+			this.lineBitmapStyle(fill.bitmapData, fill.matrix, fill.repeat, fill.smooth);
 		}
 	}
 
@@ -534,16 +518,7 @@ export class Graphics extends ASObject implements IAssetAdapter {
 			const winding = path.winding === 'nonZero' ? 'nonZero' : 'evenOdd';
 			const commands = this._toInt32Vector(path.commands);
 			const data = this._toFloat64Vector(this._transformPairs(path.data, concatenated));
-			// Construct with a valid winding first (ABC validates it). Then poke
-			// commands/data onto both JS fields and $Bg slots — the ABC ctor does not.
-			const as3: any = new display.GraphicsPath(null, null, winding);
-			as3.commands = commands;
-			as3.data = data;
-			as3.winding = winding;
-			as3.$Bgcommands = commands;
-			as3.$Bgdata = data;
-			as3.$Bgwinding = winding;
-			return as3;
+			return new display.GraphicsPath(commands, data, winding);
 		}
 
 		return null;

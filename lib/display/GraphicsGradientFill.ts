@@ -6,6 +6,13 @@ export class GraphicsGradientFill extends ASObject implements IGraphicsFill, IGr
 
 	public static classInitializer: any = null;
 
+	// AS3 declares these as public vars (slots) or AS3 accessors, so their values live
+	// under the AS3 public names. linkClass maps each listed TS name onto that AS3
+	// property, so TS code can use item.colors etc. directly.
+	public static instanceSymbols: string[] = [
+		'colors!', 'alphas!', 'ratios!', 'matrix!', 'focalPointRatio!',
+		'type!', 'spreadMethod!', 'interpolationMethod!'];
+
 	public colors: ASArray;
 	public alphas: ASArray;
 	public ratios: ASArray;

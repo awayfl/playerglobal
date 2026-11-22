@@ -5,6 +5,12 @@ export class GraphicsStroke extends ASObject implements IGraphicsData, IGraphics
 
 	public static classInitializer: any = null;
 
+	// AS3 declares these as public vars (slots) or AS3 accessors, so their values live
+	// under the AS3 public names. linkClass maps each listed TS name onto that AS3
+	// property, so TS code can use item.thickness etc. directly.
+	public static instanceSymbols: string[] = [
+		'thickness!', 'pixelHinting!', 'miterLimit!', 'fill!', 'scaleMode!', 'caps!', 'joints!'];
+
 	public thickness: number;
 	public pixelHinting: boolean;
 	public miterLimit: number;
