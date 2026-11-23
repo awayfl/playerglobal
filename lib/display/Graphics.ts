@@ -463,7 +463,8 @@ export class Graphics extends ASObject implements IAssetAdapter {
 
 		if (type == SolidFillStyle.data_type) {
 			const solid = <SolidFillStyle> item;
-			return new display.GraphicsSolidFill(solid.color, solid.alpha);
+			// Engine colours can carry alpha bits (negative ints); AS3 color is 0xRRGGBB.
+			return new display.GraphicsSolidFill(solid.color & 0xffffff, solid.alpha);
 		}
 
 		if (type == GradientFillStyle.data_type) {
@@ -472,7 +473,8 @@ export class Graphics extends ASObject implements IAssetAdapter {
 			matrix.concat(gradient.matrix);
 			return new display.GraphicsGradientFill(
 				gradient.type,
-				this.sec.createArray(gradient.colors),
+				// gradient stops carry alpha bits like solid colours; AS3 colors are 0xRRGGBB
+				this.sec.createArray(gradient.colors.map((color: number) => color & 0xffffff)),
 				this.sec.createArray(gradient.alphas),
 				this.sec.createArray(gradient.ratios),
 				new (<SecurityDomain> this.sec).flash.geom.Matrix(matrix),
@@ -516,16 +518,7 @@ export class Graphics extends ASObject implements IAssetAdapter {
 			const winding = path.winding === 'nonZero' ? 'nonZero' : 'evenOdd';
 			const commands = this._toInt32Vector(path.commands);
 			const data = this._toFloat64Vector(this._transformPairs(path.data, concatenated));
-			// Construct with a valid winding first (ABC validates it). Then poke
-			// commands/data onto both JS fields and $Bg slots — the ABC ctor does not.
-			const as3: any = new display.GraphicsPath(null, null, winding);
-			as3.commands = commands;
-			as3.data = data;
-			as3.winding = winding;
-			as3.$Bgcommands = commands;
-			as3.$Bgdata = data;
-			as3.$Bgwinding = winding;
-			return as3;
+			return new display.GraphicsPath(commands, data, winding);
 		}
 
 		return null;

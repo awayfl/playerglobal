@@ -5,14 +5,16 @@ import { IGraphicsData, IGraphicsFill } from './IGraphicsData';
 
 export class GraphicsBitmapFill extends ASObject implements IGraphicsFill, IGraphicsData {
 
-	public static classInitializer: any = function (this: any) {
-		// playerglobal.abcs ships a bytecode ctor that never assigns the native
-		// fields. AS3 `new GraphicsBitmapFill(bd, matrix, …)` then produces an
-		// instance whose $BgbitmapData slot stays null. Bind the TS constructor.
-		const proto = this.tPrototype || this.dPrototype;
-		if (proto)
-			proto.axInitializer = GraphicsBitmapFill;
-	};
+	// The bytecode constructor in playerglobal.abcs never assigns its arguments,
+	// so run this TS constructor for AS3 `new GraphicsBitmapFill(...)` instead.
+	public static forceNativeConstructor: boolean = true;
+
+	public static classInitializer: any = null;
+
+	// AS3 declares these as public vars (slots), so their values live under the
+	// AS3 public names. linkClass maps each listed TS name onto that slot, so the
+	// constructor below and TS readers share the slot storage.
+	public static instanceSymbols: string[] = ['bitmapData!', 'matrix!', 'repeat!', 'smooth!'];
 
 	public bitmapData: BitmapData;
 	public matrix: Matrix;
@@ -26,14 +28,5 @@ export class GraphicsBitmapFill extends ASObject implements IGraphicsFill, IGrap
 		this.matrix = matrix;
 		this.repeat = !!repeat;
 		this.smooth = !!smooth;
-		const self = <any> this;
-		self.$BgbitmapData = bitmapData;
-		self.$Bgmatrix = matrix;
-		self.$Bgrepeat = this.repeat;
-		self.$Bgsmooth = this.smooth;
-		self._nativeBitmapData = bitmapData;
-		self._nativeMatrix = matrix;
-		self._nativeRepeat = this.repeat;
-		self._nativeSmooth = this.smooth;
 	}
 }

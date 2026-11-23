@@ -5,6 +5,11 @@ export class GraphicsSolidFill extends ASObject implements IGraphicsFill, IGraph
 
 	public static classInitializer: any = null;
 
+	// AS3 declares these as public vars (slots), so their values live under the
+	// AS3 public names. linkClass maps each listed TS name onto that slot, so TS
+	// code can use item.color etc. directly.
+	public static instanceSymbols: string[] = ['color!', 'alpha!'];
+
 	public color: number /*uint*/;
 	public alpha: number;
 
