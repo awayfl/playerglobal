@@ -75,7 +75,8 @@ export class FlashSceneGraphFactory extends DefaultSceneGraphFactory implements 
 		if (symbol.className)
 			symbolClass = this.appDomain.getClass(Multiname.FromFQNString(symbol.className, NamespaceType.Public));
 		else
-			symbolClass = this._sec.flash.display.Sprite.axClass;
+			// createSprite is used to wrap a Graphics symbol; those are Shape in AS3
+			symbolClass = this._sec.flash.display.Shape.axClass;
 
 		symbol.symbolClass = symbolClass;
 		//Graphicsadapter.currentAwayGraphics=graphics;

@@ -470,12 +470,18 @@ export class DisplayObjectContainer extends InteractiveObject {
 	 */
 	public getObjectsUnderPoint(point: Point): DisplayObject[] {
 
-		const raycastPicker = PickGroup.getPool(AVMStage.instance().view).getRaycastPicker(AVMStage.instance().root.getNode(this.adaptee));
+		const view = AVMStage.instance().view;
+		const raycastPicker = PickGroup.getPool(view).getRaycastPicker(AVMStage.instance().root.getNode(this.adaptee));
+
+		// `point` is in this container's coordinate space (stage space when called on Stage).
+		// The picker tests in view/world space, so project to screen and unproject to a ray.
+		const projected = view.project(new Vector3D(point.x, point.y, 0));
+		const rayPosition = view.unproject(projected.x, projected.y, 0);
+		const rayDirection = view.unproject(projected.x, projected.y, 1);
+		rayDirection.decrementBy(rayPosition);
 
 		const awayChildren: IContainer[] =
-			raycastPicker.getObjectsUnderPoint(
-				new Vector3D(0, 0, -1000),
-				new Vector3D(point.x, point.y, 1000));
+			raycastPicker.getObjectsUnderPoint(rayPosition, rayDirection);
 		const avm2Children: DisplayObject[] = [];
 		let i = awayChildren.length;
 		while (i > 0) {
@@ -484,7 +490,8 @@ export class DisplayObjectContainer extends InteractiveObject {
 			if (child instanceof TextSprite) {
 				child = child.parent;
 			} else if (child.isAsset(AwaySprite) && (<any>child.adapter) == child) {
-				child.adapter = new (<any> this.sec).flash.display.Sprite();
+				// Timeline graphics are Shape instances in AS3, not Sprite.
+				child.adapter = new (<any> this.sec).flash.display.Shape();
 				child.adapter.adaptee = child;
 			}
 			avm2Children.push(<DisplayObject>child.adapter);
